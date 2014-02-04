@@ -1,0 +1,6 @@
+0001-Put-private-libraries-in-usr-lib-sogo.patch
+0002-Workaround-for-gnustep-config-bug.patch
+0003-Link-libSOGo-with-libdl.patch
+0004-Change-sogo-backup-location-and-update-cronjob.patch
+0005-Build-MAPIStore-Backend
+0006-Build-ActiveSync

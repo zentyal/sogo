@@ -1,0 +1,17 @@
+SOGo for Debian
+---------------
+
+The SOGo debian package differs from upstream in placing the
+configuration file in /etc/sogo/sogo.conf instead of using the GNUstep
+user defaults that are placed under the home directory of the user
+used to run SOGo. This file is parsed as GNUstep defaults in the
+"sogod" domain, which means you must not specify the sogod domain in
+the configuration file (there shouldn't be a "sogod = {" in
+/etc/sogo/sogo.conf).
+
+The second difference is that it is linked with GnuTLS instead of
+OpenSSL. Because GnuTLS doesn't implement functions needed to validate
+S/MIME signatures, validation of S/MIME signatures is disabled in the
+web interface.
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>, Thu, 14 Jun 2012 14:21:00 +0200

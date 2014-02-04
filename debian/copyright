@@ -1,0 +1,139 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: SOGo
+Source: http://www.sogo.nu/english/downloads/backend.html
+License: GPL-2+
+
+Files: *
+Copyright: 2005-2012 Inverse inc.
+	   2000-2005 SKYRIX Software AG
+	   2005, 2006 Helge Hess
+	   2010 Wolfgang Sourdeau
+License: GPL-2+
+
+Files: SOPE/NGCards/versitCardsSaxDriver
+Copyright: 2003-2004 Max Berger
+	   2004-2005 OpenGroupware.org
+License: LGPL-2+
+
+Files: SoObjects/SOGo/NSData+Crypto.m
+Copyright: 2001, 2005 Niels Möller 
+License: LGPL-2+
+
+Files: UI/WebServerResources/dtree.*
+Copyright: 2002-2003 Geir Landrö
+License: 
+ This script can be used freely as long as all copyright messages are
+ intact.
+
+Files: UI/WebServerResources/js_color_picker_v2.*
+Copyright: 2005 DHTMLGoodies.com, Alf Magne Kalleland
+License: LGPL-2+
+
+Files: UI/WebServerResources/tablekit*
+Copyright: 2007 Andrew Tetlaw & Millstream Web Software
+	   2008 Inverse inc.
+License: Expat
+
+Files: UI/WebServerResources/jquery.js
+Copyright: 2011 John Resig and others
+License: Expat
+
+Files: UI/WebServerResources/jquery-ui.js
+Copyright: 2011 Paul Bakaus and others
+License: Expat
+
+Files: UI/WebServerResources/prototype.js
+Copyright: 2005-2008 Marty Haught <mghaught@gmail.com>
+	   2005-2008 Thomas Fuchs <thomas@script.aculo.us>
+License: Expat
+
+Files: UI/WebServerResources/ckeditor/*
+Copyright: (C) 2003-2011 CKSource - Frederico Knabben
+License: GPL-2+
+ The ckeditor is tripple licensed under the GNU General Public License (GPL),
+ GNU Lesser General Public License (LGPL), and Mozilla Public License (MPL).
+ In Debian, it is distributed under the GNU General Public License (GPL).
+ .
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in /usr/share/common-licenses/GPL-2 file.
+
+Files: UI/WebServerResources/ckeditor/plugins/uicolor/*
+Copyright: 2009 Yahoo! Inc.
+	   2003-2011, CKSource - Frederico Knabben.
+License: BSD
+ Redistribution and use of this software in source and binary forms, with or
+ without modification, are permitted provided that the following conditions
+ are met:
+ .
+  * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+  * Neither the name of Yahoo! Inc. nor the names of its contributors may be
+    used to endorse or promote products derived from this software without
+    specific prior written permission of Yahoo! Inc.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+
+Files: UI/WebServerResources/layout2or3_xlib.txt
+Copyright: 2001-2005 Michael Foster (Cross-Browser.com).
+License: LGPL-2+
+
+Files: debian/*
+Copyright: 2011-2012 Jeroen Dekkers <jeroen@dekkers.ch>
+License: GPL-2+
+
+License: GPL-2+
+ On Debian systems the full text of the GNU General Public License can
+ be found in the `/usr/share/common-licenses/GPL-2' file.
+
+License: LGPL-2+
+ On Debian systems the full text of the GNU Lesser General Public
+ License can be found in the `/usr/share/common-licenses/LGPL-2'
+ file.
+
+License: Expat
+ Permission is hereby granted, free of charge, to any person obtaining
+ a copy of this software and associated documentation files (the
+ "Software"), to deal in the Software without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Software, and to
+ permit persons to whom the Software is furnished to do so, subject to
+ the following conditions:
+ .
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.

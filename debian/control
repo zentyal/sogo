@@ -1,0 +1,88 @@
+Source: sogo
+Priority: optional
+Maintainer: Zentyal Packaging Maintainers <pkg-team@zentyal.com>
+XSBC-Original-Maintainer: Jeroen Dekkers <jeroen@dekkers.ch>
+Build-Depends: debhelper (>= 9), gobjc, libgnustep-base-dev, libsope-dev (>= 2.1.1), libmemcached-dev, libxml2-dev, libsbjson-dev, libgnutls-dev, libldap2-dev, libcurl4-gnutls-dev, liblasso3-dev, python-minimal, libmapi-dev, libmapistore-dev, libmapiproxy-dev, libwbxml2-dev (>= 0.11.2-1)
+Section: mail
+Standards-Version: 3.9.4
+Homepage: http://www.sogo.nu/
+Vcs-Browser: http://git.debian.org/?p=collab-maint/sogo.git
+Vcs-Git: git://git.debian.org/git/collab-maint/sogo.git
+
+Package: sogo
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, tmpreaper | systemd, sogo-common (= ${source:Version}), adduser, zip, memcached
+Suggests: postgresql | mysql-server
+Description: Scalable groupware server
+ SOGo is a groupware server built around OpenGroupware.org (OGo) and
+ the SOPE application server with focus on scalability. It has many
+ feature enhancements:
+ .
+  * CalDAV and GroupDAV compliance
+  * full handling of vCard as well as vCalendar/iCalendar formats
+  * support for folder sharing and ACLs
+ .
+ The Web interface has been rewritten in an AJAX fashion to provide a faster
+ UI for the users, consistency in look and feel with the Mozilla applications,
+ and to reduce the load of the transactions on the server.
+ .
+ This package contains the SOGo daemon.
+
+Package: sogo-common
+Architecture: all
+Depends: ${misc:Depends}, ckeditor, libjs-prototype, libjs-jquery, libjs-jquery-ui
+Suggests: httpd
+Description: Scalable groupware server - common files
+ SOGo is a groupware server built around OpenGroupware.org (OGo) and
+ the SOPE application server with focus on scalability.
+ .
+ This package contains the architecture-indepedent files, including
+ all the files that are needed on the web proxy.
+
+Package: sogo-dev
+Section: devel
+Architecture: any
+Depends: sogo (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Replaces: sogo (<< ${binary:Version})
+Description: a modern and scalable groupware - development files
+ SOGo is a groupware server built around OpenGroupware.org (OGo) and
+ the SOPE application server with focus on scalability.
+ .
+ This package contains the development files for developing SOGo modules.
+
+Package: sogo-activesync
+Section: web
+Priority: extra
+Architecture: any
+Depends: sogo (= ${binary:Version}), libwbxml2-0,  ${shlibs:Depends}, ${misc:Depends}
+Description: a modern and scalable groupware - ActiveSync module
+ SOGo is a groupware server built around OpenGroupware.org (OGo) and
+ the SOPE application server with focus on scalability.
+ .
+ This package provides Microsoft EAS support for SOGo.
+
+Package: sogo-openchange
+Pre-Depends: ${misc:Pre-Depends}
+Multi-Arch: same
+Section: net
+Priority: extra
+Architecture: any
+Depends: sogo (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends},
+ python-mysqldb
+Description: a modern and scalable groupware - OpenChange backend
+ SOGo is a groupware server built around OpenGroupware.org (OGo) and
+ the SOPE application server with focus on scalability.
+ .
+ This package contains the backend plugin for using SOGo as a backend
+ to OpenChange.
+
+Package: sogo-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: sogo (= ${binary:Version}), ${misc:Depends}
+Description: Scalable groupware server - debugging symbols
+ SOGo is a groupware server built around OpenGroupware.org (OGo) and
+ the SOPE application server with focus on scalability.
+ .
+ This package contains the debugging symbols for SOGo.

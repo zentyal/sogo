@@ -1,0 +1,29 @@
+Index: sogo.zentyal/ActiveSync/GNUmakefile
+===================================================================
+--- sogo.zentyal.orig/ActiveSync/GNUmakefile	2014-02-04 12:54:03.000000000 +0100
++++ sogo.zentyal/ActiveSync/GNUmakefile	2014-02-04 13:01:10.036931469 +0100
+@@ -29,8 +29,8 @@
+ 	product.plist
+ 
+ ADDITIONAL_OBJCFLAGS += -Wno-deprecated-declarations
+-ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/ -I../SoObjects/
+-ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
++ADDITIONAL_INCLUDE_DIRS += -I../SOPE/ -I../SoObjects/
++ADDITIONAL_LIB_DIRS += -L../SOPE/GDLContentStore/obj/ -L../SoObjects/SOGo/SOGo.framework/sogo -L../SOPE/NGCards/obj/
+ ADDITIONAL_INCLUDE_DIRS += -I/usr/include/libwbxml-1.0/
+ ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lwbxml2
+ 
+Index: sogo.zentyal/GNUmakefile
+===================================================================
+--- sogo.zentyal.orig/GNUmakefile	2014-02-04 12:54:19.000000000 +0100
++++ sogo.zentyal/GNUmakefile	2014-02-04 12:54:19.000000000 +0100
+@@ -10,7 +10,8 @@
+ 	SoObjects	\
+ 	Tools		\
+ 	Tests/Unit \
+-    OpenChange
++    OpenChange \
++    ActiveSync
+ 
+ ifeq ($(daemon),yes)
+ SUBPROJECTS += Main

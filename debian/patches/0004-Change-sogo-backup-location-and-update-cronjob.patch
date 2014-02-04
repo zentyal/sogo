@@ -1,0 +1,39 @@
+From: Jeroen Dekkers <jeroen@dekkers.ch>
+Date: Sat, 13 Apr 2013 00:16:15 +0200
+Subject: Change sogo-backup location and update cronjob
+
+Change sogo-backup location to /var/backups/sogo and update
+sogo-backup.sh location in cronjob to /usr/sbin/sogo-backup.
+---
+ Scripts/sogo-backup.sh | 2 +-
+ Scripts/sogo.cron      | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+Index: sogo.zentyal/Scripts/sogo-backup.sh
+===================================================================
+--- sogo.zentyal.orig/Scripts/sogo-backup.sh	2014-02-04 12:21:44.116895968 +0100
++++ sogo.zentyal/Scripts/sogo-backup.sh	2014-02-04 12:21:44.112895968 +0100
+@@ -4,7 +4,7 @@
+ #set -x
+ PROGNAME="$(basename $0)"
+ 
+-BACKUP_DIR=~sogo/backups
++BACKUP_DIR=/var/backups/sogo
+ SOGO_TOOL=/usr/sbin/sogo-tool
+ DAYS_TO_KEEP="30"
+ 
+Index: sogo.zentyal/Scripts/sogo.cron
+===================================================================
+--- sogo.zentyal.orig/Scripts/sogo.cron	2014-02-04 12:21:44.116895968 +0100
++++ sogo.zentyal/Scripts/sogo.cron	2014-02-04 12:21:44.112895968 +0100
+@@ -15,8 +15,7 @@
+ #* * * * *      sogo	/usr/sbin/sogo-ealarms-notify
+ 
+ # Daily backups
+-#   - writes to ~sogo/backups/ by default
++#   - writes backups to /var/backups/sogo/
+ #   - will keep 31 days worth of backups by default
+ #   - runs once a day by default, but can run more frequently
+-#   - make sure to set the path to sogo-backup.sh correctly
+-#30 0 * * *     sogo   /usr/share/doc/sogo/sogo-backup.sh
++#30 0 * * *     sogo   /usr/sbin/sogo-backup

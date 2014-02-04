@@ -1,0 +1,58 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+export DH_VERBOSE=1
+export DEB_BUILD_MAINT_OPTIONS=hardening=+bindnow
+
+%:
+	dh $@ --parallel
+
+override_dh_auto_clean:
+	[ ! -f config.make ] || $(MAKE) distclean
+	rm -f config.make
+
+override_dh_auto_build:
+	dh_auto_build -- OBJCFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" messages=yes
+
+override_dh_auto_configure:
+	./configure --with-ssl=gnutls --enable-saml2
+
+override_dh_auto_install:
+	$(MAKE) DESTDIR=$(CURDIR)/debian/tmp GNUSTEP_INSTALLATION_DOMAIN=SYSTEM OBJCFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" messages=yes install
+	mkdir -p debian/tmp/etc/default debian/tmp/etc/cron.d debian/tmp/usr/share/doc/sogo debian/tmp/usr/lib/tmpfiles.d
+	cp Scripts/sogo-default debian/tmp/etc/default/sogo
+	cp Scripts/sogo.cron debian/tmp/etc/cron.d/sogo
+	cp Scripts/sogo-backup.sh debian/tmp/usr/sbin/sogo-backup
+	cp Apache/SOGo.conf debian/tmp/usr/share/doc/sogo/apache.conf
+	cp debian/sogo.tmpfiles.d debian/tmp/usr/lib/tmpfiles.d/sogo.conf
+# Remove javascript libraries already packaged by Debian.
+	rm -r debian/tmp/usr/lib/GNUstep/SOGo/WebServerResources/ckeditor
+	dh_link -psogo-common usr/share/javascript/ckeditor usr/share/GNUstep/SOGo/WebServerResources/ckeditor
+	rm debian/tmp/usr/lib/GNUstep/SOGo/WebServerResources/prototype.js
+	dh_link -psogo-common usr/share/javascript/prototype/prototype.js usr/share/GNUstep/SOGo/WebServerResources/prototype.js
+	rm debian/tmp/usr/lib/GNUstep/SOGo/WebServerResources/jquery.js
+	dh_link -psogo-common usr/share/javascript/jquery/jquery.min.js usr/share/GNUstep/SOGo/WebServerResources/jquery.js
+	rm debian/tmp/usr/lib/GNUstep/SOGo/WebServerResources/jquery-ui.js
+	dh_link -psogo-common usr/share/javascript/jquery-ui/jquery-ui.min.js usr/share/GNUstep/SOGo/WebServerResources/jquery-ui.js
+# Put arch independent files in /usr/share instead of /usr/lib
+	mkdir -p debian/tmp/usr/share/GNUstep/SOGo
+	for i in AdministrationUI.SOGo Appointments.SOGo CommonUI.SOGo Contacts.SOGo ContactsUI.SOGo MailPartViewers.SOGo \
+		 Mailer.SOGo MailerUI.SOGo MainUI.SOGo PreferencesUI.SOGo SchedulerUI.SOGo; do \
+	  mkdir debian/tmp/usr/share/GNUstep/SOGo/$$i \
+	  && mv debian/tmp/usr/lib/GNUstep/SOGo/$$i/Resources debian/tmp/usr/share/GNUstep/SOGo/$$i/ \
+	  && dh_link -psogo-common usr/share/GNUstep/SOGo/$$i/Resources usr/lib/GNUstep/SOGo/$$i/Resources ; \
+	done
+	mv debian/tmp/usr/lib/GNUstep/SOGo/Templates debian/tmp/usr/lib/GNUstep/SOGo/WebServerResources debian/tmp/usr/share/GNUstep/SOGo
+	dh_link -psogo-common usr/share/GNUstep/SOGo/Templates usr/lib/GNUstep/SOGo/Templates
+	dh_link -psogo-common usr/share/GNUstep/SOGo/WebServerResources usr/lib/GNUstep/SOGo/WebServerResources
+	mkdir -p debian/tmp/usr/share/GNUstep/Libraries/Resources
+	mv debian/tmp/usr/lib/GNUstep/Libraries/Resources/NGCards debian/tmp/usr/share/GNUstep/Libraries/Resources
+	rmdir debian/tmp/usr/lib/GNUstep/Libraries/Resources debian/tmp/usr/lib/GNUstep/Libraries
+
+override_dh_auto_test:
+#	$(MAKE) check
+
+override_dh_strip:
+	dh_strip --dbg-package=sogo-dbg
+
+override_dh_shlibdeps:
+	dh_shlibdeps -l/usr/lib/sogo

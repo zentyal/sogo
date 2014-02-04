@@ -1,0 +1,174 @@
+Index: sogo.zentyal/GNUmakefile
+===================================================================
+--- sogo.zentyal.orig/GNUmakefile	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/GNUmakefile	2014-02-04 12:28:43.008902253 +0100
+@@ -9,7 +9,8 @@
+ 	OGoContentStore	\
+ 	SoObjects	\
+ 	Tools		\
+-	Tests/Unit
++	Tests/Unit \
++    OpenChange
+ 
+ ifeq ($(daemon),yes)
+ SUBPROJECTS += Main
+Index: sogo.zentyal/OpenChange/SOGoMAPIDBObject.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/SOGoMAPIDBObject.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/SOGoMAPIDBObject.m	2014-02-04 12:28:43.008902253 +0100
+@@ -240,6 +240,7 @@
+ {
+   NSString *className, *mapiMsgClass;
+ 
++  className = NULL;
+   switch (objectType)
+     {
+     case MAPIDBObjectTypeMessage:
+@@ -269,6 +270,11 @@
+                   format: @"message class should not be queried for objects"
+                    @" of type '%d'", objectType];
+     }
++    if (className == NULL) {
++        [NSException raise: @"MAPIStoreIOException"
++                  format: @"message class should not be queried for objects"
++                   @" of type '%d'", objectType];
++    }
+ 
+   return NSClassFromString (className);
+ }
+@@ -281,6 +287,8 @@
+ 
+   if (nameInContainer)
+     oldPath = [self path];
++  else
++    oldPath = NULL;
+ 
+   [super setNameInContainer: newNameInContainer];
+ 
+Index: sogo.zentyal/OpenChange/SOGoMAPIDBFolder.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/SOGoMAPIDBFolder.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/SOGoMAPIDBFolder.m	2014-02-04 12:28:43.012902253 +0100
+@@ -227,6 +227,8 @@
+   /* change the paths in children records */
+   if (nameInContainer)
+     oldPath = [self path];
++  else
++    oldPath = nil;
+ 
+   [super setNameInContainer: newName];
+ 
+Index: sogo.zentyal/OpenChange/MAPIStoreFolder.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/MAPIStoreFolder.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/MAPIStoreFolder.m	2014-02-04 12:28:43.012902253 +0100
+@@ -101,6 +101,8 @@
+   NSUInteger lastPartIdx;
+   MAPIStoreUserContext *userContext;
+ 
++  parts = 0;
++  lastPartIdx = 0;
+   folderURL = [NSURL URLWithString: [self url]];
+   /* note: -[NSURL path] returns an unescaped representation */
+   path = [folderURL path];
+@@ -232,6 +234,7 @@
+   SOGoFolder *sogoFolder;
+   WOContext *woContext;
+ 
++  childFolder = nil;
+   if ([[self folderKeys] containsObject: folderKey])
+     {
+       woContext = [[self userContext] woContext];
+Index: sogo.zentyal/OpenChange/MAPIStoreMessage.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/MAPIStoreMessage.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/MAPIStoreMessage.m	2014-02-04 12:28:43.012902253 +0100
+@@ -474,7 +474,8 @@
+   MAPIStoreMessage *mainMessage;
+ 
+   //[self logWithFormat: @"METHOD '%s' (%d)", __FUNCTION__, __LINE__];
+-  
++  containerTables = nil;
++  max = 0;
+   context = [self context];
+   ownerUser = [[self userContext] sogoUser];
+   userIsOwner = [[context activeUser] isEqual: ownerUser];
+Index: sogo.zentyal/OpenChange/MAPIStoreObject.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/MAPIStoreObject.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/MAPIStoreObject.m	2014-02-04 12:28:43.012902253 +0100
+@@ -250,6 +250,7 @@
+   id value;
+ 
+   tz = nil;
++  tzOffset = 0;
+ 
+   newProperties = [NSMutableDictionary dictionaryWithCapacity: aRow->cValues];
+   for (counter = 0; counter < aRow->cValues; counter++)
+Index: sogo.zentyal/OpenChange/MAPIStoreDBFolder.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/MAPIStoreDBFolder.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/MAPIStoreDBFolder.m	2014-02-04 12:28:43.016902253 +0100
+@@ -138,6 +138,8 @@
+   MAPIStoreMapping *mapping;
+   NSRange slashRange;
+ 
++  pathComponent = nil;
++
+   if (isMove && [targetFolder isKindOfClass: MAPIStoreDBFolderK])
+     {
+       path = [sogoObject path];
+Index: sogo.zentyal/OpenChange/MAPIStoreMailFolder.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/MAPIStoreMailFolder.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/MAPIStoreMailFolder.m	2014-02-04 12:28:43.016902253 +0100
+@@ -163,6 +163,7 @@
+   int i;
+ 
+   nameInContainer = nil;
++  rc = MAPISTORE_ERROR;
+ 
+   folderName = nil;
+   for (i = 0; !folderName && i < aRow->cValues; i++)
+@@ -857,6 +858,8 @@
+   uint32_t currentUid, rangeMin;
+   BOOL done = NO, inRange = NO;
+ 
++  rangeMin = 0;
++  currentUid = 0;
+   UIDs = [NSMutableArray array];
+   while (!done)
+     {
+Index: sogo.zentyal/OpenChange/RTFHandler.m
+===================================================================
+--- sogo.zentyal.orig/OpenChange/RTFHandler.m	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/RTFHandler.m	2014-02-04 12:28:43.016902253 +0100
+@@ -508,6 +508,7 @@
+ 
+   fontTable = [[[RTFFontTable alloc] init] autorelease];
+   fontName = nil;
++  fontInfo = nil;
+   count = 0;
+  
+   do
+@@ -648,6 +649,7 @@
+   fontTable = nil;
+   colorTable = nil;
+   charset = NULL;
++  formattingOptions = nil;
+ 
+   _html = [[NSMutableData alloc] init];
+   [_html appendBytes: "<html><meta charset='utf-8'><body>"  length: 34];
+Index: sogo.zentyal/OpenChange/GNUmakefile
+===================================================================
+--- sogo.zentyal.orig/OpenChange/GNUmakefile	2014-02-04 12:28:43.016902253 +0100
++++ sogo.zentyal/OpenChange/GNUmakefile	2014-02-04 12:28:43.016902253 +0100
+@@ -146,7 +146,7 @@
+ 	dbmsgreader.m
+ 
+ $(DBMSGREADER_TOOL)_LIB_DIRS += \
+-	-L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
++	-L../SoObjects/SOGo/SOGo.framework/sogo -lSOGo \
+ 	-L../OGoContentStore/obj/ -lOGoContentStore \
+ 	-L../SOPE/GDLContentStore/obj/ -lGDLContentStore \
+ 	-L../SOPE/NGCards/obj/ -lNGCards \

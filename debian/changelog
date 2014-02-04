@@ -1,0 +1,92 @@
+sogo (2.1.2~20140204-1) saucy; urgency=low
+
+  [ Samuel Cabrero ]
+  * Align packaging with ubuntu releases.
+  * Build MAPI store backend.
+  * Build sogo-activesync package.
+
+  [ Carlos Perelló Marín ]
+  * Force memcache dependency.
+
+  [José A. Calvo ]
+  * Added WOxElemBuilders
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 29 Jan 2014 23:59:40 +0100
+
+sogo (2.1.1b-1) unstable; urgency=medium
+
+  * New upstream release. (Closes: #732189)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Sat, 28 Dec 2013 23:15:41 +0100
+
+sogo (2.0.7-2) unstable; urgency=high
+
+  * Do not call make distclean if config.make does not exist, fixes FTBFS
+    with latest debhelper. (Closes: #720974)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Mon, 26 Aug 2013 20:07:08 +0200
+
+sogo (2.0.7-1) unstable; urgency=low
+
+  * New upstream release.
+  * Update version of sope build dependency to 2.0.7.
+  * Remove patch applied upstream:
+    - 0001-Set-SOGoMailSpoolPath-to-var-spool-sogo-by-default
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Tue, 13 Aug 2013 20:32:13 +0200
+
+sogo (2.0.5a-1) unstable; urgency=low
+
+  * New upstream release.
+  * Include updated watch file written by Bart Martens.
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Mon, 06 May 2013 02:04:16 +0200
+
+sogo (2.0.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Remove patches applied upstream:
+    - 0001-make-check
+    - 0002-link-everything-correctly
+    - 0003-Read-configuration-from-etc
+    - 0004-Add-support-for-GnuTLS
+    - 0007-Compile-daemon-as-PIE
+  * Fix cronjob error after package removal. (Closes: #682843)
+  * Update standards version to 3.9.4.
+  * Enable SAML support.
+  * Move sogo-backup.sh to /usr/sbin/sogo-backup and change backup
+    location to /var/backups/sogo. Also change the locations in the
+    cronjob. (Closes: #681797)
+  * Use systemd-tmpfiles instead of tmpreaper for systems running
+    systemd. (Closes: #677951)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Sat, 13 Apr 2013 16:08:45 +0200
+
+sogo (1.3.16-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #677119)
+    - 0004-Add-support-for-GnuTLS.patch: Updated to new hashes in 1.3.16.
+    - 0007-GNUstep-1.24-fix.patch: Removed, was backported from upstream.
+  * Do not assume deluser is available in postrm. (Closes: #678099)
+  * Suggest postgresql or mysql-server. (Closes: #678047)
+  * Build with hardening
+    - 0007-Compile-daemon-as-PIE.patch: Compile the daemon as a PIE.
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Sat, 30 Jun 2012 02:55:17 +0200
+
+sogo (1.3.15a-2) unstable; urgency=low
+
+  * 0007-GNUstep-1.24-fix.patch:
+    - Fix to cope with changes in GNUstep 1.24. (Closes: #675201)
+  * Fix the cron.daily job:
+    - Delete the directories in a proper way. (Closes: #676161)
+    - Test whether tmpreaper is still installed before executing it.
+      (Closes: #675238)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Thu, 14 Jun 2012 14:28:31 +0200
+
+sogo (1.3.15a-1) unstable; urgency=low
+
+  * Initial release. (Closes: #584073)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Wed, 23 May 2012 19:17:40 +0200

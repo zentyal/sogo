@@ -1,0 +1,24 @@
+From: Jeroen Dekkers <jeroen@dekkers.ch>
+Date: Mon, 11 Mar 2013 18:10:16 +0100
+Subject: Workaround for gnustep-config bug
+
+This is a workaround for the following gnustep-config bug:
+https://savannah.gnu.org/bugs/index.php?38502
+---
+ configure | 3 +++
+ 1 file changed, 3 insertions(+)
+
+Index: sogo/configure
+===================================================================
+--- sogo.orig/configure	2014-02-04 16:31:47.825121100 +0100
++++ sogo/configure	2014-02-04 16:31:47.821121100 +0100
+@@ -33,6 +33,9 @@
+ 
+ DARG_GNUSTEP_SH="$ARG_GSMAKE/GNUstep.sh"
+ 
++# Workaround for https://savannah.gnu.org/bugs/index.php?38502
++export MAKEFLAGS=""
++
+ # detect GNU make, needed at least on *BSD
+ make -v 2>/dev/null | grep GNU >/dev/null 2>/dev/null
+ if [ $? -eq 0 ];then
