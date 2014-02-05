@@ -1,3 +1,10 @@
+sogo (2.1.2~20140205-1) saucy; urgency=low
+
+  [ Javier Fernández-Carrión ]
+  * UI restyle
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 05 Feb 2014 03:19:12 +0100
+
 sogo (2.1.2~20140204-1) saucy; urgency=low
 
   [ Samuel Cabrero ]
