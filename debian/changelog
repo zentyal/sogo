@@ -1,3 +1,9 @@
+sogo (2.1.2~20140205-2) saucy; urgency=low
+
+  * Set openchange dependency versions
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 05 Feb 2014 18:42:27 +0100
+
 sogo (2.1.2~20140205-1) saucy; urgency=low
 
   [ Javier Fernández-Carrión ]
