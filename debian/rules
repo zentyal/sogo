@@ -6,14 +6,20 @@ export DH_VERBOSE=1
 export PKG_CONFIG_PATH=/opt/samba4/lib/pkgconfig
 
 DESTDIR=$(CURDIR)/debian/tmp
+DIST_CODENAME=$(shell lsb_release -cs)
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+# NOTYET
+#ifeq ($(DIST_CODENAME), squeeze)
+#  SAML2_CONFIG=--enable-saml2
+#endif
 
 include /etc/GNUstep/GNUstep.conf
 include /usr/share/GNUstep/Makefiles/common.make
 
 config.make: configure
 	dh_testdir
-	./configure --prefix=$(GNUSTEP_SYSTEM_ROOT)
+	./configure --prefix=$(GNUSTEP_SYSTEM_ROOT) $(SAML2_CONFIG)
 
 #Architecture
 build: build-arch
@@ -25,6 +31,7 @@ build-arch-stamp:  config.make
 	if pkg-config --atleast-version=1.0 libmapi; \
 	then (cd OpenChange; $(MAKE));  \
 	fi
+	(cd ActiveSync && $(MAKE))
 	touch $@
 
 clean:
@@ -40,10 +47,13 @@ clean:
 	  then \
 	    (cd OpenChange; make clean); \
 	  fi; \
+	  (cd ActiveSync; $(MAKE) clean); \
 	  make clean; \
 	fi
 	-rm -f OpenChange/MAPIStorePropertySelectors.*
 	-rm -f config.make
+	-rm -rf Openchange/obj
+	-rm -rf ActiveSync/obj
 	dh_clean
 
 install: install-arch
@@ -72,12 +82,13 @@ install-arch: build-arch
 	  mv -f $(DESTDIR)/opt/samba4/lib/mapistore_backends/libMAPIStoreSOGo.so.1.0.0 \
 	           $(DESTDIR)/opt/samba4/lib/mapistore_backends/SOGo.so; \
 	fi
+	(cd ActiveSync; $(MAKE) DESTDIR=$(DESTDIR) GNUSTEP_INSTALLATION_DOMAIN=SYSTEM install)
 
-	install -D Scripts/sogo-default debian/tmp/etc/default/sogo
-	install -D debian/sogo.overrides debian/tmp/usr/share/lintian/overrides/sogo
+	install -D -m 644 Scripts/sogo-default debian/tmp/etc/default/sogo
+	install -D -m 644 debian/sogo.overrides debian/tmp/usr/share/lintian/overrides/sogo
 	install -D -m 644 Scripts/sogo.cron debian/tmp/etc/cron.d/sogo
 	install -D -m 644 Scripts/logrotate debian/tmp/etc/logrotate.d/sogo
-	install -d -m 750 debian/tmp/etc/sogo/
+	install -d -m 750 debian/tmp/etc/sogo
 	install -D -m 640 Scripts/sogo.conf debian/tmp/etc/sogo/sogo.conf
 	install -D -m 755 Scripts/openchange_user_cleanup debian/tmp/usr/sbin/openchange_user_cleanup
 

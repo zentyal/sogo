@@ -15,9 +15,9 @@ Build-Depends: debhelper (>= 8.0.0),
                libsbjson-dev,
                libssl-dev,
                libcurl4-openssl-dev | libcurl4-gnutls-dev,
-               libmapi-dev,
-               libmapistore-dev,
-               libmapiproxy-dev,
+               libmapi-dev (>= 2:2.0),
+               libmapistore-dev (>= 2:2.0),
+               libmapiproxy-dev (>= 2:2.0),
 Section: web
 Standards-Version: 3.9.2
 
@@ -57,6 +57,17 @@ Description: a modern and scalable groupware - development files
  the SOPE application server with focus on scalability.
  .
  This package contains the development files for developing SOGo modules.
+
+Package: sogo-activesync
+Section: web
+Priority: extra
+Architecture: any
+Depends: sogo (= ${binary:Version}), libwbxml2-0,  ${shlibs:Depends}, ${misc:Depends}
+Description: a modern and scalable groupware - ActiveSync module
+ SOGo is a groupware server built around OpenGroupware.org (OGo) and
+ the SOPE application server with focus on scalability.
+ .
+ This package provides Microsoft EAS support for SOGo.
 
 Package: sogo-openchange
 Pre-Depends: ${misc:Pre-Depends}
