@@ -9,10 +9,10 @@ sogo-backup.sh location in cronjob to /usr/sbin/sogo-backup.
  Scripts/sogo.cron      | 5 ++---
  2 files changed, 3 insertions(+), 4 deletions(-)
 
-Index: sogo.zentyal/Scripts/sogo-backup.sh
+Index: sogo/Scripts/sogo-backup.sh
 ===================================================================
---- sogo.zentyal.orig/Scripts/sogo-backup.sh	2014-02-04 12:21:44.116895968 +0100
-+++ sogo.zentyal/Scripts/sogo-backup.sh	2014-02-04 12:21:44.112895968 +0100
+--- sogo.orig/Scripts/sogo-backup.sh	2014-02-10 12:44:32.917427822 +0100
++++ sogo/Scripts/sogo-backup.sh	2014-02-10 12:44:54.000000000 +0100
 @@ -4,7 +4,7 @@
  #set -x
  PROGNAME="$(basename $0)"
@@ -22,10 +22,10 @@ Index: sogo.zentyal/Scripts/sogo-backup.sh
  SOGO_TOOL=/usr/sbin/sogo-tool
  DAYS_TO_KEEP="30"
  
-Index: sogo.zentyal/Scripts/sogo.cron
+Index: sogo/Scripts/sogo.cron
 ===================================================================
---- sogo.zentyal.orig/Scripts/sogo.cron	2014-02-04 12:21:44.116895968 +0100
-+++ sogo.zentyal/Scripts/sogo.cron	2014-02-04 12:21:44.112895968 +0100
+--- sogo.orig/Scripts/sogo.cron	2014-02-10 12:44:32.917427822 +0100
++++ sogo/Scripts/sogo.cron	2014-02-10 12:44:54.000000000 +0100
 @@ -15,8 +15,7 @@
  #* * * * *      sogo	/usr/sbin/sogo-ealarms-notify
  

@@ -6,10 +6,10 @@ Subject: Link libSOGo with libdl
  SoObjects/SOGo/GNUmakefile.preamble | 4 ++++
  1 file changed, 4 insertions(+)
 
-Index: sogo.zentyal/SoObjects/SOGo/GNUmakefile.preamble
+Index: sogo/SoObjects/SOGo/GNUmakefile.preamble
 ===================================================================
---- sogo.zentyal.orig/SoObjects/SOGo/GNUmakefile.preamble	2014-02-04 12:20:03.152894453 +0100
-+++ sogo.zentyal/SoObjects/SOGo/GNUmakefile.preamble	2014-02-04 12:20:03.140894453 +0100
+--- sogo.orig/SoObjects/SOGo/GNUmakefile.preamble	2014-02-10 12:44:32.917427822 +0100
++++ sogo/SoObjects/SOGo/GNUmakefile.preamble	2014-02-10 12:44:54.000000000 +0100
 @@ -49,6 +49,10 @@
  SOGo_LIBRARIES_DEPEND_UPON += -lcrypt
  endif

@@ -10,8 +10,8 @@ https://savannah.gnu.org/bugs/index.php?38502
 
 Index: sogo/configure
 ===================================================================
---- sogo.orig/configure	2014-02-04 16:31:47.825121100 +0100
-+++ sogo/configure	2014-02-04 16:31:47.821121100 +0100
+--- sogo.orig/configure	2014-02-10 12:44:32.925427822 +0100
++++ sogo/configure	2014-02-10 12:44:54.000000000 +0100
 @@ -33,6 +33,9 @@
  
  DARG_GNUSTEP_SH="$ARG_GSMAKE/GNUstep.sh"

@@ -28,10 +28,10 @@ Subject: Put private libraries in /usr/lib/sogo
  UI/common.make                         | 4 ++--
  23 files changed, 32 insertions(+), 12 deletions(-)
 
-Index: sogo.zentyal/Main/GNUmakefile
+Index: sogo/Main/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/Main/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/Main/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/Main/GNUmakefile	2014-02-10 12:44:32.909427822 +0100
++++ sogo/Main/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -7,7 +7,7 @@
  ADDITIONAL_OBJCFLAGS += -fPIE
  ADDITIONAL_INCLUDE_DIRS +=
@@ -41,10 +41,10 @@ Index: sogo.zentyal/Main/GNUmakefile
  
  SOGOD     = sogod
  TOOL_NAME = $(SOGOD)
-Index: sogo.zentyal/Main/GNUmakefile.preamble
+Index: sogo/Main/GNUmakefile.preamble
 ===================================================================
---- sogo.zentyal.orig/Main/GNUmakefile.preamble	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/Main/GNUmakefile.preamble	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/Main/GNUmakefile.preamble	2014-02-10 12:44:32.909427822 +0100
++++ sogo/Main/GNUmakefile.preamble	2014-02-10 12:44:54.000000000 +0100
 @@ -9,7 +9,7 @@
  	-I..
  
@@ -54,10 +54,10 @@ Index: sogo.zentyal/Main/GNUmakefile.preamble
  	-L../OGoContentStore/$(GNUSTEP_OBJ_DIR)/ \
  	-L../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/
  
-Index: sogo.zentyal/OGoContentStore/GNUmakefile
+Index: sogo/OGoContentStore/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/OGoContentStore/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/OGoContentStore/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/OGoContentStore/GNUmakefile	2014-02-10 12:44:32.909427822 +0100
++++ sogo/OGoContentStore/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -14,6 +14,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../SOPE
@@ -74,10 +74,10 @@ Index: sogo.zentyal/OGoContentStore/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/library.make
  include $(GNUSTEP_MAKEFILES)/tool.make
  -include GNUmakefile.postamble
-Index: sogo.zentyal/OGoContentStore/GNUmakefile.preamble
+Index: sogo/OGoContentStore/GNUmakefile.preamble
 ===================================================================
---- sogo.zentyal.orig/OGoContentStore/GNUmakefile.preamble	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/OGoContentStore/GNUmakefile.preamble	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/OGoContentStore/GNUmakefile.preamble	2014-02-10 12:44:32.909427822 +0100
++++ sogo/OGoContentStore/GNUmakefile.preamble	2014-02-10 12:44:54.000000000 +0100
 @@ -11,7 +11,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I. -I.. -I../SOPE -I../SoObjects
@@ -87,10 +87,10 @@ Index: sogo.zentyal/OGoContentStore/GNUmakefile.preamble
  
  SYSTEM_LIB_DIR += -L/usr/local/lib -L/usr/lib
  
-Index: sogo.zentyal/OpenChange/GNUmakefile
+Index: sogo/OpenChange/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/OpenChange/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/OpenChange/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/OpenChange/GNUmakefile	2014-02-10 12:44:32.909427822 +0100
++++ sogo/OpenChange/GNUmakefile	2014-02-10 12:46:16.000000000 +0100
 @@ -171,13 +171,13 @@
  
  $(MAPISTORESOGO)_INSTALL_DIR = $(DESTDIR)/$(SAMBA_LIB_DIR)/mapistore_backends
@@ -107,10 +107,10 @@ Index: sogo.zentyal/OpenChange/GNUmakefile
  	$(LIBMAPI_LIBS) \
  	$(LIBMAPISTORE_LIBS)
  
-Index: sogo.zentyal/SOPE/GDLContentStore/GNUmakefile
+Index: sogo/SOPE/GDLContentStore/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/SOPE/GDLContentStore/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/SOPE/GDLContentStore/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/SOPE/GDLContentStore/GNUmakefile	2014-02-10 12:44:32.917427822 +0100
++++ sogo/SOPE/GDLContentStore/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -68,6 +68,7 @@
  ifneq ($(FHS_INSTALL_ROOT),)
  GNUSTEP_HEADERS=$(DESTDIR)$(FHS_INSTALL_ROOT)/include
@@ -119,10 +119,10 @@ Index: sogo.zentyal/SOPE/GDLContentStore/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/library.make
  else
  include $(GNUSTEP_MAKEFILES)/framework.make
-Index: sogo.zentyal/SOPE/NGCards/GNUmakefile
+Index: sogo/SOPE/NGCards/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/SOPE/NGCards/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/SOPE/NGCards/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/SOPE/NGCards/GNUmakefile	2014-02-10 12:44:32.917427822 +0100
++++ sogo/SOPE/NGCards/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -131,6 +131,7 @@
  ifneq ($(FHS_INSTALL_ROOT),)
  GNUSTEP_HEADERS=$(DESTDIR)$(FHS_INSTALL_ROOT)/include
@@ -131,10 +131,10 @@ Index: sogo.zentyal/SOPE/NGCards/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/library.make
  else
  include $(GNUSTEP_MAKEFILES)/framework.make
-Index: sogo.zentyal/SoObjects/SOGo/GNUmakefile
+Index: sogo/SoObjects/SOGo/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/SoObjects/SOGo/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/SoObjects/SOGo/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/SoObjects/SOGo/GNUmakefile	2014-02-10 12:44:32.917427822 +0100
++++ sogo/SoObjects/SOGo/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -16,6 +16,8 @@
  #SOGo_INSTALL_DIR = $(SOGO_LIBDIR)
  SOGo_INSTALL_DIR = $(DESTDIR)$(GNUSTEP_$(GNUSTEP_INSTALLATION_DOMAIN)_FRAMEWORKS)
@@ -152,10 +152,10 @@ Index: sogo.zentyal/SoObjects/SOGo/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/framework.make
  include $(GNUSTEP_MAKEFILES)/library.make
  include $(GNUSTEP_MAKEFILES)/tool.make
-Index: sogo.zentyal/SoObjects/common.make
+Index: sogo/SoObjects/common.make
 ===================================================================
---- sogo.zentyal.orig/SoObjects/common.make	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/SoObjects/common.make	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/SoObjects/common.make	2014-02-10 12:44:32.921427822 +0100
++++ sogo/SoObjects/common.make	2014-02-10 12:44:54.000000000 +0100
 @@ -18,7 +18,7 @@
          -I../../SOPE
  
@@ -165,10 +165,10 @@ Index: sogo.zentyal/SoObjects/common.make
  	-L../../SOGo/$(GNUSTEP_OBJ_DIR)/ \
  	-L../../OGoContentStore/$(GNUSTEP_OBJ_DIR)/ \
  	-L../../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/ \
-Index: sogo.zentyal/Tests/Integration/GNUmakefile.preamble
+Index: sogo/Tests/Integration/GNUmakefile.preamble
 ===================================================================
---- sogo.zentyal.orig/Tests/Integration/GNUmakefile.preamble	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/Tests/Integration/GNUmakefile.preamble	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/Tests/Integration/GNUmakefile.preamble	2014-02-10 12:44:32.921427822 +0100
++++ sogo/Tests/Integration/GNUmakefile.preamble	2014-02-10 12:44:54.000000000 +0100
 @@ -10,7 +10,7 @@
  	-D_GNU_SOURCE -I../../SOPE/ -I../../SoObjects/
  
@@ -178,10 +178,10 @@ Index: sogo.zentyal/Tests/Integration/GNUmakefile.preamble
  	-L../../OGoContentStore/$(GNUSTEP_OBJ_DIR)/ -lOGoContentStore \
  	-L../../SOPE/GDLContentStore/$(GNUSTEP_OBJ_DIR)/ -lGDLContentStore \
  	-L../../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/ -lNGCards \
-Index: sogo.zentyal/Tests/Unit/GNUmakefile
+Index: sogo/Tests/Unit/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/Tests/Unit/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/Tests/Unit/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/Tests/Unit/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/Tests/Unit/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -33,9 +33,9 @@
  	-Wall -D_GNU_SOURCE -I../../SOPE/ -I../../SoObjects/ -I../../UI/
  
@@ -194,10 +194,10 @@ Index: sogo.zentyal/Tests/Unit/GNUmakefile
  ADDITIONAL_LDFLAGS += -Wl,--no-as-needed
  
  -include GNUmakefile.preamble
-Index: sogo.zentyal/Tools/GNUmakefile
+Index: sogo/Tools/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/Tools/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/Tools/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/Tools/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/Tools/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -4,6 +4,8 @@
  include $(GNUSTEP_MAKEFILES)/common.make
  include ../Version
@@ -207,10 +207,10 @@ Index: sogo.zentyal/Tools/GNUmakefile
  ###
  SOGO_TOOL = sogo-tool
  $(SOGO_TOOL)_INSTALL_DIR = $(SOGO_ADMIN_TOOLS)
-Index: sogo.zentyal/Tools/GNUmakefile.preamble
+Index: sogo/Tools/GNUmakefile.preamble
 ===================================================================
---- sogo.zentyal.orig/Tools/GNUmakefile.preamble	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/Tools/GNUmakefile.preamble	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/Tools/GNUmakefile.preamble	2014-02-10 12:44:32.921427822 +0100
++++ sogo/Tools/GNUmakefile.preamble	2014-02-10 12:44:54.000000000 +0100
 @@ -10,7 +10,7 @@
  	-D_GNU_SOURCE -I../SOPE/ -I../SoObjects/
  
@@ -220,10 +220,10 @@ Index: sogo.zentyal/Tools/GNUmakefile.preamble
  	-L../OGoContentStore/$(GNUSTEP_OBJ_DIR)/ -lOGoContentStore \
  	-L../SOPE/GDLContentStore/$(GNUSTEP_OBJ_DIR)/ -lGDLContentStore \
  	-L../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/ -lNGCards \
-Index: sogo.zentyal/UI/AdministrationUI/GNUmakefile
+Index: sogo/UI/AdministrationUI/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/AdministrationUI/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/AdministrationUI/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/AdministrationUI/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/AdministrationUI/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -25,6 +25,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -232,10 +232,10 @@ Index: sogo.zentyal/UI/AdministrationUI/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/Common/GNUmakefile
+Index: sogo/UI/Common/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/Common/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/Common/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/Common/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/Common/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -33,6 +33,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -244,10 +244,10 @@ Index: sogo.zentyal/UI/Common/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/Contacts/GNUmakefile
+Index: sogo/UI/Contacts/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/Contacts/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/Contacts/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/Contacts/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/Contacts/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -37,6 +37,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -256,10 +256,10 @@ Index: sogo.zentyal/UI/Contacts/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/MailPartViewers/GNUmakefile
+Index: sogo/UI/MailPartViewers/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/MailPartViewers/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/MailPartViewers/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/MailPartViewers/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/MailPartViewers/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -37,6 +37,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += $(shell xml2-config --cflags)
@@ -268,10 +268,10 @@ Index: sogo.zentyal/UI/MailPartViewers/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/MailerUI/GNUmakefile
+Index: sogo/UI/MailerUI/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/MailerUI/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/MailerUI/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/MailerUI/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/MailerUI/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -45,6 +45,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -280,10 +280,10 @@ Index: sogo.zentyal/UI/MailerUI/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/MainUI/GNUmakefile
+Index: sogo/UI/MainUI/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/MainUI/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/MainUI/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/MainUI/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/MainUI/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -29,6 +29,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -292,10 +292,10 @@ Index: sogo.zentyal/UI/MainUI/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/PreferencesUI/GNUmakefile
+Index: sogo/UI/PreferencesUI/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/PreferencesUI/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/PreferencesUI/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/PreferencesUI/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/PreferencesUI/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -28,6 +28,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -304,10 +304,10 @@ Index: sogo.zentyal/UI/PreferencesUI/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/SOGoUI/GNUmakefile
+Index: sogo/UI/SOGoUI/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/SOGoUI/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/SOGoUI/GNUmakefile	2014-02-04 12:19:36.408894052 +0100
+--- sogo.orig/UI/SOGoUI/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/SOGoUI/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -11,6 +11,8 @@
  libSOGoUI_HEADER_FILES_INSTALL_DIR = /SOGoUI
  libSOGoUI_INTERFACE_VERSION	   = $(MAJOR_VERSION).$(MINOR_VERSION)
@@ -324,10 +324,10 @@ Index: sogo.zentyal/UI/SOGoUI/GNUmakefile
 +GNUSTEP_TARGET_LDIR=sogo
  include $(GNUSTEP_MAKEFILES)/library.make
  -include GNUmakefile.postamble
-Index: sogo.zentyal/UI/Scheduler/GNUmakefile
+Index: sogo/UI/Scheduler/GNUmakefile
 ===================================================================
---- sogo.zentyal.orig/UI/Scheduler/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/Scheduler/GNUmakefile	2014-02-04 12:19:36.412894052 +0100
+--- sogo.orig/UI/Scheduler/GNUmakefile	2014-02-10 12:44:32.921427822 +0100
++++ sogo/UI/Scheduler/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
 @@ -71,6 +71,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -336,10 +336,10 @@ Index: sogo.zentyal/UI/Scheduler/GNUmakefile
  
  -include GNUmakefile.preamble
  include $(GNUSTEP_MAKEFILES)/bundle.make
-Index: sogo.zentyal/UI/common.make
+Index: sogo/UI/common.make
 ===================================================================
---- sogo.zentyal.orig/UI/common.make	2014-02-04 12:19:36.412894052 +0100
-+++ sogo.zentyal/UI/common.make	2014-02-04 12:19:36.412894052 +0100
+--- sogo.orig/UI/common.make	2014-02-10 12:44:32.925427822 +0100
++++ sogo/UI/common.make	2014-02-10 12:44:54.000000000 +0100
 @@ -20,13 +20,13 @@
  ADDITIONAL_LIB_DIRS += 				\
          -L../../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)	\
