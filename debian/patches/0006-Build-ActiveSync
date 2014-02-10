@@ -1,22 +1,7 @@
-Index: sogo/ActiveSync/GNUmakefile
-===================================================================
---- sogo.orig/ActiveSync/GNUmakefile	2014-02-07 15:55:55.000000000 +0100
-+++ sogo/ActiveSync/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
-@@ -29,8 +29,8 @@
- 	product.plist
- 
- ADDITIONAL_OBJCFLAGS += -Wno-deprecated-declarations
--ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/ -I../SoObjects/
--ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
-+ADDITIONAL_INCLUDE_DIRS += -I../SOPE/ -I../SoObjects/
-+ADDITIONAL_LIB_DIRS += -L../SOPE/GDLContentStore/obj/ -L../SoObjects/SOGo/SOGo.framework/sogo -L../SOPE/NGCards/obj/
- ADDITIONAL_INCLUDE_DIRS += -I/usr/include/libwbxml-1.0/
- ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lwbxml2
- 
 Index: sogo/GNUmakefile
 ===================================================================
---- sogo.orig/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
-+++ sogo/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/GNUmakefile	2014-02-10 17:06:40.416824737 +0100
++++ sogo/GNUmakefile	2014-02-10 17:06:40.412824738 +0100
 @@ -10,7 +10,8 @@
  	SoObjects	\
  	Tools		\
@@ -27,3 +12,16 @@ Index: sogo/GNUmakefile
  
  ifeq ($(daemon),yes)
  SUBPROJECTS += Main
+Index: sogo/ActiveSync/GNUmakefile
+===================================================================
+--- sogo.orig/ActiveSync/GNUmakefile	2014-02-10 17:01:52.576834898 +0100
++++ sogo/ActiveSync/GNUmakefile	2014-02-10 17:07:19.364823363 +0100
+@@ -30,7 +30,7 @@
+ 
+ ADDITIONAL_OBJCFLAGS += -Wno-deprecated-declarations
+ ADDITIONAL_INCLUDE_DIRS += -I../SOPE/ -I../SoObjects/
+-ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/ -L../SoObjects/SOGo/SOGo.framework -L../SOPE/GDLContentStore/obj -L ../SOPE/NGCards/obj
++ADDITIONAL_LIB_DIRS += -L../SOPE/GDLContentStore/obj/ -L../SoObjects/SOGo/SOGo.framework -L../SOPE/GDLContentStore/obj -L../SOPE/NGCards/obj
+ ADDITIONAL_INCLUDE_DIRS += -I/usr/include/libwbxml-1.0/
+ ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lwbxml2
+ 

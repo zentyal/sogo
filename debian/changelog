@@ -1,3 +1,9 @@
+sogo (2.1.2~20140210-1) UNRELEASED; urgency=low
+
+  * Update upstream
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Mon, 10 Feb 2014 17:07:48 +0100
+
 sogo (2.1.2~20140205-2) saucy; urgency=low
 
   * Set openchange dependency versions
