@@ -1,8 +1,13 @@
-sogo (2.1.2~20140210-1) UNRELEASED; urgency=low
+sogo (2.1.2~20140214-1) saucy; urgency=low
 
   * Update upstream
+  * Some restyling issues fixed by jcarrion
+  * small style fixes on write mail contacts list
+  * reload image
+  * search box correction and refresh button added removed from top tool bar
+  * calendar view buttons moved from upper toolbar
 
- -- Samuel Cabrero <scabrero@zentyal.com>  Mon, 10 Feb 2014 17:07:48 +0100
+ -- Samuel Cabrero <scabrero@zentyal.com>  Fri, 14 Feb 2014 16:40:44 +0100
 
 sogo (2.1.2~20140205-2) saucy; urgency=low
 
