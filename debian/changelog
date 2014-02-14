@@ -1,3 +1,9 @@
+sogo (2.1.2~20140214-2) saucy; urgency=low
+
+  * Merge mysql backend changes from master
+
+ -- José A. Calvo <jacalvo@zentyal.com>  Fri, 14 Feb 2014 16:54:31 +0100
+
 sogo (2.1.2~20140214-1) saucy; urgency=low
 
   * Update upstream
