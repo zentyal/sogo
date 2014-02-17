@@ -1,3 +1,14 @@
+sogo (2.1.2~20140217-2) saucy; urgency=low
+
+  * debian/control:
+    Add missing python-samba dependency
+  * debian/rules:
+    Delete files not deleted by distclean
+  * debian/patches/0001-Put-private-libraries-in-usr-lib-sogo.patch
+    Link with rpath, fixing libSOGo not found
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Tue, 18 Feb 2014 00:12:41 +0100
+
 sogo (2.1.2~20140217-1) saucy; urgency=low
 
   * Update upstream

@@ -1,21 +1,7 @@
-Index: sogo/GNUmakefile
-===================================================================
---- sogo.orig/GNUmakefile	2014-02-10 12:44:32.909427822 +0100
-+++ sogo/GNUmakefile	2014-02-10 12:45:55.000000000 +0100
-@@ -9,7 +9,8 @@
- 	OGoContentStore	\
- 	SoObjects	\
- 	Tools		\
--	Tests/Unit
-+	Tests/Unit \
-+    OpenChange
- 
- ifeq ($(daemon),yes)
- SUBPROJECTS += Main
 Index: sogo/OpenChange/SOGoMAPIDBObject.m
 ===================================================================
---- sogo.orig/OpenChange/SOGoMAPIDBObject.m	2014-02-10 12:44:32.917427822 +0100
-+++ sogo/OpenChange/SOGoMAPIDBObject.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/SOGoMAPIDBObject.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/SOGoMAPIDBObject.m	2014-02-18 00:22:30.433944943 +0100
 @@ -240,6 +240,7 @@
  {
    NSString *className, *mapiMsgClass;
@@ -47,8 +33,8 @@ Index: sogo/OpenChange/SOGoMAPIDBObject.m
  
 Index: sogo/OpenChange/SOGoMAPIDBFolder.m
 ===================================================================
---- sogo.orig/OpenChange/SOGoMAPIDBFolder.m	2014-02-10 12:44:32.917427822 +0100
-+++ sogo/OpenChange/SOGoMAPIDBFolder.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/SOGoMAPIDBFolder.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/SOGoMAPIDBFolder.m	2014-02-18 00:22:30.433944943 +0100
 @@ -227,6 +227,8 @@
    /* change the paths in children records */
    if (nameInContainer)
@@ -60,8 +46,8 @@ Index: sogo/OpenChange/SOGoMAPIDBFolder.m
  
 Index: sogo/OpenChange/MAPIStoreFolder.m
 ===================================================================
---- sogo.orig/OpenChange/MAPIStoreFolder.m	2014-02-10 12:44:32.913427822 +0100
-+++ sogo/OpenChange/MAPIStoreFolder.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/MAPIStoreFolder.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/MAPIStoreFolder.m	2014-02-18 00:22:30.433944943 +0100
 @@ -101,6 +101,8 @@
    NSUInteger lastPartIdx;
    MAPIStoreUserContext *userContext;
@@ -81,8 +67,8 @@ Index: sogo/OpenChange/MAPIStoreFolder.m
        woContext = [[self userContext] woContext];
 Index: sogo/OpenChange/MAPIStoreMessage.m
 ===================================================================
---- sogo.orig/OpenChange/MAPIStoreMessage.m	2014-02-10 12:44:32.917427822 +0100
-+++ sogo/OpenChange/MAPIStoreMessage.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/MAPIStoreMessage.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/MAPIStoreMessage.m	2014-02-18 00:22:30.433944943 +0100
 @@ -474,7 +474,8 @@
    MAPIStoreMessage *mainMessage;
  
@@ -95,8 +81,8 @@ Index: sogo/OpenChange/MAPIStoreMessage.m
    userIsOwner = [[context activeUser] isEqual: ownerUser];
 Index: sogo/OpenChange/MAPIStoreObject.m
 ===================================================================
---- sogo.orig/OpenChange/MAPIStoreObject.m	2014-02-10 12:44:32.917427822 +0100
-+++ sogo/OpenChange/MAPIStoreObject.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/MAPIStoreObject.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/MAPIStoreObject.m	2014-02-18 00:22:30.433944943 +0100
 @@ -250,6 +250,7 @@
    id value;
  
@@ -107,8 +93,8 @@ Index: sogo/OpenChange/MAPIStoreObject.m
    for (counter = 0; counter < aRow->cValues; counter++)
 Index: sogo/OpenChange/MAPIStoreDBFolder.m
 ===================================================================
---- sogo.orig/OpenChange/MAPIStoreDBFolder.m	2014-02-10 12:44:32.913427822 +0100
-+++ sogo/OpenChange/MAPIStoreDBFolder.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/MAPIStoreDBFolder.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/MAPIStoreDBFolder.m	2014-02-18 00:22:30.433944943 +0100
 @@ -138,6 +138,8 @@
    MAPIStoreMapping *mapping;
    NSRange slashRange;
@@ -120,8 +106,8 @@ Index: sogo/OpenChange/MAPIStoreDBFolder.m
        path = [sogoObject path];
 Index: sogo/OpenChange/MAPIStoreMailFolder.m
 ===================================================================
---- sogo.orig/OpenChange/MAPIStoreMailFolder.m	2014-02-10 12:44:32.913427822 +0100
-+++ sogo/OpenChange/MAPIStoreMailFolder.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/MAPIStoreMailFolder.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/MAPIStoreMailFolder.m	2014-02-18 00:22:30.433944943 +0100
 @@ -163,6 +163,7 @@
    int i;
  
@@ -141,8 +127,8 @@ Index: sogo/OpenChange/MAPIStoreMailFolder.m
      {
 Index: sogo/OpenChange/RTFHandler.m
 ===================================================================
---- sogo.orig/OpenChange/RTFHandler.m	2014-02-10 12:44:32.917427822 +0100
-+++ sogo/OpenChange/RTFHandler.m	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/OpenChange/RTFHandler.m	2014-02-18 00:22:30.437944943 +0100
++++ sogo/OpenChange/RTFHandler.m	2014-02-18 00:22:30.433944943 +0100
 @@ -508,6 +508,7 @@
  
    fontTable = [[[RTFFontTable alloc] init] autorelease];
@@ -159,16 +145,17 @@ Index: sogo/OpenChange/RTFHandler.m
  
    _html = [[NSMutableData alloc] init];
    [_html appendBytes: "<html><meta charset='utf-8'><body>"  length: 34];
-Index: sogo/OpenChange/GNUmakefile
+Index: sogo/GNUmakefile
 ===================================================================
---- sogo.orig/OpenChange/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
-+++ sogo/OpenChange/GNUmakefile	2014-02-10 12:44:54.000000000 +0100
-@@ -146,7 +146,7 @@
- 	dbmsgreader.m
+--- sogo.orig/GNUmakefile	2014-02-18 00:23:24.393943014 +0100
++++ sogo/GNUmakefile	2014-02-18 00:23:50.177942092 +0100
+@@ -9,7 +9,8 @@
+ 	OGoContentStore	\
+ 	SoObjects	\
+ 	Tools		\
+-	Tests/Unit
++	Tests/Unit	\
++	OpenChange
  
- $(DBMSGREADER_TOOL)_LIB_DIRS += \
--	-L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
-+	-L../SoObjects/SOGo/SOGo.framework/sogo -lSOGo \
- 	-L../OGoContentStore/obj/ -lOGoContentStore \
- 	-L../SOPE/GDLContentStore/obj/ -lGDLContentStore \
- 	-L../SOPE/NGCards/obj/ -lNGCards \
+ ifeq ($(daemon),yes)
+ SUBPROJECTS += Main

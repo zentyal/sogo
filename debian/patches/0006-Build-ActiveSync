@@ -1,21 +1,7 @@
-Index: sogo/GNUmakefile
-===================================================================
---- sogo.orig/GNUmakefile	2014-02-10 17:06:40.416824737 +0100
-+++ sogo/GNUmakefile	2014-02-10 17:06:40.412824738 +0100
-@@ -10,7 +10,8 @@
- 	SoObjects	\
- 	Tools		\
- 	Tests/Unit \
--    OpenChange
-+    OpenChange \
-+    ActiveSync
- 
- ifeq ($(daemon),yes)
- SUBPROJECTS += Main
 Index: sogo/ActiveSync/GNUmakefile
 ===================================================================
---- sogo.orig/ActiveSync/GNUmakefile	2014-02-10 17:01:52.576834898 +0100
-+++ sogo/ActiveSync/GNUmakefile	2014-02-10 17:07:19.364823363 +0100
+--- sogo.orig/ActiveSync/GNUmakefile	2014-02-18 00:24:00.801941713 +0100
++++ sogo/ActiveSync/GNUmakefile	2014-02-18 00:24:00.801941713 +0100
 @@ -30,7 +30,7 @@
  
  ADDITIONAL_OBJCFLAGS += -Wno-deprecated-declarations
@@ -25,3 +11,17 @@ Index: sogo/ActiveSync/GNUmakefile
  ADDITIONAL_INCLUDE_DIRS += -I/usr/include/libwbxml-1.0/
  ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lwbxml2
  
+Index: sogo/GNUmakefile
+===================================================================
+--- sogo.orig/GNUmakefile	2014-02-18 00:23:50.177942092 +0100
++++ sogo/GNUmakefile	2014-02-18 00:24:21.181940984 +0100
+@@ -10,7 +10,8 @@
+ 	SoObjects	\
+ 	Tools		\
+ 	Tests/Unit	\
+-	OpenChange
++	OpenChange	\
++	ActiveSync
+ 
+ ifeq ($(daemon),yes)
+ SUBPROJECTS += Main

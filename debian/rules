@@ -9,6 +9,12 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+bindnow
 override_dh_auto_clean:
 	[ ! -f config.make ] || $(MAKE) distclean
 	rm -f config.make
+	rm -rf ActiveSync/obj
+	rm -rf OpenChange/obj
+	rm -rf OpenChange/SOGoBackend.MAPIStore
+	rm -rf ActiveSync/ActiveSync.SOGo
+	rm -f OpenChange/MAPIStorePropertySelectors.*
+	rm -f SoObjects/SOGo/SOGoSAML2Exceptions.*
 
 override_dh_auto_build:
 	dh_auto_build -- OBJCFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" messages=yes
