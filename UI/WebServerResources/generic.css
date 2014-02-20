@@ -1571,6 +1571,44 @@ span.cke_skin_kama
   { display: none; }
 }
 
+/* date picker */
+
+.timeDateControl INPUT,
+.timeDateControl SELECT,
+.timeDateControl SPAN
+{ vertical-align: top; }
+
+.timeDateControl {
+    display: block;
+}
+
+.datePicker {
+    display: inline-block;
+    position: relative;
+}
+.datePicker a.calendarButton.add-on{
+  padding: 4px 3px 1px 5px;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+}
+.datePicker INPUT:disabled + a.calendarButton,
+.datePicker INPUT:disabled + a.calendarButton:hover{ 
+  cursor: default;
+  opacity: 0.5;
+}
+
+.datePicker INPUT{
+    padding-right: 30px;
+    width: auto;
+    width: 110px;
+}
+.timeDateControl > INPUT {
+    display: inline-block;
+    width: auto;
+}
+
+
 @media (max-width: 960px){ 
 
 .linkbanner DIV.toolbar A.toolbarButton SPAN, .linkbanner DIV.toolbar A.toolbarButton:hover SPAN{
