@@ -1922,7 +1922,7 @@ function configureDragHandles() {
 }
 
 function onMessageListResize(event) {
-    var h = $("mailboxContent").getHeight() - $("messageListHeader").getHeight();
+    var h = $("mailboxContent").getHeight() - $("messageListHeader").getHeight() - 27;
     $("mailboxList").setStyle({'height': h + 'px'});
 }
 
