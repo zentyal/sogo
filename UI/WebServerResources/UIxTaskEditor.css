@@ -72,3 +72,9 @@ LABEL#urlArea INPUT
 
 INPUT#statusPercent
 { width: 2em; }
+
+.taskstatus .timeDateControl{
+  display: inline-block;
+  vertical-align: bottom;
+
+}

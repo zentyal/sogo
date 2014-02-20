@@ -28,25 +28,13 @@
     </label>
       <var:component className="UIxTimeDateControl" var:disabled="dueDateDisabled" const:controlID="dueTime" date="taskDueDate" const:dayStartHour="0" const:dayEndHour="23"/>
   </div>
-  <span class="checkBoxList"><var:string label:value="Status:" />
-    <span class="content"><var:popup list="statusList" item="item"
-	const:id="statusList"
-        label:noSelectionString="status_NOT-SPECIFIED"
-        string="itemStatusText" selection="status"
-        /><var:component className="UIxTimeDateControl"
-	const:displayTimeControl="0"
-	var:disabled="statusDateDisabled"
-	const:controlID="statusTime"
-	date="statusDate"
-	const:dayStartHour="0"
-	const:dayEndHour="23"
-	/><input type="text" name="statusPercent"
-	id="statusPercent"
-	class="textField"
-	var:value="statusPercent"
-	var:disabled="statusPercentDisabled"
-  /><span><var:string label:value="% complete"
-    /></span></span></span>
+  <div class="taskstatus">
+    <label><var:string label:value="Status:" /></label>
+        <span style="display:inline-block;"><var:popup list="statusList" item="item" const:id="statusList" label:noSelectionString="status_NOT-SPECIFIED" string="itemStatusText" selection="status" /></span>
+        <var:component className="UIxTimeDateControl" const:displayTimeControl="0" var:disabled="statusDateDisabled" const:controlID="statusTime" date="statusDate" const:dayStartHour="0" const:dayEndHour="23" />
+        <input type="text" name="statusPercent" id="statusPercent" class="textField inline-input" var:value="statusPercent" var:disabled="statusPercentDisabled"/>
+        <span style="display:inline-block;"><var:string label:value="% complete"/></span>
+</div>
   </var:if>
   <var:if condition="eventIsReadOnly">
   <var:if condition="hasStartDate">
