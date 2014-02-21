@@ -259,30 +259,11 @@ DIV#freeBusyReplicas
 width: 300px;
 float: left;}
 
-DIV#freeBusyReplicas SPAN.datePicker.date{
-  position: relative;
-  display: inline-block;
-  min-width: 135px; 
-}
-DIV#freeBusyReplicas #startTime_time,
-DIV#freeBusyReplicas #endTime_time{
-  width: auto;
-  display: inline-block;
-}
-SPAN.timeDateControl{
-  width: 100%;
-}
-
 DIV#freeBusyReplicas LABEL
 { line-height: 1.5em; }
 
 DIV#freeBusyReplicas DIV {
   width: 100%;
-}
-DIV#freeBusyReplicas a.calendarButton {
-  position: absolute;
-  right: 4px;
-  top: 6px;
 }
 
 DIV#windowButtons

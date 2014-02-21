@@ -15,21 +15,21 @@
       onclick = "return openMessageWindowsForSelection('reply');";
       isSafe   = NO;
       image = "tb-mail-reply-flat-24x24.png";
-      cssClass = "tbicon_reply";
+      cssClass = "tbicon_reply onSelectItem hiddenButton";
       label = "Reply";
       tooltip = "Reply to the message"; },
     { link = "#";
       onclick = "return openMessageWindowsForSelection('replyall');";
       isSafe   = NO;
       image = "tb-mail-replyall-flat-24x24.png";
-      cssClass = "tbicon_replyall";
+      cssClass = "tbicon_replyall onSelectItem hiddenButton";
       label = "Reply All";
       tooltip = "Reply to sender and all recipients"; },
     { link = "#";
       onclick = "return openMessageWindowsForSelection('forward');";
       isSafe   = NO;
       image = "tb-mail-forward-flat-24x24.png";
-      cssClass = "tbicon_forward";
+      cssClass = "tbicon_forward onSelectItem hiddenButton";
       label = "Forward";
       tooltip = "Forward selected message"; },
   ),
@@ -40,7 +40,7 @@
       onclick = "onMenuDeleteMessage(event);";
 //       enabled  = showMarkDeletedButton;
       image = "tb-mail-delete-flat-24x24.png";
-      cssClass = "tbicon_delete";
+      cssClass = "tbicon_delete onSelectItem hiddenButton";
       label = "Delete";
       tooltip = "Delete selected message or folder"; },
 //    { link = "#";
@@ -53,9 +53,9 @@
   (
    { link = "#";
      onclick = "return onPrintCurrentMessage(event);";
-     cssClass = "tbicon_print single-window-not-conditional";
+     cssClass = "tbicon_print onSelectItem hiddenButton single-window-not-conditional";
      image = "tb-mail-print-flat-24x24.png";
-     label = "Print"; 
+     label = "Print";
      tooltip = "Print this message"; },
   )
 )
