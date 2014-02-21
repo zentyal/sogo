@@ -183,7 +183,7 @@
               ><input type="button" id="emptyCategory"
                 const:readonly="readonly"
                 const:name="emptyCategory"
-              const:value="Add Category" /></var:if>
+              label:value="Add..." /></var:if>
             <script type="text/javascript">
               var gCategories = <var:string value="contactCategoriesList" const:escapeHTML="NO"/>;
             </script>

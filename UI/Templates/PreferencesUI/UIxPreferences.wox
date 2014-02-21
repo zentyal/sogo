@@ -567,7 +567,7 @@
                     var:checked="ignoreLists" />
                   <var:string label:value="Do not send responses to mailing lists" /></label>
                 </div>
-                <div class="checkbox">
+                <div class="checkbox disable-reply">
                 <label class="timeDate"><input var:checked="enableVacationEndDate"
                     const:name="enableVacationEndDate" const:id="enableVacationEndDate" type="checkbox" class="checkBox"
                 /><var:string label:value="Disable auto reply on" /></label><var:component className="UIxTimeDateControl"

@@ -12,6 +12,7 @@ var Contact = {
 };
 
 function openContactsFolder(contactsFolder, reload, idx) {
+    hideMessageSelectedButtons();
     if ((contactsFolder && contactsFolder != Contact.currentAddressBook)
         || reload) {
         Contact.currentAddressBook = contactsFolder;
@@ -180,6 +181,8 @@ function contactsListCallback(http) {
                         if (div.getHeight() < rowPosition)
                             div.scrollTop = rowPosition; // scroll to selected contact
                         row.selectElement();
+                        hideMessageSelectedButtons();
+                        console.log("restore selection and scroll");
                         break;
                     }
                 }
@@ -759,6 +762,8 @@ function onFolderUnsubscribeCB(folderId) {
     var personal = $("/personal");
     personal.selectElement();
     onFolderSelectionChange();
+
+    hideMessageSelectedButtons();
 }
 
 function onAddressBookExport(event) {
@@ -906,6 +911,7 @@ function deletePersonalAddressBookCallback(http) {
             }
             var personal = $("/personal");
             personal.selectElement();
+            hideMessageSelectedButtons();
             onFolderSelectionChange();
         }
         document.deletePersonalABAjaxRequest = null;
@@ -974,6 +980,7 @@ function configureAddressBooks() {
 
         // Select initial addressbook
         $(Contact.currentAddressBook).selectElement();
+        hideMessageSelectedButtons();
     }
 }
 
@@ -1308,6 +1315,7 @@ function onDocumentKeydown(event) {
                     
                     // Select and load the next message
                     nextRow.selectElement();
+                    showMessageSelectedButtons();
                     loadContact(nextRow.readAttribute("id"));
                 }
                 Event.stop(event);
