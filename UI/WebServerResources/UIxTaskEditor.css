@@ -75,6 +75,9 @@ INPUT#statusPercent
 
 .taskstatus .timeDateControl{
   display: inline-block;
-  vertical-align: bottom;
+}
 
+.timeDateControl {
+  vertical-align: top;
+  margin-right: 4px;
 }
