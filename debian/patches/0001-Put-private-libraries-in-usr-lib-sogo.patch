@@ -30,8 +30,8 @@ Subject: Put private libraries in /usr/lib/sogo
 
 Index: sogo/Main/GNUmakefile
 ===================================================================
---- sogo.orig/Main/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/Main/GNUmakefile	2014-02-18 00:03:23.709985933 +0100
+--- sogo.orig/Main/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/Main/GNUmakefile	2014-02-25 19:26:35.389504297 +0100
 @@ -7,7 +7,7 @@
  ADDITIONAL_OBJCFLAGS += -fPIE
  ADDITIONAL_INCLUDE_DIRS +=
@@ -43,8 +43,8 @@ Index: sogo/Main/GNUmakefile
  TOOL_NAME = $(SOGOD)
 Index: sogo/Main/GNUmakefile.preamble
 ===================================================================
---- sogo.orig/Main/GNUmakefile.preamble	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/Main/GNUmakefile.preamble	2014-02-18 00:03:23.709985933 +0100
+--- sogo.orig/Main/GNUmakefile.preamble	2014-02-25 19:26:35.413504298 +0100
++++ sogo/Main/GNUmakefile.preamble	2014-02-25 19:26:35.393504297 +0100
 @@ -9,7 +9,7 @@
  	-I..
  
@@ -56,8 +56,8 @@ Index: sogo/Main/GNUmakefile.preamble
  
 Index: sogo/OGoContentStore/GNUmakefile
 ===================================================================
---- sogo.orig/OGoContentStore/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/OGoContentStore/GNUmakefile	2014-02-18 00:03:23.709985933 +0100
+--- sogo.orig/OGoContentStore/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/OGoContentStore/GNUmakefile	2014-02-25 19:26:35.393504297 +0100
 @@ -14,6 +14,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../SOPE
@@ -76,8 +76,8 @@ Index: sogo/OGoContentStore/GNUmakefile
  -include GNUmakefile.postamble
 Index: sogo/OGoContentStore/GNUmakefile.preamble
 ===================================================================
---- sogo.orig/OGoContentStore/GNUmakefile.preamble	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/OGoContentStore/GNUmakefile.preamble	2014-02-18 00:03:23.709985933 +0100
+--- sogo.orig/OGoContentStore/GNUmakefile.preamble	2014-02-25 19:26:35.413504298 +0100
++++ sogo/OGoContentStore/GNUmakefile.preamble	2014-02-25 19:26:35.393504297 +0100
 @@ -11,7 +11,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I. -I.. -I../SOPE -I../SoObjects
@@ -89,8 +89,8 @@ Index: sogo/OGoContentStore/GNUmakefile.preamble
  
 Index: sogo/OpenChange/GNUmakefile
 ===================================================================
---- sogo.orig/OpenChange/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/OpenChange/GNUmakefile	2014-02-18 00:07:17.597977573 +0100
+--- sogo.orig/OpenChange/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/OpenChange/GNUmakefile	2014-02-25 19:26:35.393504297 +0100
 @@ -5,6 +5,8 @@
  include $(GNUSTEP_MAKEFILES)/common.make
  include ../Version
@@ -127,8 +127,8 @@ Index: sogo/OpenChange/GNUmakefile
  
 Index: sogo/SOPE/GDLContentStore/GNUmakefile
 ===================================================================
---- sogo.orig/SOPE/GDLContentStore/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/SOPE/GDLContentStore/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/SOPE/GDLContentStore/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/SOPE/GDLContentStore/GNUmakefile	2014-02-25 19:26:35.393504297 +0100
 @@ -68,6 +68,7 @@
  ifneq ($(FHS_INSTALL_ROOT),)
  GNUSTEP_HEADERS=$(DESTDIR)$(FHS_INSTALL_ROOT)/include
@@ -139,8 +139,8 @@ Index: sogo/SOPE/GDLContentStore/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/framework.make
 Index: sogo/SOPE/NGCards/GNUmakefile
 ===================================================================
---- sogo.orig/SOPE/NGCards/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/SOPE/NGCards/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/SOPE/NGCards/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/SOPE/NGCards/GNUmakefile	2014-02-25 19:26:35.393504297 +0100
 @@ -131,6 +131,7 @@
  ifneq ($(FHS_INSTALL_ROOT),)
  GNUSTEP_HEADERS=$(DESTDIR)$(FHS_INSTALL_ROOT)/include
@@ -151,18 +151,16 @@ Index: sogo/SOPE/NGCards/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/framework.make
 Index: sogo/SoObjects/SOGo/GNUmakefile
 ===================================================================
---- sogo.orig/SoObjects/SOGo/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/SoObjects/SOGo/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-@@ -16,6 +16,8 @@
- #SOGo_INSTALL_DIR = $(SOGO_LIBDIR)
- SOGo_INSTALL_DIR = $(DESTDIR)$(GNUSTEP_$(GNUSTEP_INSTALLATION_DOMAIN)_FRAMEWORKS)
+--- sogo.orig/SoObjects/SOGo/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/SoObjects/SOGo/GNUmakefile	2014-02-25 19:26:35.397504297 +0100
+@@ -185,12 +185,13 @@
+ ADDITIONAL_TOOL_LIBS += -Lobj -lSOGo$(LIBRARY_NAME_SUFFIX)
+ ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
+ ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
+-ADDITIONAL_LDFLAGS += -lmemcached
++ADDITIONAL_LDFLAGS += -lmemcached -Wl,--rpath,/usr/lib/sogo
  
-+ADDITIONAL_LDFLAGS += -Wl,--rpath,/usr/lib/sogo
-+
- SOGo_HEADER_FILES = \
- 	SOGoBuild.h \
- 	SOGoProductLoader.h		\
-@@ -191,6 +193,7 @@
+ -include GNUmakefile.preamble
  ifneq ($(FHS_INSTALL_ROOT),)
  GNUSTEP_HEADERS=$(DESTDIR)$(FHS_INSTALL_ROOT)/include
  endif
@@ -172,8 +170,8 @@ Index: sogo/SoObjects/SOGo/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/tool.make
 Index: sogo/SoObjects/common.make
 ===================================================================
---- sogo.orig/SoObjects/common.make	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/SoObjects/common.make	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/SoObjects/common.make	2014-02-25 19:26:35.413504298 +0100
++++ sogo/SoObjects/common.make	2014-02-25 19:26:35.397504297 +0100
 @@ -18,7 +18,7 @@
          -I../../SOPE
  
@@ -185,8 +183,8 @@ Index: sogo/SoObjects/common.make
  	-L../../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/ \
 Index: sogo/Tests/Integration/GNUmakefile.preamble
 ===================================================================
---- sogo.orig/Tests/Integration/GNUmakefile.preamble	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/Tests/Integration/GNUmakefile.preamble	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/Tests/Integration/GNUmakefile.preamble	2014-02-25 19:26:35.413504298 +0100
++++ sogo/Tests/Integration/GNUmakefile.preamble	2014-02-25 19:26:35.397504297 +0100
 @@ -10,7 +10,7 @@
  	-D_GNU_SOURCE -I../../SOPE/ -I../../SoObjects/
  
@@ -198,8 +196,8 @@ Index: sogo/Tests/Integration/GNUmakefile.preamble
  	-L../../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/ -lNGCards \
 Index: sogo/Tests/Unit/GNUmakefile
 ===================================================================
---- sogo.orig/Tests/Unit/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/Tests/Unit/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/Tests/Unit/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/Tests/Unit/GNUmakefile	2014-02-25 19:26:35.397504297 +0100
 @@ -33,9 +33,9 @@
  	-Wall -D_GNU_SOURCE -I../../SOPE/ -I../../SoObjects/ -I../../UI/
  
@@ -214,8 +212,8 @@ Index: sogo/Tests/Unit/GNUmakefile
  -include GNUmakefile.preamble
 Index: sogo/Tools/GNUmakefile
 ===================================================================
---- sogo.orig/Tools/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/Tools/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/Tools/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/Tools/GNUmakefile	2014-02-25 19:26:35.397504297 +0100
 @@ -4,6 +4,8 @@
  include $(GNUSTEP_MAKEFILES)/common.make
  include ../Version
@@ -227,8 +225,8 @@ Index: sogo/Tools/GNUmakefile
  $(SOGO_TOOL)_INSTALL_DIR = $(SOGO_ADMIN_TOOLS)
 Index: sogo/Tools/GNUmakefile.preamble
 ===================================================================
---- sogo.orig/Tools/GNUmakefile.preamble	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/Tools/GNUmakefile.preamble	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/Tools/GNUmakefile.preamble	2014-02-25 19:26:35.413504298 +0100
++++ sogo/Tools/GNUmakefile.preamble	2014-02-25 19:26:35.397504297 +0100
 @@ -10,7 +10,7 @@
  	-D_GNU_SOURCE -I../SOPE/ -I../SoObjects/
  
@@ -240,8 +238,8 @@ Index: sogo/Tools/GNUmakefile.preamble
  	-L../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/ -lNGCards \
 Index: sogo/UI/AdministrationUI/GNUmakefile
 ===================================================================
---- sogo.orig/UI/AdministrationUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/AdministrationUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/AdministrationUI/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/AdministrationUI/GNUmakefile	2014-02-25 19:26:35.397504297 +0100
 @@ -25,6 +25,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -252,8 +250,8 @@ Index: sogo/UI/AdministrationUI/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/Common/GNUmakefile
 ===================================================================
---- sogo.orig/UI/Common/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/Common/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/Common/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/Common/GNUmakefile	2014-02-25 19:26:35.401504298 +0100
 @@ -33,6 +33,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -264,8 +262,8 @@ Index: sogo/UI/Common/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/Contacts/GNUmakefile
 ===================================================================
---- sogo.orig/UI/Contacts/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/Contacts/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/Contacts/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/Contacts/GNUmakefile	2014-02-25 19:26:35.401504298 +0100
 @@ -37,6 +37,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -276,8 +274,8 @@ Index: sogo/UI/Contacts/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/MailPartViewers/GNUmakefile
 ===================================================================
---- sogo.orig/UI/MailPartViewers/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/MailPartViewers/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/MailPartViewers/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/MailPartViewers/GNUmakefile	2014-02-25 19:26:35.401504298 +0100
 @@ -37,6 +37,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += $(shell xml2-config --cflags)
@@ -288,8 +286,8 @@ Index: sogo/UI/MailPartViewers/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/MailerUI/GNUmakefile
 ===================================================================
---- sogo.orig/UI/MailerUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/MailerUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/MailerUI/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/MailerUI/GNUmakefile	2014-02-25 19:26:35.401504298 +0100
 @@ -45,6 +45,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -300,8 +298,8 @@ Index: sogo/UI/MailerUI/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/MainUI/GNUmakefile
 ===================================================================
---- sogo.orig/UI/MainUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/MainUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/MainUI/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/MainUI/GNUmakefile	2014-02-25 19:26:35.401504298 +0100
 @@ -29,6 +29,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -312,8 +310,8 @@ Index: sogo/UI/MainUI/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/PreferencesUI/GNUmakefile
 ===================================================================
---- sogo.orig/UI/PreferencesUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/PreferencesUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/PreferencesUI/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/PreferencesUI/GNUmakefile	2014-02-25 19:26:35.401504298 +0100
 @@ -28,6 +28,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -324,8 +322,8 @@ Index: sogo/UI/PreferencesUI/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/SOGoUI/GNUmakefile
 ===================================================================
---- sogo.orig/UI/SOGoUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/SOGoUI/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/SOGoUI/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/SOGoUI/GNUmakefile	2014-02-25 19:26:35.405504298 +0100
 @@ -11,6 +11,8 @@
  libSOGoUI_HEADER_FILES_INSTALL_DIR = /SOGoUI
  libSOGoUI_INTERFACE_VERSION	   = $(MAJOR_VERSION).$(MINOR_VERSION)
@@ -344,8 +342,8 @@ Index: sogo/UI/SOGoUI/GNUmakefile
  -include GNUmakefile.postamble
 Index: sogo/UI/Scheduler/GNUmakefile
 ===================================================================
---- sogo.orig/UI/Scheduler/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/Scheduler/GNUmakefile	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/Scheduler/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/Scheduler/GNUmakefile	2014-02-25 19:26:35.405504298 +0100
 @@ -71,6 +71,7 @@
  
  ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
@@ -356,8 +354,8 @@ Index: sogo/UI/Scheduler/GNUmakefile
  include $(GNUSTEP_MAKEFILES)/bundle.make
 Index: sogo/UI/common.make
 ===================================================================
---- sogo.orig/UI/common.make	2014-02-18 00:03:23.713985933 +0100
-+++ sogo/UI/common.make	2014-02-18 00:03:23.713985933 +0100
+--- sogo.orig/UI/common.make	2014-02-25 19:26:35.413504298 +0100
++++ sogo/UI/common.make	2014-02-25 19:26:35.405504298 +0100
 @@ -20,13 +20,13 @@
  ADDITIONAL_LIB_DIRS += 				\
          -L../../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)	\
@@ -374,3 +372,53 @@ Index: sogo/UI/common.make
  RELBUILD_DIR_libSOGoUI = \
  	$(GNUSTEP_BUILD_DIR)/../SOGoUI/$(GNUSTEP_OBJ_DIR_NAME)
  RELBUILD_DIR_libOGoContentStore = \
+Index: sogo/SoObjects/Appointments/GNUmakefile
+===================================================================
+--- sogo.orig/SoObjects/Appointments/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/SoObjects/Appointments/GNUmakefile	2014-02-25 19:26:35.405504298 +0100
+@@ -59,7 +59,7 @@
+ 
+ ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
+ ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
+-ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lcurl
++ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lcurl -Wl,--rpath,/usr/lib/sogo
+ 
+ -include GNUmakefile.preamble
+ include $(GNUSTEP_MAKEFILES)/wobundle.make
+Index: sogo/SoObjects/Contacts/GNUmakefile
+===================================================================
+--- sogo.orig/SoObjects/Contacts/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/SoObjects/Contacts/GNUmakefile	2014-02-25 19:26:35.405504298 +0100
+@@ -33,6 +33,7 @@
+ 
+ ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
+ ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
++ADDITIONAL_LDFLAGS += -Wl,--rpath,/usr/lib/sogo
+ 
+ -include GNUmakefile.preamble
+ include $(GNUSTEP_MAKEFILES)/bundle.make
+Index: sogo/SoObjects/Mailer/GNUmakefile
+===================================================================
+--- sogo.orig/SoObjects/Mailer/GNUmakefile	2014-02-25 19:26:35.413504298 +0100
++++ sogo/SoObjects/Mailer/GNUmakefile	2014-02-25 19:26:35.405504298 +0100
+@@ -99,6 +99,7 @@
+ ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
+ ADDITIONAL_INCLUDE_DIRS += $(shell xml2-config --cflags)
+ ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
++ADDITIONAL_LDFLAGS += -Wl,--rpath,/usr/lib/sogo
+ 
+ -include GNUmakefile.preamble
+ include $(GNUSTEP_MAKEFILES)/wobundle.make
+Index: sogo/ActiveSync/GNUmakefile
+===================================================================
+--- sogo.orig/ActiveSync/GNUmakefile	2014-02-25 18:59:14.000000000 +0100
++++ sogo/ActiveSync/GNUmakefile	2014-02-25 19:27:05.605504751 +0100
+@@ -32,7 +32,7 @@
+ ADDITIONAL_INCLUDE_DIRS += -I../SOPE/ -I../SoObjects/
+ ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/ -L../SoObjects/SOGo/SOGo.framework -L../SOPE/GDLContentStore/obj -L ../SOPE/NGCards/obj
+ ADDITIONAL_INCLUDE_DIRS += -I/usr/include/libwbxml-1.0/
+-ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lwbxml2
++ADDITIONAL_LDFLAGS += -Wl,--no-as-needed -lwbxml2 -Wl,--rpath,/usr/lib/sogo
+ 
+ -include GNUmakefile.preamble
+ include $(GNUSTEP_MAKEFILES)/bundle.make
