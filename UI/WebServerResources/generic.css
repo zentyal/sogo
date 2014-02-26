@@ -203,6 +203,11 @@ DIV.linkbanner SPAN#userIdentificationDisplay
   font-size: 0.9em;
   font-weight: normal
 }
+DIV.linkbanner SPAN#userIdentificationDisplay > img {
+    float: left;
+    padding-left: 0;
+    padding-right: 15px;
+}
 
 DIV.linkbanner IMG
 { padding: 0px 4px; }
