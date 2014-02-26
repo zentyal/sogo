@@ -24,10 +24,12 @@
 #import <Foundation/NSURL.h>
 
 #import <NGObjWeb/SoDefaultRenderer.h>
+#import <NGObjWeb/SoJsonRenderer.h>
 #import <NGObjWeb/WOApplication.h>
 #import <NGObjWeb/WOContext.h>
 #import <NGObjWeb/WOCookie.h>
 #import <NGObjWeb/WORequest.h>
+#import <NGObjWeb/WORequest+So.h>
 #import <NGObjWeb/WOResponse.h>
 #import <NGExtensions/NGBase64Coding.h>
 #import <NGExtensions/NSCalendarDate+misc.h>
@@ -39,6 +41,7 @@
 
 #import <MainUI/SOGoRootPage.h>
 
+#import <SOGo/NSDictionary+Utilities.h>
 #import <SOGo/SOGoCache.h>
 #import <SOGo/SOGoCASSession.h>
 #import <SOGo/SOGoConstants.h>
@@ -372,10 +375,26 @@
   NSString *appName;
 
   request = [context request];
-  page = [[WOApplication application] pageWithName: @"SOGoRootPage"
-                                        forRequest: request];
-  [[SoDefaultRenderer sharedRenderer] renderObject: [page defaultAction]
-                                         inContext: context];
+  if ([request isSoJSONRequest])
+    {
+      NSDictionary *jsonResponse;
+
+      [response setStatus: 403];
+      [response appendHeader: @"application/json" forKey: @"content-type"];
+      [response setContentEncoding: NSUTF8StringEncoding];
+
+      jsonResponse
+          = [NSDictionary dictionaryWithObject: @"authentication required"
+                                        forKey: @"error"];
+      [response appendContentString: [jsonResponse jsonRepresentation]];
+    }
+  else
+    {
+      page = [[WOApplication application] pageWithName: @"SOGoRootPage"
+                                            forRequest: request];
+      [[SoDefaultRenderer sharedRenderer] renderObject: [page defaultAction]
+                                             inContext: context];
+    }
   authCookie = [WOCookie cookieWithName: [self cookieNameInContext: context]
                                   value: @"discard"];
   appName = [request applicationName];
