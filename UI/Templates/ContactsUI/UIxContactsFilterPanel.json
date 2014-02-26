@@ -33,7 +33,7 @@
                     "value": "searchMenu"
                 },
                 "autocomplete": {
-                    "type": "var",
+                    "type": "const",
                     "value": "off"
                 }
             }

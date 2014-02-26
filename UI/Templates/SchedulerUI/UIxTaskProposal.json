@@ -68,7 +68,7 @@
                     "type": "const",
                     "value": "popup"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemDurationText"
                 },

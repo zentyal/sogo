@@ -98,7 +98,7 @@
                 },
                 "extra": {
                     "autocomplete": {
-                        "type": "var",
+                        "type": "const",
                         "value": "off"
                     },
                     "menuid": {

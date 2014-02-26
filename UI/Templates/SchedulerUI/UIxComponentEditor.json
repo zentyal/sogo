@@ -538,9 +538,11 @@
                                             "type": "const",
                                             "value": "replyList"
                                         },
-                                        "item-string": {
-                                            "type": "var",
-                                            "value": "itemReplyText"
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "replyList"
+                                            }
                                         },
                                         "list": {
                                             "type": "var",
@@ -553,6 +555,10 @@
                                         "type": {
                                             "type": "const",
                                             "value": "popup"
+                                        },
+                                        "string": {
+                                            "type": "var",
+                                            "value": "itemReplyText"
                                         }
                                     },
                                     {
@@ -852,13 +858,15 @@
                                 "type": "var",
                                 "value": "category"
                             },
-                            "no-selection-string": {
-                                "type": "label",
-                                "value": "category_none"
-                            },
-                            "item-string": {
+                            "string": {
                                 "type": "var",
                                 "value": "item"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "categoryList"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -867,6 +875,10 @@
                             "item": {
                                 "type": "var",
                                 "value": "item"
+                            },
+                            "noSelectionString": {
+                                "type": "label",
+                                "value": "category_none"
                             },
                             "type": {
                                 "type": "const",
@@ -878,13 +890,15 @@
                                 "type": "var",
                                 "value": "priority"
                             },
-                            "no-selection-string": {
-                                "type": "label",
-                                "value": "prio_0"
-                            },
-                            "item-string": {
+                            "string": {
                                 "type": "var",
                                 "value": "itemPriorityText"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "priorityList"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -893,6 +907,10 @@
                             "item": {
                                 "type": "var",
                                 "value": "item"
+                            },
+                            "noSelectionString": {
+                                "type": "label",
+                                "value": "prio_0"
                             },
                             "type": {
                                 "type": "const",
@@ -904,9 +922,15 @@
                                 "type": "var",
                                 "value": "componentCalendar"
                             },
-                            "item-string": {
+                            "string": {
                                 "type": "var",
                                 "value": "calendarDisplayName"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "calendarList"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -934,9 +958,15 @@
                                 "type": "const",
                                 "value": "repeatList"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemRepeatText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeatList"
+                                },
+                                "disabledValue": {
+                                    "type": "const",
+                                    "value": "-"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -950,13 +980,17 @@
                                 "type": "var",
                                 "value": "item"
                             },
+                            "noSelectionString": {
+                                "type": "label",
+                                "value": "repeat_NEVER"
+                            },
                             "type": {
                                 "type": "const",
                                 "value": "popup"
                             },
-                            "no-selection-string": {
-                                "type": "label",
-                                "value": "repeat_NEVER"
+                            "string": {
+                                "type": "var",
+                                "value": "itemRepeatText"
                             }
                         },
                         {
@@ -968,9 +1002,15 @@
                                 "type": "const",
                                 "value": "reminderList"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemReminderText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderList"
+                                },
+                                "disabledValue": {
+                                    "type": "const",
+                                    "value": "-"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -980,13 +1020,17 @@
                                 "type": "var",
                                 "value": "item"
                             },
+                            "noSelectionString": {
+                                "type": "label",
+                                "value": "reminder_NONE"
+                            },
                             "type": {
                                 "type": "const",
                                 "value": "popup"
                             },
-                            "no-selection-string": {
-                                "type": "label",
-                                "value": "reminder_NONE"
+                            "string": {
+                                "type": "var",
+                                "value": "itemReminderText"
                             }
                         },
                         {

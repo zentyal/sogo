@@ -20,9 +20,15 @@
                     "type": "var",
                     "value": "minutes"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "unitsList"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -46,9 +52,15 @@
                     "type": "var",
                     "value": "BEFORE"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "referencesList"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -72,9 +84,15 @@
                     "type": "var",
                     "value": "START"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "relationsList"
+                    }
                 },
                 "list": {
                     "type": "var",

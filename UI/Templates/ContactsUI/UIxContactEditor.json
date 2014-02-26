@@ -164,11 +164,7 @@
                     "type": "var",
                     "value": "ldifRecord.mozillausehtmlmail"
                 },
-                "no-selection-string": {
-                    "type": "label",
-                    "value": "htmlMailFormat_UNKNOWN"
-                },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemHtmlMailFormatText"
                 },
@@ -179,6 +175,10 @@
                 "item": {
                     "type": "var",
                     "value": "item"
+                },
+                "noSelectionString": {
+                    "type": "label",
+                    "value": "htmlMailFormat_UNKNOWN"
                 },
                 "type": {
                     "type": "const",
@@ -725,25 +725,31 @@
                 "then": {
                     "inputs": [
                         {
-                            "list": {
-                                "type": "var",
-                                "value": "addressBooksList"
-                            },
                             "selection": {
                                 "type": "var",
                                 "value": "componentAddressBook"
                             },
-                            "type": {
-                                "type": "const",
-                                "value": "popup"
-                            },
-                            "item-string": {
+                            "string": {
                                 "type": "var",
                                 "value": "addressBookDisplayName"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "addressBooksList"
+                                }
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "addressBooksList"
                             },
                             "item": {
                                 "type": "var",
                                 "value": "addressBookItem"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
                             }
                         }
                     ],

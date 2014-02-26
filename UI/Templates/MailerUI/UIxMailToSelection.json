@@ -23,16 +23,12 @@
                         "contents": {
                             "inputs": [
                                 {
-                                    "display-string": {
-                                        "type": "label",
-                                        "value": "$item"
-                                    },
                                     "selection": {
                                         "type": "var",
                                         "value": "currentHeader"
                                     },
                                     "name": {
-                                        "type": "var",
+                                        "type": "const",
                                         "value": "currentPopUpId"
                                     },
                                     "list": {
@@ -42,6 +38,10 @@
                                     "item": {
                                         "type": "var",
                                         "value": "item"
+                                    },
+                                    "displayString": {
+                                        "type": "label",
+                                        "value": "$item"
                                     },
                                     "type": {
                                         "type": "const",
@@ -77,20 +77,20 @@
     ],
     "inputs": [
         {
+            "displayString": {
+                "type": "label",
+                "value": "$item"
+            },
             "list": {
                 "type": "var",
                 "value": "headers"
-            },
-            "display-string": {
-                "type": "label",
-                "value": "$item"
             },
             "type": {
                 "type": "const",
                 "value": "popup"
             },
             "name": {
-                "type": "var",
+                "type": "const",
                 "value": "currentPopUpId"
             },
             "item": {

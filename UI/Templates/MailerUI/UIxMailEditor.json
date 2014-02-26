@@ -4,13 +4,17 @@
             "type": "const",
             "value": "SOGoMailComposeMessageType,SOGoMailReplyPlacement,SOGoMailSignature"
         },
+        "cssFiles": {
+            "type": "const",
+            "value": "jquery.fileupload.css"
+        },
         "popup": {
             "type": "const",
             "value": "YES"
         },
         "jsFiles": {
             "type": "const",
-            "value": "UIxMailToSelection.js,ckeditor/ckeditor.js,SOGoAutoCompletion.js,ContactsUI.js"
+            "value": "UIxMailToSelection.js,ckeditor/ckeditor.js,SOGoAutoCompletion.js,ContactsUI.js,jquery-ui.js,jquery.fileupload.js,jquery.iframe-transport.js"
         },
         "title": {
             "type": "var",
@@ -72,17 +76,27 @@
             {
                 "item": {
                     "type": "var",
-                    "value": "attachmentName"
+                    "value": "attachment"
                 },
                 "list": {
                     "type": "var",
-                    "value": "attachmentNames"
+                    "value": "attachmentAttrs"
                 },
                 "contents": {
                     "strings": [
                         {
                             "type": "var",
-                            "value": "attachmentName"
+                            "value": "attachment.filename"
+                        },
+                        {
+                            "type": "var",
+                            "value": "attachment.size",
+                            "extra": {
+                                "formatter": {
+                                    "type": "var",
+                                    "value": "sizeFormatter"
+                                }
+                            }
                         }
                     ]
                 }
@@ -90,13 +104,15 @@
         ],
         "inputs": [
             {
-                "name": {
-                    "type": "const",
-                    "value": "contactFolder"
-                },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "currentContactFolderName"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "contactFolder"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -113,6 +129,10 @@
                 "type": {
                     "type": "const",
                     "value": "popup"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "contactFolder"
                 }
             },
             {
@@ -176,25 +196,31 @@
                 }
             },
             {
-                "list": {
-                    "type": "var",
-                    "value": "fromEMails"
-                },
                 "selection": {
                     "type": "var",
-                    "value": "from"
-                },
-                "type": {
-                    "type": "const",
-                    "value": "popup"
+                    "value": ""
                 },
                 "name": {
                     "type": "const",
                     "value": "from"
                 },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "fromSelect"
+                    }
+                },
+                "list": {
+                    "type": "var",
+                    "value": "fromEMails"
+                },
                 "item": {
                     "type": "var",
                     "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
                 }
             },
             {
@@ -209,6 +235,26 @@
                 "value": {
                     "type": "var",
                     "value": "subject"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "file"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "attachments"
+                },
+                "extra": {
+                    "multiple": {
+                        "type": "const",
+                        "value": "multiple"
+                    },
+                    "id": {
+                        "type": "const",
+                        "value": "fileUpload"
+                    }
                 }
             },
             {
@@ -257,26 +303,6 @@
             },
             {
                 "type": "label",
-                "value": "Open"
-            },
-            {
-                "type": "label",
-                "value": "Delete"
-            },
-            {
-                "type": "label",
-                "value": "Select All"
-            },
-            {
-                "type": "label",
-                "value": "Attach File(s)..."
-            },
-            {
-                "type": "label",
-                "value": "Attach Web Page..."
-            },
-            {
-                "type": "label",
                 "value": "Return Receipt"
             },
             {
@@ -301,7 +327,7 @@
             },
             {
                 "type": "label",
-                "value": "Attachments:"
+                "value": "Attach"
             }
         ],
         "components": [

@@ -52,9 +52,11 @@
                     "type": "const",
                     "value": "language"
                 },
-                "item-string": {
-                    "type": "var",
-                    "value": "languageText"
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "language"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -64,13 +66,17 @@
                     "type": "var",
                     "value": "item"
                 },
+                "noSelectionString": {
+                    "type": "label",
+                    "value": "choose"
+                },
                 "type": {
                     "type": "const",
                     "value": "popup"
                 },
-                "no-selection-string": {
-                    "type": "label",
-                    "value": "choose"
+                "string": {
+                    "type": "var",
+                    "value": "languageText"
                 }
             },
             {
@@ -82,9 +88,11 @@
                     "type": "const",
                     "value": "timezone"
                 },
-                "item-string": {
-                    "type": "var",
-                    "value": "item"
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "timezone"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -97,6 +105,10 @@
                 "type": {
                     "type": "const",
                     "value": "popup"
+                },
+                "string": {
+                    "type": "var",
+                    "value": "item"
                 }
             },
             {
@@ -108,9 +120,11 @@
                     "type": "const",
                     "value": "shortDateFormat"
                 },
-                "item-string": {
-                    "type": "var",
-                    "value": "itemShortDateFormatText"
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "shortDateFormat"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -123,6 +137,10 @@
                 "type": {
                     "type": "const",
                     "value": "popup"
+                },
+                "string": {
+                    "type": "var",
+                    "value": "itemShortDateFormatText"
                 }
             },
             {
@@ -134,9 +152,11 @@
                     "type": "const",
                     "value": "longDateFormat"
                 },
-                "item-string": {
-                    "type": "var",
-                    "value": "itemLongDateFormatText"
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "longDateFormat"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -149,6 +169,10 @@
                 "type": {
                     "type": "const",
                     "value": "popup"
+                },
+                "string": {
+                    "type": "var",
+                    "value": "itemLongDateFormatText"
                 }
             },
             {
@@ -160,9 +184,11 @@
                     "type": "const",
                     "value": "timeFormat"
                 },
-                "item-string": {
-                    "type": "var",
-                    "value": "itemTimeFormatText"
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "timeFormat"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -175,6 +201,10 @@
                 "type": {
                     "type": "const",
                     "value": "popup"
+                },
+                "string": {
+                    "type": "var",
+                    "value": "itemTimeFormatText"
                 }
             },
             {
@@ -186,9 +216,11 @@
                     "type": "const",
                     "value": "defaultModule"
                 },
-                "item-string": {
-                    "type": "var",
-                    "value": "itemModuleText"
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "defaultModule"
+                    }
                 },
                 "list": {
                     "type": "var",
@@ -201,6 +233,10 @@
                 "type": {
                     "type": "const",
                     "value": "popup"
+                },
+                "string": {
+                    "type": "var",
+                    "value": "itemModuleText"
                 }
             },
             {
@@ -359,9 +395,11 @@
                                 "type": "const",
                                 "value": "weekStartDay"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemWeekStartDay"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "weekStartDay"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -374,6 +412,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemWeekStartDay"
                             }
                         },
                         {
@@ -385,9 +427,11 @@
                                 "type": "const",
                                 "value": "dayStartTime"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "item"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "dayStartTime"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -400,6 +444,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "item"
                             }
                         },
                         {
@@ -411,9 +459,11 @@
                                 "type": "const",
                                 "value": "dayEndTime"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "item"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "dayEndTime"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -426,6 +476,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "item"
                             }
                         },
                         {
@@ -457,9 +511,11 @@
                                 "type": "const",
                                 "value": "firstWeek"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemFirstWeekText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "firstWeek"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -472,6 +528,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemFirstWeekText"
                             }
                         },
                         {
@@ -483,9 +543,11 @@
                                 "type": "const",
                                 "value": "defaultCalendar"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemCalendarText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "defaultCalendar"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -498,6 +560,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemCalendarText"
                             }
                         },
                         {
@@ -509,9 +575,11 @@
                                 "type": "const",
                                 "value": "eventsClassification"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemClassificationText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "eventsClassification"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -524,6 +592,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemClassificationText"
                             }
                         },
                         {
@@ -535,9 +607,11 @@
                                 "type": "const",
                                 "value": "tasksClassification"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemClassificationText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "tasksClassification"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -550,6 +624,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemClassificationText"
                             }
                         },
                         {
@@ -681,9 +759,11 @@
                                 "type": "const",
                                 "value": "messageCheck"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemMessageCheckText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "messageCheck"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -696,6 +776,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemMessageCheckText"
                             }
                         },
                         {
@@ -707,9 +791,11 @@
                                 "type": "const",
                                 "value": "messageForwarding"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemMessageForwardingText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "messageForwarding"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -722,6 +808,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemMessageForwardingText"
                             }
                         },
                         {
@@ -733,9 +823,11 @@
                                 "type": "const",
                                 "value": "replyPlacementList"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemReplyPlacementText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "replyPlacementList"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -748,6 +840,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemReplyPlacementText"
                             }
                         },
                         {
@@ -759,9 +855,11 @@
                                 "type": "const",
                                 "value": "signaturePlacementList"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemSignaturePlacementText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "signaturePlacementList"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -774,6 +872,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemSignaturePlacementText"
                             }
                         },
                         {
@@ -785,9 +887,11 @@
                                 "type": "const",
                                 "value": "composeMessagesType"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemComposeMessagesText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "composeMessagesType"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -800,6 +904,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemComposeMessagesText"
                             }
                         },
                         {
@@ -811,9 +919,11 @@
                                 "type": "const",
                                 "value": "displayRemoteInlineImages"
                             },
-                            "item-string": {
-                                "type": "var",
-                                "value": "itemDisplayRemoteInlineImagesText"
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "displayRemoteInlineImages"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -826,6 +936,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "string": {
+                                "type": "var",
+                                "value": "itemDisplayRemoteInlineImagesText"
                             }
                         },
                         {
@@ -1039,7 +1153,7 @@
                             },
                             "extra": {
                                 "autocomplete": {
-                                    "type": "var",
+                                    "type": "const",
                                     "value": "off"
                                 },
                                 "id": {
@@ -1320,9 +1434,11 @@
                                             "type": "const",
                                             "value": "daysBetweenResponsesList"
                                         },
-                                        "item-string": {
-                                            "type": "var",
-                                            "value": "item"
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "daysBetweenResponsesList"
+                                            }
                                         },
                                         "list": {
                                             "type": "var",
@@ -1335,6 +1451,10 @@
                                         "type": {
                                             "type": "const",
                                             "value": "popup"
+                                        },
+                                        "string": {
+                                            "type": "var",
+                                            "value": "item"
                                         }
                                     },
                                     {

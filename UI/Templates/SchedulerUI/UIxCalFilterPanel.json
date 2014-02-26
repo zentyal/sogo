@@ -39,7 +39,7 @@
                     "value": "eventSearchMenu"
                 },
                 "autocomplete": {
-                    "type": "var",
+                    "type": "const",
                     "value": "off"
                 },
                 "id": {
@@ -53,13 +53,19 @@
                 "type": "var",
                 "value": "selectedFilter"
             },
-            "name": {
-                "type": "const",
-                "value": "filterpopup"
-            },
-            "item-string": {
+            "string": {
                 "type": "var",
                 "value": "filterLabel"
+            },
+            "extra": {
+                "onchange": {
+                    "type": "const",
+                    "value": "return onListFilterChange();"
+                },
+                "id": {
+                    "type": "const",
+                    "value": "filterpopup"
+                }
             },
             "list": {
                 "type": "var",
@@ -76,6 +82,10 @@
             "type": {
                 "type": "const",
                 "value": "popup"
+            },
+            "name": {
+                "type": "const",
+                "value": "filterpopup"
             }
         }
     ],

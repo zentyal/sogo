@@ -35,11 +35,7 @@
                                 "type": "var",
                                 "value": "currentRightSelection"
                             },
-                            "name": {
-                                "type": "var",
-                                "value": "currentRightTypeName"
-                            },
-                            "item-string": {
+                            "string": {
                                 "type": "var",
                                 "value": "currentRightLabel"
                             },
@@ -58,6 +54,10 @@
                             "type": {
                                 "type": "const",
                                 "value": "popup"
+                            },
+                            "name": {
+                                "type": "var",
+                                "value": "currentRightTypeName"
                             }
                         }
                     ],

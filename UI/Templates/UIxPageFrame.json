@@ -225,7 +225,7 @@
                                                     "strings": [
                                                         {
                                                             "type": "var",
-                                                            "value": "userDefaults.jsonRepresentation",
+                                                            "value": "userDefaults",
                                                             "extra": {
                                                                 "escapeHTML": {
                                                                     "type": "const",
@@ -311,7 +311,7 @@
                                 },
                                 {
                                     "type": "var",
-                                    "value": "commonLocalizableStrings.jsonRepresentation",
+                                    "value": "commonLocalizableStrings",
                                     "extra": {
                                         "escapeHTML": {
                                             "type": "const",
@@ -321,7 +321,7 @@
                                 },
                                 {
                                     "type": "var",
-                                    "value": "productLocalizableStrings.jsonRepresentation",
+                                    "value": "productLocalizableStrings",
                                     "extra": {
                                         "escapeHTML": {
                                             "type": "const",

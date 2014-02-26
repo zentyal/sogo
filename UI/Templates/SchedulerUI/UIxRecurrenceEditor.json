@@ -44,25 +44,31 @@
         ],
         "inputs": [
             {
+                "name": {
+                    "type": "const",
+                    "value": "repeatType"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "repeatType"
+                    }
+                },
                 "list": {
                     "type": "var",
                     "value": "repeatList"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
                 },
                 "type": {
                     "type": "const",
                     "value": "popup"
                 },
-                "name": {
-                    "type": "const",
-                    "value": "repeatType"
-                },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
-                },
-                "item": {
-                    "type": "var",
-                    "value": "item"
                 }
             },
             {
@@ -186,11 +192,17 @@
                     "type": "var",
                     "value": "monthlyRepeatList"
                 },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "monthlyRepeat"
+                    }
+                },
                 "type": {
                     "type": "const",
                     "value": "popup"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
                 },
@@ -204,11 +216,17 @@
                     "type": "var",
                     "value": "monthlyDayList"
                 },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "monthlyDay"
+                    }
+                },
                 "type": {
                     "type": "const",
                     "value": "popup"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
                 },
@@ -302,11 +320,17 @@
                     "type": "var",
                     "value": "yearlyMonthList"
                 },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyMonth1"
+                    }
+                },
                 "type": {
                     "type": "const",
                     "value": "popup"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
                 },
@@ -336,25 +360,31 @@
                 }
             },
             {
-                "list": {
-                    "type": "var",
-                    "value": "monthlyRepeatList"
-                },
                 "selection": {
                     "type": "var",
                     "value": "First"
                 },
-                "type": {
-                    "type": "const",
-                    "value": "popup"
-                },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyRepeat"
+                    }
+                },
+                "list": {
+                    "type": "var",
+                    "value": "monthlyRepeatList"
                 },
                 "item": {
                     "type": "var",
                     "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
                 }
             },
             {
@@ -362,11 +392,17 @@
                     "type": "var",
                     "value": "yearlyDayList"
                 },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyDay"
+                    }
+                },
                 "type": {
                     "type": "const",
                     "value": "popup"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
                 },
@@ -380,11 +416,17 @@
                     "type": "var",
                     "value": "yearlyMonthList"
                 },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyMonth2"
+                    }
+                },
                 "type": {
                     "type": "const",
                     "value": "popup"
                 },
-                "item-string": {
+                "string": {
                     "type": "var",
                     "value": "itemText"
                 },

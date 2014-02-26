@@ -149,13 +149,15 @@
                                 "type": "var",
                                 "value": "status"
                             },
-                            "no-selection-string": {
-                                "type": "label",
-                                "value": "status_NOT-SPECIFIED"
-                            },
-                            "item-string": {
+                            "string": {
                                 "type": "var",
                                 "value": "itemStatusText"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "statusList"
+                                }
                             },
                             "list": {
                                 "type": "var",
@@ -164,6 +166,10 @@
                             "item": {
                                 "type": "var",
                                 "value": "item"
+                            },
+                            "noSelectionString": {
+                                "type": "label",
+                                "value": "status_NOT-SPECIFIED"
                             },
                             "type": {
                                 "type": "const",
