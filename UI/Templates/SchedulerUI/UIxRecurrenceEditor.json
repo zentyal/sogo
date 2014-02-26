@@ -1,0 +1,638 @@
+{
+    "parameters": {
+        "cssFiles": {
+            "type": "const",
+            "value": "datepicker.css"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "datepicker.js"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "shortWeekDaysList"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "labelForWeekDay"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "list": {
+                    "type": "var",
+                    "value": "repeatList"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "repeatType"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "dailyRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "0"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "dailyRadioButton"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "dailyDaysFieldName"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "dailyDaysField"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "dailyRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "1"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "dailyRadioButton"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "weeklyWeeksFieldName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "title"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "weeklyWeeksField"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "monthlyMonthsFieldName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "title"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "monthlyMonthsField"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "monthlyRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "0"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "monthlyRadioButton"
+                    }
+                }
+            },
+            {
+                "list": {
+                    "type": "var",
+                    "value": "monthlyRepeatList"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "list": {
+                    "type": "var",
+                    "value": "monthlyDayList"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "monthlyRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "1"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "monthlyRadioButton"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "yearlyYearsFieldName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "title"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyYearsField"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "yearlyRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "0"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyRadioButton"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "yearlyDayFieldName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "title"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyDayField"
+                    }
+                }
+            },
+            {
+                "list": {
+                    "type": "var",
+                    "value": "yearlyMonthList"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "yearlyRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "1"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "yearlyRadioButton"
+                    }
+                }
+            },
+            {
+                "list": {
+                    "type": "var",
+                    "value": "monthlyRepeatList"
+                },
+                "selection": {
+                    "type": "var",
+                    "value": "First"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "list": {
+                    "type": "var",
+                    "value": "yearlyDayList"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "list": {
+                    "type": "var",
+                    "value": "yearlyMonthList"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "rangeRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "0"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "rangeRadioButton"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "rangeRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "1"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "rangeRadioButton"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "rangeAppointmentsFieldName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "title"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "rangeAppointmentsField"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "radio"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "rangeRadioButtonName"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "2"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "rangeRadioButton"
+                    }
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "dayFieldInvalid"
+            },
+            {
+                "type": "label",
+                "value": "weekFieldInvalid"
+            },
+            {
+                "type": "label",
+                "value": "monthFieldInvalid"
+            },
+            {
+                "type": "label",
+                "value": "monthDayFieldInvalid"
+            },
+            {
+                "type": "label",
+                "value": "yearFieldInvalid"
+            },
+            {
+                "type": "label",
+                "value": "appointmentFieldInvalid"
+            },
+            {
+                "type": "label",
+                "value": "recurrenceUnsupported"
+            },
+            {
+                "type": "label",
+                "value": "Recurrence pattern"
+            },
+            {
+                "type": "label",
+                "value": "Repeat"
+            },
+            {
+                "type": "label",
+                "value": "Every"
+            },
+            {
+                "type": "label",
+                "value": "Days"
+            },
+            {
+                "type": "label",
+                "value": "repeat_EVERY WEEKDAY"
+            },
+            {
+                "type": "label",
+                "value": "Every"
+            },
+            {
+                "type": "label",
+                "value": "Week(s)"
+            },
+            {
+                "type": "label",
+                "value": "On"
+            },
+            {
+                "type": "label",
+                "value": "Every"
+            },
+            {
+                "type": "label",
+                "value": "Month(s)"
+            },
+            {
+                "type": "label",
+                "value": "The"
+            },
+            {
+                "type": "label",
+                "value": "Recur on day(s)"
+            },
+            {
+                "type": "label",
+                "value": "Every"
+            },
+            {
+                "type": "label",
+                "value": "Year(s)"
+            },
+            {
+                "type": "label",
+                "value": "Every"
+            },
+            {
+                "type": "label",
+                "value": "Every"
+            },
+            {
+                "type": "label",
+                "value": "cycle_of"
+            },
+            {
+                "type": "label",
+                "value": "Range of recurrence"
+            },
+            {
+                "type": "label",
+                "value": "No end date"
+            },
+            {
+                "type": "label",
+                "value": "Create"
+            },
+            {
+                "type": "label",
+                "value": "appointment(s)"
+            },
+            {
+                "type": "label",
+                "value": "Repeat until"
+            },
+            {
+                "type": "label",
+                "value": "OK"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "displayTimeControl": {
+                        "type": "const",
+                        "value": "0"
+                    },
+                    "dayStartHour": {
+                        "type": "const",
+                        "value": "0"
+                    },
+                    "dayEndHour": {
+                        "type": "const",
+                        "value": "23"
+                    },
+                    "date": {
+                        "type": "var",
+                        "value": "endDate"
+                    },
+                    "controlID": {
+                        "type": "const",
+                        "value": "endDate"
+                    },
+                    "id": {
+                        "type": "const",
+                        "value": "endDate"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxTimeDateControl"
+                }
+            }
+        ]
+    }
+}

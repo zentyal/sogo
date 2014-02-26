@@ -1,0 +1,54 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "toolbarGroup"
+            },
+            "list": {
+                "type": "var",
+                "value": "toolbarConfig"
+            },
+            "contents": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "buttonInfo"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "toolbarGroup"
+                        },
+                        "contents": {
+                            "conditions": [
+                                {
+                                    "then": {
+                                        "strings": [
+                                            {
+                                                "type": "var",
+                                                "value": "buttonLabel"
+                                            }
+                                        ]
+                                    },
+                                    "condition": {
+                                        "type": "var",
+                                        "value": "isButtonEnabled"
+                                    },
+                                    "else": {
+                                        "strings": [
+                                            {
+                                                "type": "var",
+                                                "value": "buttonLabel"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

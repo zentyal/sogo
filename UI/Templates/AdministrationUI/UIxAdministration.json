@@ -1,0 +1,74 @@
+{
+    "parameters": {
+        "jsFiles": {
+            "type": "const",
+            "value": "dtree.js"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "UIxAdministration.toolbar"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "strings": [
+            {
+                "type": "label",
+                "value": "Close"
+            },
+            {
+                "type": "label",
+                "value": "Modules"
+            },
+            {
+                "type": "label",
+                "value": "ACLs"
+            },
+            {
+                "type": "label",
+                "value": "ACLs_title"
+            },
+            {
+                "type": "label",
+                "value": "ACLs_description",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            },
+            {
+                "type": "var",
+                "value": "errorAlertJavaScript",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "qualifier": {
+                        "type": "var",
+                        "value": "qualifier"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxAdministrationFilterPanel"
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentUserName",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "isSubject"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentUserName",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "const",
+                        "value": "\"",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "resourceName"
+                    },
+                    {
+                        "type": "const",
+                        "value": "\"",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "isBody"
+            }
+        }
+    ]
+}

@@ -1,0 +1,1568 @@
+{
+    "parameters": {
+        "cssFiles": {
+            "type": "const",
+            "value": "datepicker.css,SOGoTimePicker.css,UIxComponentEditor.css"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "datepicker.js,UIxComponentEditor.js,SOGoAutoCompletion.js,SOGoTimePicker.js"
+        },
+        "toolbar": {
+            "type": "var",
+            "value": "toolbar"
+        },
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "clientObject.container.nameInContainer"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "isChildOccurence"
+                }
+            },
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "attach"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "attach"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "attach"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "classification"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "classification"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "classification"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "attendeesNames"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "attendeesNames"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "attendeesNames"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "attendeesUIDs"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "attendeesUIDs"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "attendeesUIDs"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "attendeesEmails"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "attendeesEmails"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "attendeesEmails"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "attendeesStates"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "attendeesStates"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "attendeesStates"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "calendarFoldersList"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "calendarsFoldersList"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "calendarFoldersList"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeatType"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeatType"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeatType"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat1"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat1"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat1"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat2"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat2"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat2"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat3"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat3"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat3"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat4"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat4"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat4"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat5"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat5"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat5"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat6"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat6"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat6"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat7"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat7"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat7"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "range1"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "range1"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "range1"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "range2"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "range2"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "range2"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderQuantity"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderQuantity"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderQuantity"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderUnit"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderUnit"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderUnit"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderRelation"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderRelation"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderRelation"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderReference"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderReference"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderReference"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderAction"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderAction"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderAction"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderEmailOrganizer"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderEmailOrganizer"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderEmailOrganizer"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderEmailAttendees"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderEmailAttendees"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderEmailAttendees"
+                                }
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "selection": {
+                                            "type": "var",
+                                            "value": "reply"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "replyList"
+                                        },
+                                        "item-string": {
+                                            "type": "var",
+                                            "value": "itemReplyText"
+                                        },
+                                        "list": {
+                                            "type": "var",
+                                            "value": "replyList"
+                                        },
+                                        "item": {
+                                            "type": "var",
+                                            "value": "item"
+                                        },
+                                        "type": {
+                                            "type": "const",
+                                            "value": "popup"
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "text"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "delegatedTo"
+                                        },
+                                        "value": {
+                                            "type": "const",
+                                            "value": ""
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "delegatedTo"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Reply:"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "OK"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "userHasRSVP"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Description:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "comment"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasComment"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Priority:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "priority"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasPriority"
+                            }
+                        },
+                        {
+                            "then": {
+                                "loops": [
+                                    {
+                                        "item": {
+                                            "type": "var",
+                                            "value": "attendee"
+                                        },
+                                        "list": {
+                                            "type": "var",
+                                            "value": "component.attendees"
+                                        },
+                                        "contents": {
+                                            "conditions": [
+                                                {
+                                                    "condition": {
+                                                        "type": "var",
+                                                        "value": "attendee.delegatedTo"
+                                                    },
+                                                    "else": {
+                                                        "strings": [
+                                                            {
+                                                                "type": "var",
+                                                                "value": "attendeeForDisplay"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Organizer:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "organizerName"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Attendees:"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasAttendees"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Category:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "category"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasCategory"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Repeat:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "repeatLabel"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasRepeat"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Location:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "location"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasLocation"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Created by:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "createdByName"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasCreatedBy"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "componentCalendarName"
+                        },
+                        {
+                            "type": "label",
+                            "value": "General:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Title:"
+                        },
+                        {
+                            "type": "var",
+                            "value": "title"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Document:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Cancel"
+                        }
+                    ],
+                    "show-component-content": true
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "eventIsReadOnly"
+                },
+                "else": {
+                    "loops": [
+                        {
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "classificationClasses"
+                            },
+                            "contents": {
+                                "strings": [
+                                    {
+                                        "type": "var",
+                                        "value": "itemClassificationText"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "summary"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "title"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "summary"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "location"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "location"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "location"
+                                }
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "category"
+                            },
+                            "no-selection-string": {
+                                "type": "label",
+                                "value": "category_none"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "categoryList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "priority"
+                            },
+                            "no-selection-string": {
+                                "type": "label",
+                                "value": "prio_0"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemPriorityText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "priorities"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "componentCalendar"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "calendarDisplayName"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "calendarList"
+                            },
+                            "disabled": {
+                                "type": "var",
+                                "value": "isChildOccurence"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "repeat"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeatList"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemRepeatText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "repeatList"
+                            },
+                            "disabled": {
+                                "type": "var",
+                                "value": "isChildOccurence"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            },
+                            "no-selection-string": {
+                                "type": "label",
+                                "value": "repeat_NEVER"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "reminder"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderList"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemReminderText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "reminderList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            },
+                            "no-selection-string": {
+                                "type": "label",
+                                "value": "reminder_NONE"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "textarea"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "comment"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "comment"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "attach"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "attach"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "attach"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "classification"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "classification"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "classification"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "attendees"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "attendees"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "calendarFoldersList"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "calendarsFoldersList"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "calendarFoldersList"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeatType"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeatType"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeatType"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat1"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat1"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat1"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat2"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat2"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat2"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat3"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat3"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat3"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat4"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat4"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat4"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat5"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat5"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat5"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat6"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat6"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat6"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "repeat7"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "repeat7"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "repeat7"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "range1"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "range1"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "range1"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "range2"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "range2"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "range2"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderQuantity"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderQuantity"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderQuantity"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderUnit"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderUnit"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderUnit"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderRelation"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderRelation"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderRelation"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderReference"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderReference"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderReference"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderAction"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderAction"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderAction"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderEmailOrganizer"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderEmailOrganizer"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderEmailOrganizer"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "reminderEmailAttendees"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reminderEmailAttendees"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reminderEmailAttendees"
+                                }
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "var",
+                                        "value": "jsonOrganizer",
+                                        "extra": {
+                                            "escapeHTML": {
+                                                "type": "const",
+                                                "value": "NO"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Organizer:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "organizerName"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasOrganizer"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Created by:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "createdByName"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasCreatedBy"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "calendarOwnerList.jsonRepresentation",
+                            "extra": {
+                                "escapeHTML": {
+                                    "type": "const",
+                                    "value": "NO"
+                                }
+                            }
+                        },
+                        {
+                            "type": "label",
+                            "value": "Title:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Location:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Category:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Priority:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Calendar:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Repeat:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Edit"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Reminder:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Edit"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Description:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Document:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Change..."
+                        }
+                    ],
+                    "show-component-content": true
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "componentCalendar.nameInContainer"
+            },
+            {
+                "type": "var",
+                "value": "clientObject.nameInContainer"
+            },
+            {
+                "type": "var",
+                "value": "jsonAttendees",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            },
+            {
+                "type": "var",
+                "value": "ownerLogin"
+            },
+            {
+                "type": "var",
+                "value": "emailAlarmsEnabled"
+            },
+            {
+                "type": "var",
+                "value": "firstDayOfWeek"
+            }
+        ]
+    }
+}

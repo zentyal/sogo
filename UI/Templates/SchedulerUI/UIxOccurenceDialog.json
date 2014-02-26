@@ -1,0 +1,56 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "strings": [
+            {
+                "type": "var",
+                "value": "calendarFolder"
+            },
+            {
+                "type": "var",
+                "value": "componentName"
+            },
+            {
+                "type": "var",
+                "value": "recurrenceName"
+            },
+            {
+                "type": "var",
+                "value": "action"
+            },
+            {
+                "type": "label",
+                "value": "editRepeatingItem"
+            },
+            {
+                "type": "label",
+                "value": "button_thisOccurrenceOnly"
+            },
+            {
+                "type": "label",
+                "value": "button_allOccurrences"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

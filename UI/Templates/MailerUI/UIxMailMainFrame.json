@@ -1,0 +1,584 @@
+{
+    "parameters": {
+        "userDefaultsKeys": {
+            "type": "const",
+            "value": "SOGoMailMessageCheck,SOGoMailSortByThreads,SOGoMailListViewColumnsOrder,SOGoMailDisplayRemoteInlineImages"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "dtree.js,MailerUIdTree.js,SOGoAutoCompletion.js,SOGoResizableTable.js,SOGoMailDataSource.js,SOGoDataTable.js,jquery-ui.js"
+        },
+        "userSettingsKeys": {
+            "type": "const",
+            "value": "Mail"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentColumn"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "columnsDisplayOrder"
+                },
+                "contents": {
+                    "conditions": [
+                        {
+                            "value": {
+                                "type": "const",
+                                "value": "Thread"
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "currentColumn.value"
+                            },
+                            "else": {
+                                "conditions": [
+                                    {
+                                        "value": {
+                                            "type": "const",
+                                            "value": "Flagged"
+                                        },
+                                        "condition": {
+                                            "type": "var",
+                                            "value": "currentColumn.value"
+                                        },
+                                        "else": {
+                                            "conditions": [
+                                                {
+                                                    "value": {
+                                                        "type": "const",
+                                                        "value": "Attachment"
+                                                    },
+                                                    "condition": {
+                                                        "type": "var",
+                                                        "value": "currentColumn.value"
+                                                    },
+                                                    "else": {
+                                                        "conditions": [
+                                                            {
+                                                                "value": {
+                                                                    "type": "const",
+                                                                    "value": "Unread"
+                                                                },
+                                                                "condition": {
+                                                                    "type": "var",
+                                                                    "value": "currentColumn.value"
+                                                                },
+                                                                "else": {
+                                                                    "strings": [
+                                                                        {
+                                                                            "type": "var",
+                                                                            "value": "columnTitle"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "verticalDragHandleStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "verticalDragHandleStyle"
+                }
+            },
+            {
+                "condition": {
+                    "type": "var",
+                    "value": "singleWindowModeEnabled"
+                },
+                "else": {
+                    "conditions": [
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "var",
+                                        "value": "mailboxContentStyle"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "mailboxContentStyle"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "horizontalDragHandleStyle"
+                        },
+                        {
+                            "type": "var",
+                            "value": "horizontalDragHandleStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "horizontalDragHandleStyle"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "mailAccounts",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            },
+            {
+                "type": "var",
+                "value": "inboxData",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            },
+            {
+                "type": "var",
+                "value": "unseenCountFolders",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            },
+            {
+                "type": "label",
+                "value": "Subscribe..."
+            },
+            {
+                "type": "label",
+                "value": "Get Messages for Account"
+            },
+            {
+                "type": "label",
+                "value": "New Folder..."
+            },
+            {
+                "type": "label",
+                "value": "Search Messages..."
+            },
+            {
+                "type": "label",
+                "value": "Properties..."
+            },
+            {
+                "type": "label",
+                "value": "Delegation..."
+            },
+            {
+                "type": "label",
+                "value": "Open in New Mail Window"
+            },
+            {
+                "type": "label",
+                "value": "Copy Folder Location"
+            },
+            {
+                "type": "label",
+                "value": "Subscribe..."
+            },
+            {
+                "type": "label",
+                "value": "Mark Folder Read"
+            },
+            {
+                "type": "label",
+                "value": "New Folder..."
+            },
+            {
+                "type": "label",
+                "value": "Compact This Folder"
+            },
+            {
+                "type": "label",
+                "value": "Archive This Folder"
+            },
+            {
+                "type": "label",
+                "value": "Search Messages..."
+            },
+            {
+                "type": "label",
+                "value": "Sharing..."
+            },
+            {
+                "type": "label",
+                "value": "Open in New Mail Window"
+            },
+            {
+                "type": "label",
+                "value": "Copy Folder Location"
+            },
+            {
+                "type": "label",
+                "value": "Subscribe..."
+            },
+            {
+                "type": "label",
+                "value": "Mark Folder Read"
+            },
+            {
+                "type": "label",
+                "value": "New Subfolder..."
+            },
+            {
+                "type": "label",
+                "value": "Compact This Folder"
+            },
+            {
+                "type": "label",
+                "value": "Archive This Folder"
+            },
+            {
+                "type": "label",
+                "value": "Empty Trash"
+            },
+            {
+                "type": "label",
+                "value": "Search Messages..."
+            },
+            {
+                "type": "label",
+                "value": "Sharing..."
+            },
+            {
+                "type": "label",
+                "value": "Open in New Mail Window"
+            },
+            {
+                "type": "label",
+                "value": "Copy Folder Location"
+            },
+            {
+                "type": "label",
+                "value": "Subscribe..."
+            },
+            {
+                "type": "label",
+                "value": "Mark Folder Read"
+            },
+            {
+                "type": "label",
+                "value": "New Subfolder..."
+            },
+            {
+                "type": "label",
+                "value": "Rename Folder..."
+            },
+            {
+                "type": "label",
+                "value": "Compact This Folder"
+            },
+            {
+                "type": "label",
+                "value": "Archive This Folder"
+            },
+            {
+                "type": "label",
+                "value": "Delete Folder"
+            },
+            {
+                "type": "label",
+                "value": "Use This Folder For"
+            },
+            {
+                "type": "label",
+                "value": "Search Messages..."
+            },
+            {
+                "type": "label",
+                "value": "Sharing..."
+            },
+            {
+                "type": "label",
+                "value": "Sent Messages"
+            },
+            {
+                "type": "label",
+                "value": "Drafts"
+            },
+            {
+                "type": "label",
+                "value": "Deleted Messages"
+            },
+            {
+                "type": "label",
+                "value": "Open Message In New Window"
+            },
+            {
+                "type": "label",
+                "value": "Reply to Sender Only"
+            },
+            {
+                "type": "label",
+                "value": "Reply to All"
+            },
+            {
+                "type": "label",
+                "value": "Forward"
+            },
+            {
+                "type": "label",
+                "value": "Edit As New..."
+            },
+            {
+                "type": "label",
+                "value": "Move To"
+            },
+            {
+                "type": "label",
+                "value": "Copy To"
+            },
+            {
+                "type": "label",
+                "value": "Label"
+            },
+            {
+                "type": "label",
+                "value": "Mark"
+            },
+            {
+                "type": "label",
+                "value": "Save As..."
+            },
+            {
+                "type": "label",
+                "value": "View Message Source"
+            },
+            {
+                "type": "label",
+                "value": "Print Preview"
+            },
+            {
+                "type": "label",
+                "value": "Print..."
+            },
+            {
+                "type": "label",
+                "value": "Delete Message"
+            },
+            {
+                "type": "label",
+                "value": "Forward"
+            },
+            {
+                "type": "label",
+                "value": "Move To"
+            },
+            {
+                "type": "label",
+                "value": "Copy To"
+            },
+            {
+                "type": "label",
+                "value": "Label"
+            },
+            {
+                "type": "label",
+                "value": "Mark"
+            },
+            {
+                "type": "label",
+                "value": "Save As..."
+            },
+            {
+                "type": "label",
+                "value": "Print Preview"
+            },
+            {
+                "type": "label",
+                "value": "Print..."
+            },
+            {
+                "type": "label",
+                "value": "Delete Selected Messages"
+            },
+            {
+                "type": "label",
+                "value": "Reply to Sender Only"
+            },
+            {
+                "type": "label",
+                "value": "Reply to All"
+            },
+            {
+                "type": "label",
+                "value": "Forward"
+            },
+            {
+                "type": "label",
+                "value": "Edit As New..."
+            },
+            {
+                "type": "label",
+                "value": "Move To"
+            },
+            {
+                "type": "label",
+                "value": "Copy To"
+            },
+            {
+                "type": "label",
+                "value": "Label"
+            },
+            {
+                "type": "label",
+                "value": "Mark"
+            },
+            {
+                "type": "label",
+                "value": "Save As..."
+            },
+            {
+                "type": "label",
+                "value": "View Message Source"
+            },
+            {
+                "type": "label",
+                "value": "Print Preview"
+            },
+            {
+                "type": "label",
+                "value": "Print..."
+            },
+            {
+                "type": "label",
+                "value": "Delete Message"
+            },
+            {
+                "type": "label",
+                "value": "None"
+            },
+            {
+                "type": "label",
+                "value": "Important"
+            },
+            {
+                "type": "label",
+                "value": "Work"
+            },
+            {
+                "type": "label",
+                "value": "Personal"
+            },
+            {
+                "type": "label",
+                "value": "To Do"
+            },
+            {
+                "type": "label",
+                "value": "Later"
+            },
+            {
+                "type": "label",
+                "value": "As Read"
+            },
+            {
+                "type": "label",
+                "value": "Thread As Read"
+            },
+            {
+                "type": "label",
+                "value": "As Read By Date..."
+            },
+            {
+                "type": "label",
+                "value": "All Read"
+            },
+            {
+                "type": "label",
+                "value": "Flag"
+            },
+            {
+                "type": "label",
+                "value": "Add to Address Book..."
+            },
+            {
+                "type": "label",
+                "value": "Compose Mail To"
+            },
+            {
+                "type": "label",
+                "value": "Save Image"
+            },
+            {
+                "type": "label",
+                "value": "Save Attachment"
+            },
+            {
+                "type": "label",
+                "value": "Folders"
+            },
+            {
+                "type": "var",
+                "value": "errorAlertJavaScript",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "qualifier": {
+                        "type": "var",
+                        "value": "qualifier"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxMailFilterPanel"
+                }
+            }
+        ]
+    }
+}

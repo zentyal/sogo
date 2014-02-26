@@ -1,0 +1,74 @@
+{
+    "strings": [
+        {
+            "type": "label",
+            "value": "New Event..."
+        },
+        {
+            "type": "label",
+            "value": "New Task..."
+        },
+        {
+            "type": "label",
+            "value": "Previous Day"
+        },
+        {
+            "type": "label",
+            "value": "Next Day"
+        },
+        {
+            "type": "label",
+            "value": "Delete Event"
+        },
+        {
+            "type": "label",
+            "value": "Copy event to my calendar"
+        },
+        {
+            "type": "label",
+            "value": "View Raw Source"
+        },
+        {
+            "type": "var",
+            "value": "currentDayName"
+        },
+        {
+            "type": "label",
+            "value": "today"
+        },
+        {
+            "type": "label",
+            "value": "Day View"
+        },
+        {
+            "type": "label",
+            "value": "Week View"
+        },
+        {
+            "type": "label",
+            "value": "Month View"
+        }
+    ],
+    "components": [
+        {
+            "parameters": {
+                "startDate": {
+                    "type": "var",
+                    "value": "startDate"
+                },
+                "CSSClass": {
+                    "type": "const",
+                    "value": "dayOverview"
+                },
+                "numberOfDays": {
+                    "type": "const",
+                    "value": "1"
+                }
+            },
+            "class-name": {
+                "type": "const",
+                "value": "UIxCalDayTable"
+            }
+        }
+    ]
+}

@@ -1,0 +1,186 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "minutes"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "unitsList"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "BEFORE"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "referencesList"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "START"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "relationsList"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "disabled": {
+                                "type": "const",
+                                "value": "1"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "emailOrganizer"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "emailOrganizer"
+                                }
+                            }
+                        },
+                        {
+                            "disabled": {
+                                "type": "const",
+                                "value": "1"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "emailAttendees"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "emailAttendees"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Choose a Reminder Action"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Show an Alert"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Send an E-mail"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Email Organizer"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Email Attendees"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "emailAlarmsEnabled"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Reminder Details"
+            },
+            {
+                "type": "label",
+                "value": "OK"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

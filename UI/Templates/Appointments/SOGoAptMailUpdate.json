@@ -1,0 +1,78 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "currentItem"
+            },
+            "list": {
+                "type": "var",
+                "value": "allChangesList"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentItem"
+                    },
+                    {
+                        "type": "var",
+                        "value": "valueForCurrentItem"
+                    }
+                ]
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "getSubject",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "organizerName",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "sentByText",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "bodyStartText",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "Please accept or decline those changes.",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        }
+    ]
+}

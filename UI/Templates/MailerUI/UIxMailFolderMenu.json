@@ -1,0 +1,88 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "item"
+            },
+            "list": {
+                "type": "var",
+                "value": "levelledNodes"
+            },
+            "contents": {
+                "conditions": [
+                    {
+                        "then": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "item.title"
+                                }
+                            ]
+                        },
+                        "condition": {
+                            "type": "var",
+                            "value": "item.hasChildren"
+                        },
+                        "else": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "item.title"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "item": {
+                "type": "var",
+                "value": "item"
+            },
+            "list": {
+                "type": "var",
+                "value": "levelledNodes"
+            },
+            "contents": {
+                "conditions": [
+                    {
+                        "then": {
+                            "components": [
+                                {
+                                    "parameters": {
+                                        "menuId": {
+                                            "type": "var",
+                                            "value": "item.folderMenuId"
+                                        },
+                                        "treeFolderAction": {
+                                            "type": "const",
+                                            "value": "view"
+                                        },
+                                        "rootClassName": {
+                                            "type": "var",
+                                            "value": "treeRootClassName"
+                                        },
+                                        "parentMenu": {
+                                            "type": "var",
+                                            "value": "item.serialAsString"
+                                        }
+                                    },
+                                    "class-name": {
+                                        "type": "const",
+                                        "value": "UIxMailFolderMenu"
+                                    }
+                                }
+                            ]
+                        },
+                        "condition": {
+                            "type": "var",
+                            "value": "item.hasChildren"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

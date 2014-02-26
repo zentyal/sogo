@@ -1,0 +1,188 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "UIxMailEditor.js,SOGoAutoCompletion.js"
+        },
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "reference"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "references"
+                },
+                "contents": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reference.name"
+                            },
+                            "extra": {
+                                "uid": {
+                                    "type": "var",
+                                    "value": "reference.id"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "reference.name"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "listName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "listName"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "listName"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "nickname"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "nickname"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "nickname"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "description"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "description"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "description"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "referencesValue"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "referencesValue"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "referencesValue"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Save"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "canCreateOrModify"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "clientObject.container.nameInContainer"
+            },
+            {
+                "type": "label",
+                "value": "List details"
+            },
+            {
+                "type": "label",
+                "value": "List name:"
+            },
+            {
+                "type": "label",
+                "value": "List nickname:"
+            },
+            {
+                "type": "label",
+                "value": "List description:"
+            },
+            {
+                "type": "label",
+                "value": "Members"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

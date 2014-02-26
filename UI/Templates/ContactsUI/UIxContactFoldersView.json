@@ -1,0 +1,306 @@
+{
+    "parameters": {
+        "userDefaultsKeys": {
+            "type": "const",
+            "value": "SOGoContactsCategories"
+        },
+        "popup": {
+            "type": "var",
+            "value": "isPopup"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "jquery-ui.js"
+        },
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentFolder"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "contactFolders"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "currentContactFolderName"
+                        }
+                    ]
+                }
+            },
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentContact"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "personalContactInfos"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "currentContact.c_cn",
+                            "extra": {
+                                "escapeHTML": {
+                                    "type": "const",
+                                    "value": "YES"
+                                }
+                            }
+                        },
+                        {
+                            "type": "var",
+                            "value": "currentContact.c_mail"
+                        },
+                        {
+                            "type": "var",
+                            "value": "currentContact.c_screenname"
+                        },
+                        {
+                            "type": "var",
+                            "value": "currentContact.c_o"
+                        },
+                        {
+                            "type": "var",
+                            "value": "currentContact.c_telephonenumber"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "file"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "contactsFile"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "contactsFile"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "verticalDragHandleStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "verticalDragHandleStyle"
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "horizontalDragHandleStyle"
+                        },
+                        {
+                            "type": "var",
+                            "value": "horizontalDragHandleStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "horizontalDragHandleStyle"
+                }
+            },
+            {
+                "then": {
+                    "components": [
+                        {
+                            "class-name": {
+                                "type": "var",
+                                "value": "selectorComponent"
+                            }
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "hasContactSelectionButtons"
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "contactsListContentStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "contactsListContentStyle"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Import Cards"
+            },
+            {
+                "type": "label",
+                "value": "Select a vCard or LDIF file."
+            },
+            {
+                "type": "label",
+                "value": "Upload"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            },
+            {
+                "type": "label",
+                "value": "Import Cards"
+            },
+            {
+                "type": "label",
+                "value": "Done"
+            },
+            {
+                "type": "label",
+                "value": "Properties"
+            },
+            {
+                "type": "label",
+                "value": "New Card"
+            },
+            {
+                "type": "label",
+                "value": "New List"
+            },
+            {
+                "type": "label",
+                "value": "Delete"
+            },
+            {
+                "type": "label",
+                "value": "Export Address Book..."
+            },
+            {
+                "type": "label",
+                "value": "Import Cards"
+            },
+            {
+                "type": "label",
+                "value": "Sharing..."
+            },
+            {
+                "type": "label",
+                "value": "Properties"
+            },
+            {
+                "type": "label",
+                "value": "Categories"
+            },
+            {
+                "type": "label",
+                "value": "Write"
+            },
+            {
+                "type": "label",
+                "value": "Instant Message"
+            },
+            {
+                "type": "label",
+                "value": "Delete"
+            },
+            {
+                "type": "label",
+                "value": "Move To"
+            },
+            {
+                "type": "label",
+                "value": "Copy To"
+            },
+            {
+                "type": "label",
+                "value": "Export"
+            },
+            {
+                "type": "label",
+                "value": "View Raw Source"
+            },
+            {
+                "type": "label",
+                "value": "Address Books"
+            },
+            {
+                "type": "label",
+                "value": "Name"
+            },
+            {
+                "type": "label",
+                "value": "Email"
+            },
+            {
+                "type": "label",
+                "value": "Screen Name"
+            },
+            {
+                "type": "label",
+                "value": "Organization"
+            },
+            {
+                "type": "label",
+                "value": "Preferred Phone"
+            },
+            {
+                "type": "var",
+                "value": "errorAlertJavaScript",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "qualifier": {
+                        "type": "var",
+                        "value": "qualifier"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxContactsFilterPanel"
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "parameters": {
+        "cssFiles": {
+            "type": "const",
+            "value": "js_color_picker_v2.css"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "js_color_picker_v2.js"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "pickerValue"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "pickerValue"
+                    }
+                }
+            }
+        ]
+    }
+}

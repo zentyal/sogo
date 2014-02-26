@@ -1,0 +1,152 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "currentTableUser"
+            },
+            "list": {
+                "type": "var",
+                "value": "subscriptionUsers"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentTableUser"
+                    },
+                    {
+                        "type": "var",
+                        "value": "currentTableUserDayLeftPercentage"
+                    }
+                ]
+            }
+        },
+        {
+            "item": {
+                "type": "var",
+                "value": "currentTableHour"
+            },
+            "list": {
+                "type": "var",
+                "value": "hoursToDisplay"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentTableHour"
+                    }
+                ]
+            }
+        },
+        {
+            "item": {
+                "type": "var",
+                "value": "currentTableUser"
+            },
+            "list": {
+                "type": "var",
+                "value": "subscriptionUsers"
+            },
+            "contents": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentAppointment"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "appointmentsForCurrentUser"
+                        },
+                        "contents": {
+                            "components": [
+                                {
+                                    "parameters": {
+                                        "style": {
+                                            "type": "const",
+                                            "value": "dayoverview"
+                                        },
+                                        "appointment": {
+                                            "type": "var",
+                                            "value": "currentAppointment"
+                                        },
+                                        "referenceDate": {
+                                            "type": "var",
+                                            "value": "selectedDate"
+                                        },
+                                        "queryDictionary": {
+                                            "type": "var",
+                                            "value": "currentDateQueryParameters"
+                                        },
+                                        "url": {
+                                            "type": "var",
+                                            "value": "appointmentViewURL"
+                                        },
+                                        "dayStartHour": {
+                                            "type": "var",
+                                            "value": "dayStartHour"
+                                        },
+                                        "dayEndHour": {
+                                            "type": "var",
+                                            "value": "dayEndHour"
+                                        },
+                                        "canAccess": {
+                                            "type": "var",
+                                            "value": "canAccessApt"
+                                        },
+                                        "formatter": {
+                                            "type": "var",
+                                            "value": "aptFormatter"
+                                        },
+                                        "tooltipFormatter": {
+                                            "type": "var",
+                                            "value": "aptTooltipFormatter"
+                                        }
+                                    },
+                                    "class-name": {
+                                        "type": "const",
+                                        "value": "UIxCalInlineAptView"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentTableUser"
+                    }
+                ]
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "dayBeforeYesterdayName"
+        },
+        {
+            "type": "var",
+            "value": "yesterdayName"
+        },
+        {
+            "type": "var",
+            "value": "currentDayName"
+        },
+        {
+            "type": "var",
+            "value": "tomorrowName"
+        },
+        {
+            "type": "var",
+            "value": "dayAfterTomorrowName"
+        },
+        {
+            "type": "var",
+            "value": "dayWidthPercentage"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "strings": [
+        {
+            "type": "label",
+            "value": "Add as..."
+        },
+        {
+            "type": "label",
+            "value": "Recipient"
+        },
+        {
+            "type": "label",
+            "value": "Carbon Copy"
+        },
+        {
+            "type": "label",
+            "value": "Blind Carbon Copy"
+        }
+    ]
+}

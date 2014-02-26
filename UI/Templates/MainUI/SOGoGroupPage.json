@@ -1,0 +1,40 @@
+{
+    "parameters": {
+        "title": {
+            "type": "const",
+            "value": "SOGo User Homepage"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "clientObject.uids"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "item"
+                        }
+                    ]
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "clientObject.davDisplayName"
+            }
+        ]
+    }
+}

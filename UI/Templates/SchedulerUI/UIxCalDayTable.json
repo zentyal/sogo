@@ -1,0 +1,40 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "currentTableDay"
+            },
+            "list": {
+                "type": "var",
+                "value": "daysToDisplay"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "labelForDate"
+                    }
+                ]
+            }
+        },
+        {
+            "item": {
+                "type": "var",
+                "value": "currentTableHour"
+            },
+            "list": {
+                "type": "var",
+                "value": "hoursToDisplay"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentTableHour"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,386 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "currentEmail"
+            },
+            "list": {
+                "type": "var",
+                "value": "secondaryEmails"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentEmail",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "conditions": [
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "Telephone"
+                    },
+                    {
+                        "type": "var",
+                        "value": "workPhone",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "homePhone",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "fax",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "mobile",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "pager",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasTelephones"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "Work"
+                    },
+                    {
+                        "type": "var",
+                        "value": "workTitle",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workService",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workCompany",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workPobox",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workStreetAddress",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workExtendedAddress",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workCityAndProv",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workPostalCodeAndCountry",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "workUrl",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasWorkInfos"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "Other Infos"
+                    },
+                    {
+                        "type": "var",
+                        "value": "bday",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "tz",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "note",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasOtherInfos"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "Home"
+                    },
+                    {
+                        "type": "var",
+                        "value": "homeStreetAddress",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "homeExtendedAddress",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "homePobox",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "homeCityAndProv",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "homePostalCodeAndCountry",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "homeUrl",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasHomeInfos"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "fullName"
+        },
+        {
+            "type": "label",
+            "value": "Contact"
+        },
+        {
+            "type": "var",
+            "value": "displayName",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "nickName",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "primaryEmail",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "screenName",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "preferredAddress",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "categories",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        }
+    ]
+}

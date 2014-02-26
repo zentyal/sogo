@@ -42,9 +42,9 @@
               <var:foreach list="references" item="reference">
                 <tr const:class="referenceListRow">
 		  <td const:class="referenceListCell">
-		    <input var:uid="reference.id"
-			   var:value="reference.name"
-			   const:style="display: none"/>
+		    <input type="hidden"
+                           var:uid="reference.id"
+			   var:value="reference.name"/>
                     <span><var:string var:value="reference.name"/></span>
                 </td></tr>
               </var:foreach>

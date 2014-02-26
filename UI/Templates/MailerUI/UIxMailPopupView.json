@@ -1,0 +1,68 @@
+{
+    "parameters": {
+        "userDefaultsKeys": {
+            "type": "const",
+            "value": "SOGoMailDisplayRemoteInlineImages"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "SOGoAutoCompletion.js"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "strings": [
+            {
+                "type": "var",
+                "value": "clientObject.relativeImap4Name"
+            },
+            {
+                "type": "var",
+                "value": "clientObject.container.container.nameInContainer"
+            },
+            {
+                "type": "var",
+                "value": "clientObject.container.nameInContainer"
+            },
+            {
+                "type": "label",
+                "value": "Add to Address Book..."
+            },
+            {
+                "type": "label",
+                "value": "Compose Mail To"
+            },
+            {
+                "type": "label",
+                "value": "Create Filter From Message..."
+            },
+            {
+                "type": "label",
+                "value": "Save Image"
+            },
+            {
+                "type": "label",
+                "value": "Save Attachment"
+            }
+        ],
+        "components": [
+            {
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxMailView"
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "inputs": [
+        {
+            "disabled": {
+                "type": "var",
+                "value": "disabled"
+            },
+            "type": {
+                "type": "const",
+                "value": "text"
+            },
+            "name": {
+                "type": "var",
+                "value": "dateID"
+            },
+            "value": {
+                "type": "var",
+                "value": "formattedDateString"
+            },
+            "extra": {
+                "shadow-value": {
+                    "type": "var",
+                    "value": "formattedDateString"
+                },
+                "id": {
+                    "type": "var",
+                    "value": "dateID"
+                }
+            }
+        }
+    ]
+}

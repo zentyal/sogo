@@ -12,6 +12,7 @@ all install :: validate-wox
 endif
 
 WOXS = $(shell find . -name '*.wox' -type f)
+JSONS = $(shell find . -name '*.json' -type f)
 TEMPLATE_DIRS = $(shell find . -type d | grep -v .svn)
 
 validate-wox:
@@ -33,6 +34,7 @@ install ::
 	  done; \
 	  echo Installing template files...; \
 	  tar cf - $(WOXS) | ( cd $(SOGO_TEMPLATESDIR); tar xf -) ;\
+	  tar cf - $(JSONS) | ( cd $(SOGO_TEMPLATESDIR); tar xf -) ;\
 	fi
 
 check ::

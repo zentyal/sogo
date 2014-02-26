@@ -1,0 +1,36 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "refreshMethod",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasRefreshMethod"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "doctype",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        }
+    ]
+}

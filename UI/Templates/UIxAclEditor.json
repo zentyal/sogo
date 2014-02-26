@@ -1,0 +1,134 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentUser"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "usersForObject"
+                },
+                "contents": {
+                    "conditions": [
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "disabled": {
+                                            "type": "var",
+                                            "value": "currentUserIsSubscribed"
+                                        },
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "currentUserIsSubscribed"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "currentUserIsSubscribed"
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Subscribe User"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "canSubscribeUsers"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "currentUserDisplayName"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "defaultUserID"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "defaultUserID"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "defaultUserID"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "action"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "saveAcls"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "folderID"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "folderID"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "folderID"
+                    }
+                }
+            }
+        ]
+    }
+}

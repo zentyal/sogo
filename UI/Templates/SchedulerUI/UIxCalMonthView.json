@@ -1,0 +1,104 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "currentTableDay"
+            },
+            "list": {
+                "type": "var",
+                "value": "headerDaysToDisplay"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "labelForCurrentDayToDisplay"
+                    }
+                ]
+            }
+        },
+        {
+            "item": {
+                "type": "var",
+                "value": "currentWeek"
+            },
+            "list": {
+                "type": "var",
+                "value": "weeksToDisplay"
+            },
+            "contents": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentTableDay"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "currentWeek"
+                        },
+                        "contents": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "dayHeaderNumber"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "label",
+            "value": "New Event..."
+        },
+        {
+            "type": "label",
+            "value": "New Task..."
+        },
+        {
+            "type": "label",
+            "value": "Previous Month"
+        },
+        {
+            "type": "label",
+            "value": "Next Month"
+        },
+        {
+            "type": "label",
+            "value": "Delete Event"
+        },
+        {
+            "type": "label",
+            "value": "Copy event to my calendar"
+        },
+        {
+            "type": "label",
+            "value": "View Raw Source"
+        },
+        {
+            "type": "var",
+            "value": "monthNameOfThisMonth"
+        },
+        {
+            "type": "label",
+            "value": "today"
+        },
+        {
+            "type": "label",
+            "value": "Day View"
+        },
+        {
+            "type": "label",
+            "value": "Week View"
+        },
+        {
+            "type": "label",
+            "value": "Month View"
+        }
+    ]
+}

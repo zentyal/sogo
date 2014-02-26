@@ -1,0 +1,1018 @@
+{
+    "parameters": {
+        "userDefaultsKeys": {
+            "type": "const",
+            "value": "SOGoContactsCategories"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "givenname"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.givenname"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "givenname"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "sn"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.sn"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "sn"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "displayname"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.displayname"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "displayname"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillanickname"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillanickname"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillanickname"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mail"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mail"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mail"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillasecondemail"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillasecondemail"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillasecondemail"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "nsaimid"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.nsaimid"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "nsaimid"
+                    }
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillausehtmlmail"
+                },
+                "no-selection-string": {
+                    "type": "label",
+                    "value": "htmlMailFormat_UNKNOWN"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemHtmlMailFormatText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "htmlMailFormatList"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "telephonenumber"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.telephonenumber"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "telephonenumber"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "homephone"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.homephone"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "homephone"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "facsimiletelephonenumber"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.facsimiletelephonenumber"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "facsimiletelephonenumber"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "pager"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.pager"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "pager"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mobile"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mobile"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mobile"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillahomestreet"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillahomestreet"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillahomestreet"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillahomestreet2"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillahomestreet2"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillahomestreet2"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillahomelocalityname"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillahomelocalityname"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillahomelocalityname"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillahomestate"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillahomestate"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillahomestate"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillahomepostalcode"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillahomepostalcode"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillahomepostalcode"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillahomecountryname"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillahomecountryname"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillahomecountryname"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillahomeurl"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillahomeurl"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "title"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.title"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "title"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "ou"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.ou"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "ou"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "o"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.o"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "o"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "street"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.street"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "street"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillaworkstreet2"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillaworkstreet2"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "mozillaworkstreet2"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "l"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.l"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "l"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "st"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.st"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "st"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "postalcode"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.postalcode"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "postalcode"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "c"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.c"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "c"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "mozillaworkurl"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.mozillaworkurl"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "birthyear"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.birthyear"
+                },
+                "extra": {
+                    "placeholder": {
+                        "type": "const",
+                        "value": "0000"
+                    },
+                    "id": {
+                        "type": "const",
+                        "value": "birthyear"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "birthmonth"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.birthmonth"
+                },
+                "extra": {
+                    "placeholder": {
+                        "type": "const",
+                        "value": "00"
+                    },
+                    "id": {
+                        "type": "const",
+                        "value": "birthmonth"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "birthday"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.birthday"
+                },
+                "extra": {
+                    "placeholder": {
+                        "type": "const",
+                        "value": "00"
+                    },
+                    "id": {
+                        "type": "const",
+                        "value": "birthday"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "textarea"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "note"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "ldifRecord.description"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "note"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Save"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "canCreateOrModify"
+                }
+            },
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "list": {
+                                "type": "var",
+                                "value": "addressBooksList"
+                            },
+                            "selection": {
+                                "type": "var",
+                                "value": "componentAddressBook"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "addressBookDisplayName"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "addressBookItem"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Add to:"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "isNew"
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Photos"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "supportPhotos"
+                }
+            },
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "jsonContactCategories"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "jsonContactCategories"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "jsonContactCategories"
+                                }
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "button"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "emptyCategory"
+                                        },
+                                        "value": {
+                                            "type": "const",
+                                            "value": "Add Category"
+                                        },
+                                        "extra": {
+                                            "readonly": {
+                                                "type": "const",
+                                                "value": "readonly"
+                                            },
+                                            "id": {
+                                                "type": "const",
+                                                "value": "emptyCategory"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "canCreateOrModify"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Categories"
+                        },
+                        {
+                            "type": "var",
+                            "value": "contactCategoriesList",
+                            "extra": {
+                                "escapeHTML": {
+                                    "type": "const",
+                                    "value": "NO"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "supportCategories"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Contact"
+            },
+            {
+                "type": "label",
+                "value": "Address"
+            },
+            {
+                "type": "label",
+                "value": "Other"
+            },
+            {
+                "type": "label",
+                "value": "Name"
+            },
+            {
+                "type": "label",
+                "value": "First:"
+            },
+            {
+                "type": "label",
+                "value": "Last:"
+            },
+            {
+                "type": "label",
+                "value": "Display:"
+            },
+            {
+                "type": "label",
+                "value": "Nickname:"
+            },
+            {
+                "type": "label",
+                "value": "Internet"
+            },
+            {
+                "type": "label",
+                "value": "Email:"
+            },
+            {
+                "type": "label",
+                "value": "Additional Email:"
+            },
+            {
+                "type": "label",
+                "value": "Screen Name:"
+            },
+            {
+                "type": "label",
+                "value": "Prefers to receive messages formatted as:"
+            },
+            {
+                "type": "label",
+                "value": "Phones"
+            },
+            {
+                "type": "label",
+                "value": "Work:"
+            },
+            {
+                "type": "label",
+                "value": "Home:"
+            },
+            {
+                "type": "label",
+                "value": "Fax:"
+            },
+            {
+                "type": "label",
+                "value": "Pager:"
+            },
+            {
+                "type": "label",
+                "value": "Mobile:"
+            },
+            {
+                "type": "label",
+                "value": "Home"
+            },
+            {
+                "type": "label",
+                "value": "Address:"
+            },
+            {
+                "type": "label",
+                "value": "City:"
+            },
+            {
+                "type": "label",
+                "value": "State_Province:"
+            },
+            {
+                "type": "label",
+                "value": "ZIP_Postal Code:"
+            },
+            {
+                "type": "label",
+                "value": "Country:"
+            },
+            {
+                "type": "label",
+                "value": "Web Page:"
+            },
+            {
+                "type": "label",
+                "value": "Work"
+            },
+            {
+                "type": "label",
+                "value": "Title:"
+            },
+            {
+                "type": "label",
+                "value": "Department:"
+            },
+            {
+                "type": "label",
+                "value": "Organization:"
+            },
+            {
+                "type": "label",
+                "value": "Address:"
+            },
+            {
+                "type": "label",
+                "value": "City:"
+            },
+            {
+                "type": "label",
+                "value": "State_Province:"
+            },
+            {
+                "type": "label",
+                "value": "ZIP_Postal Code:"
+            },
+            {
+                "type": "label",
+                "value": "Country:"
+            },
+            {
+                "type": "label",
+                "value": "Web Page:"
+            },
+            {
+                "type": "label",
+                "value": "Birthday (yyyy-mm-dd):"
+            },
+            {
+                "type": "label",
+                "value": "Note:"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

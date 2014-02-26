@@ -1,0 +1,200 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "PasswordPolicy.js"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "userName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "cookieUsername"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "userName"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "password"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "password"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "password"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "password"
+                    }
+                }
+            },
+            {
+                "name": {
+                    "type": "const",
+                    "value": "language"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "languageText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "languages"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "no-selection-string": {
+                    "type": "label",
+                    "value": "choose"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "rememberLogin"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "rememberLogin"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "domain"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "loginDomains"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Domain:"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "hasLoginDomains"
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "loginSuffix"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "hasLoginSuffix"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "doctype",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            },
+            {
+                "type": "label",
+                "value": "Username:"
+            },
+            {
+                "type": "label",
+                "value": "Password:"
+            },
+            {
+                "type": "label",
+                "value": "Language:"
+            },
+            {
+                "type": "label",
+                "value": "Remember username"
+            },
+            {
+                "type": "label",
+                "value": "Connect"
+            }
+        ]
+    }
+}

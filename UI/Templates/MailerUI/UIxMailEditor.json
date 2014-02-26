@@ -1,0 +1,348 @@
+{
+    "parameters": {
+        "userDefaultsKeys": {
+            "type": "const",
+            "value": "SOGoMailComposeMessageType,SOGoMailReplyPlacement,SOGoMailSignature"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "UIxMailToSelection.js,ckeditor/ckeditor.js,SOGoAutoCompletion.js,ContactsUI.js"
+        },
+        "title": {
+            "type": "var",
+            "value": "panelTitle"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "priorityClasses"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "itemPriorityText"
+                        }
+                    ]
+                }
+            },
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentContact"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "personalContactInfos"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "currentContact.c_cn",
+                            "extra": {
+                                "escapeHTML": {
+                                    "type": "const",
+                                    "value": "YES"
+                                }
+                            }
+                        },
+                        {
+                            "type": "var",
+                            "value": "currentContact.c_mail"
+                        }
+                    ]
+                }
+            },
+            {
+                "item": {
+                    "type": "var",
+                    "value": "attachmentName"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "attachmentNames"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "attachmentName"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "name": {
+                    "type": "const",
+                    "value": "contactFolder"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "currentContactFolderName"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "contactFolders"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "currentContactFolderId"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "currentFolder"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "priority"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "priority"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "priority"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "receipt"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "receipt"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "receipt"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "isHTML"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "isHTML"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "isHTML"
+                    }
+                }
+            },
+            {
+                "list": {
+                    "type": "var",
+                    "value": "fromEMails"
+                },
+                "selection": {
+                    "type": "var",
+                    "value": "from"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "from"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "subject"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "subject"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "textarea"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "text"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "text"
+                    }
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "isMailReply"
+            },
+            {
+                "type": "var",
+                "value": "sourceUID"
+            },
+            {
+                "type": "var",
+                "value": "sourceFolder",
+                "extra": {
+                    "escapeHTML": {
+                        "type": "const",
+                        "value": "NO"
+                    }
+                }
+            },
+            {
+                "type": "var",
+                "value": "localeCode"
+            },
+            {
+                "type": "label",
+                "value": "Open"
+            },
+            {
+                "type": "label",
+                "value": "Delete"
+            },
+            {
+                "type": "label",
+                "value": "Select All"
+            },
+            {
+                "type": "label",
+                "value": "Attach File(s)..."
+            },
+            {
+                "type": "label",
+                "value": "Attach Web Page..."
+            },
+            {
+                "type": "label",
+                "value": "Return Receipt"
+            },
+            {
+                "type": "label",
+                "value": "Priority"
+            },
+            {
+                "type": "label",
+                "value": "Name"
+            },
+            {
+                "type": "label",
+                "value": "Email"
+            },
+            {
+                "type": "label",
+                "value": "From"
+            },
+            {
+                "type": "label",
+                "value": "Subject"
+            },
+            {
+                "type": "label",
+                "value": "Attachments:"
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "qualifier": {
+                        "type": "var",
+                        "value": "qualifier"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxContactsFilterPanel"
+                }
+            },
+            {
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxContactsMailerSelection"
+                }
+            },
+            {
+                "parameters": {
+                    "cc": {
+                        "type": "var",
+                        "value": "cc"
+                    },
+                    "to": {
+                        "type": "var",
+                        "value": "to"
+                    },
+                    "bcc": {
+                        "type": "var",
+                        "value": "bcc"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxMailToSelection"
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "conditions": [
+                    {
+                        "then": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "label"
+                                }
+                            ]
+                        },
+                        "condition": {
+                            "type": "var",
+                            "value": "isSortedDescending"
+                        },
+                        "else": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "label"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "isSelected"
+            },
+            "else": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "label"
+                    }
+                ]
+            }
+        }
+    ]
+}

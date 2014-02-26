@@ -1,0 +1,94 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "components"
+                },
+                "contents": {
+                    "conditions": [
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "var",
+                                        "value": "itemEmail"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "itemHasEmail"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "itemName"
+                        }
+                    ]
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "listNickname"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "hasNickname"
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "listDescription"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "hasDescription"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "listName"
+            },
+            {
+                "type": "label",
+                "value": "Members"
+            }
+        ]
+    }
+}

@@ -1,0 +1,276 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "currentAddress"
+            },
+            "list": {
+                "type": "var",
+                "value": "clientObject.fromEnvelopeAddresses"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentAddress",
+                        "extra": {
+                            "formatter": {
+                                "type": "var",
+                                "value": "context.mailEnvelopeFullAddressFormatter"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "item": {
+                "type": "var",
+                "value": "currentAddress"
+            },
+            "list": {
+                "type": "var",
+                "value": "clientObject.toEnvelopeAddresses"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentAddress",
+                        "extra": {
+                            "formatter": {
+                                "type": "var",
+                                "value": "context.mailEnvelopeFullAddressFormatter"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "type": {
+                "type": "const",
+                "value": "hidden"
+            },
+            "value": {
+                "type": "var",
+                "value": "shouldAskReceipt"
+            },
+            "extra": {
+                "id": {
+                    "type": "const",
+                    "value": "shouldAskReceipt"
+                }
+            }
+        },
+        {
+            "type": {
+                "type": "const",
+                "value": "button"
+            },
+            "name": {
+                "type": "const",
+                "value": "loadImagesButton"
+            },
+            "value": {
+                "type": "label",
+                "value": "Load Images"
+            },
+            "extra": {
+                "id": {
+                    "type": "const",
+                    "value": "loadImagesButton"
+                }
+            }
+        }
+    ],
+    "conditions": [
+        {
+            "then": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentAddress"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "clientObject.bccEnvelopeAddresses"
+                        },
+                        "contents": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "currentAddress",
+                                    "extra": {
+                                        "formatter": {
+                                            "type": "var",
+                                            "value": "context.mailEnvelopeFullAddressFormatter"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "Bcc"
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasBCC"
+            }
+        },
+        {
+            "then": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentAddress"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "clientObject.ccEnvelopeAddresses"
+                        },
+                        "contents": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "currentAddress",
+                                    "extra": {
+                                        "formatter": {
+                                            "type": "var",
+                                            "value": "context.mailEnvelopeFullAddressFormatter"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "CC"
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasCC"
+            }
+        },
+        {
+            "then": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentAddress"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "clientObject.replyToEnvelopeAddresses"
+                        },
+                        "contents": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "currentAddress",
+                                    "extra": {
+                                        "formatter": {
+                                            "type": "var",
+                                            "value": "context.mailEnvelopeFullAddressFormatter"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "Reply-To"
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "hasReplyTo"
+            }
+        },
+        {
+            "then": {
+                "inputs": [
+                    {
+                        "type": {
+                            "type": "const",
+                            "value": "button"
+                        },
+                        "name": {
+                            "type": "const",
+                            "value": "editDraftButton"
+                        },
+                        "value": {
+                            "type": "label",
+                            "value": "Edit Draft..."
+                        },
+                        "extra": {
+                            "id": {
+                                "type": "const",
+                                "value": "editDraftButton"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "mailIsDraft"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "messageSubject"
+        },
+        {
+            "type": "var",
+            "value": "clientObject.date",
+            "extra": {
+                "formatter": {
+                    "type": "var",
+                    "value": "context.mailDateFormatter"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "To"
+        }
+    ],
+    "components": [
+        {
+            "parameters": {
+                "bodyInfo": {
+                    "type": "var",
+                    "value": "clientObject.bodyStructure"
+                }
+            },
+            "class-name": {
+                "type": "var",
+                "value": "contentViewerComponent"
+            }
+        }
+    ]
+}

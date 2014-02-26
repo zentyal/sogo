@@ -1,0 +1,78 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "currentCalendar"
+            },
+            "list": {
+                "type": "var",
+                "value": "calendars"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentCalendar.folder"
+                    },
+                    {
+                        "type": "var",
+                        "value": "currentCalendar.color"
+                    },
+                    {
+                        "type": "var",
+                        "value": "contrastingTextColor"
+                    },
+                    {
+                        "type": "var",
+                        "value": "currentCalendar.folder"
+                    },
+                    {
+                        "type": "var",
+                        "value": "currentCalendar.color"
+                    }
+                ]
+            }
+        },
+        {
+            "item": {
+                "type": "var",
+                "value": "currentCalendar"
+            },
+            "list": {
+                "type": "var",
+                "value": "calendars"
+            },
+            "contents": {
+                "inputs": [
+                    {
+                        "disabled": {
+                            "type": "const",
+                            "value": "disabled"
+                        },
+                        "type": {
+                            "type": "const",
+                            "value": "checkbox"
+                        },
+                        "value": {
+                            "type": "var",
+                            "value": "currentCalendar.active"
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "currentCalendar.displayName"
+                    }
+                ]
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "label",
+            "value": "Calendars"
+        }
+    ]
+}

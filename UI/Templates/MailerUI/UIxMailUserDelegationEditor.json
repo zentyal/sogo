@@ -1,0 +1,42 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentDelegate"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "delegates"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "currentDelegateDisplayName"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

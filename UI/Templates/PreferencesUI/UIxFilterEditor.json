@@ -1,0 +1,64 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "filterName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "filterName"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "filterId"
+            },
+            {
+                "type": "label",
+                "value": "Filter name:"
+            },
+            {
+                "type": "label",
+                "value": "For incoming messages that"
+            },
+            {
+                "type": "label",
+                "value": "match all of the following rules:"
+            },
+            {
+                "type": "label",
+                "value": "match any of the following rules:"
+            },
+            {
+                "type": "label",
+                "value": "match all messages"
+            },
+            {
+                "type": "label",
+                "value": "Perform these actions:"
+            }
+        ]
+    }
+}

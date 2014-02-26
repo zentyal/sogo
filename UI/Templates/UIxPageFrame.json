@@ -1,0 +1,380 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "show-component-content": true
+            },
+            "condition": {
+                "type": "var",
+                "value": "hideFrame"
+            },
+            "else": {
+                "conditions": [
+                    {
+                        "then": {
+                            "conditions": [
+                                {
+                                    "then": {
+                                        "components": [
+                                            {
+                                                "parameters": {
+                                                    "toolbar": {
+                                                        "type": "var",
+                                                        "value": "toolbar"
+                                                    }
+                                                },
+                                                "class-name": {
+                                                    "type": "const",
+                                                    "value": "UIxToolbar"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "condition": {
+                                        "type": "var",
+                                        "value": "isPopup"
+                                    },
+                                    "else": {
+                                        "conditions": [
+                                            {
+                                                "then": {
+                                                    "strings": [
+                                                        {
+                                                            "type": "label",
+                                                            "value": "Log Console (dev.)"
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "isUIxDebugEnabled"
+                                                }
+                                            },
+                                            {
+                                                "then": {
+                                                    "strings": [
+                                                        {
+                                                            "type": "label",
+                                                            "value": "Disconnect"
+                                                        },
+                                                        {
+                                                            "type": "var",
+                                                            "value": "userIdentification"
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "canLogoff"
+                                                }
+                                            },
+                                            {
+                                                "then": {
+                                                    "strings": [
+                                                        {
+                                                            "type": "label",
+                                                            "value": "Address Book"
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "isContacts"
+                                                },
+                                                "else": {
+                                                    "strings": [
+                                                        {
+                                                            "type": "label",
+                                                            "value": "Address Book"
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "then": {
+                                                    "conditions": [
+                                                        {
+                                                            "then": {
+                                                                "strings": [
+                                                                    {
+                                                                        "type": "label",
+                                                                        "value": "Calendar"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "condition": {
+                                                                "type": "var",
+                                                                "value": "isCalendar"
+                                                            },
+                                                            "else": {
+                                                                "strings": [
+                                                                    {
+                                                                        "type": "label",
+                                                                        "value": "Calendar"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "userHasCalendarAccess"
+                                                }
+                                            },
+                                            {
+                                                "then": {
+                                                    "conditions": [
+                                                        {
+                                                            "then": {
+                                                                "strings": [
+                                                                    {
+                                                                        "type": "label",
+                                                                        "value": "Administration"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "condition": {
+                                                                "type": "var",
+                                                                "value": "isAdministration"
+                                                            },
+                                                            "else": {
+                                                                "strings": [
+                                                                    {
+                                                                        "type": "label",
+                                                                        "value": "Administration"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "isSuperUser"
+                                                }
+                                            },
+                                            {
+                                                "then": {
+                                                    "conditions": [
+                                                        {
+                                                            "then": {
+                                                                "strings": [
+                                                                    {
+                                                                        "type": "label",
+                                                                        "value": "Mail"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "condition": {
+                                                                "type": "var",
+                                                                "value": "isMail"
+                                                            },
+                                                            "else": {
+                                                                "strings": [
+                                                                    {
+                                                                        "type": "label",
+                                                                        "value": "Mail"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "userHasMailAccess"
+                                                }
+                                            }
+                                        ],
+                                        "strings": [
+                                            {
+                                                "type": "label",
+                                                "value": "Preferences"
+                                            }
+                                        ],
+                                        "components": [
+                                            {
+                                                "parameters": {
+                                                    "toolbar": {
+                                                        "type": "var",
+                                                        "value": "toolbar"
+                                                    }
+                                                },
+                                                "class-name": {
+                                                    "type": "const",
+                                                    "value": "UIxToolbar"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "value": {
+                                        "type": "const",
+                                        "value": "anonymous"
+                                    },
+                                    "condition": {
+                                        "type": "var",
+                                        "value": "shortUserNameForDisplay"
+                                    },
+                                    "else": {
+                                        "conditions": [
+                                            {
+                                                "then": {
+                                                    "strings": [
+                                                        {
+                                                            "type": "var",
+                                                            "value": "userDefaults.jsonRepresentation",
+                                                            "extra": {
+                                                                "escapeHTML": {
+                                                                    "type": "const",
+                                                                    "value": "NO"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "hasUserDefaultsKeys"
+                                                }
+                                            },
+                                            {
+                                                "then": {
+                                                    "strings": [
+                                                        {
+                                                            "type": "var",
+                                                            "value": "userSettings",
+                                                            "extra": {
+                                                                "escapeHTML": {
+                                                                    "type": "const",
+                                                                    "value": "NO"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "condition": {
+                                                    "type": "var",
+                                                    "value": "hasUserSettingsKeys"
+                                                }
+                                            }
+                                        ],
+                                        "strings": [
+                                            {
+                                                "type": "var",
+                                                "value": "userFolderPath",
+                                                "extra": {
+                                                    "escapeHTML": {
+                                                        "type": "const",
+                                                        "value": "NO"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "var",
+                                                "value": "shortUserNameForDisplay",
+                                                "extra": {
+                                                    "escapeHTML": {
+                                                        "type": "const",
+                                                        "value": "NO"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "var",
+                                                "value": "userLanguage",
+                                                "extra": {
+                                                    "escapeHTML": {
+                                                        "type": "const",
+                                                        "value": "NO"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "modulePath"
+                                },
+                                {
+                                    "type": "var",
+                                    "value": "applicationPath"
+                                },
+                                {
+                                    "type": "var",
+                                    "value": "minimumSearchLength"
+                                },
+                                {
+                                    "type": "var",
+                                    "value": "commonLocalizableStrings.jsonRepresentation",
+                                    "extra": {
+                                        "escapeHTML": {
+                                            "type": "const",
+                                            "value": "NO"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "var",
+                                    "value": "productLocalizableStrings.jsonRepresentation",
+                                    "extra": {
+                                        "escapeHTML": {
+                                            "type": "const",
+                                            "value": "NO"
+                                        }
+                                    }
+                                }
+                            ],
+                            "show-component-content": true
+                        },
+                        "condition": {
+                            "type": "var",
+                            "value": "isCompatibleBrowser"
+                        },
+                        "else": {
+                            "components": [
+                                {
+                                    "class-name": {
+                                        "type": "const",
+                                        "value": "SOGoBrowsersPanel"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "title"
+                    },
+                    {
+                        "type": "label",
+                        "value": "noJavascriptError"
+                    },
+                    {
+                        "type": "label",
+                        "value": "noJavascriptRetry"
+                    }
+                ]
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "doctype",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        }
+    ]
+}

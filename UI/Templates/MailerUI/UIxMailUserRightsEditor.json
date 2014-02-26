@@ -1,0 +1,264 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "uid"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "uid"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "uid"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "ObjectViewer"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanReadMails"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "MailSeenKeeper"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanMarkMailsRead"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "MailWriter"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanWriteMails"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "ObjectCreator"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanInsertMails"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "MailPoster"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanPostMails"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "FolderCreator"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanCreateSubfolders"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "ObjectEraser"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanEraseMails"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "MailAdministrator"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userIsAdministrator"
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "FolderEraser"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "userCanRemoveFolder"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "MailExpunger"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "userCanExpungeFolder"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Remove this folder"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Expunge this folder"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "conformsToRFC4314"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Access rights to"
+            },
+            {
+                "type": "var",
+                "value": "folderName"
+            },
+            {
+                "type": "label",
+                "value": "For user"
+            },
+            {
+                "type": "var",
+                "value": "userDisplayName"
+            },
+            {
+                "type": "label",
+                "value": "Read mails from this folder"
+            },
+            {
+                "type": "label",
+                "value": "Mark mails read and unread"
+            },
+            {
+                "type": "label",
+                "value": "Modify the flags of the mails in this folder"
+            },
+            {
+                "type": "label",
+                "value": "Insert, copy and move mails into this folder"
+            },
+            {
+                "type": "label",
+                "value": "Post mails"
+            },
+            {
+                "type": "label",
+                "value": "Add subfolders to this folder"
+            },
+            {
+                "type": "label",
+                "value": "Erase mails from this folder"
+            },
+            {
+                "type": "label",
+                "value": "Modify the acl of this folder"
+            },
+            {
+                "type": "label",
+                "value": "Update"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

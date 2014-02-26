@@ -1,0 +1,1670 @@
+{
+    "parameters": {
+        "cssFiles": {
+            "type": "const",
+            "value": "datepicker.css"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "RowEditionController.js,PasswordPolicy.js,ckeditor/ckeditor.js,datepicker.js"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "category"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "contactsCategoryList"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "category"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "language"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "language"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "languageText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "languages"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "no-selection-string": {
+                    "type": "label",
+                    "value": "choose"
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "userTimeZone"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "timezone"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "timeZonesList"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "userShortDateFormat"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "shortDateFormat"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemShortDateFormatText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "shortDateFormatsList"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "userLongDateFormat"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "longDateFormat"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemLongDateFormatText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "longDateFormatsList"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "userTimeFormat"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "timeFormat"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemTimeFormatText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "timeFormatsList"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "selection": {
+                    "type": "var",
+                    "value": "userDefaultModule"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "defaultModule"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemModuleText"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "availableModules"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "contactsCategoriesValue"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "contactsCategoriesValue"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "contactsCategoriesValue"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "hasChanged"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "hasChanged"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "hasChanged"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Additional Parameters"
+                        }
+                    ],
+                    "components": [
+                        {
+                            "class-name": {
+                                "type": "const",
+                                "value": "UIxAdditionalPreferences"
+                            }
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "shouldDisplayAdditionalPreferences"
+                }
+            },
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "password"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "newPasswordField"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "password"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "newPasswordConfirmationField"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Password"
+                        },
+                        {
+                            "type": "label",
+                            "value": "New password:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Confirmation:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Change"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "shouldDisplayPasswordChange"
+                }
+            },
+            {
+                "then": {
+                    "loops": [
+                        {
+                            "item": {
+                                "type": "var",
+                                "value": "category"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "calendarCategoryList"
+                            },
+                            "contents": {
+                                "strings": [
+                                    {
+                                        "type": "var",
+                                        "value": "category"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "inputs": [
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userWeekStartDay"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "weekStartDay"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemWeekStartDay"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "daysList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userDayStartTime"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "dayStartTime"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "hoursList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userDayEndTime"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "dayEndTime"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "hoursList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "busyOffHours"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "busyOffHours"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "busyOffHours"
+                                }
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userFirstWeek"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "firstWeek"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemFirstWeekText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "firstWeekList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userDefaultCalendar"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "defaultCalendar"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemCalendarText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "defaultCalendarList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "eventsDefaultClassification"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "eventsClassification"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemClassificationText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "calendarClassificationsList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "tasksDefaultClassification"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "tasksClassification"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemClassificationText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "calendarClassificationsList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "calendarCategoriesValue"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "calendarCategoriesValue"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "calendarCategoriesValue"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Calendar Options"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Week begins on :"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Day start time :"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Day end time :"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Show time as busy outside working hours"
+                        },
+                        {
+                            "type": "label",
+                            "value": "First week of year :"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Default calendar :"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Default events classification :"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Default tasks classification :"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Categories"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Name"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Color"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "userHasCalendarAccess"
+                }
+            },
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "subscribedFoldersOnly"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "showSubscribedFoldersOnly"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "subscribedFoldersOnly"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "sortByThreads"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "sortByThreads"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "sortByThreads"
+                                }
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userMessageCheck"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "messageCheck"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemMessageCheckText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "messageCheckList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userMessageForwarding"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "messageForwarding"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemMessageForwardingText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "messageForwardingList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userReplyPlacement"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "replyPlacementList"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemReplyPlacementText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "replyPlacementList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userSignaturePlacement"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "signaturePlacementList"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemSignaturePlacementText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "signaturePlacementList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userComposeMessagesType"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "composeMessagesType"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemComposeMessagesText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "composeMessagesType"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "userDisplayRemoteInlineImages"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "displayRemoteInlineImages"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemDisplayRemoteInlineImagesText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "displayRemoteInlineImages"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "mailAccountsJSON"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "mailAccounts"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "mailAccountsJSON"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "serverName"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "serverName"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "port"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "port"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "radio"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "encryption"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": "none"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "radio"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "encryption"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": "ssl"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "radio"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "encryption"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": "tls"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "userName"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "userName"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "password"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "password"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "password"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "encryption"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": "none"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "fullName"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "fullName"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "email"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "email"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "replyTo"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": ""
+                            },
+                            "extra": {
+                                "autocomplete": {
+                                    "type": "var",
+                                    "value": "off"
+                                },
+                                "id": {
+                                    "type": "const",
+                                    "value": "replyTo"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "radio"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "receipt-action"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": "ignore"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "receipt-action-ignore"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "radio"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "receipt-action"
+                            },
+                            "value": {
+                                "type": "const",
+                                "value": "allow"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "receipt-action-allow"
+                                }
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "enableForward"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "enableForward"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "enableForward"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "textarea"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "forwardAddress"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "forwardAddress"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "forwardAddress"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "forwardKeepCopy"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "forwardKeepCopy"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "forwardKeepCopy"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Forward"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Forward incoming messages"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Email addresses (separated by commas) :"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Keep a copy"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "isForwardEnabled"
+                            }
+                        },
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "hidden"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "sieveFilters"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "sieveFiltersValue"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "sieveFilters"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Filters"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "sieveCapabilities",
+                                        "extra": {
+                                            "escapeHTML": {
+                                                "type": "const",
+                                                "value": "NO"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Name"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Active"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "isSieveScriptsEnabled"
+                            }
+                        },
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "enableVacation"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "enableVacation"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "enableVacation"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "textarea"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "autoReplyText"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "autoReplyText"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "autoReplyText"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "hidden"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "defaultEmailAddresses"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "defaultEmailAddresses"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "textarea"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "autoReplyEmailAddresses"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "autoReplyEmailAddresses"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "autoReplyEmailAddresses"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "selection": {
+                                            "type": "var",
+                                            "value": "daysBetweenResponses"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "daysBetweenResponsesList"
+                                        },
+                                        "item-string": {
+                                            "type": "var",
+                                            "value": "item"
+                                        },
+                                        "list": {
+                                            "type": "var",
+                                            "value": "daysBetweenResponsesList"
+                                        },
+                                        "item": {
+                                            "type": "var",
+                                            "value": "item"
+                                        },
+                                        "type": {
+                                            "type": "const",
+                                            "value": "popup"
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "ignoreLists"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "ignoreLists"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "ignoreLists"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "enableVacationEndDate"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "enableVacationEndDate"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "enableVacationEndDate"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Vacation"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Enable vacation auto reply"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Auto reply message :"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Email addresses (separated by commas) :"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Add default email addresses"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Days between responses :"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Do not send responses to mailing lists"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Disable auto reply on"
+                                    }
+                                ],
+                                "components": [
+                                    {
+                                        "parameters": {
+                                            "displayTimeControl": {
+                                                "type": "const",
+                                                "value": "0"
+                                            },
+                                            "dayStartHour": {
+                                                "type": "const",
+                                                "value": "0"
+                                            },
+                                            "disabled": {
+                                                "type": "var",
+                                                "value": "disableVacationEndDate"
+                                            },
+                                            "dayEndHour": {
+                                                "type": "const",
+                                                "value": "23"
+                                            },
+                                            "date": {
+                                                "type": "var",
+                                                "value": "vacationEndDate"
+                                            },
+                                            "controlID": {
+                                                "type": "const",
+                                                "value": "vacationEndDate"
+                                            }
+                                        },
+                                        "class-name": {
+                                            "type": "const",
+                                            "value": "UIxTimeDateControl"
+                                        }
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "isVacationEnabled"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Mail Options"
+                        },
+                        {
+                            "type": "label",
+                            "value": "IMAP Accounts"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Show subscribed mailboxes only"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Sort messages by threads"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Check for new mail:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Forward messages:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "When replying to a message:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "And place my signature"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Compose messages in"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Display remote inline images"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Server Name:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Port:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Encryption:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "None"
+                        },
+                        {
+                            "type": "label",
+                            "value": "SSL"
+                        },
+                        {
+                            "type": "label",
+                            "value": "TLS"
+                        },
+                        {
+                            "type": "label",
+                            "value": "User Name:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Password:"
+                        },
+                        {
+                            "type": "var",
+                            "value": "mailCustomFromEnabled",
+                            "extra": {
+                                "escapeHTML": {
+                                    "type": "const",
+                                    "value": "NO"
+                                }
+                            }
+                        },
+                        {
+                            "type": "label",
+                            "value": "Full Name:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Email:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Reply To Email:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Signature:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "When I receive a request for a return receipt:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Never send a return receipt"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Allow return receipts for some messages"
+                        },
+                        {
+                            "type": "label",
+                            "value": "If I'm not in the To or Cc of the message:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Never send"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Always send"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Ask me"
+                        },
+                        {
+                            "type": "label",
+                            "value": "If the sender is outside my domain:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Never send"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Always send"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Ask me"
+                        },
+                        {
+                            "type": "label",
+                            "value": "In all other cases:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Never send"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Always send"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Ask me"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "userHasMailAccess"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "localeCode"
+            },
+            {
+                "type": "label",
+                "value": "General"
+            },
+            {
+                "type": "label",
+                "value": "Contacts Options"
+            },
+            {
+                "type": "label",
+                "value": "Language :"
+            },
+            {
+                "type": "label",
+                "value": "Current Time Zone :"
+            },
+            {
+                "type": "label",
+                "value": "Short Date Format :"
+            },
+            {
+                "type": "label",
+                "value": "Long Date Format :"
+            },
+            {
+                "type": "label",
+                "value": "Time Format :"
+            },
+            {
+                "type": "label",
+                "value": "Default module :"
+            },
+            {
+                "type": "label",
+                "value": "Categories"
+            },
+            {
+                "type": "label",
+                "value": "Name"
+            }
+        ]
+    }
+}

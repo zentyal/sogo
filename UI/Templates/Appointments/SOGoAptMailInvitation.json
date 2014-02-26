@@ -1,0 +1,196 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "formattedAptStartTime",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "viewTZ",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "formattedAptStartTime.length"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "location_label",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "location",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "location.length"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "comment_label",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "apt.comment",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "apt.comment.length"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "formattedAptEndTime",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "viewTZ",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "formattedAptEndTime.length"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "getSubject",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "organizerName",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "sentByText",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "startDate_label",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "formattedAptStartDate",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "endDate_label",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "formattedAptEndDate",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        }
+    ]
+}

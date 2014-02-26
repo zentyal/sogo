@@ -1,0 +1,172 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentRightType"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "rightTypes"
+                },
+                "contents": {
+                    "inputs": [
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "currentRightSelection"
+                            },
+                            "name": {
+                                "type": "var",
+                                "value": "currentRightTypeName"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "currentRightLabel"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "objectRights"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "currentRight"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "currentRight"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "currentRightTypeLabel"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "uid"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "uid"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "uid"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "condition": {
+                    "type": "var",
+                    "value": "userIsAnonymousUser"
+                },
+                "else": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "ObjectCreator"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "userCanCreateObjects"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "ObjectEraser"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "userCanEraseObjects"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "This person can create objects in my calendar."
+                        },
+                        {
+                            "type": "label",
+                            "value": "This person can erase objects from my calendar."
+                        }
+                    ]
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Access rights to"
+            },
+            {
+                "type": "var",
+                "value": "folderName"
+            },
+            {
+                "type": "label",
+                "value": "For user"
+            },
+            {
+                "type": "var",
+                "value": "userDisplayName"
+            },
+            {
+                "type": "label",
+                "value": "Update"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

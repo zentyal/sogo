@@ -1,0 +1,24 @@
+{
+    "strings": [
+        {
+            "type": "var",
+            "value": "getSubject",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "bodyStartText",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        }
+    ]
+}

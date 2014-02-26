@@ -1,0 +1,40 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "Download"
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "isIE7Compatible"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "label",
+            "value": "browserNotCompatible"
+        },
+        {
+            "type": "label",
+            "value": "Download"
+        },
+        {
+            "type": "label",
+            "value": "alternativeBrowsers"
+        },
+        {
+            "type": "label",
+            "value": "Download"
+        },
+        {
+            "type": "label",
+            "value": "Download"
+        }
+    ]
+}

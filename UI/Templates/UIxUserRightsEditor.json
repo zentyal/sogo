@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "var",
+            "value": "toolbar"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "strings": [
+            {
+                "type": "label",
+                "value": "Sorry, the user rights can not be configured for that object."
+            }
+        ]
+    }
+}

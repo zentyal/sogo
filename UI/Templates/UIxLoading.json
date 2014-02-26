@@ -1,0 +1,18 @@
+{
+    "strings": [
+        {
+            "type": "var",
+            "value": "doctype",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "Loading"
+        }
+    ]
+}

@@ -1,0 +1,270 @@
+{
+    "parameters": {
+        "component": {
+            "type": "var",
+            "value": "event"
+        },
+        "eventIsReadOnly": {
+            "type": "var",
+            "value": "eventIsReadOnly"
+        },
+        "componentCalendar": {
+            "type": "var",
+            "value": "componentCalendar"
+        },
+        "saveURL": {
+            "type": "var",
+            "value": "saveURL"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxComponentEditor"
+    },
+    "contents": {
+        "conditions": [
+            {
+                "then": {
+                    "conditions": [
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Show Time as Free"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "isTransparent"
+                            }
+                        },
+                        {
+                            "then": {
+                                "conditions": [
+                                    {
+                                        "condition": {
+                                            "type": "var",
+                                            "value": "startDateIsEqualToEndDate"
+                                        },
+                                        "else": {
+                                            "strings": [
+                                                {
+                                                    "type": "label",
+                                                    "value": "End:"
+                                                },
+                                                {
+                                                    "type": "var",
+                                                    "value": "aptEndDateText"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Start:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "aptStartDateText"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "All day Event"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "isAllDay"
+                            },
+                            "else": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Start:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "aptStartDateTimeText"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "End:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "aptEndDateTimeText"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "eventIsReadOnly"
+                },
+                "else": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "isAllDay"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "isAllDay"
+                            },
+                            "extra": {
+                                "selection": {
+                                    "type": "var",
+                                    "value": "isAllDay"
+                                },
+                                "id": {
+                                    "type": "const",
+                                    "value": "isAllDay"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "isTransparent"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "isTransparent"
+                            },
+                            "extra": {
+                                "selection": {
+                                    "type": "var",
+                                    "value": "isTransparent"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "sendAppointmentNotifications"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "sendAppointmentNotifications"
+                            },
+                            "extra": {
+                                "selection": {
+                                    "type": "var",
+                                    "value": "sendAppointmentNotifications"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Invite Attendees"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Compose E-Mail to All Attendees"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Compose E-Mail to Undecided Attendees"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Attendees:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Start:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "End:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "All day Event"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Show Time as Free"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Send Appointment Notifications"
+                        }
+                    ],
+                    "components": [
+                        {
+                            "parameters": {
+                                "date": {
+                                    "type": "var",
+                                    "value": "aptStartDate"
+                                },
+                                "controlID": {
+                                    "type": "const",
+                                    "value": "startTime"
+                                },
+                                "dayStartHour": {
+                                    "type": "const",
+                                    "value": "0"
+                                },
+                                "dayEndHour": {
+                                    "type": "const",
+                                    "value": "23"
+                                }
+                            },
+                            "class-name": {
+                                "type": "const",
+                                "value": "UIxTimeDateControl"
+                            }
+                        },
+                        {
+                            "parameters": {
+                                "date": {
+                                    "type": "var",
+                                    "value": "aptEndDate"
+                                },
+                                "controlID": {
+                                    "type": "const",
+                                    "value": "endTime"
+                                },
+                                "dayStartHour": {
+                                    "type": "const",
+                                    "value": "0"
+                                },
+                                "dayEndHour": {
+                                    "type": "const",
+                                    "value": "23"
+                                }
+                            },
+                            "class-name": {
+                                "type": "const",
+                                "value": "UIxTimeDateControl"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

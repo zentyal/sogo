@@ -1,0 +1,30 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "refreshOpenerScript",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "0"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "refreshOpener"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "label",
+            "value": "Closing Window ..."
+        }
+    ]
+}

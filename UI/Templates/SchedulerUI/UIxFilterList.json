@@ -1,0 +1,44 @@
+{
+    "parameters": {
+        "title": {
+            "type": "var",
+            "value": "panelTitle"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxMailMainFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "filter"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "filters"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "filter"
+                        }
+                    ]
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "filters.count"
+            },
+            {
+                "type": "label",
+                "value": "filters"
+            }
+        ]
+    }
+}

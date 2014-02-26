@@ -1,0 +1,74 @@
+{
+    "conditions": [
+        {
+            "condition": {
+                "type": "var",
+                "value": "hideFrame"
+            },
+            "else": {
+                "inputs": [
+                    {
+                        "type": {
+                            "type": "const",
+                            "value": "hidden"
+                        },
+                        "name": {
+                            "type": "const",
+                            "value": "criteria"
+                        },
+                        "value": {
+                            "type": "var",
+                            "value": "searchCriteria"
+                        }
+                    },
+                    {
+                        "type": {
+                            "type": "const",
+                            "value": "text"
+                        },
+                        "name": {
+                            "type": "const",
+                            "value": "search"
+                        },
+                        "value": {
+                            "type": "var",
+                            "value": "searchText"
+                        },
+                        "extra": {
+                            "menuid": {
+                                "type": "const",
+                                "value": "searchMenu"
+                            },
+                            "autocomplete": {
+                                "type": "var",
+                                "value": "off"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "label",
+            "value": "Subject"
+        },
+        {
+            "type": "label",
+            "value": "Sender"
+        },
+        {
+            "type": "label",
+            "value": "Subject or Sender"
+        },
+        {
+            "type": "label",
+            "value": "To or Cc"
+        },
+        {
+            "type": "label",
+            "value": "Entire Message"
+        }
+    ]
+}

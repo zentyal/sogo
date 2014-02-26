@@ -1,0 +1,54 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "appointment"
+            },
+            "list": {
+                "type": "var",
+                "value": "appointments"
+            },
+            "contents": {
+                "strings": [
+                    {
+                        "type": "var",
+                        "value": "appointment.dateId"
+                    },
+                    {
+                        "type": "var",
+                        "value": "appointment.title"
+                    },
+                    {
+                        "type": "var",
+                        "value": "appointment.startDate",
+                        "extra": {
+                            "dateformat": {
+                                "type": "const",
+                                "value": "%Y-%m-%d %H:%M"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "appointment.endDate",
+                        "extra": {
+                            "dateformat": {
+                                "type": "const",
+                                "value": "%Y-%m-%d %H:%M"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "appointment.objectVersion"
+                    },
+                    {
+                        "type": "var",
+                        "value": "appointment.location"
+                    }
+                ]
+            }
+        }
+    ]
+}

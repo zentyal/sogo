@@ -1,0 +1,266 @@
+{
+    "parameters": {
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "hours"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "item"
+                        }
+                    ]
+                }
+            },
+            {
+                "item": {
+                    "type": "var",
+                    "value": "currentDay"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "days"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "currentDay",
+                            "extra": {
+                                "dateformat": {
+                                    "type": "label",
+                                    "value": "dayLabelFormat"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "list": {
+                    "type": "var",
+                    "value": "durationSteps"
+                },
+                "selection": {
+                    "type": "var",
+                    "value": "duration"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "popup"
+                },
+                "item-string": {
+                    "type": "var",
+                    "value": "itemDurationText"
+                },
+                "item": {
+                    "type": "var",
+                    "value": "item"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "submit"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "proposalSearch:method"
+                },
+                "value": {
+                    "type": "label",
+                    "value": "Search"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Search appointments"
+            },
+            {
+                "type": "label",
+                "value": "Search appointments"
+            },
+            {
+                "type": "label",
+                "value": "Start date"
+            },
+            {
+                "type": "label",
+                "value": "End date"
+            },
+            {
+                "type": "label",
+                "value": "Earliest start time"
+            },
+            {
+                "type": "label",
+                "value": "Latest end time"
+            },
+            {
+                "type": "label",
+                "value": "Duration"
+            },
+            {
+                "type": "label",
+                "value": "Search resources"
+            },
+            {
+                "type": "label",
+                "value": "Search participants"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ],
+        "components": [
+            {
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxDatePickerScript"
+                }
+            },
+            {
+                "parameters": {
+                    "month": {
+                        "type": "var",
+                        "value": "startDateMonth"
+                    },
+                    "year": {
+                        "type": "var",
+                        "value": "startDateYear"
+                    },
+                    "dateID": {
+                        "type": "const",
+                        "value": "startDate"
+                    },
+                    "day": {
+                        "type": "var",
+                        "value": "startDateDay"
+                    },
+                    "label": {
+                        "type": "label",
+                        "value": "browse start date"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxDatePicker"
+                }
+            },
+            {
+                "parameters": {
+                    "month": {
+                        "type": "var",
+                        "value": "endDateMonth"
+                    },
+                    "year": {
+                        "type": "var",
+                        "value": "endDateYear"
+                    },
+                    "dateID": {
+                        "type": "const",
+                        "value": "endDate"
+                    },
+                    "day": {
+                        "type": "var",
+                        "value": "endDateDay"
+                    },
+                    "label": {
+                        "type": "label",
+                        "value": "browse end date"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxDatePicker"
+                }
+            },
+            {
+                "parameters": {
+                    "timeID": {
+                        "type": "const",
+                        "value": "earliestStartTime"
+                    },
+                    "hour": {
+                        "type": "var",
+                        "value": "startDateHour"
+                    },
+                    "minute": {
+                        "type": "var",
+                        "value": "startDateMinute"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxTimeSelector"
+                }
+            },
+            {
+                "parameters": {
+                    "timeID": {
+                        "type": "const",
+                        "value": "latestEndTime"
+                    },
+                    "hour": {
+                        "type": "var",
+                        "value": "endDateHour"
+                    },
+                    "minute": {
+                        "type": "var",
+                        "value": "endDateMinute"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxTimeSelector"
+                }
+            },
+            {
+                "parameters": {
+                    "selectorId": {
+                        "type": "const",
+                        "value": "resources"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxContactSelector"
+                }
+            },
+            {
+                "parameters": {
+                    "selectorId": {
+                        "type": "const",
+                        "value": "participants"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxContactSelector"
+                }
+            }
+        ]
+    }
+}

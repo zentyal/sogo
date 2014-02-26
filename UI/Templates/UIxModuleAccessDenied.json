@@ -1,0 +1,32 @@
+{
+    "parameters": {
+        "cssFiles": {
+            "type": "const",
+            "value": "UIxModuleAccessDenied.css"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "strings": [
+            {
+                "type": "label",
+                "value": "You are not allowed to access this module or this system. Please contact your system administrator."
+            }
+        ]
+    }
+}

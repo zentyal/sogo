@@ -1,0 +1,84 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "const",
+                        "value": "\"",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "displayName",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "const",
+                        "value": "\"",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "isSubject"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "const",
+                        "value": "\"",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "displayName",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "const",
+                        "value": "\"",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "isBody"
+            }
+        }
+    ]
+}

@@ -1,0 +1,92 @@
+{
+    "inputs": [
+        {
+            "type": {
+                "type": "const",
+                "value": "hidden"
+            },
+            "name": {
+                "type": "const",
+                "value": "criteria"
+            },
+            "value": {
+                "type": "var",
+                "value": "searchCriteria"
+            },
+            "extra": {
+                "id": {
+                    "type": "const",
+                    "value": "searchCriteria"
+                }
+            }
+        },
+        {
+            "type": {
+                "type": "const",
+                "value": "text"
+            },
+            "name": {
+                "type": "const",
+                "value": "search"
+            },
+            "value": {
+                "type": "var",
+                "value": "searchText"
+            },
+            "extra": {
+                "menuid": {
+                    "type": "const",
+                    "value": "eventSearchMenu"
+                },
+                "autocomplete": {
+                    "type": "var",
+                    "value": "off"
+                },
+                "id": {
+                    "type": "const",
+                    "value": "searchValue"
+                }
+            }
+        },
+        {
+            "selection": {
+                "type": "var",
+                "value": "selectedFilter"
+            },
+            "name": {
+                "type": "const",
+                "value": "filterpopup"
+            },
+            "item-string": {
+                "type": "var",
+                "value": "filterLabel"
+            },
+            "list": {
+                "type": "var",
+                "value": "filters"
+            },
+            "value": {
+                "type": "var",
+                "value": "filter"
+            },
+            "item": {
+                "type": "var",
+                "value": "filter"
+            },
+            "type": {
+                "type": "const",
+                "value": "popup"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "label",
+            "value": "Title or Description"
+        },
+        {
+            "type": "label",
+            "value": "View:"
+        }
+    ]
+}

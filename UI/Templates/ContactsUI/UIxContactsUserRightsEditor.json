@@ -1,0 +1,156 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "uid"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "uid"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "uid"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "ObjectViewer"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "userCanViewObjects"
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "condition": {
+                    "type": "var",
+                    "value": "userIsAnonymousUser"
+                },
+                "else": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "ObjectCreator"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "userCanCreateObjects"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "ObjectEditor"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "userCanEditObjects"
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "ObjectEraser"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "userCanEraseObjects"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "This person can add cards to this addressbook."
+                        },
+                        {
+                            "type": "label",
+                            "value": "This person can edit the cards of this addressbook."
+                        },
+                        {
+                            "type": "label",
+                            "value": "This person can erase cards from this addressbook."
+                        }
+                    ]
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Access rights to"
+            },
+            {
+                "type": "var",
+                "value": "folderName"
+            },
+            {
+                "type": "label",
+                "value": "For user"
+            },
+            {
+                "type": "var",
+                "value": "userDisplayName"
+            },
+            {
+                "type": "label",
+                "value": "This person can read the cards of this addressbook."
+            },
+            {
+                "type": "label",
+                "value": "Update"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

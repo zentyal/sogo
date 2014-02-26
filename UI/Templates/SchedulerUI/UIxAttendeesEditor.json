@@ -1,0 +1,176 @@
+{
+    "parameters": {
+        "cssFiles": {
+            "type": "const",
+            "value": "datepicker.css,SOGoTimePicker.css"
+        },
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "datepicker.js,SOGoTimePicker.js"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "value": {
+                    "type": "const",
+                    "value": "YES"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "workDaysOnly"
+                    }
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "dayStartHour"
+            },
+            {
+                "type": "var",
+                "value": "dayEndHour"
+            },
+            {
+                "type": "label",
+                "value": "Suggest time slot:"
+            },
+            {
+                "type": "label",
+                "value": "Between"
+            },
+            {
+                "type": "label",
+                "value": "and"
+            },
+            {
+                "type": "label",
+                "value": "Work days only"
+            },
+            {
+                "type": "label",
+                "value": "Next slot"
+            },
+            {
+                "type": "label",
+                "value": "Previous slot"
+            },
+            {
+                "type": "label",
+                "value": "newAttendee"
+            },
+            {
+                "type": "label",
+                "value": "Start:"
+            },
+            {
+                "type": "label",
+                "value": "End:"
+            },
+            {
+                "type": "label",
+                "value": "Participant"
+            },
+            {
+                "type": "label",
+                "value": "Optional Participant"
+            },
+            {
+                "type": "label",
+                "value": "Non Participant"
+            },
+            {
+                "type": "label",
+                "value": "Chair"
+            },
+            {
+                "type": "label",
+                "value": "Free"
+            },
+            {
+                "type": "label",
+                "value": "Busy"
+            },
+            {
+                "type": "label",
+                "value": "No free-busy information"
+            },
+            {
+                "type": "label",
+                "value": "OK"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "date": {
+                        "type": "var",
+                        "value": "aptStartDate"
+                    },
+                    "controlID": {
+                        "type": "const",
+                        "value": "startTime"
+                    },
+                    "dayStartHour": {
+                        "type": "const",
+                        "value": "0"
+                    },
+                    "dayEndHour": {
+                        "type": "const",
+                        "value": "23"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxTimeDateControl"
+                }
+            },
+            {
+                "parameters": {
+                    "date": {
+                        "type": "var",
+                        "value": "aptEndDate"
+                    },
+                    "controlID": {
+                        "type": "const",
+                        "value": "endTime"
+                    },
+                    "dayStartHour": {
+                        "type": "const",
+                        "value": "0"
+                    },
+                    "dayEndHour": {
+                        "type": "const",
+                        "value": "23"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxTimeDateControl"
+                }
+            }
+        ]
+    }
+}

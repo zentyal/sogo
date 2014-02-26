@@ -1,0 +1,500 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "calendarID"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "calendarID"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "calendarID"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "calendarName"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "calendarName"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "calendarName"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "calendarColor"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "calendarColor"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "calendarColor"
+                    }
+                }
+            },
+            {
+                "disabled": {
+                    "type": "var",
+                    "value": "mustSynchronize"
+                },
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "synchronizeCalendar"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "synchronizeCalendar"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "synchronizeCalendar"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "showCalendarAlarms"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "showCalendarAlarms"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "showCalendarTasks"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "showCalendarTasks"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "includeInFreeBusy"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "includeInFreeBusy"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "includeInFreeBusy"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Include in free-busy"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "userIsOwner"
+                }
+            },
+            {
+                "then": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "reloadOnLogin"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "reloadOnLogin"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Reload on login"
+                        },
+                        {
+                            "type": "label",
+                            "value": "URL:"
+                        },
+                        {
+                            "type": "var",
+                            "value": "webCalendarURL"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "isWebCalendar"
+                },
+                "else": {
+                    "conditions": [
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "notifyOnPersonalModifications"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "notifyOnPersonalModifications"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "notifyOnExternalModifications"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "notifyOnExternalModifications"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "checkbox"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "notifyUserOnPersonalModifications"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "notifyUserOnPersonalModifications"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "text"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "notifiedUserOnPersonalModifications"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "notifiedUserOnPersonalModifications"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "notifiedUserOnPersonalModifications"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Notifications"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Receive a mail when I modify my calendar"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "Receive a mail when someone else modifies my calendar"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "When I modify my calendar, send a mail to:"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "calendar.activeUserIsOwner"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Public Access"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "CalDAV URL"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "WebDAV ICS URL"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "WebDAV XML URL"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "isPublicAccessEnabled"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Authenticated User Access"
+                        },
+                        {
+                            "type": "label",
+                            "value": "CalDAV URL"
+                        },
+                        {
+                            "type": "label",
+                            "value": "WebDAV ICS URL"
+                        },
+                        {
+                            "type": "label",
+                            "value": "WebDAV XML URL"
+                        }
+                    ]
+                }
+            },
+            {
+                "condition": {
+                    "type": "var",
+                    "value": "mustSynchronize"
+                },
+                "else": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "calendarSyncTag"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "calendarSyncTag"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "calendarSyncTag"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "hidden"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "allCalendarSyncTags"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "allCalendarSyncTags"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "allCalendarSyncTags"
+                                }
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "then": {
+                                "inputs": [
+                                    {
+                                        "type": {
+                                            "type": "const",
+                                            "value": "hidden"
+                                        },
+                                        "name": {
+                                            "type": "const",
+                                            "value": "originalCalendarSyncTag"
+                                        },
+                                        "value": {
+                                            "type": "var",
+                                            "value": "originalCalendarSyncTag"
+                                        },
+                                        "extra": {
+                                            "id": {
+                                                "type": "const",
+                                                "value": "originalCalendarSyncTag"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "synchronizeCalendar"
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Tag:"
+                        }
+                    ]
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "label",
+                "value": "Properties"
+            },
+            {
+                "type": "label",
+                "value": "Links to this Calendar"
+            },
+            {
+                "type": "label",
+                "value": "Properties"
+            },
+            {
+                "type": "label",
+                "value": "Name:"
+            },
+            {
+                "type": "label",
+                "value": "Color:"
+            },
+            {
+                "type": "label",
+                "value": "Synchronization"
+            },
+            {
+                "type": "label",
+                "value": "Synchronize"
+            },
+            {
+                "type": "label",
+                "value": "Display"
+            },
+            {
+                "type": "label",
+                "value": "Show alarms"
+            },
+            {
+                "type": "label",
+                "value": "Show tasks"
+            },
+            {
+                "type": "label",
+                "value": "OK"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            }
+        ]
+    }
+}

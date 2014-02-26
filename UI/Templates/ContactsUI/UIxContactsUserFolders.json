@@ -1,0 +1,50 @@
+{
+    "parameters": {
+        "popup": {
+            "type": "const",
+            "value": "YES"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "dtree.js"
+        },
+        "toolbar": {
+            "type": "const",
+            "value": "none"
+        },
+        "title": {
+            "type": "var",
+            "value": "name"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "strings": [
+            {
+                "type": "label",
+                "value": "Add"
+            },
+            {
+                "type": "label",
+                "value": "Done"
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "qualifier": {
+                        "type": "var",
+                        "value": "qualifier"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxContactsFilterPanel"
+                }
+            }
+        ]
+    }
+}

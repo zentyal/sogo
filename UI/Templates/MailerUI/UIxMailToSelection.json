@@ -1,0 +1,108 @@
+{
+    "loops": [
+        {
+            "item": {
+                "type": "var",
+                "value": "addressList"
+            },
+            "list": {
+                "type": "var",
+                "value": "addressLists"
+            },
+            "contents": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "address"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "addressList"
+                        },
+                        "contents": {
+                            "inputs": [
+                                {
+                                    "display-string": {
+                                        "type": "label",
+                                        "value": "$item"
+                                    },
+                                    "selection": {
+                                        "type": "var",
+                                        "value": "currentHeader"
+                                    },
+                                    "name": {
+                                        "type": "var",
+                                        "value": "currentPopUpId"
+                                    },
+                                    "list": {
+                                        "type": "var",
+                                        "value": "headers"
+                                    },
+                                    "item": {
+                                        "type": "var",
+                                        "value": "item"
+                                    },
+                                    "type": {
+                                        "type": "const",
+                                        "value": "popup"
+                                    }
+                                },
+                                {
+                                    "type": {
+                                        "type": "const",
+                                        "value": "text"
+                                    },
+                                    "name": {
+                                        "type": "var",
+                                        "value": "currentAddressId"
+                                    },
+                                    "value": {
+                                        "type": "var",
+                                        "value": "address"
+                                    },
+                                    "extra": {
+                                        "id": {
+                                            "type": "var",
+                                            "value": "currentAddressId"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "list": {
+                "type": "var",
+                "value": "headers"
+            },
+            "display-string": {
+                "type": "label",
+                "value": "$item"
+            },
+            "type": {
+                "type": "const",
+                "value": "popup"
+            },
+            "name": {
+                "type": "var",
+                "value": "currentPopUpId"
+            },
+            "item": {
+                "type": "var",
+                "value": "item"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "currentIndex"
+        }
+    ]
+}

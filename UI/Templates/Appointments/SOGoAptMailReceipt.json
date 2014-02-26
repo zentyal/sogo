@@ -1,0 +1,244 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentRecipient"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "updatedAttendees"
+                        },
+                        "contents": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "currentRecipient.cn",
+                                    "extra": {
+                                        "escapeHTML": {
+                                            "type": "const",
+                                            "value": "NO"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "The following attendees(s) were notified:",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "updatedAttendees.count"
+            }
+        },
+        {
+            "then": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentRecipient"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "deletedAttendees"
+                        },
+                        "contents": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "currentRecipient.cn",
+                                    "extra": {
+                                        "escapeHTML": {
+                                            "type": "const",
+                                            "value": "NO"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "The following attendees(s) were removed:",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "deletedAttendees.count"
+            }
+        },
+        {
+            "then": {
+                "loops": [
+                    {
+                        "item": {
+                            "type": "var",
+                            "value": "currentRecipient"
+                        },
+                        "list": {
+                            "type": "var",
+                            "value": "addedAttendees"
+                        },
+                        "contents": {
+                            "strings": [
+                                {
+                                    "type": "var",
+                                    "value": "currentRecipient.cn",
+                                    "extra": {
+                                        "escapeHTML": {
+                                            "type": "const",
+                                            "value": "NO"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "The following attendees(s) were added:",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "addedAttendees.count"
+            }
+        },
+        {
+            "then": {
+                "strings": [
+                    {
+                        "type": "label",
+                        "value": "location_label",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    },
+                    {
+                        "type": "var",
+                        "value": "apt.location",
+                        "extra": {
+                            "escapeHTML": {
+                                "type": "const",
+                                "value": "NO"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "apt.location.length"
+            }
+        }
+    ],
+    "strings": [
+        {
+            "type": "var",
+            "value": "aptSummary",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "calendar_label",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "calendarName",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "startDate_label",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "aptStartDate",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "label",
+            "value": "endDate_label",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        },
+        {
+            "type": "var",
+            "value": "aptEndDate",
+            "extra": {
+                "escapeHTML": {
+                    "type": "const",
+                    "value": "NO"
+                }
+            }
+        }
+    ]
+}

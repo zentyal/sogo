@@ -1,0 +1,76 @@
+{
+    "conditions": [
+        {
+            "then": {
+                "inputs": [
+                    {
+                        "disabled": {
+                            "type": "var",
+                            "value": "disabled"
+                        },
+                        "type": {
+                            "type": "const",
+                            "value": "text"
+                        },
+                        "name": {
+                            "type": "var",
+                            "value": "timeID"
+                        },
+                        "value": {
+                            "type": "var",
+                            "value": "time"
+                        },
+                        "extra": {
+                            "shadow-value": {
+                                "type": "var",
+                                "value": "time"
+                            },
+                            "id": {
+                                "type": "var",
+                                "value": "timeID"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": {
+                "type": "var",
+                "value": "displayTimeControl"
+            }
+        }
+    ],
+    "components": [
+        {
+            "parameters": {
+                "month": {
+                    "type": "var",
+                    "value": "month"
+                },
+                "disabled": {
+                    "type": "var",
+                    "value": "disabled"
+                },
+                "dateID": {
+                    "type": "var",
+                    "value": "dateID"
+                },
+                "year": {
+                    "type": "var",
+                    "value": "year"
+                },
+                "label": {
+                    "type": "var",
+                    "value": "label"
+                },
+                "day": {
+                    "type": "var",
+                    "value": "day"
+                }
+            },
+            "class-name": {
+                "type": "const",
+                "value": "UIxDatePicker"
+            }
+        }
+    ]
+}

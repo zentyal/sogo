@@ -1,0 +1,310 @@
+{
+    "parameters": {
+        "component": {
+            "type": "var",
+            "value": "todo"
+        },
+        "eventIsReadOnly": {
+            "type": "var",
+            "value": "eventIsReadOnly"
+        },
+        "componentCalendar": {
+            "type": "var",
+            "value": "componentCalendar"
+        },
+        "saveURL": {
+            "type": "var",
+            "value": "saveURL"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxComponentEditor"
+    },
+    "contents": {
+        "conditions": [
+            {
+                "then": {
+                    "conditions": [
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Start:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "taskStartDateTimeText"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasStartDate"
+                            }
+                        },
+                        {
+                            "then": {
+                                "strings": [
+                                    {
+                                        "type": "label",
+                                        "value": "Due Date:"
+                                    },
+                                    {
+                                        "type": "var",
+                                        "value": "taskDueDateTimeText"
+                                    }
+                                ]
+                            },
+                            "condition": {
+                                "type": "var",
+                                "value": "hasDueDate"
+                            }
+                        },
+                        {
+                            "condition": {
+                                "type": "var",
+                                "value": "statusDateDisabled"
+                            },
+                            "else": {
+                                "strings": [
+                                    {
+                                        "type": "var",
+                                        "value": "statusDateText"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "condition": {
+                                "type": "var",
+                                "value": "statusPercentDisabled"
+                            },
+                            "else": {
+                                "strings": [
+                                    {
+                                        "type": "var",
+                                        "value": "statusPercent"
+                                    },
+                                    {
+                                        "type": "label",
+                                        "value": "% complete"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Status:"
+                        },
+                        {
+                            "type": "var",
+                            "value": "itemStatusText"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "eventIsReadOnly"
+                },
+                "else": {
+                    "inputs": [
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "hasStartDate"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "startDateCB"
+                                }
+                            }
+                        },
+                        {
+                            "type": {
+                                "type": "const",
+                                "value": "checkbox"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "hasDueDate"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "dueDateCB"
+                                }
+                            }
+                        },
+                        {
+                            "selection": {
+                                "type": "var",
+                                "value": "status"
+                            },
+                            "no-selection-string": {
+                                "type": "label",
+                                "value": "status_NOT-SPECIFIED"
+                            },
+                            "item-string": {
+                                "type": "var",
+                                "value": "itemStatusText"
+                            },
+                            "list": {
+                                "type": "var",
+                                "value": "statusList"
+                            },
+                            "item": {
+                                "type": "var",
+                                "value": "item"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "popup"
+                            }
+                        },
+                        {
+                            "disabled": {
+                                "type": "var",
+                                "value": "statusPercentDisabled"
+                            },
+                            "type": {
+                                "type": "const",
+                                "value": "text"
+                            },
+                            "name": {
+                                "type": "const",
+                                "value": "statusPercent"
+                            },
+                            "value": {
+                                "type": "var",
+                                "value": "statusPercent"
+                            },
+                            "extra": {
+                                "id": {
+                                    "type": "const",
+                                    "value": "statusPercent"
+                                }
+                            }
+                        }
+                    ],
+                    "strings": [
+                        {
+                            "type": "label",
+                            "value": "Start:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Due Date:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "Status:"
+                        },
+                        {
+                            "type": "label",
+                            "value": "% complete"
+                        }
+                    ],
+                    "components": [
+                        {
+                            "parameters": {
+                                "disabled": {
+                                    "type": "var",
+                                    "value": "startDateDisabled"
+                                },
+                                "controlID": {
+                                    "type": "const",
+                                    "value": "startTime"
+                                },
+                                "dayEndHour": {
+                                    "type": "const",
+                                    "value": "23"
+                                },
+                                "dayStartHour": {
+                                    "type": "const",
+                                    "value": "0"
+                                },
+                                "date": {
+                                    "type": "var",
+                                    "value": "taskStartDate"
+                                }
+                            },
+                            "class-name": {
+                                "type": "const",
+                                "value": "UIxTimeDateControl"
+                            }
+                        },
+                        {
+                            "parameters": {
+                                "disabled": {
+                                    "type": "var",
+                                    "value": "dueDateDisabled"
+                                },
+                                "controlID": {
+                                    "type": "const",
+                                    "value": "dueTime"
+                                },
+                                "dayEndHour": {
+                                    "type": "const",
+                                    "value": "23"
+                                },
+                                "dayStartHour": {
+                                    "type": "const",
+                                    "value": "0"
+                                },
+                                "date": {
+                                    "type": "var",
+                                    "value": "taskDueDate"
+                                }
+                            },
+                            "class-name": {
+                                "type": "const",
+                                "value": "UIxTimeDateControl"
+                            }
+                        },
+                        {
+                            "parameters": {
+                                "displayTimeControl": {
+                                    "type": "const",
+                                    "value": "0"
+                                },
+                                "dayStartHour": {
+                                    "type": "const",
+                                    "value": "0"
+                                },
+                                "disabled": {
+                                    "type": "var",
+                                    "value": "statusDateDisabled"
+                                },
+                                "dayEndHour": {
+                                    "type": "const",
+                                    "value": "23"
+                                },
+                                "date": {
+                                    "type": "var",
+                                    "value": "statusDate"
+                                },
+                                "controlID": {
+                                    "type": "const",
+                                    "value": "statusTime"
+                                }
+                            },
+                            "class-name": {
+                                "type": "const",
+                                "value": "UIxTimeDateControl"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

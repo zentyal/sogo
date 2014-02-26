@@ -1,0 +1,402 @@
+{
+    "parameters": {
+        "userDefaultsKeys": {
+            "type": "const",
+            "value": "SOGoCalendarCategoriesColors,SOGoDefaultCalendar"
+        },
+        "jsFiles": {
+            "type": "const",
+            "value": "SchedulerUIDnD.js"
+        },
+        "userSettingsKeys": {
+            "type": "const",
+            "value": "Calendar,ShowCompletedTasks"
+        },
+        "title": {
+            "type": "var",
+            "value": "title"
+        }
+    },
+    "class-name": {
+        "type": "const",
+        "value": "UIxPageFrame"
+    },
+    "contents": {
+        "loops": [
+            {
+                "item": {
+                    "type": "var",
+                    "value": "monthMenuItem"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "monthMenuItems"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "monthMenuItemLabel"
+                        }
+                    ]
+                }
+            },
+            {
+                "item": {
+                    "type": "var",
+                    "value": "yearMenuItem"
+                },
+                "list": {
+                    "type": "var",
+                    "value": "yearMenuItems"
+                },
+                "contents": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "yearMenuItem"
+                        }
+                    ]
+                }
+            }
+        ],
+        "inputs": [
+            {
+                "type": {
+                    "type": "const",
+                    "value": "file"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "calendarFile"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "calendarFile"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "hidden"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "criteria"
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "text"
+                },
+                "name": {
+                    "type": "const",
+                    "value": "search"
+                },
+                "extra": {
+                    "autocomplete": {
+                        "type": "var",
+                        "value": "off"
+                    },
+                    "menuid": {
+                        "type": "const",
+                        "value": "taskSearchMenu"
+                    }
+                }
+            },
+            {
+                "type": {
+                    "type": "const",
+                    "value": "checkbox"
+                },
+                "value": {
+                    "type": "var",
+                    "value": "showCompletedTasks"
+                },
+                "extra": {
+                    "id": {
+                        "type": "const",
+                        "value": "showHideCompletedTasks"
+                    }
+                }
+            }
+        ],
+        "conditions": [
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "verticalDragHandleStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "verticalDragHandleStyle"
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "eventsListViewStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "eventsListViewStyle"
+                }
+            },
+            {
+                "then": {
+                    "strings": [
+                        {
+                            "type": "var",
+                            "value": "horizontalDragHandleStyle"
+                        },
+                        {
+                            "type": "var",
+                            "value": "horizontalDragHandleStyle"
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": "var",
+                    "value": "horizontalDragHandleStyle"
+                }
+            }
+        ],
+        "strings": [
+            {
+                "type": "var",
+                "value": "firstDayOfWeek"
+            },
+            {
+                "type": "var",
+                "value": "dayStartHour"
+            },
+            {
+                "type": "var",
+                "value": "currentView"
+            },
+            {
+                "type": "var",
+                "value": "localeCode"
+            },
+            {
+                "type": "label",
+                "value": "New Event..."
+            },
+            {
+                "type": "label",
+                "value": "New Task..."
+            },
+            {
+                "type": "label",
+                "value": "Edit Selected Event..."
+            },
+            {
+                "type": "label",
+                "value": "Delete Selected Event"
+            },
+            {
+                "type": "label",
+                "value": "Select All"
+            },
+            {
+                "type": "label",
+                "value": "Workweek days only"
+            },
+            {
+                "type": "label",
+                "value": "Tasks in View"
+            },
+            {
+                "type": "label",
+                "value": "Open Task..."
+            },
+            {
+                "type": "label",
+                "value": "New Task..."
+            },
+            {
+                "type": "label",
+                "value": "Mark Completed"
+            },
+            {
+                "type": "label",
+                "value": "Delete Task"
+            },
+            {
+                "type": "label",
+                "value": "View Raw Source"
+            },
+            {
+                "type": "label",
+                "value": "Properties"
+            },
+            {
+                "type": "label",
+                "value": "New Calendar..."
+            },
+            {
+                "type": "label",
+                "value": "Delete Calendar"
+            },
+            {
+                "type": "label",
+                "value": "Export Calendar..."
+            },
+            {
+                "type": "label",
+                "value": "Import Events..."
+            },
+            {
+                "type": "label",
+                "value": "Publish Calendar..."
+            },
+            {
+                "type": "label",
+                "value": "Reload Remote Calendars"
+            },
+            {
+                "type": "label",
+                "value": "Sharing..."
+            },
+            {
+                "type": "label",
+                "value": "Calendar:"
+            },
+            {
+                "type": "label",
+                "value": "Location:"
+            },
+            {
+                "type": "label",
+                "value": "Created by:"
+            },
+            {
+                "type": "label",
+                "value": "Import Events"
+            },
+            {
+                "type": "label",
+                "value": "Select an iCalendar file (.ics)."
+            },
+            {
+                "type": "label",
+                "value": "Upload"
+            },
+            {
+                "type": "label",
+                "value": "Cancel"
+            },
+            {
+                "type": "label",
+                "value": "Import Events"
+            },
+            {
+                "type": "label",
+                "value": "Done"
+            },
+            {
+                "type": "label",
+                "value": "Events"
+            },
+            {
+                "type": "label",
+                "value": "Tasks"
+            },
+            {
+                "type": "label",
+                "value": "Title"
+            },
+            {
+                "type": "label",
+                "value": "Start"
+            },
+            {
+                "type": "label",
+                "value": "End"
+            },
+            {
+                "type": "label",
+                "value": "Location"
+            },
+            {
+                "type": "label",
+                "value": "Calendar"
+            },
+            {
+                "type": "label",
+                "value": "Title or Description"
+            },
+            {
+                "type": "label",
+                "value": "Show completed tasks"
+            },
+            {
+                "type": "label",
+                "value": "Priority"
+            },
+            {
+                "type": "label",
+                "value": "Title"
+            },
+            {
+                "type": "label",
+                "value": "Due Date"
+            },
+            {
+                "type": "label",
+                "value": "Location"
+            },
+            {
+                "type": "label",
+                "value": "Category"
+            },
+            {
+                "type": "label",
+                "value": "Calendar"
+            }
+        ],
+        "components": [
+            {
+                "parameters": {
+                    "selectedDate": {
+                        "type": "var",
+                        "value": "thisMonth"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxCalDateSelector"
+                }
+            },
+            {
+                "parameters": {
+                    "calendarFolders": {
+                        "type": "var",
+                        "value": "calendarFolders"
+                    }
+                },
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxCalendarSelector"
+                }
+            },
+            {
+                "class-name": {
+                    "type": "const",
+                    "value": "UIxCalFilterPanel"
+                }
+            }
+        ]
+    }
+}
