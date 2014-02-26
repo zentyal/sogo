@@ -207,7 +207,7 @@
 
 /* page based JavaScript */
 
-- (NSString *) _stringsForFramework: (NSString *) framework
+- (NSDictionary *) _stringsForFramework: (NSString *) framework
 {
   NSString *language, *frameworkName;
   NSMutableDictionary* strings;
@@ -246,30 +246,28 @@
     }
 
   /* table is not really an NSDictionary but a hackish variation thereof */
-  return [strings jsonRepresentation];
+  return strings;
 }
 
-- (NSString *) commonLocalizableStrings
+- (NSDictionary *) commonLocalizableStrings
 {
-  NSString *rc;
+  id rc;
 
   if (isPopup)
-    rc = @"";
+    rc = [NSNull null];
   else
-    rc = [NSString stringWithFormat: @"var clabels = %@;",
-          [self _stringsForFramework: nil]];
+    rc = [self _stringsForFramework: nil];
 
   return rc;
 }
 
-- (NSString *) productLocalizableStrings
+- (NSDictionary *) productLocalizableStrings
 {
   NSString *frameworkName;
 
   frameworkName = [[context page] frameworkName];
 
-  return [NSString stringWithFormat: @"var labels = %@;",
-		   [self _stringsForFramework: frameworkName]];
+  return [self _stringsForFramework: frameworkName];
 }
 
 - (NSString *) pageJavaScriptURL
@@ -523,8 +521,8 @@
 }
 
 /* UserDefaults, UserSettings */
-- (NSString *) _dictionaryWithKeys: (NSArray *) keys
-                        fromSource: (SOGoDefaultsSource *) source
+- (NSDictionary *) _dictionaryWithKeys: (NSArray *) keys
+                            fromSource: (SOGoDefaultsSource *) source
 {
   NSString *key;
   int count, max;
@@ -546,7 +544,7 @@
       [dict setObject: value forKey: key];
     }
 
-  return [dict jsonRepresentation];
+  return dict;
 }
 
 - (void) setUserDefaultsKeys: (NSString *) newKeys
@@ -561,7 +559,7 @@
   return ([udKeys count] > 0);
 }
 
-- (NSString *) userDefaults
+- (NSDictionary *) userDefaults
 {
   SOGoUserDefaults *ud;
 
@@ -582,7 +580,7 @@
   return ([usKeys count] > 0);
 }
 
-- (NSString *) userSettings
+- (NSDictionary *) userSettings
 {
   SOGoUserSettings *us;
 

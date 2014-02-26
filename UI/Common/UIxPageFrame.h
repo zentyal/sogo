@@ -47,8 +47,8 @@
   NSMutableArray *systemAdditionalJSFiles;
 }
 
-- (NSString *) commonLocalizableStrings;
-- (NSString *) productLocalizableStrings;
+- (NSDictionary *) commonLocalizableStrings;
+- (NSDictionary *) productLocalizableStrings;
 
 - (NSString *) pageJavaScriptURL;
 - (NSString *) productJavaScriptURL;
