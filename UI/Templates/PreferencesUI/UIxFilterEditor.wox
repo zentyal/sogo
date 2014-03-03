@@ -13,15 +13,17 @@
   >
   <script type="text/javascript">
     var filterId = '<var:string value="filterId"/>';
+    var mailTags = <var:string value="labels" const:escapeHTML="NO"/>;
   </script>
   <form id="mainForm" var:href="ownPath">
+    <fieldset>
     <div id="filterNameContainer" class="container">
-      <label><var:string label:value="Filter name:"
-          /><input const:name="filterName" class="textField" type="text"
-          var:value="filterName"/></label><br/>
+      <label><var:string label:value="Filter name:"/></label>
+      <input const:name="filterName" class="textField" type="text"
+          var:value="filterName"/>
     </div>
     <div id="filterMatchContainer" class="container">
-      <var:string label:value="For incoming messages that"/>
+      <label><var:string label:value="For incoming messages that"/></label>
       <select const:name="matchType" const:id="matchType"
         ><option const:value="all"
           ><var:string label:value="match all of the following rules:"
@@ -59,5 +61,6 @@
           </span></a
           ></div>
     </div>
+  </fieldset>
   </form>
 </var:component>
