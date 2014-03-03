@@ -203,6 +203,11 @@ DIV.linkbanner SPAN#userIdentificationDisplay
   font-size: 0.9em;
   font-weight: normal
 }
+DIV.linkbanner SPAN#userIdentificationDisplay > img {
+    float: left;
+    padding-left: 0;
+    padding-right: 15px;
+}
 
 DIV.linkbanner IMG
 { padding: 0px 4px; }
@@ -905,7 +910,7 @@ BUTTON.comboBoxButton:active
   background-color: #d6d7d6;
 }
 a.reload {
-  background: url("calendar-reload.png") no-repeat center center;
+  background: url("mail-reload.png") no-repeat center center;
   position: absolute;
   right: 10px;
   top: 0px;
@@ -1203,7 +1208,6 @@ SPAN.toolbarSeparator
 
 DIV.toolbar IMG.buttonImage
 { height: 24px;
-  width: 24px;
   margin-top: 8px;
   padding: 0px;
   /*left: 4px;
@@ -1585,16 +1589,55 @@ span.cke_skin_kama
   { display: none; }
 }
 
+/* date picker */
+
+.timeDateControl INPUT,
+.timeDateControl SELECT,
+.timeDateControl SPAN
+{ vertical-align: top; }
+
+.timeDateControl {
+    display: block;
+}
+
+.datePicker {
+    display: inline-block;
+    position: relative;
+}
+.datePicker a.calendarButton.add-on{
+  padding: 4px 3px 1px 5px;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+}
+.datePicker INPUT:disabled + a.calendarButton,
+.datePicker INPUT:disabled + a.calendarButton:hover{ 
+  cursor: default;
+  opacity: 0.5;
+}
+
+.datePicker INPUT{
+    padding-right: 30px;
+    width: auto;
+    width: 110px;
+}
+.timeDateControl > INPUT {
+    display: inline-block;
+    width: auto;
+}
+
+
 @media (max-width: 960px){ 
 
-.linkbanner DIV.toolbar A.toolbarButton SPAN, .linkbanner DIV.toolbar A.toolbarButton:hover SPAN{
+.linkbanner DIV.toolbar A.toolbarButton SPAN,
+.linkbanner DIV.toolbar A.toolbarButton:hover SPAN{
     color: transparent;
-    font-size:0px;
-    width: 24px;
+    font-size:0px !important;
+    width: 26px;
 }
 
 .linkbanner DIV.toolbar IMG.buttonImage{ 
- display: block;
+ display: inline-block;
 }
 
 }

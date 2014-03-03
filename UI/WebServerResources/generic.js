@@ -719,12 +719,14 @@ function onRowClick(event, target) {
             rowIndex = null;
         } else {
             $(node).selectElement();
+            showMessageSelectedButtons();
         }
         // At this point, should empty content of 3-pane view
     } else {
         // Single line selection
         $(node.parentNode).deselectAll();
         $(node).selectElement();
+        showMessageSelectedButtons();
     }
     if (rowIndex != null) {
 	lastClickedRow = rowIndex;
@@ -732,6 +734,16 @@ function onRowClick(event, target) {
     }
 
     return true;
+}
+
+/* Custom functions to show & hide mail buttons when no one is selected
+   as Reply, fordward, ... They all share the hiddenButton CSS class */
+function showMessageSelectedButtons() {
+    jQuery(".hiddenButton").removeClass("onSelectItem");
+}
+
+function hideMessageSelectedButtons() {
+    jQuery(".hiddenButton").addClass("onSelectItem");
 }
 
 /* popup menus */
@@ -1131,6 +1143,7 @@ function onSearchFocus(event) {
         this.setAttribute("modified", "");
     } else {
         this.selectElement();
+        showMessageSelectedButtons();
     }
     this.setStyle({ color: "#262B33" });
 }

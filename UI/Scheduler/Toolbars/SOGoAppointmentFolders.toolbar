@@ -22,6 +22,7 @@
       label="Delete";
       onclick = "return deleteEvent(this);";
       image = "tb-mail-delete-flat-24x24.png";
+      cssClass = "onSelectItem hiddenButton";
       tooltip = "Delete this event or task"; } ),
   ( { link = "#";
       label = "Reload";
