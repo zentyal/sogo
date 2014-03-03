@@ -198,7 +198,6 @@
       if ([classes containsObject: @"group"] ||
 	  [classes containsObject: @"groupofnames"] ||
 	  [classes containsObject: @"groupofuniquenames"] ||
-	  [classes containsObject: @"zentyaldistributiongroup"] ||
 	  [classes containsObject: @"posixgroup"])
 	{
 	  o = [[self alloc] initWithIdentifier: theValue
