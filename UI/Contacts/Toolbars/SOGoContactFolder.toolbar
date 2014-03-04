@@ -17,11 +17,13 @@
      label = "Properties";
      onclick = "return onToolbarEditSelectedContacts(this);";
      image = "properties.png";
+     cssClass = "onSelectItem hiddenButton";
      tooltip = "Edit the selected card"; },
    { link = "#";
      label="Write";
      onclick = "return onToolbarWriteToSelectedContacts(this);";
      image="write.png";
+     cssClass = "onSelectItem hiddenButton";
      tooltip = "Send a mail message"; }
   ),
   (
@@ -29,6 +31,7 @@
      label="Delete";
      onclick = "return onToolbarDeleteSelectedContacts(this);";
      image="tb-mail-delete-flat-24x24.png";
+     cssClass = "onSelectItem hiddenButton";
      tooltip = "Delete selected card or address book"; }
   ),
   ( { link = "#";

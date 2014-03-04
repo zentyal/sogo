@@ -1176,6 +1176,7 @@ function tasksListCallback(http) {
                     var node = $(selectedNodesId[i]);
                     if (node) {
                         node.selectElement();
+                        showMessageSelectedButtons();
                     }
                 }
             }
@@ -1200,6 +1201,7 @@ function restoreCurrentDaySelection(div) {
                     if (document.selectedDate)
                         document.selectedDate.deselect();
                     $(td).selectElement();
+                    showMessageSelectedButtons();
                     document.selectedDate = td;
                 }
             }
@@ -2353,6 +2355,7 @@ function selectCalendarEvent(calendar, cname, recurrenceTime) {
     if (selection) {
         for (var i = 0; i < selection.length; i++)
             selection[i].selectElement();
+            showMessageSelectedButtons();
         if (selectedCalendarCell) {
             selectedCalendarCell = selectedCalendarCell.concat(selection);
         }
@@ -2440,6 +2443,7 @@ function onCalendarSelectEvent(event, willShowContextualMenu) {
         deselectAll();
         listOfSelection = null;
         this.selectElement();
+        showMessageSelectedButtons();
         if (alreadySelected)
             selectedCalendarCell = [this];
     }
@@ -2453,6 +2457,7 @@ function onCalendarSelectEvent(event, willShowContextualMenu) {
         var div = row.parentNode.parentNode.parentNode;
         div.scrollTop = row.offsetTop - (div.offsetHeight / 2);
         row.selectElement();
+        showMessageSelectedButtons();
     }
 }
 

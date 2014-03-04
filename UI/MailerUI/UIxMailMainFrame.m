@@ -359,7 +359,7 @@
    [self _setupContext];
    height = [moduleSettings objectForKey: @"DragHandleVertical"];
 
-   return ((height && [height intValue] > 0) ? (id)[NSString stringWithFormat: @"%ipx", ([height intValue] - 27)] : nil);
+   return ((height && [height intValue] > 0) ? (id)[NSString stringWithFormat: @"%ipx", ([height intValue])] : nil);
 }
 
 - (WOResponse *) saveDragHandleStateAction

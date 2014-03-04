@@ -411,6 +411,7 @@ function onDocumentKeydown(event) {
 
                     // Select and load the next message
                     nextRow.selectElement();
+                    showMessageSelectedButtons();
                     loadMessage(Mailer.currentMessages[Mailer.currentMailbox]);
                     // from generic.js
                     lastClickedRow = nextRow.rowIndex;
@@ -620,6 +621,7 @@ function onMailboxTreeItemClick(event) {
     if (topNode.selectedEntry)
         topNode.selectedEntry.deselect();
     this.selectElement();
+    hideMessageSelectedButtons();
     topNode.selectedEntry = this;
 
     search = {};
@@ -1017,6 +1019,7 @@ function onMessageListRender(event) {
 	var rows = this.select("TR#row_" + currentMessage);
 	if (rows.length == 1)
 	    rows[0].selectElement();
+        showMessageSelectedButtons();
     }
     // Update message counter in folder name
     updateMessageListCounter(event.memo, false);
@@ -1902,7 +1905,7 @@ function configureDragHandles() {
 }
 
 function onMessageListResize(event) {
-    var h = $("mailboxContent").getHeight() - $("messageListHeader").getHeight();
+    var h = $("mailboxContent").getHeight() - $("messageListHeader").getHeight() - 27;
     $("mailboxList").setStyle({'height': h + 'px'});
 }
 

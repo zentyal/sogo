@@ -24,23 +24,37 @@
   color: #000;
   text-decoration: none;
   display: inline-block;
-  line-height: 28px;
+  line-height: 30px;
   vertical-align: top;
+  height: 30px;
 }
 
-.dtree a.node
-{
+.dtree a.node{
   white-space: nowrap;
-  padding: 0px 2px;
-  line-height: 28px;
+  padding: 0px 5px 0px 0px;
   font-size: 1.1em;
   display: inline-block;
 }
 
-.dtree a.node:hover
-{
-  text-decoration: none;
+.dtree a.node img{
+margin-left: 3px;
+float: left;
+margin-top: 1px;
 }
+
+.dtree a.node .nodeName{
+  height: 30px;
+  line-height: 30px;
+  margin-left: 5px;
+}
+
+.dtree a.node:hover{
+  text-decoration: none;
+  background-color: #e3e3e3;
+}
+
+.dtree a.node._selected
+{ background-color: #ccc; }
 
 .dtree .clip
 {
@@ -48,9 +62,6 @@
 }
 
 .dTreeNode
-{ height: 28px; }
-.dTreeNode:hover{
-  background-color: #e3e3e3;
-}
-.dTreeNode._selected
-{ background-color: #ccc; }
+{ height: 30px; }
+
+
