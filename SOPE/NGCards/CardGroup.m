@@ -142,6 +142,12 @@ static NGCardsSaxHandler *sax = nil;
   return nil;
 }
 
+- (void) clear
+{
+  [super clear];
+  [children removeAllObjects];
+}
+
 - (BOOL) isVoid
 {
   BOOL isVoid = YES;

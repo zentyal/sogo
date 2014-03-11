@@ -20,6 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#import <Foundation/NSData.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSBundle.h>
 
@@ -43,14 +44,15 @@
 
   response = [context response];
   [response setStatus: status];
+  [response setContent: [NSData data]];
   [response setHeader: @"text/plain; charset=utf-8" 
-	    forKey: @"content-type"];
+               forKey: @"content-type"];
 
   return response;
 }
 
 - (WOResponse *) responseWithStatus: (unsigned int) status
-			  andString: (NSString *) contentString
+                          andString: (NSString *) contentString
 {
   WOResponse *response;
 
@@ -61,7 +63,7 @@
 }
 
 - (WOResponse *) responseWithStatus: (unsigned int) status
-	      andJSONRepresentation: (NSObject *) contentObject;
+              andJSONRepresentation: (NSObject *) contentObject;
 {
   WOResponse *response;
 

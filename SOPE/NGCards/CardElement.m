@@ -456,6 +456,14 @@ _orderedValuesAreVoid (NSArray *orderedValues)
   return result;
 }
 
+- (void) clear
+{
+  [self setTag: nil];
+  [self setGroup: nil];
+  [values removeAllObjects];
+  [attributes removeAllObjects];
+}
+
 - (BOOL) isVoid
 {
   BOOL result = YES;
@@ -593,7 +601,7 @@ _orderedValuesAreVoid (NSArray *orderedValues)
   [newGroup release];
   [new setValues: [self deepCopyOfDictionary: values withZone: aZone]];
   [new setAttributesAsCopy: [self deepCopyOfDictionary: attributes
-				  withZone: aZone]];
+                                  withZone: aZone]];
 
   return new;
 }

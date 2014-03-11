@@ -1,8 +1,8 @@
-/* SOGoContactGCSList.h - this file is part of SOGo
+/* CardJsonParser.h - this file is part of SOPE
  *
- * Copyright (C) 2008 Inverse inc.
+ * Copyright (C) 2014 Zentyal
  *
- * Author: Wolfgang Sourdeau <wsourdeau@inverse.ca>
+ * Author: Wolfgang Sourdeau <wolfgang@contre.com>
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,32 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef SOGOCONTACTGCSLIST_H
-#define SOGOCONTACTGCSLIST_H
+#ifndef CARDJSONPARSER_H
+#define CARDJSONPARSER_H
 
-#import <SOGo/SOGoContentObject.h>
+#import <Foundation/NSObject.h>
 
-@class NGVList;
+#import "CardElement.h"
+#import "CardGroup.h"
 
-@interface SOGoContactGCSList : SOGoContentObject
-{
-  NGVList *list;
-}
+@class NSDictionary;
+@class NSString;
 
-- (NGVList *) vList;
-- (NSException *) save;
+
+@interface CardElement (CardJsonParsing)
+
+- (NSDictionary *) jsonDictionary;
+
+- (void) parseFromJsonString: (NSString *) aString;
+- (void) parseFromJsonDictionary: (NSDictionary *) aDict;
 
 @end
 
-#endif /* SOGOCONTACTGCSLIST_H */
+
+@interface CardGroup (CardJsonParsing)
+
+- (void) parseFromJsonDictionary: (NSDictionary *) aDict;
+
+@end
+
+#endif /* CARDJSONPARSER_H */

@@ -155,6 +155,15 @@ static NSArray *folderListingFields = nil;
               else if ([url hasSuffix: @"AsList"])
                 obj = [SOGoContactGCSList objectWithName: _key
 					  inContainer: self];
+              else if ([url hasSuffix: @"json"])
+                {
+                  if ([_key hasSuffix: @".vcf"])
+                    obj = [SOGoContactGCSEntry objectWithName: _key
+                                               inContainer: self];
+                  else if ([_key hasSuffix: @".vlf"])
+                    obj = [SOGoContactGCSList objectWithName: _key
+                                              inContainer: self];
+                }
 	      [obj setIsNew: YES];
             }
         }

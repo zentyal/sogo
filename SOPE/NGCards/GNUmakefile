@@ -27,8 +27,11 @@ libNGCards_HEADER_FILES =  		\
 	CardElement.h			\
 	CardGroup.h			\
 	\
+	CardJsonRenderer.h		\
 	CardVersitRenderer.h		\
 	iCalXMLRenderer.h		\
+	\
+	CardElement+Json.h		\
 	\
 	NGCards.h			\
 	iCalAlarm.h			\
@@ -80,8 +83,11 @@ libNGCards_OBJC_FILES =    		\
 	CardElement.m			\
 	CardGroup.m			\
 	\
+	CardJsonRenderer.m		\
 	CardVersitRenderer.m		\
 	iCalXMLRenderer.m		\
+	\
+	CardElement+Json.m		\
 	\
 	iCalAlarm.m			\
 	iCalAttachment.m		\

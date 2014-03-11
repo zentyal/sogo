@@ -15,7 +15,10 @@ class JSONFormsTests(unittest.TestCase):
 
     def testJsonContactCreationViaJson(self):
         self._doJsonContactCreation("json")
+
     def _doJsonContactCreation(self, prefix):
+        deletes = []
+
         client = webdavlib.WebDAVClient(hostname, port)
 
         # json connect
@@ -46,6 +49,7 @@ class JSONFormsTests(unittest.TestCase):
                      "displayname": "Json Card",
                      "mail": "nouvelle@carte.com"}
         data = json.dumps(card_data)
+        deletes.append(webdavlib.RAIIOperation(client, post))
         post = webdavlib.HTTPPOST("%s/saveAsContact" % base_url,
                                   data, content_type = "application/json")
         post.cookie = login_value

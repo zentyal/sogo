@@ -94,13 +94,13 @@
 
 /* specialized actions */
 
-- (void) save
+- (NSException *) save
 {
   NGVList *vlist;
 
   vlist = [self vList];
 
-  [self saveContentString: [vlist versitString]];
+  return [self saveContentString: [vlist versitString]];
 }
 
 @end

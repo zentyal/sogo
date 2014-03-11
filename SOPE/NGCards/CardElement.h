@@ -60,6 +60,7 @@
 - (void) setGroup: (NSString *) aGroup;
 - (NSString *) group;
 
+- (void) clear;
 - (BOOL) isVoid;
 
 - (void) setValues: (NSMutableDictionary *) newValues;
@@ -78,6 +79,9 @@
 - (void) setSingleValue: (NSString *) newValue
                  forKey: (NSString *) key;
 
+/* Values are represented as arrays of arrays, where the first level separates
+ * field that are separated by ";" and the second, fields that are separated
+ * by a "," */
 - (NSMutableArray *) valuesForKey: (NSString *) key;
 - (NSMutableArray *) valuesAtIndex: (NSUInteger) idx
                             forKey: (NSString *) key;

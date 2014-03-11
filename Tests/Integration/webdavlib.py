@@ -574,3 +574,14 @@ class _WD_XMLTreeTextNode:
 
     def render(self):
         return self.text
+
+
+class RAIIOperation(object):
+    """This class enables operations at destruction time (RAII)."""
+
+    def __init__(self, client, op):
+        self.client = client
+        self.op = op
+
+    def __del__(self):
+        self.client.execute(self.op)

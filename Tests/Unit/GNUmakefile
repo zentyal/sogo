@@ -15,6 +15,7 @@ $(TEST_TOOL)_OBJC_FILES += \
 	SOGoTestRunner.m \
 	SaxXMLReaderFactory+SOGoTests.m \
 	\
+	TestJsonCards.m \
 	TestVersit.m \
 	TestiCalTimeZonePeriod.m \
 	TestiCalRecurrenceCalculator.m \

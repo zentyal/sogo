@@ -195,5 +195,3 @@ class TestAddressBookACLUtility(TestACLUtility):
             sogoRights.append(sogoRightsTable[k])
 
         return sogoRights
-
-

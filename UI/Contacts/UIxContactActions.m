@@ -21,16 +21,23 @@
  */
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
 #import <Foundation/NSString.h>
 
+#import <NGObjWeb/NSException+HTTP.h>
+#import <NGObjWeb/SoSecurityManager.h>
 #import <NGObjWeb/WOContext.h>
 #import <NGObjWeb/WODirectAction.h>
 #import <NGObjWeb/WORequest.h>
 #import <NGObjWeb/WOResponse.h>
 
+#import <NGCards/CardElement+Json.h>
 #import <NGCards/NGVCard.h>
 
+#import <SOGo/NSDictionary+Utilities.h>
+#import <SOGo/SOGoPermissions.h>
 #import <Contacts/SOGoContactGCSEntry.h>
+#import <Contacts/SOGoContactGCSList.h>
 
 #import <Common/WODirectAction+SOGo.h>
 
@@ -137,14 +144,92 @@
 {
   NSMutableString *content;
   WOResponse *response;
+  NSString *type;
 
   content = [NSMutableString string];
   response = [context response];
 
   [content appendFormat: [[self clientObject] contentAsString]];
-  [response setHeader: @"text/plain; charset=utf-8" 
+  if ([[self clientObject] isKindOfClass: [SOGoContactGCSEntry class]])
+      type = @"x-vcard";
+  else if ([[self clientObject] isKindOfClass: [SOGoContactGCSList class]])
+      type = @"x-vlist";
+  else
+      [NSException raise: @"SOGoException"
+                   format: @"unhandled object class"];
+  [response setHeader: [NSString stringWithFormat: @"text/%@; charset=utf-8",
+                                 type]
             forKey: @"content-type"];
   [response appendContentString: content];
+
+  return response;
+}
+
+- (WOResponse *) jsonAction
+{
+  WOResponse *response;
+  id co, component;
+  NSDictionary *rendering;
+
+  co = [self clientObject];
+  if ([co isKindOfClass: [SOGoContactGCSEntry class]])
+    component = [co vCard];
+  else if ([[self clientObject] isKindOfClass: [SOGoContactGCSList class]])
+    component = [co vList];
+  else
+    [NSException raise: @"SOGoException"
+                format: @"unhandled object class"];
+
+  WORequest *rq = [context request];
+  if ([[rq method] isEqualToString: @"GET"])
+    {
+      rendering = [component jsonDictionary];
+      response = [self responseWithStatus: 200
+                    andJSONRepresentation: rendering];
+    }
+  else if ([[rq method] isEqualToString: @"POST"])
+  {
+      NSArray *headers;
+      NSString *contentType;
+
+      headers = [rq headersForKey: @"content-type"];
+      if ([headers count] > 0)
+          contentType = [headers objectAtIndex: 0];
+      else
+          contentType = nil;
+
+      if ([contentType hasPrefix: @"application/json"])
+        {
+          SoSecurityManager *sm;
+
+          sm = [SoSecurityManager sharedSecurityManager];
+          if (([co isNew]
+               && [sm validatePermission: SoPerm_AddDocumentsImagesAndFiles
+                      onObject: [co container]
+                      inContext: context])
+              || (![co isNew]
+                  && [sm validatePermission: SoPerm_ChangeImagesAndFiles
+                      onObject: co
+                         inContext: context]))
+            response = (WOResponse *) [NSException exceptionWithHTTPStatus: 403
+                                                   reason: @"Operation denied"];
+          else
+            {
+              [component parseFromJsonString: [rq contentAsString]];
+              response = (WOResponse *) [co save];
+              if (!response)
+                {
+                  if ([co isNew])
+                    response = [self responseWithStatus: 201];
+                  else
+                    response = [self responseWith204];
+                }
+            }
+        }
+      else
+        response = [self responseWithStatus: 403
+                                  andString: @"expected 'application/json'"];
+  }
 
   return response;
 }

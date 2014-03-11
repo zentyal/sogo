@@ -1,8 +1,8 @@
-/* SOGoContactGCSList.h - this file is part of SOGo
+/* CardJsonRenderer.h - this file is part of SOPE
  *
- * Copyright (C) 2008 Inverse inc.
+ * Copyright (C) 2014 Zentyal
  *
- * Author: Wolfgang Sourdeau <wsourdeau@inverse.ca>
+ * Author: Wolfgang Sourdeau <wolfgang@contre.com>
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef SOGOCONTACTGCSLIST_H
-#define SOGOCONTACTGCSLIST_H
+#ifndef CARDJSONRENDERER_H
+#define CARDJSONRENDERER_H
 
-#import <SOGo/SOGoContentObject.h>
+#import <Foundation/NSObject.h>
 
-@class NGVList;
+@class NSDictionary;
 
-@interface SOGoContactGCSList : SOGoContentObject
-{
-  NGVList *list;
-}
+@interface CardJsonRenderer : NSObject
 
-- (NGVList *) vList;
-- (NSException *) save;
+- (NSDictionary *) render: (id) anElement;
 
 @end
 
-#endif /* SOGOCONTACTGCSLIST_H */
+#endif /* CARDCARDRENDERER_H */

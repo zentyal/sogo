@@ -206,6 +206,11 @@
           actionClass = "UIxContactActions";
           actionName  = "raw";
         };
+        json = {
+          protectedBy = "View";
+          actionClass = "UIxContactActions";
+          actionName  = "json";
+        };
       };
     };
 
@@ -243,6 +248,11 @@
           actionClass = "UIxContactActions";
           actionName  = "raw";
         };
+        json = {
+          protectedBy = "View";
+          actionClass = "UIxContactActions";
+          actionName  = "json";
+        };
       };
     };
 
@@ -274,6 +284,11 @@
           protectedBy = "<public>";
           pageName    = "UIxContactEditor";
           actionName  = "write";
+        };
+        json = {
+          protectedBy = "View";
+          actionClass = "UIxContactActions";
+          actionName  = "json";
         };
       };
     };
