@@ -1567,6 +1567,12 @@ function onMessageEditDraft(event) {
     return openMessageWindowsForSelection("edit", true);
 }
 
+function onMessageAnchorClick(event) {
+    if (this.href)
+        window.open(this.href);
+    preventDefault(event);
+}
+
 function onMessageLoadImages(event) {
     loadRemoteImages();
     Event.stop(event);
