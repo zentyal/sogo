@@ -75,18 +75,22 @@ sogo_backend_unexpected_error()
 static enum mapistore_error
 sogo_backend_handle_objc_exception(NSException *e, const char *fn_name, const int line_no)
 {
+  void *frames[128];
+  int i, len; = backtrace(frames, 128);
+  char **symbols;
+
   NSLog(@"[SOGo: %s:%d] - EXCEPTION: %@, reason: %@, backtrace: %@",
         fn_name, line_no, [e name], [e reason], [e callStackSymbols]);
-  if (![e callStackSymbols])
+
+  len = backtrace(frames, 128);
+  symbols = backtrace_symbols(frames, len);
+  NSLog(@"Backtrace using execinfo.h:");
+  for (i = 0; i < len; ++i)
     {
-      void *frames[128];
-      int i, len = backtrace(frames, 128);
-      char **symbols = backtrace_symbols(frames, len);
-      NSLog(@"Backtrace using execinfo.h:");
-      for (i = 0; i < len; ++i)
-        NSLog(@"\t%s", symbols[i]);
-      free(symbols);
+      NSLog(@"\t%s", symbols[i]);
     }
+  free(symbols);
+
   if ([[e name] isEqual:@"NotImplementedException"])
     {
       return MAPISTORE_ERR_NOT_IMPLEMENTED;
