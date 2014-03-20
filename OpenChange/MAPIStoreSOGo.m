@@ -179,7 +179,6 @@ sogo_backend_create_context(TALLOC_CTX *mem_ctx,
                             struct tdb_wrap *indexingTdb,
                             const char *uri, void **context_object)
 {
-  TRYCATCH_START
   NSAutoreleasePool *pool;
   MAPIStoreContext *context;
   int rc;
@@ -191,12 +190,14 @@ sogo_backend_create_context(TALLOC_CTX *mem_ctx,
 
   if (MAPIStoreContextK)
     {
+      TRYCATCH_START
       rc = [MAPIStoreContextK openContext: &context
                                   withURI: uri
                            connectionInfo: conn_info
                            andTDBIndexing: indexingTdb];
       if (rc == MAPISTORE_SUCCESS)
         *context_object = [context tallocWrapper: mem_ctx];
+      TRYCATCH_END
     }
   else
     rc = MAPISTORE_ERROR;
@@ -205,7 +206,6 @@ sogo_backend_create_context(TALLOC_CTX *mem_ctx,
   GSUnregisterCurrentThread ();
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -215,7 +215,6 @@ sogo_backend_create_root_folder (const char *username,
                                  // struct tdb_wrap *indexingTdb,
                                  TALLOC_CTX *mem_ctx, char **mapistore_urip)
 {
-  TRYCATCH_START
   NSAutoreleasePool *pool;
   NSString *userName, *folderName;
   NSString *mapistoreUri;
@@ -228,6 +227,7 @@ sogo_backend_create_root_folder (const char *username,
 
   if (MAPIStoreContextK)
     {
+      TRYCATCH_START
       userName = [NSString stringWithUTF8String: username];
       folderName = [NSString stringWithUTF8String: name];
       rc = [MAPIStoreContextK createRootFolder: &mapistoreUri
@@ -237,6 +237,7 @@ sogo_backend_create_root_folder (const char *username,
                                       withRole: role];
       if (rc == MAPISTORE_SUCCESS)
         *mapistore_urip = [mapistoreUri asUnicodeInMemCtx: mem_ctx];
+      TRYCATCH_END
     }
   else
     rc = MAPISTORE_ERROR;
@@ -245,7 +246,6 @@ sogo_backend_create_root_folder (const char *username,
   GSUnregisterCurrentThread ();
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -253,7 +253,6 @@ sogo_backend_list_contexts(const char *username, struct tdb_wrap *indexingTdb,
                            TALLOC_CTX *mem_ctx,
                            struct mapistore_contexts_list **contexts_listp)
 {
-  TRYCATCH_START
   NSAutoreleasePool *pool;
   NSString *userName;
   int rc;
@@ -265,11 +264,13 @@ sogo_backend_list_contexts(const char *username, struct tdb_wrap *indexingTdb,
 
   if (MAPIStoreContextK)
     {
+      TRYCATCH_START
       userName = [NSString stringWithUTF8String: username];
       *contexts_listp = [MAPIStoreContextK listAllContextsForUser: userName
                                                   withTDBIndexing: indexingTdb
                                                          inMemCtx: mem_ctx];
       rc = MAPISTORE_SUCCESS;
+      TRYCATCH_END
     }
   else
     rc = MAPISTORE_ERROR;
@@ -278,7 +279,6 @@ sogo_backend_list_contexts(const char *username, struct tdb_wrap *indexingTdb,
   GSUnregisterCurrentThread ();
 
   return rc;
-  TRYCATCH_END
 }
 
 // andFID: fid
@@ -300,7 +300,6 @@ static enum mapistore_error
 sogo_context_get_path(void *backend_object, TALLOC_CTX *mem_ctx,
                       uint64_t fmid, char **path)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreContext *context;
@@ -314,7 +313,11 @@ sogo_context_get_path(void *backend_object, TALLOC_CTX *mem_ctx,
       context = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [context getPath: path ofFMID: fmid inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -324,14 +327,12 @@ sogo_context_get_path(void *backend_object, TALLOC_CTX *mem_ctx,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_context_get_root_folder(void *backend_object, TALLOC_CTX *mem_ctx,
                              uint64_t fid, void **folder_object)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreContext *context;
@@ -346,9 +347,13 @@ sogo_context_get_root_folder(void *backend_object, TALLOC_CTX *mem_ctx,
       context = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [context getRootFolder: &folder withFID: fid];
       if (rc == MAPISTORE_SUCCESS)
         *folder_object = [folder tallocWrapper: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -358,7 +363,6 @@ sogo_context_get_root_folder(void *backend_object, TALLOC_CTX *mem_ctx,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 /**
@@ -373,7 +377,6 @@ sogo_context_get_root_folder(void *backend_object, TALLOC_CTX *mem_ctx,
 static enum mapistore_error
 sogo_folder_open_folder(void *folder_object, TALLOC_CTX *mem_ctx, uint64_t fid, void **childfolder_object)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder, *childFolder;
@@ -387,10 +390,14 @@ sogo_folder_open_folder(void *folder_object, TALLOC_CTX *mem_ctx, uint64_t fid, 
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder openFolder: &childFolder withFID: fid];
       if (rc == MAPISTORE_SUCCESS)
         *childfolder_object = [childFolder tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -400,7 +407,6 @@ sogo_folder_open_folder(void *folder_object, TALLOC_CTX *mem_ctx, uint64_t fid, 
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 /**
@@ -415,7 +421,6 @@ sogo_folder_create_folder(void *folder_object, TALLOC_CTX *mem_ctx,
                           uint64_t fid, struct SRow *aRow,
                           void **childfolder_object)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder, *childFolder;
@@ -429,9 +434,13 @@ sogo_folder_create_folder(void *folder_object, TALLOC_CTX *mem_ctx,
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder createFolder: &childFolder withRow: aRow andFID: fid];
       if (rc == MAPISTORE_SUCCESS)
         *childfolder_object = [childFolder tallocWrapper: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -441,7 +450,6 @@ sogo_folder_create_folder(void *folder_object, TALLOC_CTX *mem_ctx,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 /**
@@ -456,7 +464,6 @@ sogo_folder_create_folder(void *folder_object, TALLOC_CTX *mem_ctx,
 static enum mapistore_error
 sogo_folder_delete(void *folder_object)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -470,7 +477,11 @@ sogo_folder_delete(void *folder_object)
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder deleteFolder];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -480,13 +491,11 @@ sogo_folder_delete(void *folder_object)
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_folder_get_child_count(void *folder_object, enum mapistore_table_type table_type, uint32_t *child_count)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -500,7 +509,11 @@ sogo_folder_get_child_count(void *folder_object, enum mapistore_table_type table
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder getChildCount: child_count ofTableType: table_type];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -510,7 +523,6 @@ sogo_folder_get_child_count(void *folder_object, enum mapistore_table_type table
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -519,7 +531,6 @@ sogo_folder_open_message(void *folder_object,
                          uint64_t mid, bool write_access,
                          void **message_object)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -534,12 +545,16 @@ sogo_folder_open_message(void *folder_object,
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder openMessage: &message
                        withMID: mid
                     forWriting: write_access
                       inMemCtx: mem_ctx];
       if (rc == MAPISTORE_SUCCESS)
         *message_object = [message tallocWrapper: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -549,7 +564,6 @@ sogo_folder_open_message(void *folder_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -559,7 +573,6 @@ sogo_folder_create_message(void *folder_object,
                            uint8_t associated,
                            void **message_object)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -574,11 +587,15 @@ sogo_folder_create_message(void *folder_object,
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder createMessage: &message
                          withMID: mid
 		    isAssociated: associated];
       if (rc == MAPISTORE_SUCCESS)
         *message_object = [message tallocWrapper: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -588,13 +605,11 @@ sogo_folder_create_message(void *folder_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_folder_delete_message(void *folder_object, uint64_t mid, uint8_t flags)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -608,7 +623,11 @@ sogo_folder_delete_message(void *folder_object, uint64_t mid, uint8_t flags)
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder deleteMessageWithMID: mid andFlags: flags];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -618,7 +637,6 @@ sogo_folder_delete_message(void *folder_object, uint64_t mid, uint8_t flags)
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -630,7 +648,6 @@ sogo_folder_move_copy_messages(void *folder_object,
                                struct Binary_r **target_change_keys,
                                uint8_t want_copy)
 {
-  TRYCATCH_START
   MAPIStoreFolder *sourceFolder, *targetFolder;
   NSAutoreleasePool *pool;
   struct MAPIStoreTallocWrapper *wrapper;
@@ -648,6 +665,8 @@ sogo_folder_move_copy_messages(void *folder_object,
 
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [targetFolder moveCopyMessagesWithMIDs: src_mids
                                          andCount: mid_count
                                        fromFolder: sourceFolder
@@ -655,6 +674,8 @@ sogo_folder_move_copy_messages(void *folder_object,
                                     andChangeKeys: target_change_keys
                                          wantCopy: want_copy
                                          inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -664,14 +685,12 @@ sogo_folder_move_copy_messages(void *folder_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_folder_move_folder(void *folder_object, void *target_folder_object,
                         TALLOC_CTX *mem_ctx, const char *new_folder_name)
 {
-  TRYCATCH_START
   NSAutoreleasePool *pool;
   MAPIStoreFolder *moveFolder, *targetFolder;
   NSString *newFolderName;
@@ -699,11 +718,13 @@ sogo_folder_move_folder(void *folder_object, void *target_folder_object,
       else
         newFolderName = nil;
 
+      TRYCATCH_START
       rc = [moveFolder moveCopyToFolder: targetFolder
                             withNewName: newFolderName
                                  isMove: YES
                             isRecursive: YES
                                inMemCtx: mem_ctx];
+      TRYCATCH_END
 
       [pool release];
       GSUnregisterCurrentThread ();
@@ -714,14 +735,12 @@ sogo_folder_move_folder(void *folder_object, void *target_folder_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_folder_copy_folder(void *folder_object, void *target_folder_object, TALLOC_CTX *mem_ctx,
                         bool recursive, const char *new_folder_name)
 {
-  TRYCATCH_START
   NSAutoreleasePool *pool;
   MAPIStoreFolder *copyFolder, *targetFolder;
   NSString *newFolderName;
@@ -743,12 +762,14 @@ sogo_folder_copy_folder(void *folder_object, void *target_folder_object, TALLOC_
 
       newFolderName = [NSString stringWithUTF8String: new_folder_name];
 
+      TRYCATCH_START
       rc = [copyFolder moveCopyToFolder: targetFolder
                             withNewName: newFolderName
                                  isMove: NO
                             isRecursive: recursive
                                inMemCtx: mem_ctx];
- 
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -758,7 +779,6 @@ sogo_folder_copy_folder(void *folder_object, void *target_folder_object, TALLOC_
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -766,7 +786,6 @@ sogo_folder_get_deleted_fmids(void *folder_object, TALLOC_CTX *mem_ctx,
                               enum mapistore_table_type table_type, uint64_t change_num,
                               struct UI8Array_r **fmidsp, uint64_t *cnp)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -780,11 +799,15 @@ sogo_folder_get_deleted_fmids(void *folder_object, TALLOC_CTX *mem_ctx,
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder getDeletedFMIDs: fmidsp
                              andCN: cnp
                   fromChangeNumber: change_num
                        inTableType: table_type
                           inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -794,7 +817,6 @@ sogo_folder_get_deleted_fmids(void *folder_object, TALLOC_CTX *mem_ctx,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -802,7 +824,6 @@ sogo_folder_open_table(void *folder_object, TALLOC_CTX *mem_ctx,
                        enum mapistore_table_type table_type, uint32_t handle_id,
                        void **table_object, uint32_t *row_count)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -817,12 +838,16 @@ sogo_folder_open_table(void *folder_object, TALLOC_CTX *mem_ctx,
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder getTable: &table
                 andRowCount: row_count
                   tableType: table_type
                 andHandleId: handle_id];
       if (rc == MAPISTORE_SUCCESS)
         *table_object = [table tallocWrapper: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -832,7 +857,6 @@ sogo_folder_open_table(void *folder_object, TALLOC_CTX *mem_ctx,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -840,7 +864,6 @@ sogo_folder_modify_permissions(void *folder_object, uint8_t flags,
                                uint16_t pcount,
                                struct PermissionData *permissions)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -854,9 +877,13 @@ sogo_folder_modify_permissions(void *folder_object, uint8_t flags,
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder modifyPermissions: permissions
                            withCount: pcount
                             andFlags: flags];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -866,13 +893,11 @@ sogo_folder_modify_permissions(void *folder_object, uint8_t flags,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_folder_preload_message_bodies(void *folder_object, enum mapistore_table_type table_type, const struct UI8Array_r *mids)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreFolder *folder;
@@ -886,8 +911,12 @@ sogo_folder_preload_message_bodies(void *folder_object, enum mapistore_table_typ
       folder = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder preloadMessageBodiesWithMIDs: mids
                                     ofTableType: table_type];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -897,7 +926,6 @@ sogo_folder_preload_message_bodies(void *folder_object, enum mapistore_table_typ
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -905,7 +933,6 @@ sogo_message_get_message_data(void *message_object,
                               TALLOC_CTX *mem_ctx,
                               struct mapistore_message **msg_dataP)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMessage *message;
@@ -919,8 +946,12 @@ sogo_message_get_message_data(void *message_object,
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [message getMessageData: msg_dataP
                      inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
       rc = MAPISTORE_SUCCESS;
@@ -931,13 +962,11 @@ sogo_message_get_message_data(void *message_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_message_create_attachment (void *message_object, TALLOC_CTX *mem_ctx, void **attachment_object, uint32_t *aidp)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMessage *message;
@@ -952,10 +981,14 @@ sogo_message_create_attachment (void *message_object, TALLOC_CTX *mem_ctx, void 
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message createAttachment: &attachment inAID: aidp];
       if (rc == MAPISTORE_SUCCESS)
         *attachment_object = [attachment tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -965,14 +998,12 @@ sogo_message_create_attachment (void *message_object, TALLOC_CTX *mem_ctx, void 
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_message_open_attachment (void *message_object, TALLOC_CTX *mem_ctx,
                               uint32_t aid, void **attachment_object)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMessage *message;
@@ -987,10 +1018,14 @@ sogo_message_open_attachment (void *message_object, TALLOC_CTX *mem_ctx,
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message getAttachment: &attachment withAID: aid];
       if (rc == MAPISTORE_SUCCESS)
         *attachment_object = [attachment tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1000,13 +1035,11 @@ sogo_message_open_attachment (void *message_object, TALLOC_CTX *mem_ctx,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_message_get_attachment_table (void *message_object, TALLOC_CTX *mem_ctx, void **table_object, uint32_t *row_count)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMessage *message;
@@ -1021,11 +1054,15 @@ sogo_message_get_attachment_table (void *message_object, TALLOC_CTX *mem_ctx, vo
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message getAttachmentTable: &table
                            andRowCount: row_count];
       if (rc == MAPISTORE_SUCCESS)
         *table_object = [table tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1035,7 +1072,6 @@ sogo_message_get_attachment_table (void *message_object, TALLOC_CTX *mem_ctx, vo
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -1044,7 +1080,6 @@ sogo_message_modify_recipients (void *message_object,
                                 uint16_t count,
                                 struct mapistore_message_recipient *recipients)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMessage *message;
@@ -1058,10 +1093,14 @@ sogo_message_modify_recipients (void *message_object,
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message modifyRecipientsWithRecipients: recipients
                                           andCount: count
                                         andColumns: columns];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1071,13 +1110,11 @@ sogo_message_modify_recipients (void *message_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_message_set_read_flag (void *message_object, uint8_t flag)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMessage *message;
@@ -1091,8 +1128,12 @@ sogo_message_set_read_flag (void *message_object, uint8_t flag)
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message setReadFlag: flag];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1102,13 +1143,11 @@ sogo_message_set_read_flag (void *message_object, uint8_t flag)
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_message_save (void *message_object, TALLOC_CTX *mem_ctx)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMessage *message;
@@ -1122,8 +1161,12 @@ sogo_message_save (void *message_object, TALLOC_CTX *mem_ctx)
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message saveMessage: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1133,13 +1176,11 @@ sogo_message_save (void *message_object, TALLOC_CTX *mem_ctx)
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_message_submit (void *message_object, enum SubmitFlags flags)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreMailVolatileMessage *message;
@@ -1153,8 +1194,12 @@ sogo_message_submit (void *message_object, enum SubmitFlags flags)
       message = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message submitWithFlags: flags];
       // [context tearDownRequest];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1164,7 +1209,6 @@ sogo_message_submit (void *message_object, enum SubmitFlags flags)
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -1174,7 +1218,6 @@ sogo_message_attachment_open_embedded_message (void *attachment_object,
                                                uint64_t *midP,
                                                struct mapistore_message **msg)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreAttachment *attachment;
@@ -1189,12 +1232,16 @@ sogo_message_attachment_open_embedded_message (void *attachment_object,
       attachment = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [attachment openEmbeddedMessage: &message
                                    withMID: midP
                           withMAPIStoreMsg: msg
                                   inMemCtx: mem_ctx];
       if (rc == MAPISTORE_SUCCESS)
         *message_object = [message tallocWrapper: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1204,7 +1251,6 @@ sogo_message_attachment_open_embedded_message (void *attachment_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -1213,7 +1259,6 @@ sogo_message_attachment_create_embedded_message (void *attachment_object,
                                                  void **message_object,
                                                  struct mapistore_message **msg)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreAttachment *attachment;
@@ -1228,18 +1273,15 @@ sogo_message_attachment_create_embedded_message (void *attachment_object,
       attachment = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
-      @try
-        {
+
+      TRYCATCH_START
           rc = [attachment createEmbeddedMessage: &message
                                 withMAPIStoreMsg: msg
                                         inMemCtx: mem_ctx];
           if (rc == MAPISTORE_SUCCESS)
             *message_object = [message tallocWrapper: mem_ctx];
-        }
-      @catch (NSException *e)
-        {
-          rc = sogo_backend_handle_objc_exception(e, __FUNCTION__, __LINE__);
-        }
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1249,13 +1291,11 @@ sogo_message_attachment_create_embedded_message (void *attachment_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error sogo_table_get_available_properties(void *table_object,
                                                TALLOC_CTX *mem_ctx, struct SPropTagArray **propertiesP)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreTable *table;
@@ -1269,7 +1309,11 @@ static enum mapistore_error sogo_table_get_available_properties(void *table_obje
       table = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table getAvailableProperties: propertiesP inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1279,13 +1323,11 @@ static enum mapistore_error sogo_table_get_available_properties(void *table_obje
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_table_set_columns (void *table_object, uint16_t count, enum MAPITAGS *properties)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreTable *table;
@@ -1299,8 +1341,12 @@ sogo_table_set_columns (void *table_object, uint16_t count, enum MAPITAGS *prope
       table = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table setColumns: properties
                    withCount: count];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1310,13 +1356,11 @@ sogo_table_set_columns (void *table_object, uint16_t count, enum MAPITAGS *prope
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_table_set_restrictions (void *table_object, struct mapi_SRestriction *restrictions, uint8_t *table_status)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreTable *table;
@@ -1330,10 +1374,14 @@ sogo_table_set_restrictions (void *table_object, struct mapi_SRestriction *restr
       table = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [table setRestrictions: restrictions];
       //[table cleanupCaches];
       rc = MAPISTORE_SUCCESS;
       *table_status = TBLSTAT_COMPLETE;
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1343,13 +1391,11 @@ sogo_table_set_restrictions (void *table_object, struct mapi_SRestriction *restr
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_table_set_sort_order (void *table_object, struct SSortOrderSet *sort_order, uint8_t *table_status)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreTable *table;
@@ -1363,10 +1409,14 @@ sogo_table_set_sort_order (void *table_object, struct SSortOrderSet *sort_order,
       table = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [table setSortOrder: sort_order];
       [table cleanupCaches];
       rc = MAPISTORE_SUCCESS;
       *table_status = TBLSTAT_COMPLETE;
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1376,7 +1426,6 @@ sogo_table_set_sort_order (void *table_object, struct SSortOrderSet *sort_order,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -1384,7 +1433,6 @@ sogo_table_get_row (void *table_object, TALLOC_CTX *mem_ctx,
                     enum mapistore_query_type query_type, uint32_t row_id,
                     struct mapistore_property_data **data)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreTable *table;
@@ -1398,8 +1446,12 @@ sogo_table_get_row (void *table_object, TALLOC_CTX *mem_ctx,
       table = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table getRow: data withRowID: row_id andQueryType: query_type
                 inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1409,7 +1461,6 @@ sogo_table_get_row (void *table_object, TALLOC_CTX *mem_ctx,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -1417,7 +1468,6 @@ sogo_table_get_row_count (void *table_object,
                           enum mapistore_query_type query_type,
                           uint32_t *row_countp)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreTable *table;
@@ -1431,8 +1481,12 @@ sogo_table_get_row_count (void *table_object,
       table = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table getRowCount: row_countp
                 withQueryType: query_type];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1442,13 +1496,11 @@ sogo_table_get_row_count (void *table_object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_table_handle_destructor (void *table_object, uint32_t handle_id)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreTable *table;
@@ -1462,7 +1514,11 @@ sogo_table_handle_destructor (void *table_object, uint32_t handle_id)
       table = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [table destroyHandle: handle_id];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
       rc = MAPISTORE_SUCCESS;
@@ -1473,14 +1529,12 @@ sogo_table_handle_destructor (void *table_object, uint32_t handle_id)
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error sogo_properties_get_available_properties(void *object,
                                                     TALLOC_CTX *mem_ctx,
                                                     struct SPropTagArray **propertiesP)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreObject *propObject;
@@ -1494,7 +1548,11 @@ static enum mapistore_error sogo_properties_get_available_properties(void *objec
       propObject = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [propObject getAvailableProperties: propertiesP inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1504,7 +1562,6 @@ static enum mapistore_error sogo_properties_get_available_properties(void *objec
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -1513,7 +1570,6 @@ sogo_properties_get_properties (void *object,
                                 uint16_t count, enum MAPITAGS *properties,
                                 struct mapistore_property_data *data)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreObject *propObject;
@@ -1527,9 +1583,13 @@ sogo_properties_get_properties (void *object,
       propObject = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [propObject getProperties: data withTags: properties
                             andCount: count
                             inMemCtx: mem_ctx];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1539,13 +1599,11 @@ sogo_properties_get_properties (void *object,
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
 sogo_properties_set_properties (void *object, struct SRow *aRow)
 {
-  TRYCATCH_START
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
   MAPIStoreObject *propObject;
@@ -1559,7 +1617,11 @@ sogo_properties_set_properties (void *object, struct SRow *aRow)
       propObject = wrapper->instance;
       GSRegisterCurrentThread ();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [propObject addPropertiesFromRow: aRow];
+      TRYCATCH_END
+
       [pool release];
       GSUnregisterCurrentThread ();
     }
@@ -1569,7 +1631,6 @@ sogo_properties_set_properties (void *object, struct SRow *aRow)
     }
 
   return rc;
-  TRYCATCH_END
 }
 
 static enum mapistore_error
@@ -1580,7 +1641,6 @@ sogo_manager_generate_uri (TALLOC_CTX *mem_ctx,
                            const char *rootURI,
                            char **uri)
 {
-  TRYCATCH_START
   NSAutoreleasePool *pool;
   NSString *partialURLString, *username, *directory;
 
@@ -1593,6 +1653,7 @@ sogo_manager_generate_uri (TALLOC_CTX *mem_ctx,
   GSRegisterCurrentThread ();
   pool = [NSAutoreleasePool new];
 
+  TRYCATCH_START
   // printf("rootURI = %s\n", rootURI);
   if (rootURI)
     partialURLString = [NSString stringWithUTF8String: rootURI];
@@ -1612,12 +1673,12 @@ sogo_manager_generate_uri (TALLOC_CTX *mem_ctx,
 
   // printf("uri = %s\n", [partialURLString UTF8String]);
   *uri = talloc_strdup (mem_ctx, [partialURLString UTF8String]);
+  TRYCATCH_END
 
   [pool release];
   GSUnregisterCurrentThread ();
 
   return MAPISTORE_SUCCESS;
-  TRYCATCH_END
 }
 
 /**
