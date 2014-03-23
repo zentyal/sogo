@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import "SOGoTest.h"
 #import "SOGoTestRunner.h"
 
 int main()
@@ -30,6 +31,9 @@ int main()
   int rc;
   NSDictionary *defaults;
   NSUserDefaults *ud;
+  NSArray *classNames;
+  NSProcessInfo *info;
+  NSUInteger max;
 
   pool = [NSAutoreleasePool new];
 
@@ -42,7 +46,14 @@ int main()
                 forName: @"sogo-tests-volatile"];
   [ud addSuiteNamed: @"sogo-tests-volatile"];
 
-  rc = [[SOGoTestRunner testRunner] run];
+  info = [NSProcessInfo processInfo];
+  max = [[info arguments] count];
+  if (max > 1)
+      classNames = [[info arguments] subarrayWithRange: NSMakeRange(1, max - 1)];
+  else
+      classNames = [SOGoTest allTestClasses];
+  rc = [[SOGoTestRunner testRunner] run: classNames];
+
   [pool release];
 
   return rc;

@@ -25,6 +25,7 @@
 
 #import <Foundation/NSObject.h>
 
+@class NSArray;
 @class NSException;
 @class NSMutableArray;
 @class NSString;
@@ -46,7 +47,7 @@ typedef enum {
 
 + (SOGoTestRunner *) testRunner;
 
-- (int) run;
+- (int) run: (NSArray *) tests;
 
 - (void) incrementTestCounter: (SOGoTestFailureCode) failureCode;
 - (void) reportException: (NSException *) exception

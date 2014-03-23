@@ -65,7 +65,7 @@
   [super dealloc];
 }
 
-- (int) run
+- (int) run: (NSArray *) tests
 {
   NSEnumerator *allTestClasses;
   NSString *class;
@@ -75,7 +75,7 @@
   rc = 0;
 
   [self retain];
-  allTestClasses = [[SOGoTest allTestClasses] objectEnumerator];
+  allTestClasses = [tests objectEnumerator];
   [allTestClasses retain];
   while ((class = [allTestClasses nextObject]))
     {
