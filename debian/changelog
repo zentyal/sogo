@@ -1,3 +1,9 @@
+sogo (2.1.2-zentyal3~20140327-1) saucy; urgency=low
+
+  * saucy New upstream release
+
+ -- Julio J. García Martín <jjgarcia@zentyal.com>  Thu, 27 Mar 2014 18:44:02 +0100
+
 sogo (2.1.2~20140226-1) saucy; urgency=low
 
   * Fix mapistore backend bundle search path
