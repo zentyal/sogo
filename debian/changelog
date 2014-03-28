@@ -1,3 +1,9 @@
+sogo (2.1.2-zentyal3~20140327-2) trusty; urgency=low
+
+  * trusty build
+
+ -- José A. Calvo <jacalvo@zentyal.com>  Fri, 28 Mar 2014 15:52:32 +0100
+
 sogo (2.1.2-zentyal3~20140327-1) saucy; urgency=low
 
   * saucy New upstream release
