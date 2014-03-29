@@ -1766,6 +1766,9 @@ function newBaseEventDIV(eventRep, event, eventText) {
     if (eventRep.userState >= 0 && userStates[eventRep.userState])
         innerDiv.addClassName(userStates[eventRep.userState]);
 
+    var gradientDiv = createElement("div");
+    innerDiv.appendChild(gradientDiv);
+
     var textDiv = createElement("div");
     innerDiv.appendChild(textDiv);
     textDiv.addClassName("text");
