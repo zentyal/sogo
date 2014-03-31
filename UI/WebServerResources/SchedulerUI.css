@@ -1350,7 +1350,10 @@ DIV.event > DIV.eventInside
   padding: 0px;
   height: 100%;
   -webkit-border-radius: 2px;
-  border-radius: 2px; }
+  border-radius: 2px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
 
 DIV.eventInside SPAN.location
 { font-size: smaller; }
