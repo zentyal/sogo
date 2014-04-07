@@ -55,6 +55,7 @@ Section: web
 Priority: extra
 Architecture: any
 Depends: sogo (= ${binary:Version}), libwbxml2-0,  ${shlibs:Depends}, ${misc:Depends}
+Conflicts: z-push
 Description: a modern and scalable groupware - ActiveSync module
  SOGo is a groupware server built around OpenGroupware.org (OGo) and
  the SOPE application server with focus on scalability.
