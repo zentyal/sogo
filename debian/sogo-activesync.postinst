@@ -15,7 +15,7 @@ case "$1" in
             WIDTH=$(expr $COLS - 10)
             HEIGHT=$(expr $LINES - 5)
             FULL_LICENSE=/tmp/license.$$.tmp
-            zcat /usr/share/doc/sogo-activesync/LICENSE.gz > $FULL_LICENSE
+            cp /usr/share/doc/sogo-activesync/LICENSE $FULL_LICENSE
             echo -e "\n\n---\n" >> $FULL_LICENSE
             cat /usr/share/doc/sogo-activesync/README.zentyal >> $FULL_LICENSE
             dialog --title "License Agreement" --exit-label Accept --textbox $FULL_LICENSE $HEIGHT $WIDTH
