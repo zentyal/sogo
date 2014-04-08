@@ -54,7 +54,7 @@ Package: sogo-activesync
 Section: web
 Priority: extra
 Architecture: any
-Depends: sogo (= ${binary:Version}), libwbxml2-0,  ${shlibs:Depends}, ${misc:Depends}
+Depends: sogo (= ${binary:Version}), libwbxml2-0, ${shlibs:Depends}, ${misc:Depends}, dialog, gzip
 Conflicts: z-push
 Description: a modern and scalable groupware - ActiveSync module
  SOGo is a groupware server built around OpenGroupware.org (OGo) and

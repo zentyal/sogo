@@ -6,6 +6,21 @@ case "$1" in
     configure)
         service zentyal webserver restart || true
         service zentyal sogo restart || true
+
+        # Display License Agreement only in the first install
+        if [ -z "$2" ]
+        then
+            COLS=$(tput cols)
+            LINES=$(tput lines)
+            WIDTH=$(expr $COLS - 10)
+            HEIGHT=$(expr $LINES - 5)
+            FULL_LICENSE=/tmp/license.$$.tmp
+            zcat /usr/share/doc/sogo-activesync/LICENSE.gz > $FULL_LICENSE
+            echo -e "\n\n---\n" >> $FULL_LICENSE
+            cat /usr/share/doc/sogo-activesync/README.zentyal >> $FULL_LICENSE
+            dialog --title "License Agreement" --exit-label Accept --textbox $FULL_LICENSE $HEIGHT $WIDTH
+            rm -f $FULL_LICENSE
+        fi
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
