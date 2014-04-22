@@ -3,7 +3,7 @@ DIV#leftPanel
   top: 40px;
   left: 0px;
   width: 19.25em;
-  bottom: 0px;
+  bottom: 36px;
   background-color: #eee;
   overflow: auto;
   overflow-x: hidden;
@@ -56,6 +56,8 @@ DIV#schedulerTabs .tabs
 DIV#calendarSelectorButtons
 { position: absolute;
   width: 100%;
+  background-color: #EEE;
+  border-top: 1px solid #DDD;
   bottom: 0px; }
 
 DIV.colorBox
