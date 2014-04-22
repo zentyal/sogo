@@ -116,7 +116,7 @@ DIV#contactFoldersList
   left: 0px;
   width: 15em;
   background-color: #EEE;
-  bottom: 0px;
+  bottom: 36px;
   margin: 0px;
   padding: 0px;
   overflow: auto;
@@ -126,6 +126,8 @@ DIV#contactFoldersList
 DIV#abToolbar
 { position: absolute;
   width: 100%;
+  background-color: #EEE;
+  border-top: 1px solid #DDD;
   bottom: 0px;
  }
 
