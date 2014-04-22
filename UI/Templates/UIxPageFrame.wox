@@ -65,7 +65,7 @@
 				<div id="linkBanner" class="linkbanner">
 					<div id="appNav" class="appNav">
                         <var:if condition="userHasMailAccess">
-                            <a id="mailBannerLink" var:href="relativeMailPath" style="padding-left:0px;padding-right: 0px;">
+                            <a id="mailBannerLink" var:href="relativeMailPath" label:title="Mail" style="padding-left:0px;padding-right: 0px;">
                                 <img rsrc:src="zentyal_w_logo.png" alt="zentyal logo" style="float:left;"/>
                             </a>
                         </var:if>
