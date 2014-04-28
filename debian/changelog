@@ -1,4 +1,4 @@
-sogo (2.1.2-zentyal2) UNRELEASED; urgency=low
+sogo (2.1.2-zentyal2) precise; urgency=low
 
   * New upstream release
   * SOGo webinterface UI restyle
