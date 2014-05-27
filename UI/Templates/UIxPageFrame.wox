@@ -64,27 +64,36 @@
 				</var:if>
 				<div id="linkBanner" class="linkbanner">
 					<div id="appNav" class="appNav">
-						<img rsrc:src="zentyal_w_logo.png" alt="zentyal logo" style="float:left;"/>
-						<var:if condition="userHasCalendarAccess">
-							<var:if condition="isCalendar">
-								<span class="active">
-									<var:string label:value="Calendar"/>
-								</span>
-							</var:if>
-						</var:if>
-						<var:if condition="isContacts">
-							<span class="active">
-								<var:string label:value="Address Book"/>
-							</span>
-						</var:if>
-						<var:if condition="userHasMailAccess">
-							<var:if condition="isMail">
-								<span class="active">
-									<var:string label:value="Mail"/>
-								</span>
-							</var:if>
-						</var:if>
-						<span id="dropdown-NavMenu" onclick="ToggleAppNavMenu()" class="dropdown"><img class="buttonMenuArrow" rsrc:src="arrow-down-w.png" var:alt="buttonTooltip"/></span>
+                        <var:if condition="userHasMailAccess">
+                            <a id="mailBannerLink" var:href="relativeMailPath" label:title="Mail" style="padding-left:0px;padding-right: 0px;">
+                                <img rsrc:src="zentyal_w_logo.png" alt="zentyal logo" style="float:left;"/>
+                            </a>
+                        </var:if>
+                        <var:if condition="userHasMailAccess" const:negate="YES">
+                            <img rsrc:src="zentyal_w_logo.png" alt="zentyal logo" style="float:left;"/>
+                        </var:if>
+						<span id="dropdown-NavMenu" onclick="ToggleAppNavMenu()" class="dropdown">
+                            <var:if condition="userHasCalendarAccess">
+                                <var:if condition="isCalendar">
+                                    <span class="active">
+                                        <var:string label:value="Calendar"/>
+                                    </span>
+                                </var:if>
+                            </var:if>
+                            <var:if condition="isContacts">
+                                <span class="active">
+                                    <var:string label:value="Address Book"/>
+                                </span>
+                            </var:if>
+                            <var:if condition="userHasMailAccess">
+                                <var:if condition="isMail">
+                                    <span class="active">
+                                        <var:string label:value="Mail"/>
+                                    </span>
+                                </var:if>
+                            </var:if>
+                            <img class="buttonMenuArrow" rsrc:src="arrow-down-w.png" var:alt="buttonTooltip" style="padding-left:10px;"/>
+                        </span>
 						<div id="appNavMenu" class="appNavMenu">
 							<var:if condition="userHasCalendarAccess">
 								<var:if condition="isCalendar" const:negate="YES">

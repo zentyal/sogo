@@ -223,7 +223,7 @@ DIV.appNav{
   font-size: 16px;
   font-weight: 100;
   float: left;
-  margin-right: 30px;
+  margin-right: 15px;
   position: relative;
 }
 
@@ -244,8 +244,7 @@ DIV.linkbanner SPAN.active{
   padding: 0;
 }
 DIV.appNav .dropdown{
-  padding: 0px;
-  margin-left: 10px;
+  cursor: pointer;
 }
 DIV.appNav .dropdown:hover,
 DIV.appNav:hover{
