@@ -171,10 +171,10 @@ MAPIStoreMappingTDBTraverse (TDB_CONTEXT *ctx, TDB_DATA data1, TDB_DATA data2,
 	{
 	  idNbr = [keys objectAtIndex: count];
 	  uri = [mapping objectForKey: idNbr];
-          //[self logWithFormat: @"preregistered id '%@' for url '%@'", idNbr, uri];
+	  //[self logWithFormat: @"preregistered id '%@' for url '%@'", idNbr, uri];
 	  [reverseMapping setObject: idNbr forKey: uri];
 	}
-      
+
       //[self logWithFormat: @"Complete mapping: %@ \nComplete reverse mapping: %@", mapping, reverseMapping];
     }
 
@@ -200,11 +200,41 @@ MAPIStoreMappingTDBTraverse (TDB_CONTEXT *ctx, TDB_DATA data1, TDB_DATA data2,
   id key;
   uint64_t idNbr;
 
+  NSString *idNbrStr, *uri;
+  NSArray *keys;
+  NSUInteger count, max;
+
+  idNbr = NSNotFound;
   key = [reverseMapping objectForKey: url];
-  if (key)
+  if (key) {
     idNbr = [key unsignedLongLongValue];
-  else
-    idNbr = NSNotFound;
+  } else {
+    //[self logWithFormat: @"Reloading mapping cache - Searching reverse mapping  for '%@'", url];
+    /* The dovecot plugin together with openchange notification daemon can
+     * insert new keys on the indexing TDB when a new mail arrive. If the
+     * cache does not contain the key then update it and look up again */
+    [mapping release];
+    [reverseMapping release];
+    mapping = [NSMutableDictionary new];
+    reverseMapping = [NSMutableDictionary new];
+
+    tdb_traverse_read(indexing->tdb, MAPIStoreMappingTDBTraverse, mapping);
+    keys = [mapping allKeys];
+    max = [keys count];
+    for (count = 0; count < max; count++) {
+        idNbrStr = [keys objectAtIndex: count];
+        uri = [mapping objectForKey: idNbrStr];
+        //[self logWithFormat: @"Reloading cache - preregistered id '%@' for url '%@'", idNbrStr, uri];
+	    [reverseMapping setObject: idNbrStr forKey: uri];
+	}
+
+    /* Look up again */
+    key = [reverseMapping objectForKey: url];
+    if (key) {
+        idNbr = [key unsignedLongLongValue];
+    }
+    //[self logWithFormat: @"Reloading mapping cache - '%@' -> '%@'", url, idNbrStr];
+  }
 
   return idNbr;
 }
