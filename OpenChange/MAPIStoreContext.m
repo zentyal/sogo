@@ -521,26 +521,41 @@ static inline NSURL *CompleteURLFromMapistoreURI (const char *uri)
   MAPIStoreMapping *mapping;
   uint64_t mappingId;
   uint32_t contextId;
+  bool softdeleted;
   void *rootObject;
+  int ret;
 
   if (key)
     childURL = [NSString stringWithFormat: @"%@%@", folderURL,
                   [key stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
   else
     childURL = folderURL;
+
+  //[self warnWithFormat: @"idForObjectWithKey: childURL='%@'", childURL];
+
+  owner = [userContext username];
+
+  ret = mapistore_indexing_record_get_fmid(connInfo->mstore_ctx, [owner UTF8String],
+    [childURL UTF8String], false, &mappingId, &softdeleted);
+
+  //[self warnWithFormat: @"idForObjectWithKey: '%@'->'0x%'"PRIx64"'", childURL, mappingId];
+  if (!ret) {
+    //[self warnWithFormat: @"Returning existing mapping Id", mappingId];
+	return mappingId;
+  }
+
   mapping = [userContext mapping];
   mappingId = [mapping idFromURL: childURL];
   if (mappingId == NSNotFound)
     {
-      //[self warnWithFormat: @"no id exist yet for '%@', requesting one...",
-      //      childURL];
+      //[self warnWithFormat: @"no id exist yet for '%@', requesting one...", childURL];
       openchangedb_get_new_folderID (connInfo->oc_ctx, &mappingId);
       [mapping registerURL: childURL withID: mappingId];
       contextId = 0;
 
       mapistore_search_context_by_uri (connInfo->mstore_ctx, [folderURL UTF8String],
                                        &contextId, &rootObject);
-      owner = [userContext username];
+
       mapistore_indexing_record_add_mid (connInfo->mstore_ctx, contextId,
                                          [owner UTF8String], mappingId);
     }
