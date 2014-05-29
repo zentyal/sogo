@@ -865,7 +865,7 @@ MakeMessageBody (NSDictionary *mailProperties, NSDictionary *attachmentParts, NS
   NSMutableArray *recipientEmails;
   NSArray *list;
   NSString *recId, *from, *msgClass;
-  enum ulRecipClass type;
+  NSUInteger count;
   SOGoUser *activeUser;
   SOGoDomainDefaults *dd;
   NSException *error;
@@ -881,9 +881,9 @@ MakeMessageBody (NSDictionary *mailProperties, NSDictionary *attachmentParts, NS
       
       recipientEmails = [NSMutableArray arrayWithCapacity: 32];
       recipients = [properties objectForKey: @"recipients"];
-      for (type = MAPI_ORIG; type <= MAPI_BCC; type++)
+      for (count = 0; count < 3; count++)
         {
-          recId = recTypes[type];
+          recId = recTypes[count];
           list = [recipients objectForKey: recId];
           [recipientEmails
             addObjectsFromArray: [list objectsForKey: @"email"
