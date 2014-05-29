@@ -127,7 +127,7 @@ P.infoMessage#passwordError
 { position: absolute;
   overflow: auto;
   bottom: 30px;
-  left: 140px;
+//  left: 140px;
   padding: 0px;
   right: 5px; }
 
@@ -139,7 +139,12 @@ P.infoMessage#passwordError
   left: 5px;
   width: 130px;
   border-top: 1px solid #9b9b9b;
+  display: none;
 position: relative;}
+
+fieldset#accountInfo {
+    display: none;
+}
 
 #mailAccountsList
 { position: absolute;
