@@ -561,7 +561,7 @@ FillMessageHeadersFromProperties (NGMutableHashMap *headers,
         bccLimit = MAPI_BCC;
       else
         bccLimit = MAPI_CC;
-      bccLimit++;
+
       for (type = MAPI_TO; type <= bccLimit; type++)
 	{
 	  recId = recTypes[type];
@@ -865,7 +865,7 @@ MakeMessageBody (NSDictionary *mailProperties, NSDictionary *attachmentParts, NS
   NSMutableArray *recipientEmails;
   NSArray *list;
   NSString *recId, *from, *msgClass;
-  NSUInteger count;
+  enum ulRecipClass type;
   SOGoUser *activeUser;
   SOGoDomainDefaults *dd;
   NSException *error;
@@ -881,9 +881,9 @@ MakeMessageBody (NSDictionary *mailProperties, NSDictionary *attachmentParts, NS
       
       recipientEmails = [NSMutableArray arrayWithCapacity: 32];
       recipients = [properties objectForKey: @"recipients"];
-      for (count = 0; count < 3; count++)
+      for (type = MAPI_ORIG; type <= MAPI_BCC; type++)
         {
-          recId = recTypes[count];
+          recId = recTypes[type];
           list = [recipients objectForKey: recId];
           [recipientEmails
             addObjectsFromArray: [list objectsForKey: @"email"
