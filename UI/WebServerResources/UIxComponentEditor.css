@@ -112,45 +112,44 @@ IMG#progressIndicator
 
 SPAN.content INPUT,
 SPAN.content SELECT,
-SPAN.content SPAN,
-SPAN.timeDateControl INPUT,
-SPAN.timeDateControl SELECT,
-SPAN.timeDateControl SPAN
+SPAN.content SPAN{
+  vertical-align: top;
+}
+
+
+/* date picker */
+
+.timeDateControl INPUT,
+.timeDateControl SELECT,
+.timeDateControl SPAN
 { vertical-align: top; }
 
-SPAN.timeDateControl {
+.timeDateControl {
     display: block;
 }
 
-SPAN.datePicker.date {
+.datePicker {
     display: inline-block;
     position: relative;
 }
-SPAN.datePicker.date .calendarButton.add-on{
-  background: #fff;
+.datePicker a.calendarButton.add-on{
   padding: 4px 3px 1px 5px;
   position: absolute;
   right: 1px;
   top: 1px;
 }
-INPUT#startTime_date:disabled + .calendarButton,
-INPUT#startTime_date:disabled + .calendarButton:hover,
-INPUT#dueTime_date:disabled + .calendarButton,
-INPUT#dueTime_date:disabled + .calendarButton:hover{
+.datePicker INPUT:disabled + a.calendarButton,
+.datePicker INPUT:disabled + a.calendarButton:hover{ 
   cursor: default;
   opacity: 0.5;
-  background-color: #ddd;  
 }
 
-INPUT#startTime_date,
-INPUT#dueTime_date,
-INPUT#endTime_date{
+.datePicker INPUT{
     padding-right: 30px;
     width: auto;
+    width: 110px;
 }
-INPUT#startTime_time,
-INPUT#dueTime_time,
-INPUT#endTime_time {
+.timeDateControl > INPUT {
     display: inline-block;
     width: auto;
 }

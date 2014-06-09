@@ -230,10 +230,10 @@ UL#attachments .progressDone .icon-attachment:hover
 { /*width: 95%;*/ }
 
 TEXTAREA#text
-{ display: none;
+{
   background: #fff;
-border:0px;
-max-width: none;}
+  border:0px;
+  max-width: none;}
 
 /* Contacts search pane */
 

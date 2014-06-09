@@ -218,3 +218,7 @@ position: relative;}
   bottom: 13px;
 }
 
+.disable-reply .timeDateControl{
+  display: inline-block;
+  margin-left: 10px;
+}
