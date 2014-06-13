@@ -376,14 +376,14 @@ static inline NSURL *CompleteURLFromMapistoreURI (const char *uri)
         {
           *path = [[objectURL substringFromIndex: 7]
 		    asUnicodeInMemCtx: memCtx];
-	  [self logWithFormat: @"found path '%s' for fmid %.16x",
+	  [self logWithFormat: @"found path '%s' for fmid 0x%.16"PRIx64"",
 		*path, fmid];
           rc = MAPISTORE_SUCCESS;
         }
       else
         {
 	  [self logWithFormat: @"context (%@, %@) does not contain"
-		@" found fmid: 0x%.16x",
+		@" found fmid: 0x%.16"PRIx64"",
 		objectURL, url, fmid];
           *path = NULL;
           rc = MAPISTORE_SUCCESS;
