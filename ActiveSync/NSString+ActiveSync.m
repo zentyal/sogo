@@ -139,7 +139,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   NSString *s;
   int i;
 
-  components = [[[self componentsSeparatedByString: @"/"] lastObject] componentsSeparatedByString: @"&"];
+  components = [[[self componentsSeparatedByString: @"?"] lastObject] componentsSeparatedByString: @"&"];
   
   for (i = 0; i < [components count]; i++)
     {
@@ -168,6 +168,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   return s;
 }
+
+//
+// This method extracts the "DeviceType" from a URI:
+//
+// /SOGo/Microsoft-Server-ActiveSync?Cmd=FolderSync&User=sogo10&DeviceId=SEC17CD1A3E9E3F2&DeviceType=SAMSUNGSGHI317M
+//
+- (NSString *) deviceType
+{
+  NSString *s;
+
+  s = [self _valueForParameter: @"DEVICETYPE="];
+
+  if (!s)
+    s = @"Unknown";
+
+  return s;
+}
+
+// This method extracts the "AttachmentName" from a URI:
+//
+// /SOGo/Microsoft-Server-ActiveSync?Cmd=GetAttachment&User=sogo&DeviceId=HTCa04b4932597acd3f2dc1a918b9728&DeviceType=htcvision&AttachmentName=mail/TestFldr/8/2
+//
+- (NSString *) attachmentName
+{
+  NSString *s;
+
+  s = [self _valueForParameter: @"ATTACHMENTNAME="];
+
+  if (!s)
+    s = @"Unknown";
+
+  return s;
+}
+
 
 //
 //

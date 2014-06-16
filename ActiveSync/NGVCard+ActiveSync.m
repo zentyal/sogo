@@ -40,6 +40,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Contacts/NGVCard+SOGo.h>
 
+#import <SOGo/NSString+Utilities.h>
+
 #include "NSDate+ActiveSync.h"
 #include "NSString+ActiveSync.h"
 
@@ -47,9 +49,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 - (NSString *) activeSyncRepresentationInContext: (WOContext *) context
 {
+  NSArray *emails, *addresses, *categories, *elements;
   CardElement *n, *homeAdr, *workAdr;
-  NSArray *emails, *addresses;
   NSMutableString *s;
+  NSString *url;
   id o;
 
   int i;
@@ -65,10 +68,42 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   if ((o = [self workCompany]))
     [s appendFormat: @"<CompanyName xmlns=\"Contacts:\">%@</CompanyName>", [o activeSyncRepresentationInContext: context]];
+
+  if ((o = [[self org] flattenedValueAtIndex: 1 forKey: @""]))
+    [s appendFormat: @"<Department xmlns=\"Contacts:\">%@</Department>", [o activeSyncRepresentationInContext: context]];
+
+  categories = [self categories];
+
+  if ([categories count])
+    {
+      [s appendFormat: @"<Categories xmlns=\"Contacts:\">"];
+      for (i = 0; i < [categories count]; i++)
+        {
+          [s appendFormat: @"<Category xmlns=\"Contacts:\">%@</Category>", [[categories objectAtIndex: i] activeSyncRepresentationInContext: context]];
+        }
+      [s appendFormat: @"</Categories>"];
+    }
+  
+  elements = [self childrenWithTag: @"url"
+                      andAttribute: @"type"
+                       havingValue: @"work"];
+  if ([elements count] > 0)
+    {
+      url = [[elements objectAtIndex: 0] flattenedValuesForKey: @""];
+      [s appendFormat: @"<WebPage xmlns=\"Contacts:\">%@</WebPage>", [url activeSyncRepresentationInContext: context]];
+    }
+  
+  
+  if ((o = [[self uniqueChildWithTag: @"x-aim"] flattenedValuesForKey: @""]))
+    [s appendFormat: @"<IMAddress xmlns=\"Contacts:\">%@</IMAddress>", [o activeSyncRepresentationInContext: context]];
+  
+  if ((o = [self nickname]))
+    [s appendFormat: @"<NickName xmlns=\"Contacts:\">%@</NickName>", [o activeSyncRepresentationInContext: context]];
+  
   
   if ((o = [self title]))
     [s appendFormat: @"<JobTitle xmlns=\"Contacts:\">%@</JobTitle>", [o activeSyncRepresentationInContext: context]];
-
+  
   if ((o = [self preferredEMail])) 
     [s appendFormat: @"<Email1Address xmlns=\"Contacts:\">%@</Email1Address>", o];
   
@@ -154,7 +189,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   // Other, less important fields
   if ((o = [self birthday]))
-    [s appendFormat: @"<Birthday xmlns=\"Contacts:\">%@</Birthday>", [o activeSyncRepresentationWithoutSeparatorsInContext: context]];
+    [s appendFormat: @"<Birthday xmlns=\"Contacts:\">%@</Birthday>", [o activeSyncRepresentationInContext: context]];
 
   if ((o = [self note]))
     {
@@ -166,6 +201,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       [s appendFormat: @"<Data>%@</Data>", o];
       [s appendString: @"</Body>"];
     }
+
+  if ((o = [self photo]))
+    [s appendFormat: @"<Picture xmlns=\"Contacts:\">%@</Picture>", o];
   
   return s;
 }
@@ -182,6 +220,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   // Contact's note
   if ((o = [[theValues objectForKey: @"Body"] objectForKey: @"Data"]))
     [self setNote: o];
+
+  // Categories
+  if ((o = [theValues objectForKey: @"Categories"]))
+    [self setCategories: o];
 
   // Birthday
   if ((o = [theValues objectForKey: @"Birthday"]))
@@ -238,24 +280,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   // Company's name
   if ((o = [theValues objectForKey: @"CompanyName"]))
-    {
-      [self setOrg: o  units: nil];
-    }
+    [self setOrg: o  units: nil];
+  
+  // Department
+  if ((o = [theValues objectForKey: @"Department"]))
+    [self setOrg: nil  units: [NSArray arrayWithObjects:o,nil]];
   
   // Email addresses
   if ((o = [theValues objectForKey: @"Email1Address"]))
     {
-      [self addEmail: o  types: [NSArray arrayWithObject: @"pref"]];
+      element = [self elementWithTag: @"email" ofType: @"work"];
+      [element setSingleValue: [o pureEMailAddress] forKey: @""];
     }
   
   if ((o = [theValues objectForKey: @"Email2Address"]))
     {
-      [self addEmail: o types: nil];
+      element = [self elementWithTag: @"email" ofType: @"home"];
+      [element setSingleValue: [o pureEMailAddress] forKey: @""];
     }
   
+  // SOGo currently only supports 2 email addresses ... but AS clients might send 3
+  // FIXME: revise this when the GUI revamp is done in SOGo
   if ((o = [theValues objectForKey: @"Email3Address"]))
     {
-      [self addEmail: o  types: nil];
+      element = [self elementWithTag: @"email" ofType: @"three"];
+      [element setSingleValue: [o pureEMailAddress] forKey: @""];
     }
   
   // Formatted name
@@ -293,16 +342,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   // Job's title
   if ((o = [theValues objectForKey: @"JobTitle"]))
-    {
-      [self setTitle: o];
-    }
+    [self setTitle: o];
   
   // WebPage (work)
   if ((o = [theValues objectForKey: @"WebPage"]))
-    {
-      [[self elementWithTag: @"url" ofType: @"work"]
+    [[self elementWithTag: @"url" ofType: @"work"]
           setSingleValue: o  forKey: @""];
-    }
+  
+  if ((o = [theValues objectForKey: @"NickName"]))
+    [self setNickname: o];
+
+  if ((o = [theValues objectForKey: @"Picture"]))
+    [self setPhoto: o];
+
 }
 
 @end

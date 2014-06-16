@@ -329,7 +329,10 @@ position: fixed;}
 { padding: 8px 10px;
   margin: 0px;
   width: auto;
-  white-space: nowrap; }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer; }
 
 .menu LI.disabled,
 .popuMenu LI.disabled,
@@ -509,7 +512,8 @@ TD.headerTitle
 { width: 20%; }
 
 TD.headerLocation,
-TD.headerCalendarName
+TD.headerCalendarName,
+TD.headerCategory
 { min-width: 15em;
   width: 15em; }
 

@@ -302,7 +302,7 @@ function onPopupRecurrenceWindow(event) {
             if (ComponentEditor.recurrenceWindow && ComponentEditor.recurrenceWindow.open && !ComponentEditor.recurrenceWindow.closed)
                 ComponentEditor.recurrenceWindow.focus();
             else
-                ComponentEditor.recurrenceWindow = window.open(ApplicationBaseURL + "editRecurrence",
+                ComponentEditor.recurrenceWindow = window.open(ApplicationBaseURL + "/editRecurrence",
                                                                sanitizeWindowName(activeCalendar + activeComponent + "Recurrence"),
                                                                "width=500,height=400");
         }
@@ -328,7 +328,7 @@ function onPopupReminderWindow(event) {
             else {
                 var height = (emailAlarmsEnabled ? 450 : 300);
                 ComponentEditor.reminderWindow
-                    = window.open(ApplicationBaseURL + "editReminder",
+                    = window.open(ApplicationBaseURL + "/editReminder",
                                   sanitizeWindowName(activeCalendar + activeComponent + "Reminder"),
                                   "width=255,height=" + height);
             }
@@ -355,7 +355,7 @@ function onOkButtonClick (e) {
     else if (value == 3)
         action = 'tentative';
     else if (value == 4) {
-        var url = ApplicationBaseURL + activeCalendar + '/' + activeComponent;
+        var url = ApplicationBaseURL + "/" + activeCalendar + "/" + activeComponent;
         delegateInvitation(url, modifyEventCallback);
     }
 

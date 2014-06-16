@@ -417,12 +417,15 @@ function configureAttachments() {
             // With singleFileUploads option enabled, the 'add' and 'done' (or 'fail') callbacks
             // are called once for each file in the selection for XHR file uploads
             singleFileUploads: true,
+            pasteZone: null,
             dataType: 'json',
             add: function (e, data) {
                 var file = data.files[0];
                 var attachment = createAttachment(file);
                 if (attachment) {
                     file.attachment = attachment;
+                    // Update the text field when using HTML mode
+                    if (CKEDITOR.instances.text) CKEDITOR.instances.text.updateElement();
                     data.submit();
                 }
                 if (dropzone.is(":visible"))
@@ -482,6 +485,7 @@ function initMailEditor() {
     }
 
     initializePriorityMenu();
+    initializeReturnReceiptMenu();
 
     configureDragHandle();
 
@@ -558,6 +562,12 @@ function initializePriorityMenu() {
         chosenNode = menuEntries[2];
     priorityMenu.chosenNode = chosenNode;
     $(chosenNode).addClassName("_chosen");
+}
+
+function initializeReturnReceiptMenu() {
+    var receipt = $("receipt").value.toLowerCase();
+    if (receipt == "true")
+        $("optionsMenu").down('li').addClassName("_chosen");
 }
 
 function onMenuCheckReturnReceipt(event) {

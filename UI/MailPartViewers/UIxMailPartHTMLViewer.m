@@ -86,6 +86,9 @@ _xmlCharsetForCharset (NSString *charset)
     { @"windows-1251", XML_CHAR_ENCODING_ERROR}, // unsupported, will trigger windows-1251 -> utf8 conversion
     { @"windows-1257", XML_CHAR_ENCODING_ERROR}, // unsupported, will trigger windows-1257 -> utf8 conversion
     { @"gb2312", XML_CHAR_ENCODING_ERROR},       // unsupported, will trigger gb2312 -> utf8 conversion
+    { @"gbk", XML_CHAR_ENCODING_ERROR},          // unsupported, will trigger gb2312 -> utf8 conversion
+    { @"gb18030", XML_CHAR_ENCODING_ERROR},      // unsupported, will trigger gb2312 -> utf8 conversion
+    { @"big5", XML_CHAR_ENCODING_ERROR},         // unsupported, will trigger gb2312 -> utf8 conversion
     { @"euc-jp", XML_CHAR_ENCODING_EUC_JP}};
   unsigned count;
   xmlCharEncoding encoding;
@@ -559,6 +562,13 @@ static NSData* _sanitizeContent(NSData *theData)
                                    && ![value hasPrefix: @"mailto:"]
                                    && ![value hasPrefix: @"#"]);
                 }
+              // Avoid: <div style="background:url('http://www.sogo.nu/fileadmin/sogo/logos/sogo.bts.png' ); width: 200px; height: 200px;" title="ssss">
+              else if ([name isEqualToString: @"style"])
+                {
+                  value = [_attributes valueAtIndex: count];
+                  if ([value rangeOfString: @"url" options: NSCaseInsensitiveSearch].location != NSNotFound)
+                    name = [NSString stringWithFormat: @"unsafe-%@", name];
+                }
 	      else if (
 		       // Mouse Events
 		       [name isEqualToString: @"onclick"] ||
@@ -594,12 +604,13 @@ static NSData* _sanitizeContent(NSData *theData)
 		}
               else
                 value = [_attributes valueAtIndex: count];
+              
               if (!skipAttribute)
                 [resultPart appendFormat: @" %@=\"%@\"",
                             name, [value stringByReplacingString: @"\""
                                                       withString: @"\\\""]];
             }
-
+          
           if ([VoidTags containsObject: lowerName])
             [resultPart appendString: @"/"];
           [resultPart appendString: @">"];
@@ -686,16 +697,16 @@ static NSData* _sanitizeContent(NSData *theData)
         [self _appendStyle: _chars length: _len];
       else if (inBody)
         {
-	  NSString *tmpString;
+	  NSString *s;
   
-          tmpString = [NSString stringWithCharacters: _chars length: _len];
+          s = [NSString stringWithCharacters: _chars length: _len];
 
 	  // HACK: This is to avoid appending the useless junk in the <html> tag
 	  //       that Outlook adds. It seems to confuse the XML parser for
 	  //       forwarded messages as we get this in the _body_ of the email
 	  //       while we really aren't in it!
-	  if (![tmpString hasPrefix: @" xmlns:v=\"urn:schemas-microsoft-com:vml\""])
-	    [result appendString: [tmpString stringByEscapingHTMLString]];
+	  if (![s hasPrefix: @" xmlns:v=\"urn:schemas-microsoft-com:vml\""])
+	    [result appendString: [s stringByEscapingHTMLString]];
         }
     }
 }

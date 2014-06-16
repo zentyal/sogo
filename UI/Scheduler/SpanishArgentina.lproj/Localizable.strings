@@ -5,6 +5,7 @@
 "Create a new event" = "Crear un nuevo evento";
 "Create a new task" = "Crear una nueva tarea";
 "Edit this event or task" = "Modificar éste evento o tarea";
+"Print the current calendar view" = "Imprimir la vista actual del calendario";
 "Delete this event or task" = "Borrar éste evento o tarea";
 "Go to today" = "Ir a hoy";
 "Switch to day view" = "Cambiar a vista diaria";
@@ -58,7 +59,7 @@
 "Export Calendar..." = "Exportar calendario...";
 "Import Events..." = "Importar Eventos...";
 "Import Events" = "Importar Eventos";
-"Select an iCalendar file (.ics)." = "Seleccionar un fichero iCalendar (.ics).";
+"Select an iCalendar file (.ics)." = "Seleccionar un archivo iCalendar (.ics).";
 "Upload" = "Subir";
 "Uploading" = "Cargando";
 "Publish Calendar..." = "Publicar calendario...";
@@ -117,7 +118,7 @@
 "Name of the Calendar" = "Nombre del calendario";
 
 "new" = "Nuevo";
-"printview" = "Vista previa";
+"Print view" = "Imprimir esta vista";
 "edit" = "Modificar";
 "delete" = "Borrar";
 "proposal" = "Propuesta";
@@ -145,6 +146,16 @@
 "Hide already accepted and rejected appointments" = "Ocultar eventos ya confirmados o rechazados";
 "Show already accepted and rejected appointments" = "Mostrar eventos ya confirmados o rechazados";
 
+/* Print view */
+
+"LIST" = "Lista";
+"Print Settings" = "Opciones de impresión";
+"Title:" = "Título:";
+"Layout:" = "Disposición:";
+"What to Print" = "Qué imprimir";
+"Options" = "Opciones";
+"Tasks with no due date" = "Tareas sin fecha de vencimiento";
+"Completed tasks" = "Tareas completadas";
 
 /* Appointments */
 
@@ -179,6 +190,8 @@
 "Reminder:" = "Recordatorio:";
 "General:" = "General:";
 "Reply:" = "Responder:";
+"Created by:" = "Creado por:";
+
 
 "Target:" = "URL documento:";
 
@@ -223,8 +236,13 @@
 "view_future" = "Todos los eventos futuros";
 "view_selectedday" = "Día seleccionado";
 
+"view_not_started" = "Tareas que no han comenzado";
+"view_overdue" = "Tareas que han vencido";
+"view_incomplete" = "Tareas incompletas";
+
 "View:" = "Ver:";
-"Title or Description" = "Título o descripción";
+"Title, category or location" = "Título, categoría o lugar";
+"Entire content" = "Contenido completo";
 
 "Search" = "Buscar";
 "Search attendees" = "Buscar asistentes";
@@ -373,6 +391,9 @@
 
 "Show Time as Free" = "Mostrar tiempo como disponible";
 
+/* email notifications */
+"Send Appointment Notifications" = "Enviar notificaciones sobre el evento";
+
 /* validation errors */
 
 validate_notitle           = "No ha escrito un título, ¿Desea continuar?";
@@ -418,7 +439,7 @@ validate_endbeforestart    = "La fecha/hora de inicio es posterior a la de fin."
 "You cannot remove nor unsubscribe from your personal calendar."
 = "No puede quitarse ni darse de baja de su calendario personal.";
 "Are you sure you want to delete the calendar \"%{0}\"?"
-= "¿Está seguro/a que desea borrar el calendario \"%{0}\"?";
+= "¿Está seguro de que quiere borrar el calendario \"%{0}\"?";
 
 /* Legend */
 "Participant" = "Asistente";
@@ -449,7 +470,7 @@ validate_endbeforestart    = "La fecha/hora de inicio es posterior a la de fin."
 "and" = "y";
 
 "A time conflict exists with one or more attendees.\nWould you like to keep the current settings anyway?"
-= "Existe un conflicto de disponibilidad con uno o más asistentes.\n¿Quiere guardar ésta propuesta de todas formas?";
+= "Existe un conflicto de disponibilidad entre uno o más asistentes.\n¿Quiere guardar ésta propuesta de todas formas?";
 
 /* apt list */
 "Title" = "Título";
@@ -484,7 +505,7 @@ vtodo_class2 = "(Tarea confidencial)";
 "Name:" = "Nombre:";
 "Color:" = "Color:";
 
-"Include in free-busy" = "Incluye en tiempo libre-ocupado";
+"Include in free-busy" = "Incluir en información de disponibilidad";
 
 "Synchronization" = "Sincronización";
 "Synchronize" = "Sincronizar";
@@ -501,17 +522,17 @@ vtodo_class2 = "(Tarea confidencial)";
 
 "Links to this Calendar" = "Vínculos a éste calendario";
 "Authenticated User Access" = "Acceso a usuario autenticado";
-"CalDAV URL" = "CalDAV url";
+"CalDAV URL" = "URL CalDAV:";
 "WebDAV ICS URL" = "URL ICS WebDAV";
 "WebDAV XML URL" = "URL XML WebDAV";
 
 /* Error messages */
-"dayFieldInvalid" = "Por favor, especificar un valor numérico en el campo día superior o igual a 1.";
-"weekFieldInvalid" = "Por favor, especificar un valor numérico en el campo semana(s) superior o igual a 1.";
-"monthFieldInvalid" = "Por favor, especificar un valor numérico en el campo mes superior o igual a 1.";
-"monthDayFieldInvalid" = "Por favor, especificar un valor numérico en el campo día del mes superior o igual a 1.";
-"yearFieldInvalid" = "Por favor, especificar un valor numérico en el campo año superior o igual a 1.";
-"appointmentFieldInvalid" = "Por favor, especificar un valor numérico en el campo cita(s) superior o igual a 1.";
+"dayFieldInvalid" = "Por favor, especificar un valor numérico en el campo día mayor o igual a 1.";
+"weekFieldInvalid" = "Por favor, especificar un valor numérico en el campo semana(s) mayor o igual a 1.";
+"monthFieldInvalid" = "Por favor, especificar un valor numérico en el campo mes mayor o igual a 1.";
+"monthDayFieldInvalid" = "Por favor, especificar un valor numérico en el campo día del mes mayor o igual a 1.";
+"yearFieldInvalid" = "Por favor, especificar un valor numérico en el campo año mayor o igual a 1.";
+"appointmentFieldInvalid" = "Por favor, especificar un valor numérico en el campo cita(s) mayor o igual a 1.";
 "recurrenceUnsupported" = "Este tipo de frecuencia no esta soportado.";
 "Please specify a calendar name." = "Por favor ingrese el nombre del calendario.";
 "tagNotDefined" = "Tiene que especificar una etiqueta si quiere sincronizar este calendario.";
