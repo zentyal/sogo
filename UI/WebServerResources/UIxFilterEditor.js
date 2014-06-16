@@ -38,7 +38,7 @@ function onLoadHandler() {
 }
 
 function loadMailboxes() {
-    var url = ApplicationBaseURL + "Mail/0/mailboxes";
+    var url = ApplicationBaseURL + "/Mail/0/mailboxes";
     triggerAjaxRequest(url, onLoadMailboxesCallback);
 }
 
@@ -513,7 +513,7 @@ function ensureMethodSelectRepresentation(container, methodSpan) {
     if (sieveCapabilities.indexOf("fileinto") > -1) {
         methods.push("fileinto");
     }
-    if (sieveCapabilities.indexOf("imapflags") > -1) {
+    if (sieveCapabilities.indexOf("imapflags") > -1 || sieveCapabilities.indexOf("imap4flags") > -1) {
         methods.push("addflag");
     }
     methods.push("stop");
@@ -632,8 +632,12 @@ function ensureMailboxArgRepresentation(container, argumentSpan) {
                          : {'displayName': 'INBOX', 'path': 'INBOX' });
         for (var i = 0; i < mailboxes.length; i++) {
             var mailbox = mailboxes[i];
+            var folderValue;
+            ((sieveFolderEncoding == "UTF-8") ? folderValue = mailbox.displayName
+                                              : folderValue = mailbox.path);
+              
             var mboxOption = createElement("option", null, null,
-                                           { value: mailbox.path }, null, select);
+                                           { value: folderValue }, null, select);
             mboxOption.appendChild(document.createTextNode(mailbox.displayName));
         }
         argumentSpan.appendChild(select);

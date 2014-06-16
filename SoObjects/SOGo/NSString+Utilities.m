@@ -46,7 +46,7 @@ static NSString **cssEscapingStrings = NULL;
 static unichar *cssEscapingCharacters = NULL;
 static int cssEscapingCount;
 
-static unichar thisCharCode[29];
+static unichar thisCharCode[30];
 static NSString *controlCharString = nil;
 static NSCharacterSet *controlCharSet = nil;
 
@@ -285,8 +285,8 @@ static NSCharacterSet *controlCharSet = nil;
       int i, j;
       
       // Create an array of chars for all control characters between 0x00 and 0x1F,
-      // apart from \t, \n, \f and \r (0x08, 0x09, 0x0A, 0x0C and 0x0D)
-      for (i = 0, j = 0x00; j < 0x08; i++, j++) {
+      // apart from \t, \n, \f and \r (0x09, 0x0A, 0x0C and 0x0D)
+      for (i = 0, j = 0x00; j <= 0x08; i++, j++) {
         thisCharCode[i] = j;
       }
       thisCharCode[i++] = 0x0B;
@@ -332,8 +332,7 @@ static NSCharacterSet *controlCharSet = nil;
                                         (cssEscapingCount + 1)
                                         * sizeof (unichar));
   for (count = 0; count < cssEscapingCount; count++)
-    *(cssEscapingCharacters + count)
-      = [[characters objectAtIndex: count] characterAtIndex: 0];
+    *(cssEscapingCharacters + count) = [[characters objectAtIndex: count] characterAtIndex: 0];
   *(cssEscapingCharacters + cssEscapingCount) = 0;
 }
 
@@ -360,14 +359,20 @@ static NSCharacterSet *controlCharSet = nil;
 
   cssIdentifier = [NSMutableString string];
   max = [self length];
-  for (count = 0; count < max; count++)
+  if (max > 0)
     {
-      currentChar = [self characterAtIndex: count];
-      idx = [self _cssCharacterIndex: currentChar];
-      if (idx > -1)
-        [cssIdentifier appendString: cssEscapingStrings[idx]];
-      else
-        [cssIdentifier appendFormat: @"%C", currentChar];
+      if (isdigit([self characterAtIndex: 0]))
+        // A CSS identifier can't start with a digit; we add an underscore
+        [cssIdentifier appendString: @"_"];
+      for (count = 0; count < max; count++)
+        {
+          currentChar = [self characterAtIndex: count];
+          idx = [self _cssCharacterIndex: currentChar];
+          if (idx > -1)
+            [cssIdentifier appendString: cssEscapingStrings[idx]];
+          else
+            [cssIdentifier appendFormat: @"%C", currentChar];
+        }
     }
 
   return cssIdentifier;
@@ -397,7 +402,17 @@ static NSCharacterSet *controlCharSet = nil;
 
   newString = [NSMutableString string];
   max = [self length];
-  for (count = 0; count < max - 2; count++)
+  count = 0;
+  if (max > 0
+      && [self characterAtIndex: 0] == '_'
+      && isdigit([self characterAtIndex: 1]))
+    {
+      /* If the identifier starts with an underscore followed by a digit,
+         we remove the underscore */
+      count = 1;
+    }
+
+  for (; count < max - 2; count++)
     {
       currentChar = [self characterAtIndex: count];
       if (currentChar == '_')

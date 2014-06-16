@@ -223,7 +223,7 @@ DIV.appNav{
   font-size: 16px;
   font-weight: 100;
   float: left;
-  margin-right: 30px;
+  margin-right: 15px;
   position: relative;
 }
 
@@ -244,8 +244,7 @@ DIV.linkbanner SPAN.active{
   padding: 0;
 }
 DIV.appNav .dropdown{
-  padding: 0px;
-  margin-left: 10px;
+  cursor: pointer;
 }
 DIV.appNav .dropdown:hover,
 DIV.appNav:hover{
@@ -330,7 +329,10 @@ position: fixed;}
 { padding: 8px 10px;
   margin: 0px;
   width: auto;
-  white-space: nowrap; }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer; }
 
 .menu LI.disabled,
 .popuMenu LI.disabled,
@@ -510,7 +512,8 @@ TD.headerTitle
 { width: 20%; }
 
 TD.headerLocation,
-TD.headerCalendarName
+TD.headerCalendarName,
+TD.headerCategory
 { min-width: 15em;
   width: 15em; }
 

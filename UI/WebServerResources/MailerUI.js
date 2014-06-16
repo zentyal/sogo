@@ -40,7 +40,8 @@ function URLForFolderID(folderID, application) {
         application = UserFolderURL + application + "/";
     else
         application = ApplicationBaseURL;
-    var url = application + encodeURI(folderID.substr(1));
+  
+    var url = application + encodeURI(folderID);
 
     if (url[url.length-1] == '/')
         url = url.substr(0, url.length-1);
@@ -54,7 +55,7 @@ function openMessageWindow(msguid, url) {
     var wId = '';
     if (msguid) {
         wId += "SOGo_msg" + Mailer.currentMailbox + "/" + msguid;
-        markMailReadInWindow(window, msguid);
+        mailListToggleMessagesRead($("row_" + msguid), true);
     }
     var msgWin = openMailComposeWindow(url, wId);
 
@@ -245,7 +246,7 @@ function mailListToggleMessageThread(row, cell) {
 
 /* Triggered when clicking on the read/unread dot of a message row or
  * through the contextual menu. */
-function mailListToggleMessagesRead(row) {
+function mailListToggleMessagesRead(row, force_mark_as_read) {
     var selectedRowsId = [];
     if (row) {
         selectedRowsId = [row.id];
@@ -265,17 +266,18 @@ function mailListToggleMessagesRead(row) {
             action = 'markMessageRead';
             markread = true;
         }
-        else {
+        else if (!force_mark_as_read) {
             action = 'markMessageUnread';
             markread = false;
+        }
+        else {
+            return;
         }
 
         for (var i = 0; i < selectedRowsId.length; i++) {
             var msguid = selectedRowsId[i].split('_')[1];
+            // Assume ajax request will succeed and change message flag in table
             markMailInWindow(window, msguid, markread);
-
-            // Assume ajax request will succeed and invalidate data cache now.
-	    Mailer.dataTable.invalidate(msguid, true);
 
             var url = ApplicationBaseURL + encodeURI(Mailer.currentMailbox) + "/"
                 + msguid + "/" + action;
@@ -298,7 +300,10 @@ function mailListMarkMessage(event) {
 
 function mailListMarkMessageCallback(http) {
     var data = http.callbackData;
-    if (!isHttpStatus204(http.status)) {
+    if (isHttpStatus204(http.status)) {
+        Mailer.dataTable.invalidate(data["msguid"], true);
+    }
+    else {
         log("Message Mark Failed (" + http.status + "): " + http.statusText);
 	Mailer.dataTable.invalidate(data["msguid"], false);
     }
@@ -564,7 +569,7 @@ function deleteSelectedMessagesCallback(http) {
 }
 
 function deleteMessagesWithoutTrash(data) {
-    var url = ApplicationBaseURL + encodeURI(data["mailbox"]) + "/batchDelete";
+    var url = ApplicationBaseURL + encodeURI(data["/mailbox"]) + "/batchDelete";
     var parameters = "uid=" + data["id"].join(",") + '&withoutTrash=1';
     data["withoutTrash"] = true;
     triggerAjaxRequest(url, deleteSelectedMessagesCallback, data, parameters,
@@ -769,7 +774,7 @@ function composeNewMessage() {
     else
         account = null;
     if (account) {
-        var url = ApplicationBaseURL + encodeURI(account) + "/compose";
+        var url = ApplicationBaseURL + encodeURI("/" + account) + "/compose";
         openMailComposeWindow(url);
     }
 }
@@ -1043,8 +1048,6 @@ function onMessageContextMenu(event) {
         popupMenu(event, "messagesListMenu", selectedNodes);
     else if (selectedNodes.length == 1)
         popupMenu(event, "messageListMenu", row);
-
-    return false;
 }
 
 function onFolderMenuClick(event) {
@@ -1227,8 +1230,6 @@ function loadMessage(msguid) {
 							 { 'mailbox': Mailer.currentMailbox,
                                                            'msguid': msguid,
                                                            'seenStateHasChanged': seenStateHasChanged });
-	// Warning: We assume the user can set the read/unread flag of the message.
-        markMailInWindow(window, msguid, true);
     }
     else {
         div.innerHTML = cachedMessage['text'];
@@ -1637,7 +1638,7 @@ function onReadMessageConfirmMDN(event) {
     var messageURL;
     if (window.opener && window.opener.Mailer) {
         /* from UIxMailPopupView */
-        messageURL = (ApplicationBaseURL + encodeURI(mailboxName)
+        messageURL = (ApplicationBaseURL + encodeURI("/" + mailboxName)
                       + "/" + messageName);
     }
     else {
@@ -1668,10 +1669,6 @@ function loadMessageCallback(http) {
                     loadRemoteImages();
                 configureSignatureFlagImage();
                 handleReturnReceipt();
-	        // Warning: If the user can't set the read/unread flag, it won't
-	        // be reflected in the view unless we force the refresh.
-                if (http.callbackData.seenStateHasChanged)
-                    Mailer.dataTable.dataSource.invalidate(msguid);
             }
             var cachedMessage = new Array();
             cachedMessage['idx'] = Mailer.currentMailbox + '/' + msguid;
@@ -1679,6 +1676,8 @@ function loadMessageCallback(http) {
             cachedMessage['text'] = http.responseText;
             if (cachedMessage['text'].length < 30000)
                 storeCachedMessage(cachedMessage);
+            // Mark the mail as read
+            mailListToggleMessagesRead($("row_" + msguid), true);
         }
     }
     else if (http.status == 404) {
@@ -1761,7 +1760,9 @@ function onMenuViewMessageSource(event) {
     if (rows.length > 0) {
         var url = (ApplicationBaseURL + encodeURI(Mailer.currentMailbox) + "/"
                    + rows[0].substr(4) + "/viewsource");
-        openMailComposeWindow(url);
+        $(function() {
+            openMailComposeWindow(url);
+        }).delay(0.1);
     }
 
     preventDefault(event);
@@ -1773,6 +1774,18 @@ function saveImage(event) {
     var urlAsAttachment = url.replace(/(\/[^\/]*)$/,"/asAttachment$1");
 
     window.location.href = urlAsAttachment;
+}
+
+/* Download a file using a temporary iframe that we delete once the download is started */
+function download(url) {
+    var form = createElement('form', null, 'hidden', { action: url, method: 'GET'});
+    $(document.body).appendChild(form);
+    var div = AIM.submit(form);
+    form.submit();
+    setTimeout(function () {
+        form.remove();
+        div.remove();
+    }, 20000);
 }
 
 function saveAttachment(event) {
@@ -2043,7 +2056,7 @@ function initMailboxTree() {
 
     var chainRq = new AjaxRequestsChain(initMailboxTreeCB);
     for (var i = 0; i < mailAccounts.length; i++) {
-        var url = ApplicationBaseURL + i + "/mailboxes";
+      var url = ApplicationBaseURL + "/" + i + "/mailboxes";
         chainRq.requests.push([url, onLoadMailboxesCallback, i]);
     }
     chainRq.start();
@@ -2275,7 +2288,7 @@ function buildMailboxes(accountIdx, encoded) {
 
 function getFoldersState() {
     if (mailAccounts.length > 0) {
-        var urlstr =  ApplicationBaseURL + "foldersState";
+        var urlstr =  ApplicationBaseURL + "/foldersState";
         triggerAjaxRequest(urlstr, getFoldersStateCallback);
     }
 }
@@ -2299,7 +2312,7 @@ function getFoldersStateCallback(http) {
 function saveFoldersState() {
     if (mailAccounts.length > 0) {
         var foldersState = mailboxTree.getFoldersState();
-        var urlstr =  ApplicationBaseURL + "saveFoldersState";
+        var urlstr =  ApplicationBaseURL + "/saveFoldersState";
         var parameters = "expandedFolders=" + foldersState;
         triggerAjaxRequest(urlstr, saveFoldersStateCallback, null, parameters,
                            { "Content-type": "application/x-www-form-urlencoded" });
@@ -2329,7 +2342,8 @@ function onMenuCreateFolderConfirm(event) {
 }
 
 function onMenuRenameFolder(event) {
-    showPromptDialog(_("Rename Folder..."), _("Enter the new name of your folder :"), onMenuRenameFolderConfirm);
+    var folderName = document.menuTarget.down('.nodeName').childNodes[0].nodeValue;
+    showPromptDialog(_("Rename Folder..."), _("Enter the new name of your folder :"), onMenuRenameFolderConfirm, folderName);
 }
 
 function onMenuRenameFolderConfirm() {
@@ -2886,7 +2900,7 @@ function Mailbox(type, name, unseen, displayName) {
     else
       this.displayName = name;
     // log("name: " + name + "; dn: " + displayName);
-    this.name = name.asCSSIdentifier();
+    this.name = name;
     this.unseen = unseen;
     this.parentFolder = null;
     this.children = new Array();
@@ -2907,7 +2921,7 @@ Mailbox.prototype = {
 
         var currentFolder = this;
         while (currentFolder.parentFolder) {
-            fullName = "/folder" + currentFolder.name + fullName;
+            fullName = ("/folder" + currentFolder.name).asCSSIdentifier() + fullName;
             currentFolder = currentFolder.parentFolder;
         }
 
@@ -2916,11 +2930,9 @@ Mailbox.prototype = {
     findMailboxByName: function(name) {
         var mailbox = null;
 
-        var searchName = name.asCSSIdentifier();
-
         var i = 0;
         while (!mailbox && i < this.children.length)
-            if (this.children[i].name == searchName
+            if (this.children[i].name == name
                 || this.children[i].displayName == name)
                 mailbox = this.children[i];
             else

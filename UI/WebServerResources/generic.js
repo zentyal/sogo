@@ -45,7 +45,7 @@ var activeAjaxRequests = 0;
 var removeFolderRequestCount = 0;
 
 // Email validation regexp
-var emailRE = /^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i;
+var emailRE = /^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i;
 
 
 /* This function enables the execution of a wrapper function just before the
@@ -91,6 +91,7 @@ function createElement(tagName, id, classes, attributes, htmlAttributes, parentN
 function URLForFolderID(folderID) {
     var folderInfos = folderID.split(":");
     var url;
+                  
     if (folderInfos.length > 1) {
         url = UserFolderURL + "../" + encodeURI(folderInfos[0]);
         if (!(folderInfos[0].endsWith('/')
@@ -100,9 +101,8 @@ function URLForFolderID(folderID) {
     }
     else {
         var folderInfo = folderInfos[0];
-        if (ApplicationBaseURL.endsWith('/')
-            && folderInfo.startsWith('/'))
-            folderInfo = folderInfo.substr(1);
+        if (!(folderInfo.startsWith('/')))
+            folderInfo = "/" + folderInfo;
         url = ApplicationBaseURL + encodeURI(folderInfo);
     }
 
@@ -173,9 +173,7 @@ function sanitizeWindowName(dirtyWindowName) {
 
 function openUserFolderSelector(callback, type) {
     var urlstr = ApplicationBaseURL;
-    if (! urlstr.endsWith('/'))
-        urlstr += '/';
-    urlstr += ("../../" + UserLogin + "/Contacts/userFolders");
+    urlstr += ("/../../" + UserLogin + "/Contacts/userFolders");
 
     var div = $("popupFrame");
     if (div) {
@@ -266,11 +264,11 @@ function openContactWindow(url, wId) {
         else
             wId = sanitizeWindowName(wId);
 
-        var w = window.open(url, wId,
-                            "width=450,height=550,resizable=0,location=0");
-        w.focus();
-
-        return w;
+        $(function() {
+            var w = window.open(url, wId,
+                                "width=450,height=550,resizable=0,location=0");
+            w.focus();
+        }).delay(0.1);
     }
 }
 
@@ -327,9 +325,11 @@ function openMailTo(senderMailTo) {
     }
 
     if (sanitizedAddresses.length > 0)
-        openMailComposeWindow(ApplicationBaseURL
-                              + "../Mail/compose?mailto=" + encodeURIComponent(Object.toJSON(sanitizedAddresses))
-                              + ((subject.length > 0)?"?subject=" + encodeURIComponent(subject):""));
+        $(function() {
+            openMailComposeWindow(ApplicationBaseURL
+                                  + "/../Mail/compose?mailto=" + encodeURIComponent(Object.toJSON(sanitizedAddresses))
+                                  + ((subject.length > 0)?"?subject=" + encodeURIComponent(subject):""));
+        }).delay(0.1);
 
     return false; /* stop following the link */
 }
@@ -862,13 +862,13 @@ function hideMenu(menuNode) {
     Event.fire(menuNode, "contextmenu:hide");
 }
 
-function onMenuEntryClick(event) {
-    var node = event.target;
-
-    id = getParentMenu(node).menuTarget;
-
-    return false;
-}
+//function onMenuEntryClick(event) {
+//    var node = event.target;
+//
+//    id = getParentMenu(node).menuTarget;
+//
+//    return false;
+//}
 
 /* query string */
 
@@ -1490,7 +1490,7 @@ function showAlarmCallback(http) {
             if (data["description"].length)
                 msg += "\n\n" + data["description"];
 
-            window.alert(msg.unescapeHTML());
+            window.alert(msg.decodeEntities());
             showSelectDialog(data["summary"], _('Snooze for '),
                              { '5': _('5 minutes'),
                                '10': _('10 minutes'),
@@ -1558,14 +1558,14 @@ function openExternalLink(anchor) {
 }
 
 function openAclWindow(url) {
-    var w = window.open(url, "aclWindow",
-                        "width=420,height=300,resizable=1,scrollbars=1,toolbar=0,"
-                        + "location=0,directories=0,status=0,menubar=0"
-                        + ",copyhistory=0");
-    w.opener = window;
-    w.focus();
-
-    return w;
+    $(function () {
+        var w = window.open(url, "aclWindow",
+                            "width=420,height=300,resizable=1,scrollbars=1,toolbar=0,"
+                            + "location=0,directories=0,status=0,menubar=0"
+                            + ",copyhistory=0");
+        w.opener = window;
+        w.focus();
+    }).delay(0.1);
 }
 
 function getUsersRightsWindowHeight() {
@@ -1756,7 +1756,7 @@ function onPreferencesClick(event) {
     }
     else {
         var w = window.open(urlstr, "SOGoPreferences",
-                            "width=580,height=476,resizable=1,scrollbars=0,location=0");
+                            "width=615,height=520,resizable=1,scrollbars=0,location=0");
         w.opener = window;
         w.focus();
     }
@@ -1816,12 +1816,7 @@ function CurrentModule() {
     if (ApplicationBaseURL) {
         var parts = ApplicationBaseURL.split("/");
         var last = parts.length - 1;
-        while (last > -1 && parts[last] == "") {
-            last--;
-        }
-        if (last > -1) {
-            module = parts[last];
-        }
+        module = parts[last];
     }
 
     return module;
@@ -2169,7 +2164,10 @@ function _showPromptDialog(title, label, callback, defaultValue) {
     }
     if (Prototype.Browser.IE)
         jQuery('#bgDialogDiv').css('opacity', 0.4);
-    jQuery(dialog).fadeIn('fast', function () { dialog.down("input").focus(); });
+    jQuery(dialog).fadeIn('fast', function () {
+        var input = dialog.down("input");
+        input.selectText(0, input.value.length);
+    });
 }
 
 function showSelectDialog(title, label, options, button, callbackFcn, callbackArg, defaultValue) {
