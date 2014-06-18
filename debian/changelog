@@ -1,3 +1,9 @@
+sogo (2.2.5-zentyal1~20140618-1) trusty; urgency=medium
+
+  * New upstream release
+
+ -- Julio J. García Martín <jjgarcia@zentyal.com>  Wed, 18 Jun 2014 14:14:22 +0200
+
 sogo (2.1.2-zentyal3~20140327-2) trusty; urgency=low
 
   * trusty build
