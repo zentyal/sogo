@@ -9,7 +9,9 @@ SUBPROJECTS = \
 	OGoContentStore	\
 	SoObjects	\
 	Tools		\
-	Tests/Unit
+	Tests/Unit \
+	OpenChange \
+	ActiveSync
 
 ifeq ($(daemon),yes)
 SUBPROJECTS += Main
