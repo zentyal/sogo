@@ -91,7 +91,7 @@ function createElement(tagName, id, classes, attributes, htmlAttributes, parentN
 function URLForFolderID(folderID) {
     var folderInfos = folderID.split(":");
     var url;
-                  
+
     if (folderInfos.length > 1) {
         url = UserFolderURL + "../" + encodeURI(folderInfos[0]);
         if (!(folderInfos[0].endsWith('/')
@@ -2349,7 +2349,7 @@ function SetLogMessage(containerId, message, msgType) {
 }
 
 function ToggleAppNavMenu() {
-    jQuery("#appNavMenu").slideToggle("fast");
+    jQuery("#appNavMenu").slideToggle(100);
 }
 
 
