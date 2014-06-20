@@ -34,14 +34,10 @@
 #import <NGExtensions/NSNull+misc.h>
 
 #import "BSONCodec.h"
+#import "NSObject+PropertyList.h"
 
 const char *indentationStep = "  ";
 
-@interface NSObject (plext)
-
-- (void) displayWithIndentation: (NSInteger) anInt;
-
-@end
 
 @implementation NSObject (plext)
 
