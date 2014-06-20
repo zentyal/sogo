@@ -84,8 +84,7 @@
       baseUrl = [NSString stringWithFormat: @"sogo://%@@%@/",
                           [userName stringByReplacingOccurrencesOfString: @"@"
                                     withString: @"%40"],
-                          [moduleName stringByReplacingOccurrencesOfString: @"@"
-                                      withString: @"%40"]];
+                          moduleName];
 
       subfolders = [parentFolder subFolders];
       max = [subfolders count];
@@ -132,10 +131,7 @@
     mapistoreURI = [NSString stringWithFormat: @"sogo://%@@%@/%@/",
                              [userName stringByReplacingOccurrencesOfString: @"@"
                                        withString: @"%40"],
-                             [moduleName stringByReplacingOccurrencesOfString: @"@"
-                                         withString: @"%40"],
-                             [nameInContainer stringByReplacingOccurrencesOfString: @"@"
-                                       withString: @"%40"]];
+                             moduleName, nameInContainer];
   else
     mapistoreURI = nil;
   [MAPIApp setUserContext: nil];

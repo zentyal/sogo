@@ -276,8 +276,7 @@ MakeDisplayFolderName (NSString *folderName)
                             withString: @"%40"],
                   [userName stringByReplacingOccurrencesOfString: @"@"
                             withString: @"%40"],
-                  [folderName stringByReplacingOccurrencesOfString: @"@"
-                            withString: @"%40"]];
+                  folderName];
 
   context = talloc_zero (memCtx, struct mapistore_contexts_list);
   context->url = [url asUnicodeInMemCtx: context];
