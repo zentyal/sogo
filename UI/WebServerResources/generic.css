@@ -51,7 +51,7 @@ FIELDSET LEGEND{
     font-size: 1.3em;
     margin: 0 -20px;
     padding: 10px 30px 10px 10px;
-    width: 100%; 
+    width: 100%;
   }
 
 IMG#progressIndicator
@@ -122,8 +122,8 @@ div#header
   border-bottom: 1px solid #000; }
 
 div#header img.headerlogo
-{ float: right; 
-  width: 182px; 
+{ float: right;
+  width: 182px;
   height: 30px; }
 
 div#header div#headerhistory
@@ -142,7 +142,7 @@ div#header a:hover
 { text-decoration: none; }
 
 DIV.linkbanner
-{ background-color: #69BE28;
+{ background-color: #46962D  ;
   width: 100%;
   top: 0px;
   left: 0px;
@@ -151,6 +151,10 @@ DIV.linkbanner
   font-size: 12px;
   line-height: 40px;
   color: #aaa; }
+.popup DIV.linkbanner{
+  height: auto;
+  overflow: hidden;
+}
 
 DIV.linkbanner A,
 DIV.linkbanner SPAN
@@ -160,8 +164,8 @@ DIV.linkbanner SPAN
   top: 0px;
   left: 0px;
   padding: 0px 1em;
-  transition: all 0.2s;
-  -webkit-transition:  all 0.2s }
+  transition: background-color 0.2s;
+  -webkit-transition:  background-color 0.2s }
 
 DIV.linkbanner A#logoff
 { color:transparent;
@@ -193,7 +197,7 @@ DIV.linkbanner SPAN
   font-weight: bold; }
 
 DIV.linkbanner A:hover
-{ background-color: rgba(0, 0, 0, 0.1);
+{ background-color: #69be28;
   color: #ffffff;
   transition: background-color 0.2s;
   -webkit-transition:  background-color 0.2s }
@@ -208,50 +212,68 @@ DIV.linkbanner SPAN#userIdentificationDisplay > img {
     padding-left: 0;
     padding-right: 15px;
 }
-
+DIV.linkbanner .logo{
+  padding: 0px 10px 0px 0px;
+}
 DIV.linkbanner IMG
 { padding: 0px 4px; }
 
+DIV.linkbanner IMG.buttonMenuArrow{
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  padding: 0px;
+}
 .linkbannerlinks
 { vertical-align: bottom;
   text-align: left; }
 
-.linkbannerimage { 
+.linkbannerimage {
   text-align: right; }
 
 DIV.appNav{
   font-size: 16px;
   font-weight: 100;
   float: left;
-  margin-right: 30px;
   position: relative;
+  border-right: 1px solid #69be28;
 }
 
 DIV.appNav DIV.appNavMenu {
-    background-color: #46962D;
-    position: absolute; 
-    top: 40px;
+    background-color: #46962d;
+    position: absolute;
+    top: 42px;
     z-index: 100;
     display: none;
-    width: 100%;
+    min-width: 100%;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+
 }
 DIV.appNav DIV.appNavMenu > a {
     display: block;
     float: none;
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+DIV.appNav DIV.appNavMenu > a:hover{
+    background-color: #69be28;
 }
 DIV.linkbanner SPAN.active{
   font-weight: normal;
   padding: 0;
+  text-transform: uppercase;
 }
 DIV.appNav .dropdown{
-  padding: 0px;
-  margin-left: 10px;
+  cursor: pointer;
+  padding: 0 10px;
 }
-DIV.appNav .dropdown:hover,
-DIV.appNav:hover{
-  background-color: rgba(0, 0, 0, 0.1)
+DIV.appNav .dropdown .buttonMenuArrow{
+  position: static;
 }
-
+DIV.appNav .dropdown:hover{
+  background-color: #69be28;
+}
 DIV.userMenu{
   float: right;
 }
@@ -282,7 +304,7 @@ DIV.contactSelector DIV.contactList
 /* contextual menus & popups */
 
 BODY.popup {
-  background-color: #EEE;   
+  background-color: #EEE;
 }
 BODY.popup #toolbar + #pageContent{
   position: absolute;
@@ -307,13 +329,13 @@ BODY.popup #toolbar + #pageContent{
   margin: 0px;
   padding: 0px;
   border: 1px solid #ccc;
-  overflow: auto; 
+  overflow: auto;
   overflow-x: hidden;
   box-shadow:0px 5px 10px rgba(0,0,0,0.2)}
 
 .popup .popupMenu,
 .popup .menu
-{ background-color: #fff; 
+{ background-color: #fff;
 position: fixed;}
 
 .menu UL,
@@ -330,7 +352,10 @@ position: fixed;}
 { padding: 8px 10px;
   margin: 0px;
   width: auto;
-  white-space: nowrap; }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer; }
 
 .menu LI.disabled,
 .popuMenu LI.disabled,
@@ -510,7 +535,8 @@ TD.headerTitle
 { width: 20%; }
 
 TD.headerLocation,
-TD.headerCalendarName
+TD.headerCalendarName,
+TD.headerCategory
 { min-width: 15em;
   width: 15em; }
 
@@ -568,7 +594,7 @@ DIV#javascriptSafetyNet
 DIV.javascriptPopupBackground
 { position: absolute;
   background-color: #999;
-  -moz-opacity: 0.6; 
+  -moz-opacity: 0.6;
   opacity: 0.6;
   z-index: 2;
   top: 0px;
@@ -626,7 +652,7 @@ TD._selected
 }
 
 LI._selected.denied
-{ 
+{
   background-color: #f33;
 }
 
@@ -644,7 +670,7 @@ DIV.dTreeNode A SPAN.nodeName
 /* drag'n'drop */
 
 DIV.dTreeNode SPAN._dragOver
-{ 
+{
   background-color: #7BC143;
   color: #fff;
 }
@@ -839,12 +865,12 @@ DIV, TEXTAREA, INPUT, SELECT
   font-size: 8pt;
   font-size: inherit; }
 
-INPUT[type="text"], 
-INPUT[type="password"], 
+INPUT[type="text"],
+INPUT[type="password"],
 TEXTAREA
 { border: 1px solid #CCC;
   background-color: #fff;
-  color: #333; 
+  color: #333;
   padding: 8px 2.5%;
   font-size: 1.2em;
   margin:0px;
@@ -856,7 +882,7 @@ TEXTAREA
 INPUT[type="file"]
 { border: 1px solid #CCC;
   background-color: #fff;
-  color: #333; 
+  color: #333;
   margin:0px;
   display: block;
   max-width:600px;
@@ -939,9 +965,9 @@ INPUT[name="search"]
 }
 
 
-/* Buttons 
+/* Buttons
  * Avoid using DIVS as buttons, they're only helpful when they have multiple
- * listeners for "onclick" 
+ * listeners for "onclick"
  */
 A.button {
   padding: 0px;
@@ -951,7 +977,7 @@ A.button {
   display: block;
   float: right;
   /*height: 23px;*/
-  text-decoration: none;  
+  text-decoration: none;
   text-align: center;
   color: inherit;
   font-weight: bold;
@@ -969,7 +995,7 @@ A.button SPAN {
     min-width: 70px;
 }
 
-A.button.actionButton SPAN 
+A.button.actionButton SPAN
 { font-weight: bold; }
 
 A.button:active SPAN
@@ -1042,7 +1068,7 @@ TABLE.framenocaption
   padding: 1em;
   display: table;
   text-align: right;
-  width: 100%; 
+  width: 100%;
   background-color: #f6f6f6;}
 
 TABLE.nopadding
@@ -1091,7 +1117,7 @@ DIV.tabsContainer > UL
   float: left;
   list-style-type: none;
   list-style-image: none;
-  padding: 0px; 
+  padding: 0px;
   margin: 10px;
   width: 1000px;
 }
@@ -1102,8 +1128,8 @@ DIV.tabsContainer > UL LI
   display: block;
   float: left;
   height: 35px;
-  text-decoration: none; 
-  background-color:#ddd; 
+  text-decoration: none;
+  background-color:#ddd;
   color: inherit;
   box-shadow: inset 0px 0px 5px rgba(0,0,0,0.2)
 }
@@ -1119,7 +1145,7 @@ DIV.tabsContainer > UL LI SPAN
   padding: 0px 15px;
   font-size: 1.2em; }
 
-DIV.tabsContainer > UL LI.active, 
+DIV.tabsContainer > UL LI.active,
 DIV.tabsContainer > UL LI.active:hover
 { background-color: #ff7900;
   box-shadow: none;
@@ -1133,8 +1159,8 @@ DIV.tabsContainer > DIV.tabs
   color: #333;
   top: 55px;
   bottom: 55px;
-  left: 10px;
-  right: 10px;
+  left: 0px;
+  right: 0px;
   overflow: hidden; }
 
 DIV.tabsContainer > DIV.tabs > DIV.tab
@@ -1190,35 +1216,34 @@ DIV.tabsContainer > DIV.active.tab
 DIV#toolbar
 { left: 0px;
   margin: 0px;
-  padding: 0px; 
+  padding: 0px;
   white-space: nowrap;
   overflow: hidden;
-  background-color: #69BE28}
+  float:left;}
 
 BODY.popup DIV#toolbar
 { border-top: 0px; }
 
 SPAN.toolbarSeparator
-{ display: block;
-  float: left;
+{ float: left;
   height: 40px;
-  border-left: 3px solid #DDD;
-  margin: 0;
-  width: 0px;}
-
+  margin: 0 !important;
+  padding: 0px !important;
+  width: 0px;
+}
+SPAN.toolbarSeparator + .toolbarButton{
+  border-left:1px solid #75ca34;
+}
 DIV.toolbar IMG.buttonImage
 { height: 24px;
   margin-top: 8px;
   padding: 0px;
-  /*left: 4px;
-  position: absolute;
-  top: 8px;*/
   display: none;
 }
 
-DIV.toolbar A.toolbarButton, 
+DIV.toolbar A.toolbarButton,
 DIV.toolbar A.toolbarButton:hover,
-A.smallToolbarButton, 
+A.smallToolbarButton,
 A.smallToolbarButton:hover {
     color: #333333;
     cursor: pointer;
@@ -1235,10 +1260,10 @@ DIV.toolbar A.toolbarButton SPAN,
 DIV.toolbar A.toolbarButton:hover SPAN {
   cursor: pointer;
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   height: 40px;
   line-height: 40px;
-  padding: 0 10px;
+  padding: 0 15px;
   position: relative;
   text-align: center;
   font-weight: normal;
@@ -1246,7 +1271,7 @@ DIV.toolbar A.toolbarButton:hover SPAN {
 
 }
 
-A.smallToolbarButton SPAN, 
+A.smallToolbarButton SPAN,
 A.smallToolbarButton:hover SPAN {
   text-align: center;
   display: block;
@@ -1255,12 +1280,6 @@ A.smallToolbarButton:hover SPAN {
   cursor: pointer;
   height: 30px;
   overflow: hidden;
-}
-
-DIV.toolbar A.toolbarButton:hover SPAN, A.smallToolbarButton:hover SPAN {
-  background-color: rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s;
-  -webkit-transition: background-color 0.2s;
 }
 DIV.toolbar A.toolbarButton:active SPAN {
   background-position: bottom left;
@@ -1311,7 +1330,7 @@ DIV.bottomToolbar A.bottomButton
   padding: 0px;
   width: 23px;
   text-align: center;
-  text-decoration: none;  
+  text-decoration: none;
   color: inherit;
   cursor: pointer;
   border-bottom: 1px solid #9B9B9B;
@@ -1611,7 +1630,7 @@ span.cke_skin_kama
   top: 1px;
 }
 .datePicker INPUT:disabled + a.calendarButton,
-.datePicker INPUT:disabled + a.calendarButton:hover{ 
+.datePicker INPUT:disabled + a.calendarButton:hover{
   cursor: default;
   opacity: 0.5;
 }
@@ -1626,17 +1645,33 @@ span.cke_skin_kama
     width: auto;
 }
 
+/* force css for zentyal style */
+DIV#preferencesTabs{ top: 40px !important;}
 
-@media (max-width: 960px){ 
 
-.linkbanner DIV.toolbar A.toolbarButton SPAN,
-.linkbanner DIV.toolbar A.toolbarButton:hover SPAN{
+@media (max-width: 960px){
+
+.main .linkbanner DIV.toolbar A.toolbarButton SPAN,
+.main .linkbanner DIV.toolbar A.toolbarButton:hover SPAN{
     color: transparent;
     font-size:0px !important;
     width: 26px;
 }
 
-.linkbanner DIV.toolbar IMG.buttonImage{ 
+.main .linkbanner DIV.toolbar IMG.buttonImage{
+ display: inline-block;
+}
+
+@media (max-width: 450px){
+
+.popup .linkbanner DIV.toolbar A.toolbarButton SPAN,
+.popup .linkbanner DIV.toolbar A.toolbarButton:hover SPAN{
+    color: transparent;
+    font-size:0px !important;
+    width: 26px;
+}
+
+.popup .linkbanner DIV.toolbar IMG.buttonImage{
  display: inline-block;
 }
 

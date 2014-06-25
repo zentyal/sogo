@@ -125,6 +125,10 @@
         <div id="generalView" class="tab">
           <fieldset>
             <div>
+              <label><var:string label:value="SOGo version:"/></label>
+              <var:string value="sogoVersion"/>
+            </div>
+            <div>
               <label><var:string label:value="Language :"/></label>
               <var:popup list="languages" item="item"
                   const:id="language"
@@ -230,7 +234,6 @@
                   const:name="tasksClassification"
                   string="itemClassificationText" selection="tasksDefaultClassification"/>
             </div>
-
             <div>
               <label><var:string label:value="Categories"/></label>
               <div id="calendarCategoriesListWrapper" class="listWrapper"
@@ -257,11 +260,9 @@
               </div>
               <div class="bottomToolbar">
                 <a const:id="calendarCategoryAdd" class="bottomButton" href="#">
-                  <span><img rsrc:src="add-icon.png" label:title="Add" />
-                  </span></a>
+                  <span><img rsrc:src="add-icon.png" label:title="Add" /></span></a>
                 <a const:id="calendarCategoryDelete" class="bottomButton" href="#">
-                  <span><img rsrc:src="remove-icon.png" label:title="Delete" />
-                  </span></a>
+                  <span><img rsrc:src="remove-icon.png" label:title="Delete" /></span></a>
               </div>
             </div>
             <input type="hidden" const:id="calendarCategoriesValue" 
@@ -269,6 +270,7 @@
             </fieldset>
           </div>
         </var:if>
+
         <div id="contactsOptionsView" class="tab">
           <fieldset>
             <div>
@@ -304,6 +306,7 @@
             const:name="contactsCategoriesValue" var:value="contactsCategoriesValue"/>
         </fieldset>
         </div>
+
         <var:if condition="userHasMailAccess">
           <div id="mailOptionsView" class="tab">
             <fieldset >
@@ -318,9 +321,18 @@
                 <label><input type="checkbox" 
                     const:name="sortByThreads"
                     const:id="sortByThreads"
-                    var:checked="sortByThreads" />
-                  <var:string label:value="Sort messages by threads"/>
-                </label>
+                    var:checked="sortByThreads" /><var:string label:value="Sort messages by threads"/></label>
+              </div>
+              <div>
+                <label><input type="checkbox"
+                    const:name="addOutgoingAddresses"
+                    const:id="addOutgoingAddresses"
+                    var:checked="addOutgoingAddresses" />
+                  <var:string label:value="When sending mail, add unknown recipients to my"/>:</label>
+                    <var:popup list="addressBookList" item="item"
+                         const:id="addressBookList"
+                         const:name="addressBookList"
+                         string="itemAddressBookText" selection="userAddressBook"/>
               </div>
               <div>
                 <label><var:string label:value="Check for new mail:"/></label>

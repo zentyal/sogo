@@ -80,14 +80,32 @@ function contactsListCallback(http) {
                     row.setAttribute("categories", contact["c_categories"]);
                     row.setAttribute("contactname", contact["c_cn"]);
                     var cells = row.getElementsByTagName("TD");
-                    $(cells[0]).update(contact["c_cn"]);
+                    if (contact["c_cn"])
+                        $(cells[0]).update(contact["c_cn"].escapeHTML());
+                    else
+                        $(cells[0]).update();
                     cells[0].title = contact["c_cn"];
-                    $(cells[1]).update(contact["c_mail"]);
+                    log('mail ' + contact["c_mail"]);
+                    if (contact["c_mail"])
+                        $(cells[1]).update(contact["c_mail"].escapeHTML());
+                    else
+                        $(cells[1]).update();
                     cells[1].title = contact["c_mail"];
                     if (fullView) {
-                        $(cells[2]).update(contact["c_screenname"]);
-                        $(cells[3]).update(contact["c_o"]);
-                        $(cells[4]).update(contact["c_telephonenumber"]);
+                        if (contact["c_screenname"])
+                            $(cells[2]).update(contact["c_screenname"].escapeHTML());
+                        else
+                            $(cells[2]).update();
+
+                        if (contact["c_o"])
+                            $(cells[3]).update(contact["c_o"].escapeHTML());
+                        else
+                            $(cells[3]).update();
+
+                        if (contact["c_telephonenumber"])
+                            $(cells[4]).update(contact["c_telephonenumber"].escapeHTML());
+                        else
+                            $(cells[4]).update();
                     }
                 }
 
@@ -107,13 +125,17 @@ function contactsListCallback(http) {
                                              null,
                                              null,
                                              row);
-                    cell.update(contact["c_cn"]);
-                    cell.title = contact["c_cn"];
+
+                    if (contact["c_cn"]) {
+                        $(cell).update(contact["c_cn"].escapeHTML());
+                        cell.title = contact["c_cn"];
+                    }
 
                     cell = document.createElement("td");
                     row.appendChild(cell);
+
                     if (contact["c_mail"]) {
-                        cell.update(contact["c_mail"]);
+                        $(cell).update(contact["c_mail"].escapeHTML());
                         cell.title = contact["c_mail"];
                     }
 
@@ -121,17 +143,17 @@ function contactsListCallback(http) {
                         cell = document.createElement("td");
                         row.appendChild(cell);
                         if (contact["c_screenname"])
-                            cell.update(contact["c_screenname"]);
+                            $(cell).update(contact["c_screenname"].escapeHTML());
 
                         cell = document.createElement("td");
                         row.appendChild(cell);
                         if (contact["c_o"])
-                            cell.update(contact["c_o"]);
+                            $(cell).update(contact["c_o"].escapeHTML());
 
                         cell = document.createElement("td");
                         row.appendChild(cell);
                         if (contact["c_telephonenumber"])
-                            cell.update(contact["c_telephonenumber"]);
+                            $(cell).update(contact["c_telephonenumber"].escapeHTML());
                     }
                 }
             }
@@ -140,7 +162,7 @@ function contactsListCallback(http) {
             for (i = rows.length - 1; i >= data.length; i--) {
                 tbody.removeChild(rows[i]);
             }
-            
+
             if (sorting["attribute"] && sorting["attribute"].length > 0) {
                 var sortHeader;
                 if (sorting["attribute"] == "c_cn")
@@ -250,7 +272,7 @@ function _onContactMenuAction(folderItem, action, refresh) {
     var selectedFolders = $("contactFolders").getSelectedNodes();
     var folderId = $(folderItem).readAttribute("folderId");
     if (folderId)
-      folderId = folderId.substring(1);
+        folderId = folderId.substring(1);
     if (Object.isArray(document.menuTarget) && selectedFolders.length > 0) {
         var selectedFolderId = $(selectedFolders[0]).readAttribute("id");
         var contactIds = $(document.menuTarget).collect(function(row) {
@@ -264,7 +286,7 @@ function _onContactMenuAction(folderItem, action, refresh) {
             }
         }
 
-        var url = ApplicationBaseURL + selectedFolderId + "/" + action;
+        var url = ApplicationBaseURL + "/" + selectedFolderId + "/" + action;
         var uids = contactIds.collect(function (s) {
                 return encodeURIComponent(s.unescapeHTML());
             }).join('&uid=');
@@ -296,8 +318,8 @@ function onMenuExportContact (event) {
         var contactIds = document.menuTarget.collect(function(row) {
                 return row.readAttribute("id");
             });
-        var url = ApplicationBaseURL + selectedFolderId + "/export"
-          + "?uid=" + contactIds.join("&uid=");
+        var url = ApplicationBaseURL + "/" + selectedFolderId + "/export"
+            + "?uid=" + contactIds.join("&uid=");
         window.location.href = url;
     }
 }
@@ -307,8 +329,10 @@ function onMenuRawContact (event) {
             return row.readAttribute("id");
         });
 
-    openGenericWindow(URLForFolderID(Contact.currentAddressBook)
-                      + "/" + cname + "/raw");
+    $(function() {
+            openGenericWindow(URLForFolderID(Contact.currentAddressBook)
+                              + "/" + cname + "/raw");
+        }).delay(0.1);
 }
 
 function actionContactCallback(http) {
@@ -475,7 +499,7 @@ function onToolbarWriteToSelectedContacts(event) {
         showAlertDialog(_("Please select a contact."));
     }
     else {
-        openMailComposeWindow(ApplicationBaseURL + "../Mail/compose"
+        openMailComposeWindow(ApplicationBaseURL + "/../Mail/compose"
                               + "?folder=" + Contact.currentAddressBook.substring(1)
                               + "&uid=" + rows.join("&uid="));
         if (document.body.hasClassName("popup"))
@@ -510,7 +534,7 @@ function onToolbarDeleteSelectedContactsConfirm(dialogId) {
                        ('ids=' + rowIds.collect(function (s) {
                                return encodeURIComponent(s.unescapeHTML());
                            }).join(",")),
-        { "Content-type": "application/x-www-form-urlencoded" });
+                       { "Content-type": "application/x-www-form-urlencoded" });
 }
 
 function onContactDeleteEventCallback(http) {
@@ -598,9 +622,9 @@ function newList(sender) {
     var li = $(Contact.currentAddressBook);
     var listEditing = li.getAttribute("list-editing");
     if (listEditing && listEditing == "available")
-      openContactWindow(URLForFolderID(Contact.currentAddressBook) + "/newlist");
+        openContactWindow(URLForFolderID(Contact.currentAddressBook) + "/newlist");
     else
-      showAlertDialog(_("You cannot create a list in a shared address book."));
+        showAlertDialog(_("You cannot create a list in a shared address book."));
 
     return false;
 }
@@ -648,15 +672,13 @@ function onConfirmContactSelection(event) {
     var rows = contactsList.getSelectedRows();
     for (i = 0; i < rows.length; i++) {
         var cid = rows[i].getAttribute("id");
-        if (cid.endsWith (".vlf")) {
-            addListToOpener (tag, Contact.currentAddressBook, 
-                             currentAddressBookName, cid);
+        if (cid.endsWith(".vlf")) {
+            addListToOpener(tag, Contact.currentAddressBook, currentAddressBookName, cid);
         }
         else {
-          var cname = '' + rows[i].readAttribute("contactname");
-          var email = '' + rows[i].cells[1].innerHTML;
-          addContact(tag, currentAddressBookName + '/' + cname,
-                     cid, cname, email);
+            var cname = '' + rows[i].readAttribute("contactname");
+            var email = '' + rows[i].cells[1].innerHTML;
+            addContact(tag, currentAddressBookName + '/' + cname, cid, cname, email);
         }
     }
 
@@ -669,11 +691,12 @@ function onConfirmContactSelection(event) {
 function addListToOpener (tag, aBookId, aBookName, listId) {
     var url = UserFolderURL + "Contacts/" + aBookId + "/" + listId + "/properties";
     triggerAjaxRequest (url, addListToOpenerCallback, {
-                        "aBookId": aBookId, 
-                        "aBookName": aBookName,
-                        "tag": tag
-                        });
+            "aBookId": aBookId, 
+                "aBookName": aBookName,
+                "tag": tag
+                });
 }
+
 function addListToOpenerCallback (http) {
     var data = http.callbackData;
     var received = http.responseText.evalJSON (true);
@@ -785,7 +808,7 @@ function onAddressBookImport(event) {
     var node = $("contactFolders").getSelectedNodes().first();
     var folderId = node.getAttribute("id");
 
-    var url = ApplicationBaseURL + folderId + "/import";
+    var url = ApplicationBaseURL + "/" + folderId + "/import";
     $("uploadForm").action = url;
     $("contactsFile").value = "";
 
@@ -800,6 +823,7 @@ function onAddressBookImport(event) {
     div.setStyle({ top: top + "px", left: left + "px" });
     div.show();
 }
+
 function hideContactsImport(event) {
     $("uploadDialog").hide();
 }
@@ -807,17 +831,19 @@ function hideContactsImport(event) {
 function hideImportResults () {
     $("uploadResults").hide();
 }
+
 function validateUploadForm () {
     rc = false;
     if ($("contactsFile").value.length) {
-      var btn = jQuery('#uploadSubmit');
-      jQuery('#uploadCancel').fadeOut('fast');
-      btn.addClass("disabled");
-      btn.children('span').text(_('Uploading'));
-      rc = true;
+        var btn = jQuery('#uploadSubmit');
+        jQuery('#uploadCancel').fadeOut('fast');
+        btn.addClass("disabled");
+        btn.children('span').text(_('Uploading'));
+        rc = true;
     }
     return rc;
 }
+
 function uploadCompleted(response) {
     jQuery('#uploadCancel').show();
     var btn = jQuery('#uploadSubmit');
@@ -861,7 +887,7 @@ function onAddressBookRemove(event) {
         }
         else {
             var folderId = node.getAttribute("id");
-            var folderUrl = ApplicationBaseURL + folderId;
+            var folderUrl = ApplicationBaseURL + "/" + folderId;
             unsubscribeFromFolder(folderUrl, owner, onFolderUnsubscribeCB, folderId);
         }
     }
@@ -887,7 +913,7 @@ function deletePersonalAddressBookConfirm(folderId) {
         document.deletePersonalABAjaxRequest.aborted = true;
         document.deletePersonalABAjaxRequest.abort();
     }
-    var url = ApplicationBaseURL + folderId + "/delete";
+    var url = ApplicationBaseURL + "/" + folderId + "/delete";
     document.deletePersonalABAjaxRequest
         = triggerAjaxRequest(url, deletePersonalAddressBookCallback, folderId);
 
@@ -1048,37 +1074,17 @@ function updateAddressBooksMenus() {
 function onAddressBookModify(event) {
     var folders = $("contactFolders");
     var selected = folders.getSelectedNodes()[0];
-    if (selected.getAttribute("owner") != "nobody") {
-        var currentName = selected.innerHTML.unescapeHTML();
-        showPromptDialog(_("Properties"),
-                         _("Address Book Name"),
-                         onAddressBookModifyConfirm,
-                         currentName);
-    }
-}
-
-function onAddressBookModifyConfirm() {
-    var folders = $("contactFolders");
-    var selected = folders.getSelectedNodes()[0];
-    var newName = this.value;
-    var currentName = this.getAttribute("previousValue");
-    if (newName && newName.length > 0
-        && newName != currentName) {
-        var url = (URLForFolderID(selected.getAttribute("id"))
-                   + "/renameFolder?name=" + escape(newName.utf8encode()));
-        triggerAjaxRequest(url, folderRenameCallback,
-                           {node: selected, name: newName});
-    }
-    disposeDialog();
-}
-
-function folderRenameCallback(http) {
-    if (http.readyState == 4) {
-        if (isHttpStatus204(http.status)) {
-            var dict = http.callbackData;
-            dict["node"].innerHTML = dict["name"];
-        }
-    }
+    var addressBookID = selected.getAttribute("id");
+    var url = ApplicationBaseURL + addressBookID + "/properties";
+    var windowID = sanitizeWindowName(addressBookID + " properties");
+    var width = 410;
+    var height = 410;
+  
+    $(function() {
+            var properties = window.open(url, windowID, "width="+width+",height="+height+",resizable=0");
+            properties.focus();
+        }).delay(0.1);
+  
 }
 
 function onMenuSharing(event) {
@@ -1267,15 +1273,15 @@ getMenus = function() {
     return menus;
 }
 
-function configureSelectionButtons() {
-    var container = $("contactSelectionButtons");
-    if (container) {
-        var buttons = container.select("A.button");
-        for (var i = 0; i < buttons.length; i++) {
-            $(buttons[i]).observe("click", onConfirmContactSelection);
+    function configureSelectionButtons() {
+        var container = $("contactSelectionButtons");
+        if (container) {
+            var buttons = container.select("A.button");
+            for (var i = 0; i < buttons.length; i++) {
+                $(buttons[i]).observe("click", onConfirmContactSelection);
+            }
         }
     }
-}
 
 function onDocumentKeydown(event) {
     var target = Event.element(event);
@@ -1334,12 +1340,12 @@ function onDocumentKeydown(event) {
 }
 
 /*function fixSearchFieldPosition () {
-    var panel = $("filterPanel");
-    if (panel) {
-        panel.style.position = "relative";
-        panel.style.top = "7px";
-    }
-    }*/
+  var panel = $("filterPanel");
+  if (panel) {
+  panel.style.position = "relative";
+  panel.style.top = "7px";
+  }
+  }*/
 
 function initContacts(event) {
     if ($(document.body).hasClassName("popup")) {
@@ -1398,35 +1404,35 @@ onContactsWindowResize = function (event) {
         handle.adjust();
 }
 
-function resetCategoriesMenu() {
-    var menu = $("categoriesMenu");
-    if (menu) {
-        menu.parentNode.removeChild(menu);
-    }
+    function resetCategoriesMenu() {
+        var menu = $("categoriesMenu");
+        if (menu) {
+            menu.parentNode.removeChild(menu);
+        }
 
-    menu = createElement("div", "categoriesMenu", "menu");
-    var menuUL = createElement("ul", null, "choiceMenu");
-    menu.appendChild(menuUL);
-    if (UserDefaults && UserDefaults["SOGoContactsCategories"]) {
-        for (var i = 0;
-             i < UserDefaults["SOGoContactsCategories"].length;
-             i++) {
-            var catName = UserDefaults["SOGoContactsCategories"][i];
-            if (catName.length > 0) {
-                var menuLI = createElement("li");
-                menuLI.observe("mousedown", onCategoriesMenuItemClick);
-                menuLI.category = catName;
-                menuLI.appendChild(document.createTextNode(catName));
-                menuUL.appendChild(menuLI);
+        menu = createElement("div", "categoriesMenu", "menu");
+        var menuUL = createElement("ul", null, "choiceMenu");
+        menu.appendChild(menuUL);
+        if (UserDefaults && UserDefaults["SOGoContactsCategories"]) {
+            for (var i = 0;
+                 i < UserDefaults["SOGoContactsCategories"].length;
+                 i++) {
+                var catName = UserDefaults["SOGoContactsCategories"][i];
+                if (catName.length > 0) {
+                    var menuLI = createElement("li");
+                    menuLI.observe("mousedown", onCategoriesMenuItemClick);
+                    menuLI.category = catName;
+                    menuLI.appendChild(document.createTextNode(catName));
+                    menuUL.appendChild(menuLI);
+                }
             }
         }
+
+        menu.prepareVisibility = onCategoriesMenuPrepareVisibility;
+
+        var pageContent = $("pageContent");
+        pageContent.appendChild(menu);
     }
-
-    menu.prepareVisibility = onCategoriesMenuPrepareVisibility;
-
-    var pageContent = $("pageContent");
-    pageContent.appendChild(menu);
-}
 
 function onCategoriesMenuPrepareVisibility() {
     var contactsList = $("contactsList");
@@ -1519,16 +1525,16 @@ function configureDraggables() {
         var rows = jQuery("tr.vcard");
         try { rows.draggable("destroy"); } catch (e) {}
         rows.draggable({
-            helper: function (event) { return '<div id="dragDropVisual"></div>'; },
-            start: startDragging,
-            drag: whileDragging,
-            stop: stopDragging,
-            appendTo: 'body',
-            cursorAt: { right: 25 },
-            scroll: false,
-            distance: 4,
-            zIndex: 20
-        });
+                helper: function (event) { return '<div id="dragDropVisual"></div>'; },
+                    start: startDragging,
+                    drag: whileDragging,
+                    stop: stopDragging,
+                    appendTo: 'body',
+                    cursorAt: { right: 25 },
+                    scroll: false,
+                    distance: 4,
+                    zIndex: 20
+                    });
     }
 }
 
@@ -1562,7 +1568,7 @@ function startDragging(event, ui) {
     handle.html(count);
 
     if (event.shiftKey || currentFolderIsRemote()) {
-      handle.addClass("copy");
+        handle.addClass("copy");
     }
     handle.show();
 }
@@ -1607,13 +1613,13 @@ function dropSelectedContacts(action, toId) {
         if ((!currentFolderIsRemote() || action != "move")
             && fromId.substring(1) != toId) {
 
-            var url = ApplicationBaseURL + fromId + "/" + action;
+            var url = ApplicationBaseURL + "/" + fromId + "/" + action;
             var uids = contactIds.collect(function (s) {
                     return encodeURIComponent(s.unescapeHTML());
                 }).join('&uid=');
             triggerAjaxRequest(url, actionContactCallback, fromId,
-                                   ('folder='+ toId + '&uid=' + uids),
-                                   { "Content-type": "application/x-www-form-urlencoded" });
+                               ('folder='+ toId + '&uid=' + uids),
+                               { "Content-type": "application/x-www-form-urlencoded" });
         }
     }
 }

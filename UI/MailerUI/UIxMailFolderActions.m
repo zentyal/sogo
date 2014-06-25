@@ -28,8 +28,11 @@
 #import <NGObjWeb/WOContext+SoObjects.h>
 #import <NGObjWeb/WOResponse.h>
 #import <NGObjWeb/WORequest.h>
+
 #import <NGImap4/NGImap4Connection.h>
 #import <NGImap4/NGImap4Client.h>
+#import <NGImap4/NSString+Imap4.h>
+
 #import <EOControl/EOQualifier.h>
 
 #import <Mailer/SOGoMailAccount.h>
@@ -38,6 +41,7 @@
 #import <Mailer/SOGoTrashFolder.h>
 
 #import <SOGo/NSObject+Utilities.h>
+#import <SOGo/NSString+Utilities.h>
 #import <SOGo/SOGoDomainDefaults.h>
 #import <SOGo/SOGoUser.h>
 #import <SOGo/SOGoUserDefaults.h>
@@ -60,6 +64,7 @@
   folderName = [[context request] formValueForKey: @"name"];
   if ([folderName length] > 0)
     {
+      folderName = [folderName stringByEncodingImap4FolderName];
       newFolder
         = [co lookupName: [NSString stringWithFormat: @"folder%@", folderName]
                inContext: context

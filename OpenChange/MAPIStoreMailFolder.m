@@ -59,7 +59,7 @@
 #import "NSData+MAPIStore.h"
 #import "NSString+MAPIStore.h"
 #import "SOGoMAPIDBMessage.h"
-#import "SOGoMAPIDBFolder.h"
+#import <SOGo/SOGoCacheGCSFolder.h>
 
 #import "MAPIStoreMailVolatileMessage.h"
 
@@ -106,7 +106,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
   ASSIGN (versionsMessage,
           [SOGoMAPIDBMessage objectWithName: @"versions.plist"
                                 inContainer: dbFolder]);
-  [versionsMessage setObjectType: MAPIDBObjectTypeInternal];
+  [versionsMessage setObjectType: MAPIInternalCacheObject];
 }
 
 - (BOOL) ensureFolderExists
@@ -163,6 +163,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
   int i;
 
   nameInContainer = nil;
+  rc = MAPISTORE_ERROR;
 
   folderName = nil;
   for (i = 0; !folderName && i < aRow->cValues; i++)
@@ -857,6 +858,8 @@ _parseIMAPRange (const unichar *uniString, NSArray **UIDsP)
   uint32_t currentUid, rangeMin;
   BOOL done = NO, inRange = NO;
 
+  rangeMin = 0;
+  currentUid = 0;
   UIDs = [NSMutableArray array];
   while (!done)
     {
@@ -1172,9 +1175,9 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
 
 - (MAPIStoreMessage *) createMessage
 {
-  SOGoMAPIObject *childObject;
+  SOGoCacheObject *childObject;
 
-  childObject = [SOGoMAPIObject objectWithName: [SOGoMAPIObject
+  childObject = [SOGoCacheObject objectWithName: [SOGoCacheObject
                                                   globallyUniqueObjectId]
                                    inContainer: sogoObject];
   return [MAPIStoreMailVolatileMessage

@@ -82,12 +82,29 @@ SPAN.timeDateControl INPUT.textField
 #passwordView BR
 { clear: both; }
 
-/* mail filters */
+/* mail options */
+DIV#mailOptionsTabs
+{ position: absolute;
+  top: 225px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px; }
+
 DIV#filtersListWrapper
 { bottom: 30px;
   right: 2em;
   top: 208px;
   left: 2em; }
+DIV#mailLabelsListWrapper
+{ bottom: 22px;
+  right: 0px;
+  top: 0px;
+  left: 0px; }
+
+#mailOptionsTabs .bottomToolbar
+{ bottom: 0px;
+  left: 0px;
+  right: 0px; }
 
 DIV#filtersListWrapper TD,
 DIV.bottomToolbar
@@ -107,7 +124,7 @@ TD.activeColumn
 
 P#passwordFields,
 P#passwordError
-{ width: 410px; 
+{ width: 410px;
   text-align: right; }
 
 P.errorMessage#passwordError
@@ -127,7 +144,7 @@ P.infoMessage#passwordError
 { position: absolute;
   overflow: auto;
   bottom: 30px;
-  left: 140px;
+//  left: 140px;
   padding: 0px;
   right: 5px; }
 
@@ -139,7 +156,12 @@ P.infoMessage#passwordError
   left: 5px;
   width: 130px;
   border-top: 1px solid #9b9b9b;
+  display: none;
 position: relative;}
+
+fieldset#accountInfo {
+    display: none;
+}
 
 #mailAccountsList
 { position: absolute;

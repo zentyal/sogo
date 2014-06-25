@@ -20,7 +20,14 @@ SOGo_HEADER_FILES = \
 	SOGoBuild.h \
 	SOGoProductLoader.h		\
 	\
+	BSONCodec.h			\
+	EOBitmaskQualifier.h 		\
+	EOQualifier+SOGoCacheObject.h 	\
+	GCSSpecialQueries+SOGoCacheObject.h \
 	SOGoCache.h			\
+	SOGoCacheGCSFolder.h		\
+	SOGoCacheGCSObject.h		\
+	SOGoCacheObject.h		\
 	SOGoConstants.h			\
 	SOGoObject.h			\
 	SOGoContentObject.h		\
@@ -85,7 +92,14 @@ SOGo_OBJC_FILES = \
 	SOGoProductLoader.m		\
 	SOGoSQLInit.m			\
 	\
+	BSONCodec.m			\
+	EOBitmaskQualifier.m		\
+	EOQualifier+SOGoCacheObject.m	\
+	GCSSpecialQueries+SOGoCacheObject.m \
 	SOGoCache.m			\
+	SOGoCacheGCSFolder.m		\
+	SOGoCacheGCSObject.m		\
+	SOGoCacheObject.m		\
 	SOGoConstants.m			\
 	SOGoObject.m			\
 	SOGoContentObject.m		\
@@ -165,6 +179,9 @@ ifeq ($(saml2_config), yes)
 
 SOGoSAML2Exceptions.h SOGoSAML2Exceptions.m: gen-saml2-exceptions.py
 	$(ECHO_CREATING) ./gen-saml2-exceptions.py $(LASSO_CFLAGS) $(END_ECHO)
+
+distclean clean::
+	-rm -f SOGoSAML2Exceptions.h SOGoSAML2Exceptions.m
 
 endif
 

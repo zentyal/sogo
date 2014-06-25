@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2004-2005 SKYRIX Software AG
-  Copyright (C) 2007-2013 Inverse inc.
+  Copyright (C) 2007-2014 Inverse inc.
 
   This file is part of SOGo.
 
@@ -60,6 +60,8 @@
 #import "SOGoUser+Mailer.h"
 
 #import "SOGoMailAccount.h"
+#import <Foundation/NSProcessInfo.h>
+
 
 #define XMLNS_INVERSEDAV @"urn:inverse:params:xml:ns:inverse-dav"
 
@@ -307,11 +309,17 @@ static NSString *inboxFolderName = @"INBOX";
 
 - (BOOL) updateFilters
 {
+  return [self updateFiltersWithUsername: nil andPassword: nil];
+}
+
+- (BOOL) updateFiltersWithUsername: (NSString *) theUsername
+                       andPassword: (NSString *) thePassword
+{
   SOGoSieveManager *manager;
 
   manager = [SOGoSieveManager sieveManagerForUser: [context activeUser]];
 
-  return [manager updateFiltersForAccount: self];
+  return [manager updateFiltersForAccount: self  withUsername: theUsername  andPassword: thePassword];
 }
 
 
@@ -652,6 +660,62 @@ static NSString *inboxFolderName = @"INBOX";
 
   return password;
 }
+
+
+- (NSDictionary *) imapFolderGUIDs
+{
+  NSDictionary *result, *nresult, *folderData;
+  NSMutableDictionary *folders;
+  NGImap4Client *client;
+  SOGoUserDefaults *ud;
+  NSArray *folderList;
+  NSEnumerator *e;
+  NSString *guid;
+  id object;
+  
+  BOOL subscribedOnly;
+
+  ud = [[context activeUser] userDefaults];
+  subscribedOnly = [ud mailShowSubscribedFoldersOnly];
+
+  folderList = [[self imap4Connection] allFoldersForURL: [self imap4URL]
+                               onlySubscribedFolders: subscribedOnly];
+
+  folders = [NSMutableDictionary dictionary];
+
+  client = [[self imap4Connection] client];
+  result = [client annotation: @"*"  entryName: @"/comment" attributeName: @"value.priv"];
+
+  e = [folderList objectEnumerator];
+
+  while (object = [e nextObject])
+    {
+      guid = [[[[result objectForKey: @"FolderList"] objectForKey: [object substringFromIndex: 1]] objectForKey: @"/comment"] objectForKey: @"value.priv"];
+
+      if (!guid)
+        {
+          guid = [[NSProcessInfo processInfo] globallyUniqueString];
+          nresult = [client annotation: [object substringFromIndex: 1] entryName: @"/comment" attributeName: @"value.priv" attributeValue: guid];
+          
+          if (![[nresult objectForKey: @"result"] boolValue])
+            {
+              // Need to implement X-GUID query for Dovecot - this requires modification in SOPE to support following command:
+              // 1 list "" "*" return (status (x-guid)) -> this would avoid firing a command per folder to IMAP
+              nresult = [client status: [object substringFromIndex: 1] flags: [NSArray arrayWithObject: @"x-guid"]];
+              guid = [nresult objectForKey: @"x-guid"];
+              if (!guid)
+                {
+                  guid = [NSString stringWithFormat: @"%@", [object substringFromIndex: 1]];
+                }
+            }
+        }
+      
+      [folders setObject: guid forKey: [object substringFromIndex: 1]];
+    }
+  
+  return folders;
+}
+
 
 /* name lookup */
 
