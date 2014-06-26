@@ -61,25 +61,23 @@
           <div id="linkBanner" class="linkbanner">
 
           <var:if condition="isPopup" const:negate="YES">
+            <a var:href="relativeMailPath" class="logo"><img alt="zentyal logo" style="float:left;" rsrc:src="zentyal_w_logo.png"/></a>
             <div id="appNav" class="appNav">
+                <span onclick="ToggleAppNavMenu()" class="dropdown" id="dropdown-NavMenu">
 
                 <var:if condition="userHasCalendarAccess">
                 <var:if condition="isCalendar">
-                  <a var:href="relativeCalendarPath" class="logo"><img alt="zentyal logo" style="float:left;" rsrc:src="zentyal_w_logo.png"/>
-                    <span class="active"><var:string label:value="Calendar" /></span></a>
+                    <span class="active" style=" padding-right: 10px;"><var:string label:value="Calendar" /></span>
                 </var:if></var:if>
 
                 <var:if condition="isContacts">
-                  <a var:href="relativeContactsPath" class="logo"><img alt="zentyal logo" style="float:left;" rsrc:src="zentyal_w_logo.png"/>
-                  <span class="active"><var:string label:value="Address Book" /></span></a>
+                  <span class="active"><var:string label:value="Address Book" /></span>
                 </var:if>
                 <var:if condition="userHasMailAccess">
                 <var:if condition="isMail">
-                  <a var:href="relativeMailPath" class="logo" ><img alt="zentyal logo" style="float:left;" rsrc:src="zentyal_w_logo.png"/>
-                  <span class="active"><var:string label:value="Mail" /></span></a>
+                  <span class="active" style=" padding-right: 10px;"><var:string label:value="Mail" /></span>
                 </var:if></var:if>
 
-                <span onclick="ToggleAppNavMenu()" class="dropdown" id="dropdown-NavMenu">
                 <img class="buttonMenuArrow" alt="" rsrc:src="arrow-down-w.png"/>
                 </span>
 
