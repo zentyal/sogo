@@ -9,7 +9,7 @@ ADDITIONAL_INCLUDE_DIRS += \
 	-I..
 
 ADDITIONAL_LIB_DIRS += \
-	-L../SoObjects/SOGo/SOGo.framework  \
+	-L../SoObjects/SOGo/SOGo.framework/sogo  \
 	-L../OGoContentStore/$(GNUSTEP_OBJ_DIR)/ \
 	-L../SOPE/NGCards/$(GNUSTEP_OBJ_DIR)/
 

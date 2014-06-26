@@ -99,6 +99,7 @@ Mailer_LOCALIZED_RESOURCE_FILES = Localizable.strings
 ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
 ADDITIONAL_INCLUDE_DIRS += $(shell xml2-config --cflags)
 ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
+ADDITIONAL_LDFLAGS += -Wl,--rpath,/usr/lib/sogo
 
 -include GNUmakefile.preamble
 include $(GNUSTEP_MAKEFILES)/wobundle.make

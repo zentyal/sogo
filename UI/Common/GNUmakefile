@@ -33,6 +33,7 @@ CommonUI_LOCALIZED_RESOURCE_FILES +=	\
 
 ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
 ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
+ADDITIONAL_LDFLAGS += -Wl,--rpath,/usr/lib/sogo
 
 -include GNUmakefile.preamble
 include $(GNUSTEP_MAKEFILES)/bundle.make

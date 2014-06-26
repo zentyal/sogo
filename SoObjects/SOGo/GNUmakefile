@@ -202,12 +202,13 @@ endif
 ADDITIONAL_TOOL_LIBS += -Lobj -lSOGo$(LIBRARY_NAME_SUFFIX)
 ADDITIONAL_INCLUDE_DIRS += -I../../SOPE/
 ADDITIONAL_LIB_DIRS += -L../../SOPE/GDLContentStore/obj/
-ADDITIONAL_LDFLAGS += -lmemcached
+ADDITIONAL_LDFLAGS += -lmemcached -Wl,--rpath,/usr/lib/sogo
 
 -include GNUmakefile.preamble
 ifneq ($(FHS_INSTALL_ROOT),)
 GNUSTEP_HEADERS=$(DESTDIR)$(FHS_INSTALL_ROOT)/include
 endif
+GNUSTEP_TARGET_LDIR=sogo
 include $(GNUSTEP_MAKEFILES)/framework.make
 include $(GNUSTEP_MAKEFILES)/library.make
 include $(GNUSTEP_MAKEFILES)/tool.make
