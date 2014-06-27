@@ -5,8 +5,6 @@ include ../config.make
 include $(GNUSTEP_MAKEFILES)/common.make
 include ../Version
 
-ADDITIONAL_LDFLAGS += -Wl,--rpath,/usr/lib/sogo
-
 BACKEND_VERSION = 1.0.0
 
 ### bootstrap library
@@ -138,7 +136,7 @@ $(DBMSGREADER_TOOL)_OBJC_FILES += \
 	dbmsgreader.m
 
 $(DBMSGREADER_TOOL)_LIB_DIRS += \
-	-L../SoObjects/SOGo/SOGo.framework/sogo -lSOGo \
+	-L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
 	-L../OGoContentStore/obj/ -lOGoContentStore \
 	-L../SOPE/GDLContentStore/obj/ -lGDLContentStore \
 	-L../SOPE/NGCards/obj/ -lNGCards \
@@ -163,13 +161,13 @@ LIBMAPISTORE_LIBS = $(shell pkg-config libmapistore --libs) -lmapiproxy -lWEExte
 
 $(MAPISTORESOGO)_INSTALL_DIR = $(DESTDIR)/$(SAMBA_LIB_DIR)/mapistore_backends
 $(MAPISTORESOGO)_LIB_DIRS += \
-        -L../SoObjects/SOGo/SOGo.framework/sogo -lSOGo \
+        -L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
 	$(LIBMAPI_LIBS) \
 	$(LIBMAPISTORE_LIBS)
 
 $(SOGOBACKEND)_LIB_DIRS += \
         -L../OGoContentStore/$(GNUSTEP_OBJ_DIR)/ -lOGoContentStore \
-        -L../SoObjects/SOGo/SOGo.framework/sogo -lSOGo \
+        -L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
 	$(LIBMAPI_LIBS) \
 	$(LIBMAPISTORE_LIBS)
 
