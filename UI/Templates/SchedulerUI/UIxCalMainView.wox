@@ -134,7 +134,24 @@
       <hr/>
     </div>
   </div>
-
+    <div id="calendarSelectorButtons">
+      <a href="#" class="smallToolbarButton"
+        ><span><img rsrc:src="add-calendar.png"
+            label:title="New Calendar..."
+            /></span></a>
+      <a href="#" class="smallToolbarButton"
+        ><span><img rsrc:src="add-web-calendar.png"
+            label:title="Subscribe to a web calendar..."
+            /></span></a>
+      <a href="#" class="smallToolbarButton"
+        ><span><img rsrc:src="add-user-calendar.png"
+            label:title="Subscribe to a Calendar..."
+            /></span></a>
+      <a href="#" class="smallToolbarButton"
+        ><span><img rsrc:src="remove-calendar.png"
+            label:title="Remove the selected Calendar"
+            /></span></a>
+    </div>
   <div id="leftPanel">
     <div id="dateSelectorView" class=""
          ><var:component className="UIxCalDateSelector"
