@@ -51,6 +51,7 @@ margin-top: 1px;
 .dtree a.node:hover{
   text-decoration: none;
   background-color: #e3e3e3;
+  cursor: pointer;
 }
 
 .dtree a.node._selected
