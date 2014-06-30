@@ -11,8 +11,8 @@ sogo-backup.sh location in cronjob to /usr/sbin/sogo-backup.
 
 Index: sogo/Scripts/sogo-backup.sh
 ===================================================================
---- sogo.orig/Scripts/sogo-backup.sh	2014-02-10 12:44:32.917427822 +0100
-+++ sogo/Scripts/sogo-backup.sh	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/Scripts/sogo-backup.sh	2014-06-30 09:41:36.450138974 +0200
++++ sogo/Scripts/sogo-backup.sh	2014-06-30 09:41:36.446138974 +0200
 @@ -4,7 +4,7 @@
  #set -x
  PROGNAME="$(basename $0)"
@@ -24,8 +24,8 @@ Index: sogo/Scripts/sogo-backup.sh
  
 Index: sogo/Scripts/sogo.cron
 ===================================================================
---- sogo.orig/Scripts/sogo.cron	2014-02-10 12:44:32.917427822 +0100
-+++ sogo/Scripts/sogo.cron	2014-02-10 12:44:54.000000000 +0100
+--- sogo.orig/Scripts/sogo.cron	2014-06-30 09:41:36.450138974 +0200
++++ sogo/Scripts/sogo.cron	2014-06-30 09:41:36.446138974 +0200
 @@ -15,8 +15,7 @@
  #* * * * *      sogo	/usr/sbin/sogo-ealarms-notify
  
