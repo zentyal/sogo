@@ -91,7 +91,7 @@ function createElement(tagName, id, classes, attributes, htmlAttributes, parentN
 function URLForFolderID(folderID) {
     var folderInfos = folderID.split(":");
     var url;
-                  
+
     if (folderInfos.length > 1) {
         url = UserFolderURL + "../" + encodeURI(folderInfos[0]);
         if (!(folderInfos[0].endsWith('/')
@@ -304,7 +304,7 @@ function openMailComposeWindow(url, wId) {
             parentWindow = window.opener;
 
         var w = parentWindow.open(url, wId,
-                                  "width=680,height=520,resizable=1,scrollbars=1,toolbar=0,"
+                                  "width=900,height=620,resizable=1,scrollbars=1,toolbar=0,"
                                   + "location=0,directories=0,status=0,menubar=0"
                                   + ",copyhistory=0");
 
@@ -2349,7 +2349,7 @@ function SetLogMessage(containerId, message, msgType) {
 }
 
 function ToggleAppNavMenu() {
-    jQuery("#appNavMenu").slideToggle("fast");
+    jQuery("#appNavMenu").slideToggle(100);
 }
 
 

@@ -124,7 +124,7 @@ TD.activeColumn
 
 P#passwordFields,
 P#passwordError
-{ width: 410px; 
+{ width: 410px;
   text-align: right; }
 
 P.errorMessage#passwordError

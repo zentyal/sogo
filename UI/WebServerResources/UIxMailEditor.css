@@ -1,18 +1,18 @@
 /* CSS for compose panel */
 
 DIV#leftPanel
-{ top: 0px;
+{ top: 40px;
   }
 
 DIV#rightPanel
-{ top: 0px;
+{ top: 40px;
   left: 0em;
   background-color: white; }
 
 DIV#hiddenDragHandle
 { cursor: e-resize;
   border: 0px;
-  top: 0px;
+  top: 40px;
   left: 15em;
   width: 5px;
   bottom: 0; }
