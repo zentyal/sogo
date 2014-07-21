@@ -2,7 +2,7 @@ Source: sogo
 Priority: optional
 Maintainer: Zentyal Packaging Maintainers <pkg-team@zentyal.com>
 XSBC-Original-Maintainer: Jeroen Dekkers <jeroen@dekkers.ch>
-Build-Depends: debhelper (>= 9), gobjc, libgnustep-base-dev, libsope-dev (>= 2.1.1), libmemcached-dev, libxml2-dev, libsbjson-dev, libgnutls-dev, libldap2-dev, libcurl4-gnutls-dev, liblasso3-dev, python-minimal, python-samba (>= 2:4.1.4+dfsg-3~), libmapi-dev (>= 1:2.0-2), libmapistore-dev (>= 1:2.0-2), libmapiproxy-dev (>= 1:2.0-2), libwbxml2-dev (>= 0.11.2-1)
+Build-Depends: debhelper (>= 9), gobjc, libgnustep-base-dev, libsope-dev (>= 2.1.1), libmemcached-dev, libxml2-dev, libsbjson-dev, libgnutls-dev, libldap2-dev, libcurl4-gnutls-dev, liblasso3-dev, python-minimal, python-samba (>= 2:4.1.4+dfsg-3~), libmapi-dev (>= 2.0-220140606-1~93), libmapistore-dev (>= 2.0-220140606-1~93), libmapiproxy-dev (>= 2.0-220140606-1~93), libwbxml2-dev (>= 0.11.2-1)
 Section: mail
 Standards-Version: 3.9.4
 Homepage: http://www.sogo.nu/
