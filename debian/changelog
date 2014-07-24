@@ -1,3 +1,9 @@
+sogo (2.2.5-zentyal1~20140724-1) trusty; urgency=medium
+
+  * New upstream release
+
+ -- José A. Calvo <jacalvo@zentyal.com>  Thu, 24 Jul 2014 15:57:21 +0200
+
 sogo (2.2.5-zentyal1~20140618-1) trusty; urgency=medium
 
   * New upstream release
