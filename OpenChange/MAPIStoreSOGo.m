@@ -50,9 +50,32 @@
 
 #include <mapistore/mapistore.h>
 #include <mapistore/mapistore_errors.h>
+#include <execinfo.h>
 
 static Class MAPIStoreContextK = Nil;
 static BOOL leakDebugging = NO;
+static BOOL initialization_done = NO;
+
+#define NS_CURRENT_THREAD_REGISTER() \
+    BOOL __nsrct_thread_registered = GSRegisterCurrentThread(); \
+    if (!initialization_done) { \
+        DEBUG(5, ("[SOGo: %s:%d] You should call sogo_backend_init() first. Current thread: %p, pid: %d\n", \
+		  __FUNCTION__, __LINE__, GSCurrentThread(), getpid())); \
+    }
+#define NS_CURRENT_THREAD_TRY_UNREGISTER() \
+    if (__nsrct_thread_registered) { \
+        GSUnregisterCurrentThread(); \
+    }
+
+#define TRYCATCH_START @try {
+#define TRYCATCH_END(pool)  \
+          } @catch (NSException * e) { \
+            enum mapistore_error ret = sogo_backend_handle_objc_exception(e, __PRETTY_FUNCTION__, __LINE__); \
+            [pool release]; \
+            NS_CURRENT_THREAD_TRY_UNREGISTER(); \
+            return ret; \
+          }
+
 
 static enum mapistore_error
 sogo_backend_unexpected_error()
@@ -60,6 +83,35 @@ sogo_backend_unexpected_error()
   NSLog (@"  UNEXPECTED WEIRDNESS: RECEIVED NO OBJECT");
   abort();
   return MAPISTORE_SUCCESS;
+}
+
+static enum mapistore_error
+sogo_backend_handle_objc_exception(NSException *e, const char *fn_name, const int line_no)
+{
+  NSString *callStackSymbols = nil;
+  if ([e respondsToSelector:@selector(callStackSymbols)])
+    {
+      callStackSymbols = [[e callStackSymbols] componentsJoinedByString:@"\n\t"];
+    }
+  NSLog(@"[SOGo: %s:%d] - EXCEPTION: %@, reason: %@, backtrace: \n\t%@\n",
+        fn_name, line_no, [e name], [e reason], callStackSymbols);
+
+  // Another point of view on the stack trace
+  {
+    void *frames[128];
+    int i, len = backtrace(frames, 128);
+    char **symbols = backtrace_symbols(frames, len);
+    NSLog(@"Backtrace using execinfo.h:\n");
+    for (i = 0; i < len; ++i)
+      NSLog(@"\t%s", symbols[i]);
+    free(symbols);
+  }
+
+  if ([[e name] isEqual:@"NotImplementedException"])
+    {
+      return MAPISTORE_ERR_NOT_IMPLEMENTED;
+    }
+  return MAPISTORE_ERROR;
 }
 
 static void
@@ -73,6 +125,7 @@ sogo_backend_atexit (void)
   [pool release];
   GSUnregisterCurrentThread ();
 }
+
 
 /**
    \details Initialize sogo mapistore backend
@@ -89,7 +142,13 @@ sogo_backend_init (void)
   SoProductRegistry *registry;
   char *argv[] = { SAMBA_PREFIX "/sbin/samba", NULL };
 
-  GSRegisterCurrentThread ();
+  GSRegisterCurrentThread();
+
+  if (initialization_done) {
+      DEBUG(0, ("SOGo backend already initialized.\n"));
+      return MAPISTORE_SUCCESS;
+  }
+
   pool = [NSAutoreleasePool new];
 
   /* Here we work around a bug in GNUstep which decodes XML user
@@ -133,6 +192,9 @@ sogo_backend_init (void)
 
   [pool release];
 
+  DEBUG(0, ("[SOGo: %s:%d] backend init SUCCESS. Current thread: %p, pid: %d\n", __FUNCTION__, __LINE__, GSCurrentThread(), getpid()));
+  initialization_done = YES;
+
   return MAPISTORE_SUCCESS;
 }
 
@@ -156,23 +218,25 @@ sogo_backend_create_context(TALLOC_CTX *mem_ctx,
 
   DEBUG(0, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
 
-  GSRegisterCurrentThread ();
+  NS_CURRENT_THREAD_REGISTER();
   pool = [NSAutoreleasePool new];
 
   if (MAPIStoreContextK)
     {
+      TRYCATCH_START
       rc = [MAPIStoreContextK openContext: &context
                                   withURI: uri
                            connectionInfo: conn_info
                            andTDBIndexing: indexingTdb];
       if (rc == MAPISTORE_SUCCESS)
         *context_object = [context tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
     }
   else
     rc = MAPISTORE_ERROR;
 
   [pool release];
-  GSUnregisterCurrentThread ();
+  NS_CURRENT_THREAD_TRY_UNREGISTER();
 
   return rc;
 }
@@ -191,11 +255,12 @@ sogo_backend_create_root_folder (const char *username,
 
   DEBUG(0, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
 
-  GSRegisterCurrentThread ();
+  NS_CURRENT_THREAD_REGISTER();
   pool = [NSAutoreleasePool new];
 
   if (MAPIStoreContextK)
     {
+      TRYCATCH_START
       userName = [NSString stringWithUTF8String: username];
       folderName = [NSString stringWithUTF8String: name];
       rc = [MAPIStoreContextK createRootFolder: &mapistoreUri
@@ -205,12 +270,13 @@ sogo_backend_create_root_folder (const char *username,
                                       withRole: role];
       if (rc == MAPISTORE_SUCCESS)
         *mapistore_urip = [mapistoreUri asUnicodeInMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
     }
   else
     rc = MAPISTORE_ERROR;
 
   [pool release];
-  GSUnregisterCurrentThread ();
+  NS_CURRENT_THREAD_TRY_UNREGISTER();
 
   return rc;
 }
@@ -226,22 +292,24 @@ sogo_backend_list_contexts(const char *username, struct tdb_wrap *indexingTdb,
 
   DEBUG(0, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
 
-  GSRegisterCurrentThread ();
+  NS_CURRENT_THREAD_REGISTER();
   pool = [NSAutoreleasePool new];
 
   if (MAPIStoreContextK)
     {
+      TRYCATCH_START
       userName = [NSString stringWithUTF8String: username];
       *contexts_listp = [MAPIStoreContextK listAllContextsForUser: userName
                                                   withTDBIndexing: indexingTdb
                                                          inMemCtx: mem_ctx];
       rc = MAPISTORE_SUCCESS;
+      TRYCATCH_END(pool)
     }
   else
     rc = MAPISTORE_ERROR;
 
   [pool release];
-  GSUnregisterCurrentThread ();
+  NS_CURRENT_THREAD_TRY_UNREGISTER();
 
   return rc;
 }
@@ -276,11 +344,15 @@ sogo_context_get_path(void *backend_object, TALLOC_CTX *mem_ctx,
     {
       wrapper = backend_object;
       context = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [context getPath: path ofFMID: fmid inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -306,13 +378,17 @@ sogo_context_get_root_folder(void *backend_object, TALLOC_CTX *mem_ctx,
     {
       wrapper = backend_object;
       context = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [context getRootFolder: &folder withFID: fid];
       if (rc == MAPISTORE_SUCCESS)
         *folder_object = [folder tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -345,14 +421,18 @@ sogo_folder_open_folder(void *folder_object, TALLOC_CTX *mem_ctx, uint64_t fid, 
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder openFolder: &childFolder withFID: fid];
       if (rc == MAPISTORE_SUCCESS)
         *childfolder_object = [childFolder tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -385,13 +465,17 @@ sogo_folder_create_folder(void *folder_object, TALLOC_CTX *mem_ctx,
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder createFolder: &childFolder withRow: aRow andFID: fid];
       if (rc == MAPISTORE_SUCCESS)
         *childfolder_object = [childFolder tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -424,11 +508,15 @@ sogo_folder_delete(void *folder_object)
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder deleteFolder];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -452,11 +540,15 @@ sogo_folder_get_child_count(void *folder_object, enum mapistore_table_type table
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder getChildCount: child_count ofTableType: table_type];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -484,16 +576,20 @@ sogo_folder_open_message(void *folder_object,
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder openMessage: &message
                        withMID: mid
                     forWriting: write_access
                       inMemCtx: mem_ctx];
       if (rc == MAPISTORE_SUCCESS)
         *message_object = [message tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -522,15 +618,19 @@ sogo_folder_create_message(void *folder_object,
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder createMessage: &message
                          withMID: mid
 		    isAssociated: associated];
       if (rc == MAPISTORE_SUCCESS)
         *message_object = [message tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -554,11 +654,15 @@ sogo_folder_delete_message(void *folder_object, uint64_t mid, uint8_t flags)
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder deleteMessageWithMID: mid andFlags: flags];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -592,8 +696,10 @@ sogo_folder_move_copy_messages(void *folder_object,
       wrapper = source_folder_object;
       sourceFolder = wrapper->instance;
 
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [targetFolder moveCopyMessagesWithMIDs: src_mids
                                          andCount: mid_count
                                        fromFolder: sourceFolder
@@ -601,8 +707,10 @@ sogo_folder_move_copy_messages(void *folder_object,
                                     andChangeKeys: target_change_keys
                                          wantCopy: want_copy
                                          inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -635,7 +743,7 @@ sogo_folder_move_folder(void *folder_object, void *target_folder_object,
       else
         targetFolder = nil;
 
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
 
       if (new_folder_name)
@@ -643,14 +751,16 @@ sogo_folder_move_folder(void *folder_object, void *target_folder_object,
       else
         newFolderName = nil;
 
+      TRYCATCH_START
       rc = [moveFolder moveCopyToFolder: targetFolder
                             withNewName: newFolderName
                                  isMove: YES
                             isRecursive: YES
                                inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
 
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -680,19 +790,21 @@ sogo_folder_copy_folder(void *folder_object, void *target_folder_object, TALLOC_
       wrapper = target_folder_object;
       targetFolder = wrapper->instance;
 
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
 
       newFolderName = [NSString stringWithUTF8String: new_folder_name];
 
+      TRYCATCH_START
       rc = [copyFolder moveCopyToFolder: targetFolder
                             withNewName: newFolderName
                                  isMove: NO
                             isRecursive: recursive
                                inMemCtx: mem_ctx];
- 
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -718,15 +830,19 @@ sogo_folder_get_deleted_fmids(void *folder_object, TALLOC_CTX *mem_ctx,
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder getDeletedFMIDs: fmidsp
                              andCN: cnp
                   fromChangeNumber: change_num
                        inTableType: table_type
                           inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -753,16 +869,20 @@ sogo_folder_open_table(void *folder_object, TALLOC_CTX *mem_ctx,
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder getTable: &table
                 andRowCount: row_count
                   tableType: table_type
                 andHandleId: handle_id];
       if (rc == MAPISTORE_SUCCESS)
         *table_object = [table tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -788,13 +908,17 @@ sogo_folder_modify_permissions(void *folder_object, uint8_t flags,
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder modifyPermissions: permissions
                            withCount: pcount
                             andFlags: flags];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -818,12 +942,16 @@ sogo_folder_preload_message_bodies(void *folder_object, enum mapistore_table_typ
     {
       wrapper = folder_object;
       folder = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [folder preloadMessageBodiesWithMIDs: mids
                                     ofTableType: table_type];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -849,12 +977,16 @@ sogo_message_get_message_data(void *message_object,
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [message getMessageData: msg_dataP
                      inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
       rc = MAPISTORE_SUCCESS;
     }
   else
@@ -880,14 +1012,18 @@ sogo_message_create_attachment (void *message_object, TALLOC_CTX *mem_ctx, void 
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message createAttachment: &attachment inAID: aidp];
       if (rc == MAPISTORE_SUCCESS)
         *attachment_object = [attachment tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -913,14 +1049,18 @@ sogo_message_open_attachment (void *message_object, TALLOC_CTX *mem_ctx,
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message getAttachment: &attachment withAID: aid];
       if (rc == MAPISTORE_SUCCESS)
         *attachment_object = [attachment tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -945,15 +1085,19 @@ sogo_message_get_attachment_table (void *message_object, TALLOC_CTX *mem_ctx, vo
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message getAttachmentTable: &table
                            andRowCount: row_count];
       if (rc == MAPISTORE_SUCCESS)
         *table_object = [table tallocWrapper: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -980,14 +1124,18 @@ sogo_message_modify_recipients (void *message_object,
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message modifyRecipientsWithRecipients: recipients
                                           andCount: count
                                         andColumns: columns];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1011,12 +1159,16 @@ sogo_message_set_read_flag (void *message_object, uint8_t flag)
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message setReadFlag: flag];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1040,12 +1192,16 @@ sogo_message_save (void *message_object, TALLOC_CTX *mem_ctx)
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message saveMessage: mem_ctx];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1069,12 +1225,16 @@ sogo_message_submit (void *message_object, enum SubmitFlags flags)
     {
       wrapper = message_object;
       message = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [message submitWithFlags: flags];
       // [context tearDownRequest];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1103,16 +1263,20 @@ sogo_message_attachment_open_embedded_message (void *attachment_object,
     {
       wrapper = attachment_object;
       attachment = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [attachment openEmbeddedMessage: &message
                                    withMID: midP
                           withMAPIStoreMsg: msg
                                   inMemCtx: mem_ctx];
       if (rc == MAPISTORE_SUCCESS)
         *message_object = [message tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1140,15 +1304,19 @@ sogo_message_attachment_create_embedded_message (void *attachment_object,
     {
       wrapper = attachment_object;
       attachment = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
-      rc = [attachment createEmbeddedMessage: &message
-                            withMAPIStoreMsg: msg
-                                    inMemCtx: mem_ctx];
-      if (rc == MAPISTORE_SUCCESS)
-        *message_object = [message tallocWrapper: mem_ctx];
+
+      TRYCATCH_START
+          rc = [attachment createEmbeddedMessage: &message
+                                withMAPIStoreMsg: msg
+                                        inMemCtx: mem_ctx];
+          if (rc == MAPISTORE_SUCCESS)
+            *message_object = [message tallocWrapper: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1172,11 +1340,15 @@ static enum mapistore_error sogo_table_get_available_properties(void *table_obje
     {
       wrapper = table_object;
       table = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table getAvailableProperties: propertiesP inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1200,12 +1372,16 @@ sogo_table_set_columns (void *table_object, uint16_t count, enum MAPITAGS *prope
     {
       wrapper = table_object;
       table = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table setColumns: properties
                    withCount: count];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1229,14 +1405,18 @@ sogo_table_set_restrictions (void *table_object, struct mapi_SRestriction *restr
     {
       wrapper = table_object;
       table = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [table setRestrictions: restrictions];
       //[table cleanupCaches];
       rc = MAPISTORE_SUCCESS;
       *table_status = TBLSTAT_COMPLETE;
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1260,14 +1440,18 @@ sogo_table_set_sort_order (void *table_object, struct SSortOrderSet *sort_order,
     {
       wrapper = table_object;
       table = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [table setSortOrder: sort_order];
       [table cleanupCaches];
       rc = MAPISTORE_SUCCESS;
       *table_status = TBLSTAT_COMPLETE;
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1293,12 +1477,16 @@ sogo_table_get_row (void *table_object, TALLOC_CTX *mem_ctx,
     {
       wrapper = table_object;
       table = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table getRow: data withRowID: row_id andQueryType: query_type
                 inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1324,12 +1512,16 @@ sogo_table_get_row_count (void *table_object,
     {
       wrapper = table_object;
       table = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [table getRowCount: row_countp
                 withQueryType: query_type];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1353,11 +1545,15 @@ sogo_table_handle_destructor (void *table_object, uint32_t handle_id)
     {
       wrapper = table_object;
       table = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       [table destroyHandle: handle_id];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
       rc = MAPISTORE_SUCCESS;
     }
   else
@@ -1383,11 +1579,15 @@ static enum mapistore_error sogo_properties_get_available_properties(void *objec
     {
       wrapper = object;
       propObject = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [propObject getAvailableProperties: propertiesP inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1414,13 +1614,17 @@ sogo_properties_get_properties (void *object,
     {
       wrapper = object;
       propObject = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [propObject getProperties: data withTags: properties
                             andCount: count
                             inMemCtx: mem_ctx];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1444,11 +1648,15 @@ sogo_properties_set_properties (void *object, struct SRow *aRow)
     {
       wrapper = object;
       propObject = wrapper->instance;
-      GSRegisterCurrentThread ();
+      NS_CURRENT_THREAD_REGISTER();
       pool = [NSAutoreleasePool new];
+
+      TRYCATCH_START
       rc = [propObject addPropertiesFromRow: aRow];
+      TRYCATCH_END(pool)
+
       [pool release];
-      GSUnregisterCurrentThread ();
+      NS_CURRENT_THREAD_TRY_UNREGISTER();
     }
   else
     {
@@ -1475,9 +1683,10 @@ sogo_manager_generate_uri (TALLOC_CTX *mem_ctx,
 
   /* This fixes a crash occurring during the instantiation of the
      NSAutoreleasePool below. */
-  GSRegisterCurrentThread ();
+  NS_CURRENT_THREAD_REGISTER();
   pool = [NSAutoreleasePool new];
 
+  TRYCATCH_START
   // printf("rootURI = %s\n", rootURI);
   if (rootURI)
     partialURLString = [NSString stringWithUTF8String: rootURI];
@@ -1497,9 +1706,10 @@ sogo_manager_generate_uri (TALLOC_CTX *mem_ctx,
 
   // printf("uri = %s\n", [partialURLString UTF8String]);
   *uri = talloc_strdup (mem_ctx, [partialURLString UTF8String]);
+  TRYCATCH_END(pool)
 
   [pool release];
-  GSUnregisterCurrentThread ();
+  NS_CURRENT_THREAD_TRY_UNREGISTER();
 
   return MAPISTORE_SUCCESS;
 }
