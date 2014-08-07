@@ -640,14 +640,18 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
       changeNumber = nil;
       for (count = 0; count < max; count++)
         {
-          uid = [fetchResults objectAtIndex: count];
+          uid = [[fetchResults objectAtIndex: count] stringValue];
           if ([messages objectForKey: uid])
             {
               newChangeNum = [[changeNumbers objectAtIndex: count]
                                unsignedLongLongValue];
               changeNumber = [NSString stringWithUnsignedLongLong: newChangeNum];
               [messages removeObjectForKey: uid];
-              [self logWithFormat: @"removed message entry for uid %@", uid];
+              [self logWithFormat: @"Removed message entry for UID %@", uid];
+            }
+          else
+            {
+              [self logWithFormat:@"Message entry not found for UID %@", uid];
             }
         }
       if (changeNumber)
@@ -689,7 +693,11 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   if (dotRange.location != NSNotFound)
     messageUid = [messageKey substringToIndex: dotRange.location];
   else
-    messageUid = nil;
+    {
+      messageUid = nil;
+      [self errorWithFormat:@"%s: Unexpected messageKey value [%@]",
+            __PRETTY_FUNCTION__, messageKey];
+    }
 
   return messageUid;
 }
