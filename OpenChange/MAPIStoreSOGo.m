@@ -453,7 +453,7 @@ sogo_folder_open_folder(TALLOC_CTX *mem_ctx, void *folder_object, uint64_t fid, 
    \return MAPISTORE_SUCCESS on success, otherwise MAPISTORE_ERROR
 */
 static enum mapistore_error
-sogo_folder_create_folder(void *folder_object, TALLOC_CTX *mem_ctx,
+sogo_folder_create_folder(TALLOC_CTX *mem_ctx, void *folder_object
                           uint64_t fid, struct SRow *aRow,
                           void **childfolder_object)
 {
@@ -856,7 +856,7 @@ sogo_folder_get_deleted_fmids(void *folder_object, TALLOC_CTX *mem_ctx,
 }
 
 static enum mapistore_error
-sogo_folder_open_table(void *folder_object, TALLOC_CTX *mem_ctx,
+sogo_folder_open_table(TALLOC_CTX *mem_ctx, void *folder_object,
                        enum mapistore_table_type table_type, uint32_t handle_id,
                        void **table_object, uint32_t *row_count)
 {
