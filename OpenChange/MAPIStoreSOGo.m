@@ -453,7 +453,7 @@ sogo_folder_open_folder(TALLOC_CTX *mem_ctx, void *folder_object, uint64_t fid, 
    \return MAPISTORE_SUCCESS on success, otherwise MAPISTORE_ERROR
 */
 static enum mapistore_error
-sogo_folder_create_folder(TALLOC_CTX *mem_ctx, void *folder_object
+sogo_folder_create_folder(TALLOC_CTX *mem_ctx, void *folder_object,
                           uint64_t fid, struct SRow *aRow,
                           void **childfolder_object)
 {
