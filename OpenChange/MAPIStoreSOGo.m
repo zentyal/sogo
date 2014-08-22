@@ -562,9 +562,9 @@ sogo_folder_get_child_count(void *folder_object, enum mapistore_table_type table
 }
 
 static enum mapistore_error
-sogo_folder_open_message(void *folder_object,
-                         TALLOC_CTX *mem_ctx,
-                         uint64_t mid, bool write_access,
+sogo_folder_open_message(TALLOC_CTX *mem_ctx,
+                         void *folder_object,
+			 uint64_t mid, bool write_access,
                          void **message_object)
 {
   struct MAPIStoreTallocWrapper *wrapper;
@@ -965,8 +965,8 @@ sogo_folder_preload_message_bodies(void *folder_object, enum mapistore_table_typ
 }
 
 static enum mapistore_error
-sogo_message_get_message_data(void *message_object,
-                              TALLOC_CTX *mem_ctx,
+sogo_message_get_message_data(TALLOC_CTX *mem_ctx,
+			      void *message_object,
                               struct mapistore_message **msg_dataP)
 {
   struct MAPIStoreTallocWrapper *wrapper;
