@@ -1465,7 +1465,7 @@ sogo_table_set_sort_order (void *table_object, struct SSortOrderSet *sort_order,
 }
 
 static enum mapistore_error
-sogo_table_get_row (void *table_object, TALLOC_CTX *mem_ctx,
+sogo_table_get_row (TALLOC_CTX *mem_ctx, void *table_object,
                     enum mapistore_query_type query_type, uint32_t row_id,
                     struct mapistore_property_data **data)
 {
