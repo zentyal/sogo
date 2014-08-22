@@ -1601,8 +1601,7 @@ static enum mapistore_error sogo_properties_get_available_properties(void *objec
 }
 
 static enum mapistore_error
-sogo_properties_get_properties (void *object,
-                                TALLOC_CTX *mem_ctx,
+sogo_properties_get_properties (TALLOC_CTX *mem_ctx, void *object,
                                 uint16_t count, enum MAPITAGS *properties,
                                 struct mapistore_property_data *data)
 {
