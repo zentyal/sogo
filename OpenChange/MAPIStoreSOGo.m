@@ -603,8 +603,8 @@ sogo_folder_open_message(TALLOC_CTX *mem_ctx,
 }
 
 static enum mapistore_error
-sogo_folder_create_message(void *folder_object,
-                           TALLOC_CTX *mem_ctx,
+sogo_folder_create_message(TALLOC_CTX *mem_ctx,
+			   void *folder_object,
                            uint64_t mid,
                            uint8_t associated,
                            void **message_object)
