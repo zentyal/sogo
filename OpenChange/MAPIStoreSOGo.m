@@ -1182,7 +1182,7 @@ sogo_message_set_read_flag (void *message_object, uint8_t flag)
 }
 
 static enum mapistore_error
-sogo_message_save (void *message_object, TALLOC_CTX *mem_ctx)
+sogo_message_save (TALLOC_CTX *mem_ctx, void *message_object)
 {
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
