@@ -2,7 +2,6 @@
  *
  * Copyright (C) 2006-2014 Inverse inc.
  *
- *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
@@ -22,6 +21,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSArray.h>
 
+#import <SOGo/SOGoUserSettings.h>
+#import <SOGo/SOGoUser.h>
+
 #import <UIxCalViewPrint.h>
 
 static NSArray *layoutItems = nil;
@@ -32,29 +34,26 @@ static NSArray *layoutItems = nil;
 {
   if (!layoutItems)
   {
-    layoutItems = [NSArray arrayWithObjects: @"LIST", @"Daily", @"Weekly", nil];
+    layoutItems = [NSArray arrayWithObjects: @"LIST", @"Daily", @"Multi-Columns", @"Weekly", nil];
     [layoutItems retain];
   }
-
 }
+
 - (id) init
 {
   item = nil;
-  return [super init];
+  
+  return self;
 }
 
 - (void) dealloc
 {
   [item release];
-  [super dealloc];
 }
-
-/****************************************************************/
-/* Interfacing; populating the popup list for the print layouts */
 
 - (void) setItem: (NSString *) newItem
 {
-  ASSIGN (item, newItem);
+  ASSIGN(item, newItem);
 }
 
 - (NSString *) item
@@ -72,11 +71,30 @@ static NSArray *layoutItems = nil;
   return [self labelForKey: [NSString stringWithFormat: item]];
 }
 
-- (NSString *) layoutSelectedByUser
+//
+// The objective here is to return the parent view layout and select the print
+// layout corresponding. Default print view: list view
+// 
+- (NSString *) parentPrintLayout
 {
-  return nil;
+  SOGoUser *activeUser;
+  NSString *parentView;
+  
+  activeUser = [context activeUser];
+  us = [activeUser userSettings];
+  parentView = [[us objectForKey:@"Calendar"] objectForKey:@"View" ];
+  
+  if ([parentView isEqualToString:@"dayview"])
+    return @"Daily";
+  
+  else if ([parentView isEqualToString:@"weekview"])
+    return @"Weekly";
+  
+  else if ([parentView isEqualToString:@"multicolumndayview"])
+    return @"Multi-Columns";
+  
+  else
+    return @"LIST";
 }
-/******************************************************************/
-/*  */
 
 @end
