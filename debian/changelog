@@ -1,3 +1,34 @@
+sogo (2.2.6-zentyal1) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [601740] Error message only when initialization hadn't been done
+  * [96b3f9] increase log level of debug message
+  * [48a4e3] openchange: return proper url for folders with non-ascii chars
+  * [287b31] oc-rtf: Don't crash when we don't know the specified font
+  * [b6283a] oc-rtf: check valid font name when generating <font> tag
+  * [0750f6] oc: cached usercontext updates indexing_context
+  * [7581c0] oc-rtf: control words can also have a space before next tag
+
+  [ Kamen Mazdrashki ]
+  * [e75afe] Scripts/openchange_user_cleanup: Don't hardcode samba private dir, use samba LoadParm()
+  * [44f9ad] oc/util: Tune dbmsgreader for new caching classes names
+  * [8fa0b6] oc: Set log level to 0 in samba-get-config script - it is very chatty during builds
+  * [e54151] oc: Make sure we always use NSString keys in 'messages' dictionary
+  * [220cd9] oc/MailFolder: Add more logging so we can trace invalid message kyes
+
+  [ Miguel Julián ]
+  * [89dd35] Compose new mail windows is now larger
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [ad29a9] Fix mysql cleanup log message
+
+  [ Julien Kerihuel ]
+  * [7a2649] Prevent SOGo backend from crashing when mapistore_set_connection_info is not called beforehand and connInfo is not initialized.
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 27 Aug 2014 17:17:13 +0200
+
 sogo (2.2.5-zentyal1~20140724-1) trusty; urgency=medium
 
   * New upstream release
