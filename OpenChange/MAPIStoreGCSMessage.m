@@ -137,12 +137,21 @@
       changeKey = [parentFolder changeKeyForMessageWithKey: nameInContainer];
       if (!changeKey)
         {
+          [self warnWithFormat: @"attempting to get ChangeKey of %@ by "
+                                @"synchronising folder...", nameInContainer];
           [parentFolder synchroniseCache];
           changeKey = [parentFolder changeKeyForMessageWithKey: nameInContainer];
         }
+
       if (!changeKey)
-        abort ();
-      *data = [changeKey asBinaryInMemCtx: memCtx];
+        {
+          [self errorWithFormat: @"ERROR not found ChangeKey of %@", nameInContainer];
+          rc = MAPISTORE_ERR_NOT_FOUND;
+        }
+      else
+        {
+          *data = [changeKey asBinaryInMemCtx: memCtx];
+        }
     }
 
   return rc;

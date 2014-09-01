@@ -312,20 +312,22 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
       changeKey = [parentFolder changeKeyForMessageWithKey: nameInContainer];
       if (!changeKey)
         {
-          [self warnWithFormat: @"attempting to get change key"
-                @" by synchronising folder..."];
+          [self warnWithFormat: @"attempting to get ChangeKey of %@ by "
+                                @"synchronising folder...", nameInContainer];
           [(MAPIStoreMailFolder *) container synchroniseCache];
           [parentFolder synchroniseCache];
           changeKey = [parentFolder changeKeyForMessageWithKey: nameInContainer];
-          if (changeKey)
-            [self logWithFormat: @"got one"];
-          else
-            {
-              [self errorWithFormat: @"still nothing. We crash!"];
-              abort ();
-            }
         }
-      *data = [changeKey asBinaryInMemCtx: memCtx];
+
+      if (!changeKey)
+        {
+          [self errorWithFormat: @"ERROR not found ChangeKey of %@", nameInContainer];
+          rc = MAPISTORE_ERR_NOT_FOUND;
+        }
+      else
+        {
+          *data = [changeKey asBinaryInMemCtx: memCtx];
+        }
     }
 
   return rc;
