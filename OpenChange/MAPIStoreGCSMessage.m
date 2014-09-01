@@ -197,29 +197,28 @@
 - (uint64_t) objectVersion
 {
   uint64_t version = ULLONG_MAX;
-  NSString *changeNumber;
- 
+  NSString *changeNumber, *nameInContainer;
+
   if (!isNew)
     {
-      changeNumber = [(MAPIStoreGCSFolder *) container
-                        changeNumberForMessageWithKey: [self nameInContainer]];
+      nameInContainer = [self nameInContainer];
+      changeNumber = [(MAPIStoreGCSFolder *) container changeNumberForMessageWithKey: nameInContainer];
       if (!changeNumber)
         {
-          [self warnWithFormat: @"attempting to get change number"
-                @" by synchronising folder..."];
+          [self warnWithFormat: @"attempting to get ChangeNumber of %@ by "
+                                @"synchronising folder...", nameInContainer];
           [(MAPIStoreGCSFolder *) container synchroniseCache];
-          changeNumber = [(MAPIStoreGCSFolder *) container
-                            changeNumberForMessageWithKey: [self nameInContainer]];
-          
-          if (changeNumber)
-            [self logWithFormat: @"got one"];
-          else
-            {
-              [self errorWithFormat: @"still nothing. We crash!"];
-              abort();
-            }
+          changeNumber = [(MAPIStoreGCSFolder *) container changeNumberForMessageWithKey: nameInContainer];
         }
-      version = [changeNumber unsignedLongLongValue] >> 16;
+
+      if (!changeNumber)
+        {
+          [self errorWithFormat: @"ERROR not found ChangeNumber of %@", nameInContainer];
+        }
+      else
+        {
+          version = [changeNumber unsignedLongLongValue] >> 16;
+        }
     }
 
   return version;

@@ -373,33 +373,30 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 - (uint64_t) objectVersion
 {
   uint64_t version = ULLONG_MAX;
-  NSString *uid, *changeNumber;
+  NSString *uid, *changeNumber, *nameInContainer;
 
-  uid = [(MAPIStoreMailFolder *)
-          container messageUIDFromMessageKey: [self nameInContainer]];
+  nameInContainer = [self nameInContainer];
+  uid = [(MAPIStoreMailFolder *) container messageUIDFromMessageKey: nameInContainer];
   if (uid)
     {
-      changeNumber = [(MAPIStoreMailFolder *) container
-                         changeNumberForMessageUID: uid];
+      changeNumber = [(MAPIStoreMailFolder *) container changeNumberForMessageUID: uid];
       if (!changeNumber)
         {
-          [self warnWithFormat: @"attempting to get change number"
-                @" by synchronising folder..."];
+          [self warnWithFormat: @"attempting to get ChangeNumber of %@"
+                                @"by synchronising folder...", nameInContainer];
           [(MAPIStoreMailFolder *) container synchroniseCache];
-          changeNumber = [(MAPIStoreMailFolder *) container
-                             changeNumberForMessageUID: uid];
-          if (changeNumber)
-            [self logWithFormat: @"got one"];
-          else
-            {
-              [self errorWithFormat: @"still nothing. We crash!"];
-              abort();
-            }
+          changeNumber = [(MAPIStoreMailFolder *) container changeNumberForMessageUID: uid];
         }
-      version = [changeNumber unsignedLongLongValue] >> 16;
+
+      if (!changeNumber)
+        {
+          [self errorWithFormat: @"ERROR not found ChangeNumber of %@", nameInContainer];
+        }
+      else
+        {
+          version = [changeNumber unsignedLongLongValue] >> 16;
+        }
     }
-  else
-    abort();
 
   return version;
 }
