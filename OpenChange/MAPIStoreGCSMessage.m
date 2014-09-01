@@ -163,23 +163,32 @@
   int rc = MAPISTORE_SUCCESS;
   NSData *changeList;
   MAPIStoreGCSFolder *parentFolder;
+  NSString *nameInContainer;
 
   if (isNew)
     rc = MAPISTORE_ERR_NOT_FOUND;
   else
     {
+      nameInContainer = [self nameInContainer];
       parentFolder = (MAPIStoreGCSFolder *)[self container];
-      changeList = [parentFolder
-                     predecessorChangeListForMessageWithKey: [self nameInContainer]];
+      changeList = [parentFolder predecessorChangeListForMessageWithKey: nameInContainer];
       if (!changeList)
         {
+          [self warnWithFormat: @"attempting to get PredecessorChangeList of %@ by "
+                                @"synchronising folder...", nameInContainer];
           [parentFolder synchroniseCache];
-          changeList = [parentFolder
-                         predecessorChangeListForMessageWithKey: [self nameInContainer]];
+          changeList = [parentFolder predecessorChangeListForMessageWithKey: nameInContainer];
         }
+
       if (!changeList)
-        abort ();
-      *data = [changeList asBinaryInMemCtx: memCtx];
+        {
+          [self errorWithFormat: @"ERROR not found PredecessorChangeList of %@", nameInContainer];
+          rc = MAPISTORE_ERR_NOT_FOUND;
+        }
+      else
+        {
+          *data = [changeList asBinaryInMemCtx: memCtx];
+        }
     }
 
   return rc;

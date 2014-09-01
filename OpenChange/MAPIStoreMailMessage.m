@@ -338,29 +338,33 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 {
   int rc = MAPISTORE_SUCCESS;
   NSData *changeList;
+  NSString *nameInContainer;
 
   if (isNew)
     rc = MAPISTORE_ERR_NOT_FOUND;
   else
     {
+      nameInContainer = [self nameInContainer];
       changeList = [(MAPIStoreMailFolder *)[self container]
-                   predecessorChangeListForMessageWithKey: [self nameInContainer]];
+                   predecessorChangeListForMessageWithKey: nameInContainer];
       if (!changeList)
         {
-          [self warnWithFormat: @"attempting to get predecessor change list"
-                @" by synchronising folder..."];
+          [self warnWithFormat: @"attempting to get PredecessorChangeList of %@ "
+                                @"by synchronising folder...", nameInContainer];
           [(MAPIStoreMailFolder *) container synchroniseCache];
           changeList = [(MAPIStoreMailFolder *)[self container]
-                       predecessorChangeListForMessageWithKey: [self nameInContainer]];
-          if (changeList)
-            [self logWithFormat: @"got one"];
-          else
-            {
-              [self errorWithFormat: @"still nothing. We crash!"];
-              abort ();
-            }
+                       predecessorChangeListForMessageWithKey: nameInContainer];
         }
-      *data = [changeList asBinaryInMemCtx: memCtx];
+
+      if (!changeList)
+        {
+          [self errorWithFormat: @"ERROR not found PredecessorChangeList of %@", nameInContainer];
+          rc = MAPISTORE_ERR_NOT_FOUND;
+        }
+      else
+        {
+          *data = [changeList asBinaryInMemCtx: memCtx];
+        }
     }
 
   return rc;
