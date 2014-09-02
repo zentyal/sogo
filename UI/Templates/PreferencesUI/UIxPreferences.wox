@@ -588,12 +588,10 @@
                 var:checked="enableVacation" />
                 <var:string label:value="Enable vacation auto reply"/></label>
               <div id="vacation">
-                <div>
                   <label><var:string label:value="Auto reply message :"/></label>
                   <textarea const:name="autoReplyText"
                   const:id="autoReplyText"
                   var:value="autoReplyText"/>
-                </label><br/>
                 
                 <label><var:string label:value="Email addresses (separated by commas) :"/><br/>
                   <input type="hidden"
@@ -633,7 +631,6 @@
                 
               </div>
 
-              </fieldset>
             </div>
             </var:if
           ><var:if condition="isForwardEnabled">

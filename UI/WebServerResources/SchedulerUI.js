@@ -3298,7 +3298,7 @@ function onCalendarSelectionChange(event) {
     var target = Event.element(event);
     if (target.tagName == 'DIV' || target.tagName == 'SPAN') {
         target = target.parentNode;
-
+    }
     onRowClick(event, target);
 }
 

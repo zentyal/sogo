@@ -2533,6 +2533,7 @@ function _onMenuLabelFlagX(flag) {
                            { mailbox: Mailer.currentMailbox, msg: id,
                              label: operation + flag } );
     });
+}
 
 function onMenuLabelFlag1() {
     _onMenuLabelFlagX(1);
