@@ -114,14 +114,12 @@ MAPIStoreMappingKeyFromId (uint64_t idNbr)
     {
       ASSIGN (username, newUsername);
       indexing = newIndexing;
+      /* Workaround so all indexing context are valid and won't be freed. */
+      // TODO refactor indexing interface
+      talloc_reference(memCtx, indexing);
     }
 
   return self;
-}
-
-- (void) updateIndexing: (struct indexing_context *) newIndexing
-{
-    indexing = newIndexing;
 }
 
 - (void) dealloc
