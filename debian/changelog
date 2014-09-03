@@ -1,3 +1,13 @@
+sogo (2.2.6-zentyal2) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [849419] Revert "oc: cached usercontext updates indexing_context"
+  * [ca548e] oc: add talloc reference to indexing context
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 03 Sep 2014 14:20:07 +0200
+
 sogo (2.2.6-zentyal1) trusty; urgency=medium
 
   [ Jesús García Sáez ]
