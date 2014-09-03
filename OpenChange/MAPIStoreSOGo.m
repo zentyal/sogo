@@ -1037,7 +1037,7 @@ sogo_message_create_attachment (void *message_object, TALLOC_CTX *mem_ctx, void 
 }
 
 static enum mapistore_error
-sogo_message_open_attachment (void *message_object, TALLOC_CTX *mem_ctx,
+sogo_message_open_attachment (TALLOC_CTX *mem_ctx, void *message_object,
                               uint32_t aid, void **attachment_object)
 {
   struct MAPIStoreTallocWrapper *wrapper;
