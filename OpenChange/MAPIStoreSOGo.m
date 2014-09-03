@@ -1074,7 +1074,7 @@ sogo_message_open_attachment (void *message_object, TALLOC_CTX *mem_ctx,
 }
 
 static enum mapistore_error
-sogo_message_get_attachment_table (void *message_object, TALLOC_CTX *mem_ctx, void **table_object, uint32_t *row_count)
+sogo_message_get_attachment_table (TALLOC_CTX *mem_ctx, void *message_object, void **table_object, uint32_t *row_count)
 {
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
