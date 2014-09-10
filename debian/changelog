@@ -1,3 +1,128 @@
+sogo (2.2.7-zentyal1) trusty; urgency=medium
+
+  [ Wolfgang Sourdeau ]
+  * [ce4084] getNewChangeNumbers: new wrapper for openchangedb_get_new_changeNumbers
+
+  [ Jean Raby ]
+  * [f049e2] Added ldap attribute mapping table
+
+  [ Ludovic Marcotte ]
+  * [045b27] Properly escape the foldername to avoid XSS issues
+  * [e26e3d] Revert "Properly escape the foldername to avoid XSS issues"
+  * [333b56] Applied patch from bug #2736
+  * [e04834] Include, in our private NS, all ACLs defined on a calendar collectiob
+  * [9fa0b4] Ignore SCHEDULE-AGENT for Thunderbird/Lightning
+  * [3523dc] Fix for bug #2825
+  * [22f5ed] Fixed tests regarding default permissions on CalDAV collections
+  * [5419f4] Fix for bug #2734
+  * [b6be4e] Applied patch from bug #2810
+  * [6da03b] Cleaned up code for older gcc
+  * [ff015a] Fixed indent
+  * [899a1e] Updated NEWS file
+  * [55422b] Fixed typo
+  * [9c3c2c] Updated the doc for the release
+  * [5dd208] Updated for the release
+  * [6e13f1] Update ChangeLog
+  * [4843c6] Renamed Multi-Column to Multicolumn and refactored some code
+  * [8a1724] Cleaned up code and fixed the translation of the weekdays in the datepicker
+  * [dbdb7d] Fix sending of METHOD:REPLY for DAV clients
+  * [1cc93c] Updated NEWS file for changes occurred right after v2.2.6 was released
+  * [08cd08] Fixed charset substitution in meta tags
+  * [8dd967] Updated NEWS file for two merged pull requests
+  * [006727] Properly destroy cache objects of vanished folders
+  * [f6ef94] improved handling of SOGoSubscriptionFolderFormat
+  * [4c21a0] JSON interface to folder subscriptions
+  * [4eefa4] Fixed test since we now return a 200 instead of a 204
+  * [1df7e9] Removed worthless declaration
+  * [94f324] Improved error message when you cannot invite users
+
+  [ Alexandre Cloutier ]
+  * [43ac57] display the number of active tasks in calendar view
+  * [de2ee2] Change the NSString with NSNumber and add some JavaScript
+  * [0e182f] Update SOGoAppointmentFolder.m
+  * [eb3cc8] The multiColumns view
+  * [5b3de0] Fix error from the last commit
+  * [d7d458] multiColumns print view + bugFixes
+  * [dabd8d] Fix list view printing with multiColumns view
+  * [302e40] bugFix#2823
+  * [7a69bc] applied comments
+  * [5b9c7e] text wraping and text alignment in list view
+  * [5b61df] activeTasks updates dynamically
+  * [2b119c] Applied comments
+  * [6b58e0] printView display the parentView by default
+  * [0fb713] bugfixes
+  * [8335c3] fix infinite loop bug
+  * [660f39] delete notice and put grey background for multi-columns view
+  * [8c8e47] fix spacing between events and categorie display
+  * [017a85] fix month events categories display
+  * [1cf484] fix display glitch
+  * [8ded5a] Prevent Invitations and whitelist GUI
+  * [16d024] Serialization of the whiteList
+  * [f0b8eb] server side code to integrate the whitelist
+  * [b5c036] applied comment and refactor code
+  * [ef2010] fix bug where the user could enter any names in the whitelist
+  * [05fb7a] applied comments
+  * [7c3e85] applied comments
+  * [89d116] replace ampersands with commas
+  * [17319c] reverted UIxListEditor.wox
+  * [5217be] Organized the categories and appointments invitations inside a tabContainer
+  * [eaec5a] Change exception 403 to 409 and fix indentation in the javascript
+  * [a71013] javascript indentation
+  * [ce6a31] Adjust line of code to make it easier to read
+  * [c2027f] indentation
+  * [e478b2] creating and dragNDrop between calendars in multicolumndayview
+  * [ccf181] applied comments and fix repeated events dragNdrop between calendars
+  * [6dddb5] dragNdrop from the events table to the calendars list
+  * [01af72] DnD from eventList to the calendarList
+  * [9bd7ae] DnD from calendarView to CalendarList
+  * [a5ecb2] added event7.png and adjust javascript indentation
+  * [a2a701] fix dnd repeated event bug + applied comments
+  * [8f9b24] visual helper while dragging from calendar view to calendarList
+  * [3cac79] move line
+  * [cdf4cc] fix DnD from eventList to calendarList for repeated event
+  * [b892b3] Add RegEx
+  * [28e6bb] Applied comments
+  * [a43dd9] Fix bug with DnD; leftPanelController.stopEvent()
+  * [c38963] DnD tasksList
+  * [b52289] task.png for DnD taskList
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [efa65b] Encode @ character from usernames
+
+  [ Jesús García Sáez ]
+  * [b089bf] removed encode @ on stuff different from username
+  * [30360a] avoid decode @ from url with username on it
+  * [98f56d] multitenancy: adapt openchangedb_* calls
+
+  [ Francis Lachapelle ]
+  * [45553b] Fix rename of calendars, improve tasks count badge
+  * [e343ed] Fix regression of word breaking
+  * [44d0cb] Fix refresh of list when forwarding a message
+  * [24f9d8] Fix JavaScript from merge leftover
+  * [06fe36] Add missing localizable strings
+  * [192659] Add missing localizable string
+  * [08fd2f] Fix JavaScript after bad merge
+  * [5de51e] Fix missing argument with new DnD controller
+  * [d9ca10] Improve headers of multicolumns view
+  * [ea4430] Fix all-day events display in IE
+  * [bd5c05] Indentation in JavaScript files
+  * [571322] Update fi, fr, de, and es_ES translations
+  * [ef2432] Update NEWS file
+  * [c24093] Update CKEditor to version 4.4.3
+  * [397a36] Preparation for release 2.2.7
+  * [07324e] Update ChangeLog
+
+  [ Jeroen Dekkers ]
+  * [661984] Add Mailer and Appointments to product.list requires of MailPartViewers
+
+  [ Julio García ]
+  * [adbfb8] Fixed merge errors
+  * [9ab0ab] Updating the build depends to the new openchange package
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 10 Sep 2014 09:47:08 +0200
+
 sogo (2.2.6-zentyal2) trusty; urgency=medium
 
   [ Jesús García Sáez ]
