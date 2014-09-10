@@ -1,10 +1,40 @@
-2.2.6 (2014-XX-YY)
+2.2.7 (2014-07-30)
 ------------------
+
+New features
+ - new user preference to prevent event invitations
+
+Enhancements
+ - improved badges of active tasks count
+ - refresh draft folder after sending a message
+ - now possible to DnD events in the calendar list
+ - improved handling of SOGoSubscriptionFolderFormat
+ - JSON'ified folder subscription interface
+ - updated Finnish, French, German, and Spanish (Spain) translations
+ - updated CKEditor to version 4.4.3
+
+Bug fixes
+ - fixed weekdays translation in the datepicker
+ - fixed event categories display
+ - fixed all-day events display in IE
+ - fixed rename of calendars
+ - we now correctly add the "METHOD:REPLY" when sending out ITIP messages from DAV clients
+ - fixed refresh of message headers when forwarding a message (#2818)
+ - we now correctly escape all charset= in <meta> tags, not only in the <head>
+ - we now destroy cache objects of vanished folders
+
+2.2.6 (2014-07-02)
+------------------
+
+New features
+ - add new 'multi-columns' calendar view (#1948)
 
 Enhancements
  - contacts photos are now synchronized using ActiveSync (#2807)
  - implemented the GetAttachment ActiveSync command (#2808)
  - implemented the Ping ActiveSync command
+ - added "soft deletes" support for ActiveSync (#2734)
+ - now display the active tasks count next to calendar names (#2760)
 
 Bug fixes
  - better handling of empty "Flag" messages over ActiveSync (#2806)
@@ -14,6 +44,9 @@ Bug fixes
  - fixed regression when attaching files to a reply
  - wait 20 seconds (instead of 2) before deleting temporary download forms (#2811)
  - avoid raising exceptions when the db is down and we try to access the preferences module (#2813)
+ - we now ignore the SCHEDULE-AGENT property when Thunderbird/Lightning sends it to avoid
+   not-generating invitation responses for externally received IMIP messages
+ - improved charset handling over ActiveSync (#2810)
 
 2.2.5 (2014-06-05)
 ------------------
