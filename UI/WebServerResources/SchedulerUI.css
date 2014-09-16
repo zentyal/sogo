@@ -18,6 +18,7 @@ DIV#leftPanel
 }
 .searchBox {
     left: 250px;
+    width: 240px;
     position: absolute;
     top: 0;
     background: white;
