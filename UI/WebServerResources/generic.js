@@ -1756,7 +1756,7 @@ function onPreferencesClick(event) {
     }
     else {
         var w = window.open(urlstr, "SOGoPreferences",
-                            "width=615,height=520,resizable=1,scrollbars=0,location=0");
+                            "width=615,height=660,resizable=1,scrollbars=0,location=0");
         w.opener = window;
         w.focus();
     }

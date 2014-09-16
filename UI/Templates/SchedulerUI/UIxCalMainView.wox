@@ -214,7 +214,7 @@
                 const:name="tasksFilterpopup"
                 const:onchange="return onTasksListFilterChange();" />
             </span>
-            <span>
+            <span style="left:500px; position:absolute; top:5px">
               <input id="showHideCompletedTasks" type="checkbox" class="checkBox" var:checked="showCompletedTasks"/>
               <var:string label:value="Show completed tasks" />
             </span>

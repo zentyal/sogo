@@ -82,7 +82,7 @@ DIV.listWrapper
 
 DIV#calendarOptionsTabs 
 { position: absolute;
-  top: 225px;
+  top: 320px;
   left: 0px;
   right: 0px;
   bottom: 0px;
@@ -117,7 +117,7 @@ SPAN.timeDateControl INPUT.textField
 /* mail options */
 DIV#mailOptionsTabs
 { position: absolute;
-  top: 225px;
+  top: 320px;
   left: 0px;
   right: 0px;
   bottom: 0px; }
