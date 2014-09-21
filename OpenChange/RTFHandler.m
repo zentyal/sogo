@@ -803,9 +803,13 @@ const unsigned short ansicpg874[256] = {
             {
               // ignore
             }
-         else if ([s hasPrefix: @"fromtext"])
+          else if ([s hasPrefix: @"fromtext"])
             {
               // ignore
+            }
+          else if ([s hasPrefix: @"ftn"])
+            {
+              // ignore the footnotes by now and ftnil control word
             }
           else if ([s hasPrefix: @"f"] && [s length] > 1)
             {
@@ -814,45 +818,48 @@ const unsigned short ansicpg874[256] = {
 
               font_index = [[s substringFromIndex: 1] intValue];
 
-              if (!formattingOptions)
-                continue;
-
-              if (formattingOptions->font_index >= 0 &&
-                  font_index != formattingOptions->font_index)
+              if (font_index > 0 || [[s substringToIndex: 1] isEqualToString: @"f0"])
                 {
-                  [_html appendBytes: "</font>"  length: 7];
-                }
+                  if (!formattingOptions)
+                    continue;
 
-              formattingOptions->font_index = font_index;
-
-              fontInfo = [fontTable fontInfoAtIndex: font_index];
-              char *v = NULL;
-              if (fontInfo && fontInfo->name)
-                {
-                  if (fontInfo->name.length < 128)
+                  if (formattingOptions->font_index >= 0 &&
+                      font_index != formattingOptions->font_index)
                     {
-                      int tag_size = 15 + fontInfo->name.length;
-                      v = calloc(tag_size, sizeof(char));
-                      snprintf(v, tag_size, "<font face=\"%s\">", [fontInfo->name UTF8String]);
+                      [_html appendBytes: "</font>"  length: 7];
+                    }
+
+                  formattingOptions->font_index = font_index;
+
+                  fontInfo = [fontTable fontInfoAtIndex: font_index];
+                  char *v = NULL;
+                  if (fontInfo && fontInfo->name)
+                    {
+                      if (fontInfo->name.length < 128)
+                        {
+                          int tag_size = 15 + fontInfo->name.length;
+                          v = calloc(tag_size, sizeof(char));
+                          snprintf(v, tag_size, "<font face=\"%s\">", [fontInfo->name UTF8String]);
+                        }
+                      else
+                        {
+                          NSLog(@"RTFHandler: Font %u has %d chars length, parse error? "
+                                "Ignored", font_index, fontInfo->name.length);
+                          v = calloc(7, sizeof(char));
+                          sprintf(v, "<font>");
+                        }
                     }
                   else
                     {
-                      NSLog(@"RTFHandler: Font %u has %d chars length, parse error? "
-                            "Ignored", font_index, fontInfo->name.length);
+                      // RTF badformed? We don't know about that font (font_index).
+                      // Anyhow, we still open the html tag because in the future
+                      // we will close it (e.g. when new font is used).
                       v = calloc(7, sizeof(char));
                       sprintf(v, "<font>");
                     }
+                  [_html appendBytes: v  length: strlen(v)];
+                  free(v);
                 }
-              else
-                {
-                  // RTF badformed? We don't know about that font (font_index).
-                  // Anyhow, we still open the html tag because in the future
-                  // we will close it (e.g. when new font is used).
-                  v = calloc(7, sizeof(char));
-                  sprintf(v, "<font>");
-                }
-              [_html appendBytes: v  length: strlen(v)];
-              free(v);
             }
           else if ([s isEqualToString: @"i"] && formattingOptions)
             {
