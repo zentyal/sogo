@@ -632,6 +632,43 @@ const unsigned short ansicpg874[256] = {
   [self parseStyleSheet];
 }
 
+
+- (void) closeTagWith: (RTFFormattingOptions *) formattingOptions
+{
+
+  // Handle {\b bold} vs. \b bold \b0
+  if (formattingOptions->bold)
+    {
+      [_html appendBytes: "</b>"  length: 4];
+    }
+
+  if (formattingOptions->italic)
+    {
+      [_html appendBytes: "</i>"  length: 4];
+    }
+
+  if (formattingOptions->strikethrough)
+    {
+      [_html appendBytes: "</strike>"  length: 9];
+    }
+
+  if (formattingOptions->underline)
+    {
+      [_html appendBytes: "</u>"  length: 4];
+    }
+
+  if (formattingOptions->font_index >= 0)
+    {
+      [_html appendBytes: "</font>"  length: 7];
+    }
+
+  if (formattingOptions->color_index >= 0)
+    {
+      [_html appendBytes: "</font>"  length: 7];
+    }
+}
+
+
 //
 //
 //
@@ -938,36 +975,7 @@ const unsigned short ansicpg874[256] = {
 
           if (formattingOptions)
             {
-              // Handle {\b bold} vs. \b bold \b0
-              if (formattingOptions->bold)
-                {
-                  [_html appendBytes: "</b>"  length: 4];
-                }
-              
-              if (formattingOptions->italic)
-                {
-                  [_html appendBytes: "</i>"  length: 4];
-                }
-              
-              if (formattingOptions->strikethrough)
-                {
-                  [_html appendBytes: "</strike>"  length: 9];
-                }
-              
-              if (formattingOptions->underline)
-                {
-                  [_html appendBytes: "</u>"  length: 4];
-                }
-              
-              if (formattingOptions->font_index >= 0)
-                {
-                  [_html appendBytes: "</font>"  length: 7];
-                }
-              
-              if (formattingOptions->color_index >= 0)
-                {
-                  [_html appendBytes: "</font>"  length: 7];
-                }
+              [self closeTagWith: formattingOptions];
             }
           
           formattingOptions = [stack top];
@@ -980,6 +988,12 @@ const unsigned short ansicpg874[256] = {
             [_html appendBytes: _bytes  length: 1];
           ADVANCE;
         }
+    }
+
+  // Closing any leaving bracket
+  while ((formattingOptions = [stack pop]))
+    {
+      [self closeTagWith: formattingOptions];
     }
   
   [_html appendBytes: "</body></html>"  length: 14];
