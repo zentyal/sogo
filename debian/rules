@@ -17,10 +17,10 @@ override_dh_auto_clean:
 	rm -f SoObjects/SOGo/SOGoSAML2Exceptions.*
 
 override_dh_auto_build:
-	dh_auto_build -- OBJCFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" messages=yes
+	dh_auto_build -- CFLAGS="$(CFLAGS) -O0 " OBJCFLAGS="$(CFLAGS) -O0 " CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" messages=yes
 
 override_dh_auto_configure:
-	./configure --with-ssl=gnutls --enable-saml2
+	./configure --with-ssl=gnutls --enable-saml2 --enable-debug
 
 override_dh_auto_install:
 	$(MAKE) DESTDIR=$(CURDIR)/debian/tmp GNUSTEP_INSTALLATION_DOMAIN=SYSTEM OBJCFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" messages=yes install
