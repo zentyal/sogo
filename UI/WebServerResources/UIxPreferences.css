@@ -14,6 +14,12 @@ DIV.bottomToolbar
   margin: 0px;
 }
 
+#WhiteListAdd, #WhiteListDelete
+{
+  border-bottom: 1px solid #9B9B9B;
+  border-right: 1px solid #9B9B9B;
+}
+
 #mailAccountsToolbar
 { left: 5px;
   bottom: 9px;
@@ -56,6 +62,32 @@ DIV.listWrapper
   background: #fff;
   margin-bottom: 0;}
 
+.listWrapper TABLE TD
+{ height: 22px; }
+
+#calendarCategoriesListWrapper
+{ top:1em;
+  bottom: 30px;
+  right: 2em;
+  left: 2em; }
+
+#appointmentsWhiteListWrapper
+{ top:4.5em;
+  bottom: 30px;
+  right: 2em;
+  left: 2em; }
+
+#tableViewWhiteList 
+{ width:100%; }
+
+DIV#calendarOptionsTabs 
+{ position: absolute;
+  top: 320px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
 #contactsCategoriesListWrapper
 { overflow: auto;
   padding: 0px;
@@ -85,7 +117,7 @@ SPAN.timeDateControl INPUT.textField
 /* mail options */
 DIV#mailOptionsTabs
 { position: absolute;
-  top: 225px;
+  top: 320px;
   left: 0px;
   right: 0px;
   bottom: 0px; }

@@ -471,7 +471,7 @@ TH.tbtv_navcell
   border-left: none;
   text-align: left;
   font-weight: normal;
-  height: 20px; }
+  height: 20px;}
 
 TD.sortableTableHeader:active,
 TH.sortableTableHeader:active
@@ -517,7 +517,8 @@ TH.tbtv_headercell IMG.tbtv_sortcell
   text-align: right;
   border: 0px;
   width: 12px;
-  height: 12px; }
+  height: 12px; 
+  top:0;}
 
 .tableview
 { cursor: default;
@@ -1020,6 +1021,23 @@ A.disabled.button SPAN
 
 A.disabled.button:active SPAN
 { background-position: top left;}
+
+.badge
+{ display: inline-block;
+  min-width: 10px;
+  padding: 2px 3px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: #777;
+  border-radius: 10px; }
+
+.badge:empty
+{ display: none; }
 
 dt, dd {
   line-height: 20px;

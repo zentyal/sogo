@@ -18,6 +18,7 @@ DIV#leftPanel
 }
 .searchBox {
     left: 250px;
+    width: 240px;
     position: absolute;
     top: 0;
     background: white;
@@ -87,11 +88,15 @@ UL#calendarList LI
   white-space: nowrap;
   line-height: 2em;
   font-size: 1.1em;
-  padding-left: 10px;
-  margin-top: 5px; }
+  margin-top: 5px;
+  padding-left: 10px; }
 UL#calendarList LI INPUT{
   padding: 0px
 }
+
+#calendarList .badge
+{ margin-left: 4px; }
+
 #tasksList .duelater,
 #tasksList .duetoday,
 #tasksList .overdue
@@ -454,12 +459,12 @@ DIV#daysView
   left: 0px; }
 
 DIV#daysView
-{ top: 120px;
+{ top: 97px;
   bottom: 0px;
   border-top: 1px solid #ccc;
   overflow: auto;
   overflow-x: hidden;
-  right: 0px;}
+  right: 0px; }
 
 DIV#calendarHeader
 { top: 40px;
@@ -469,6 +474,7 @@ DIV#calendarHeader
   border-top: 1px solid #ccc;
 }
 
+DIV#calendarHeader DIV.calendarLabels,
 DIV#calendarHeader DIV.dayLabels,
 DIV#calendarHeader DIV.days
 { position: absolute;
@@ -478,6 +484,15 @@ DIV#calendarHeader DIV.days
   /* 'right' is computed from JS code when daysView is first drawn */
   overflow: hidden; }
 
+DIV#calendarHeader DIV.calendarLabels
+{ top: 11px;
+  height: 20px; 
+  border-left: 1px solid #ccc;
+  text-align: center;
+  font-size:150%;
+}
+.calendarsToDisplay
+{ border-top: 2px solid #fff; }
 DIV#calendarHeader DIV.dayLabels
 { top: 0px;
   height: 25px; }
@@ -500,8 +515,10 @@ DIV#calendarHeader DIV.days
 { cursor: pointer;
   bottom: 0px;
   top: 25px;
-
-}
+  z-index:0;
+  border-bottom:1px solid #ccc;
+  background:white;
+ }
 
 DIV#calendarHeader DIV.day,
 DIV#daysView DIV.day
@@ -602,7 +619,9 @@ DIV.monthView DIV.dayHeader
   padding-left: 4px;
   padding-top: 2px;
   text-align: left;
-  -moz-user-select: none; }
+  cursor: pointer;
+  -moz-user-select: none; 
+  }
 
 DIV#monthDaysView DIV.selectedDay DIV.dayHeader
 { font-weight: bold; }
@@ -612,7 +631,8 @@ DIV.monthView DIV.days
   cursor: pointer;
   bottom: 0px;
   left: 0px;
-  right: 0px; }
+  right: 0px; 
+  }
 
 DIV.monthView DIV.day
 { position: absolute;
@@ -1355,11 +1375,11 @@ DIV.event > DIV.eventInside
 { overflow: hidden;
   padding: 0px;
   height: 100%;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-}
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  cursor:move; }
 
 DIV.eventInside SPAN.location
 { font-size: smaller; }
@@ -1501,7 +1521,8 @@ DIV.event.draggable:hover DIV.rightDragGrip
 #daysView DIV.eventDragGhost > DIV.eventInside
 { padding: 0px;
   border-left: 1px solid #555;
-  border-right: 1px solid #555; }
+  border-right: 1px solid #555;
+}
 
 #daysView DIV.eventDragGhost.startGhost > DIV.eventInside
 { border-top: 1px solid #555; }
@@ -1515,7 +1536,6 @@ DIV.event.draggable:hover DIV.rightDragGrip
   color: #fff;
   left: 0px;
   right: 0px;
-  margin-right: 1px;
   border-top: 1px solid #555;
   border-bottom: 1px solid #555; }
 
@@ -1549,7 +1569,7 @@ DIV.event.draggable:hover DIV.rightDragGrip
 #ghostEndHour
 { bottom: -14px; }
 
-DIV#nowLineDisplay
+DIV.nowLineDisplay
 { position: relative;
   width: 100%;
   height: 2px;
@@ -1576,3 +1596,60 @@ DIV#calendarView .calendarOverview > a > img{
 DIV#calendarView  .calendarOverview > a:hover{
   background-color: #eee;
 }
+DIV#calendarContent .alert-box {
+    color:#555;
+    border-radius:10px;
+    font-family:Tahoma,Geneva,Arial,sans-serif;font-size:11px;
+    padding:10px 10px 10px 36px;
+    margin:10px;
+}
+
+DIV#calendarContent .alert-box span {
+    font-weight:bold;
+    text-transform:uppercase;
+}
+
+.error {
+    background:#ffecec url('error.png') no-repeat 10px 50%;
+    border:1px solid #f5aca6;
+}
+.success {
+    background:#e9ffd9 url('success.png') no-repeat 10px 50%;
+    border:1px solid #a6ca8a;
+}
+.warning {
+    background:#fff8c4 url('warning.png') no-repeat 10px 50%;
+    border:1px solid #f2c779;
+}
+.notice {
+    background:#e3f7fc url('notice.png') no-repeat 10px 50%;
+    border:1px solid #8ed9f6;
+}
+
+DIV#DnDVisualEvents
+{ background-image: url(event7.png); }
+
+DIV#DnDVisualTasks
+{ background-image: url(task.png); }
+
+DIV#DnDVisualEvents, DIV#DnDVisualTasks
+{
+  background-repeat: no-repeat;
+  background-position: 4px 2px;
+  width: 5px;
+  height: 20px;
+  padding-left: 24px;
+  padding-top: 5px;
+}
+
+#DnDLeftPanelImage
+{
+  position:absolute;
+  z-index:1;
+  left:0;
+  top:0;
+}
+
+
+
+

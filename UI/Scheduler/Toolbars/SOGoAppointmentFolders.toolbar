@@ -11,14 +11,7 @@
       onclick = "return newEvent('task');";
       image = "new-task.png";
       tooltip = "Create a new task"; } ),
-  ( /* disabled until we fix the view */
-    /*    { link = "#";
-            label="Multicolumn Day View";
-            onclick = "return onMulticolumnDayOverview();";
-            image = "day-view-multicolumn.png";
-            tooltip = ""; }, */
-
-    { link = "#";
+  ( { link = "#";
       label="Delete";
       onclick = "return deleteEvent(this);";
       image = "tb-mail-delete-flat-24x24.png";

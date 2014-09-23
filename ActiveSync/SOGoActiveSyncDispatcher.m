@@ -64,6 +64,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #import <NGMime/NGMimeBodyPart.h>
 #import <NGMime/NGMimeFileData.h>
 #import <NGMime/NGMimeMultipartBody.h>
+#import <NGMime/NGMimeType.h>
 #import <NGMail/NGMimeMessageParser.h>
 #import <NGMail/NGMimeMessage.h>
 #import <NGMail/NGMimeMessageGenerator.h>
@@ -168,6 +169,41 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   [o reloadIfNeeded];
   
   return [o properties];
+}
+
+- (unsigned int) _softDeleteCountWithFilter: (NSCalendarDate *) theFilter
+                               collectionId: (NSString *) theCollectionId
+{
+  NSMutableDictionary *dateCache;
+  NSMutableArray *sdUids;
+  SOGoCacheGCSObject *o;
+  NSArray *allKeys;
+  NSString *key;
+
+  int i;
+
+  sdUids = [NSMutableArray array];
+  
+  if (theFilter)
+    {
+      o = [SOGoCacheGCSObject objectWithName: [NSString stringWithFormat: @"%@+folder%@", [context objectForKey: @"DeviceId"], theCollectionId] inContainer: nil];
+      [o setObjectType: ActiveSyncGlobalCacheObject];
+      [o setTableUrl: [self folderTableURL]];
+      [o reloadIfNeeded];
+
+      dateCache = [[o properties] objectForKey: @"DateCache"];
+      allKeys = [dateCache allKeys];
+
+      for (i = 0; i < [allKeys count]; i++)
+        {
+          key = [allKeys objectAtIndex: i];
+          
+          if ([[dateCache objectForKey:key] compare: theFilter ] == NSOrderedAscending)
+            [sdUids addObject: [dateCache objectForKey:key]];
+        }
+    }
+  
+  return [sdUids count];
 }
 
 - (id) globallyUniqueIDToIMAPFolderName: (NSString *) theIdToTranslate
@@ -421,13 +457,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       NSData *d;
 
       //
-      // We mark the cache object as deleted
+      // We destroy the cache object
       //
       key = [NSString stringWithFormat: @"%@+%@", [context objectForKey: @"DeviceId"], [folderToDelete nameInContainer]];
       o = [SOGoCacheGCSObject objectWithName: key  inContainer: nil];
       [o setTableUrl: [self folderTableURL]];
-      [o reloadIfNeeded];
-      [o delete];
+      [o destroy];
 
       //
       // We update the FolderSync's synckey
@@ -661,7 +696,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
           if (![imapGUIDs allKeysForObject: cKey])
             {
-              // Delete folders cache content to avoid stale data if a new folder gets created with the same name
+              // Destroy folders cache content to avoid stale data if a new folder gets created with the same name
               key =  [NSString stringWithFormat: @"%@+folder%@", [context objectForKey: @"DeviceId"], [cachedGUIDs objectForKey: cKey]];
               o = [SOGoCacheGCSObject objectWithName: key  inContainer: nil];
               [o setObjectType: ActiveSyncFolderCacheObject];
@@ -675,8 +710,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   command_count++;
                 }
               
-              [[o properties] removeAllObjects];
-              [o save];
+              [o destroy];
             }
         }
       
@@ -919,6 +953,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                                               sortOrdering: @"REVERSE ARRIVAL"
                                                   threaded: NO];
       count = [uids count];
+      
+      // Add the number of UIDs expected to "soft delete"
+      count += [self _softDeleteCountWithFilter: filter collectionId: realCollectionId];
+
     }
   else
     {
