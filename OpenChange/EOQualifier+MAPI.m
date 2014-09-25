@@ -114,14 +114,14 @@ typedef BOOL (*EOComparator) (id, SEL, id);
   EOComparator comparator;
 
   if ([key isKindOfClass: [NSNumber class]])
-    finalKey = key;
+    finalKey = [(NSNumber *)key stringValue];
   else if ([key isKindOfClass: [NSString class]])
     {
       finalKey = [key stringByTrimmingCharactersInSet: [NSCharacterSet decimalDigitCharacterSet]];
       if ([finalKey length] > 0)
         finalKey = key;
       else
-        finalKey = [NSNumber numberWithInt: [key intValue]];
+        finalKey = [[NSNumber numberWithInt: [key intValue]] stringValue];
     }
   else
     finalKey = @"";
