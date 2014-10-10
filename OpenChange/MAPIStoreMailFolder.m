@@ -1279,6 +1279,7 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
   NGImap4Client *client;
   NSArray *fetch;
   NSData *bodyContent;
+  NSMutableArray *unseenUIDs;
 
   if (tableType == MAPISTORE_MESSAGE_TABLE)
     {
@@ -1289,6 +1290,7 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
         {
           bodyPartKeys = [NSMutableSet setWithCapacity: max];
 
+          unseenUIDs = [NSMutableArray arrayWithCapacity: max];
           keyAssoc = [NSMutableDictionary dictionaryWithCapacity: max];
           for (count = 0; count < max; count++)
             {
@@ -1302,12 +1304,22 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
                       [bodyPartKeys addObject: bodyPartKey];
                       messageUid = [self messageUIDFromMessageKey: messageKey];
                       [keyAssoc setObject: bodyPartKey forKey: messageUid];
+                      /* Fetch flags to remove seen flag if required,
+                         as fetching a message body set the seen flag.
+                         We are not using body.peek[] as
+                         bodyContentPartKey explicitly avoids it.
+                      */
+                      if (![message read])
+                        {
+                          [unseenUIDs addObject: messageUid];
+                        }
                     }
                 }
             }
       
           client = [[(SOGoMailFolder *) sogoObject imap4Connection] client];
           [client select: [sogoObject absoluteImap4Name]];
+
           response = [client fetchUids: [keyAssoc allKeys]
                              parts: [bodyPartKeys allObjects]];
           fetch = [response objectForKey: @"fetch"];
@@ -1328,6 +1340,14 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
                       [bodyData setObject: bodyContent forKey: messageKey];
                     }
                 }
+            }
+
+          /* Restore unseen state once the body has been fetched */
+          if ([unseenUIDs count] > 0)
+            {
+              response = [client storeFlags: [NSArray arrayWithObjects: @"seen", nil]
+                                    forUIDs: unseenUIDs
+                                addOrRemove: NO];
             }
         }
     }
