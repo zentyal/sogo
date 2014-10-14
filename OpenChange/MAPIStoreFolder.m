@@ -682,6 +682,7 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
   //TALLOC_CTX *memCtx;
   struct SRow aRow;
   struct SPropValue property;
+  uint8_t deleteFlags;
 
   [self logWithFormat: @"-moveCopyMessageWithMID: 0x%.16llx .. withMID: 0x%.16llx .. wantCopy: %d", srcMid, targetMid, wantCopy];
 
@@ -712,7 +713,9 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
     }
   [destMsg save: memCtx];
   if (!wantCopy)
-    rc = [sourceFolder deleteMessageWithMID: srcMid andFlags: 0];
+    /* We want to keep mid for restoring/shared data to work if mids are different. */
+    deleteFlags = (srcMid == targetMid) ? MAPISTORE_PERMANENT_DELETE : MAPISTORE_SOFT_DELETE;
+    rc = [sourceFolder deleteMessageWithMID: srcMid andFlags: deleteFlags];
 
  end:
   //talloc_free (memCtx);
@@ -952,6 +955,7 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
   NSString *baseURL, *URL, *key;
   NSArray *newIDs;
   uint64_t idNbr;
+  bool softDeleted;
   
   baseURL = [self url];
 
@@ -962,8 +966,8 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
     {
       key = [keys objectAtIndex: count];
       URL = [NSString stringWithFormat: @"%@%@", baseURL, key];
-      idNbr = [mapping idFromURL: URL];
-      if (idNbr == NSNotFound)
+      idNbr = [mapping idFromURL: URL isSoftDeleted: &softDeleted];
+      if (idNbr == NSNotFound && !softDeleted)
         [missingURLs addObject: URL];
     }
 
@@ -1094,6 +1098,7 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
   MAPIStoreMapping *mapping;
   struct UI8Array_r *fmids;
   uint64_t fmid;
+  bool softDeleted;
 
   keys = [self getDeletedKeysFromChangeNumber: changeNum andCN: &cnNbr
                                   inTableType: tableType];
@@ -1120,10 +1125,10 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
         {
           url = [NSString stringWithFormat: format,
                           baseURL, [keys objectAtIndex: count]];
-          fmid = [mapping idFromURL: url];
+          fmid = [mapping idFromURL: url isSoftDeleted: &softDeleted];
           if (fmid != NSNotFound) /* if no fmid is returned, then the object
                                      "never existed" in the OpenChange
-                                     databases */
+                                     databases. Soft-deleted messages are returned back */
             {
               fmids->lpui8[fmids->cValues] = fmid;
               fmids->cValues++;
