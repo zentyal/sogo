@@ -854,7 +854,7 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
               if (isMove)
                 {
                   fmid = [mapping idFromURL: [message url]];
-                  [self deleteMessageWithMID: fmid andFlags: 0];
+                  [self deleteMessageWithMID: fmid andFlags: MAPISTORE_PERMANENT_DELETE];
                   [mapping registerURL: [targetMessage url]
                                 withID: fmid];
                 }
@@ -875,7 +875,7 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
               if (isMove)
                 {
                   fmid = [mapping idFromURL: [message url]];
-                  [self deleteMessageWithMID: fmid andFlags: 0];
+                  [self deleteMessageWithMID: fmid andFlags: MAPISTORE_PERMANENT_DELETE];
                   [mapping registerURL: [targetMessage url]
                                 withID: fmid];
                 }
