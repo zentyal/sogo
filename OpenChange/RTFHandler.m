@@ -415,10 +415,39 @@ const unsigned short ansicpg874[256] = {
 
   start = ADVANCE;
 
-  while (isalnum(*_bytes) || *_bytes == '-' || isspace(*_bytes))
+  /*
+    A control word is defined by:
+
+    \<ASCII Letter Sequence><Delimiter>
+  */
+  while (isalpha(*_bytes))
     {
       ADVANCE;
     }
+
+  /*
+    The <Delimiter> can be one of the following:
+
+     - A space. This serves only to delimit a control word and is
+       ignored in subsequent processing.
+
+     - A numeric digit or an ASCII minus sign (-), which indicates
+       that a numeric parameter is associated with the control word.
+       Only this case requires to include it in the control word.
+
+     - Any character other than a letter or a digit
+  */
+  if (*_bytes == '-' || isdigit(*_bytes))
+    {
+      ADVANCE;
+      while (isdigit(*_bytes))  // TODO: Allow up to 10 digits
+        {
+          ADVANCE;
+        }
+    }
+  /* In this case, the delimiting character terminates the control
+     word and is not part of the control word. */
+
   end = _bytes;
 
   *len = end-start-1;
@@ -545,7 +574,7 @@ const unsigned short ansicpg874[256] = {
           // Skip our control word
           if (strncmp((const char*)cw, "fonttbl", len) == 0)
             continue;
-            
+
           // We must at least parse <fontnum><fontfamily><fcharset>
           s = [[NSString alloc] initWithBytesNoCopy: (void *)cw+1
                                              length: len-1
@@ -560,12 +589,18 @@ const unsigned short ansicpg874[256] = {
               
               // We now parse <fontfamily><fcharset>
               cw = [self parseControlWord: &len];
+              if (len == 0)  // Possibly parsing a space
+                cw = [self parseControlWord: &len];
+
               fontInfo->family = [[NSString alloc] initWithBytesNoCopy: (void *)cw+1
                                                                 length: len-1
                                                               encoding: NSASCIIStringEncoding
                                                           freeWhenDone: NO];
 
               cw = [self parseControlWord: &len];
+              if (len == 0)  // Possibly parsing a space
+                cw = [self parseControlWord: &len];
+
               fontInfo->charset = [[NSString alloc] initWithBytesNoCopy: (void *)cw+1
                                                                  length: len-1
                                                                encoding: NSASCIIStringEncoding
@@ -729,16 +764,16 @@ const unsigned short ansicpg874[256] = {
             {
               // We rewind our buffer so we start at the beginning of {\fonttbl...
               _bytes = cw-2;
-              _current_pos -= 10;
+              _current_pos -= 9;  // Length: {\fonttbl
               fontTable = [self parseFontTable];
               
-              // We go back 1 byte in order to end our section properly ('}' character
+              // We go back 1 byte in order to end our section properly ('}' character)
               REWIND;
             }
           else if (strncmp(cw, "stylesheet", 10) == 0)
   	     {
                _bytes = cw-2;
-               _current_pos -= 13;
+               _current_pos -= 12;  // Length: {\stylesheet
                [self parseStyleSheet];
                REWIND;
              } 
@@ -749,7 +784,7 @@ const unsigned short ansicpg874[256] = {
            else if (strncmp(cw, "pict", 4) == 0)
              {
                _bytes = cw-2;
-               _current_pos -= 7;
+               _current_pos -= 6;  // Length: {\pict
                [self parsePicture];
                REWIND;
              }
