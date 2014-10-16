@@ -1567,9 +1567,9 @@ sogo_table_handle_destructor (void *table_object, uint32_t handle_id)
   return rc;
 }
 
-static enum mapistore_error sogo_properties_get_available_properties(void *object,
-                                                    TALLOC_CTX *mem_ctx,
-                                                    struct SPropTagArray **propertiesP)
+static enum mapistore_error sogo_properties_get_available_properties(TALLOC_CTX *mem_ctx,
+								     void *object,
+								     struct SPropTagArray **propertiesP)
 {
   struct MAPIStoreTallocWrapper *wrapper;
   NSAutoreleasePool *pool;
