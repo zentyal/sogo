@@ -160,6 +160,21 @@ MAPIStoreMappingKeyFromId (uint64_t idNbr)
     return NSNotFound;
 }
 
+- (uint64_t) idFromURL: (NSString *) url
+         isSoftDeleted: (bool *) softDeleted
+{
+  enum mapistore_error ret;
+  uint64_t idNbr;
+
+  ret = indexing->get_fmid(indexing, [username UTF8String], [url UTF8String],
+                           false, &idNbr, softDeleted);
+
+  if (ret != MAPISTORE_SUCCESS)
+    return NSNotFound;
+
+  return idNbr;
+}
+
 - (void) _updateFolderWithURL: (NSString *) oldURL
                       withURL: (NSString *) urlString
 {
@@ -217,7 +232,7 @@ MAPIStoreMappingKeyFromId (uint64_t idNbr)
 {
   NSString *oldURL;
   uint64_t oldIdNbr;
-  bool rc;
+  bool rc, softDeleted;
 
   oldURL = [self urlFromID: idNbr];
   if (oldURL != NULL)
@@ -228,13 +243,16 @@ MAPIStoreMappingKeyFromId (uint64_t idNbr)
       return NO;
     }
 
-  oldIdNbr = [self idFromURL: urlString];
+  oldIdNbr = [self idFromURL: urlString isSoftDeleted: &softDeleted];
   if (oldIdNbr != NSNotFound)
     {
-      [self errorWithFormat:
-              @"attempt to double register an entry with idNbr ('%@', %lld,"
-            @" 0x%.16"PRIx64", oldid=0x%.16"PRIx64")",
-            urlString, idNbr, idNbr, oldIdNbr];
+      if (softDeleted)
+        [self logWithFormat: @"Attempt to register a soft-deleted %@", urlString];
+      else
+        [self errorWithFormat:
+                @"attempt to double register an entry with idNbr ('%@', %lld,"
+              @" 0x%.16"PRIx64", oldid=0x%.16"PRIx64")",
+              urlString, idNbr, idNbr, oldIdNbr];
       return NO;
     }
   else
@@ -277,5 +295,14 @@ MAPIStoreMappingKeyFromId (uint64_t idNbr)
   indexing->del_fmid(indexing, [username UTF8String],
                      idNbr, MAPISTORE_PERMANENT_DELETE);
 }
+
+- (void) unregisterURLWithID: (uint64_t) idNbr
+                    andFlags: (uint8_t) flags
+{
+  indexing->del_fmid(indexing, [username UTF8String],
+                     idNbr,
+                     (flags == MAPISTORE_SOFT_DELETE) ? MAPISTORE_SOFT_DELETE : MAPISTORE_PERMANENT_DELETE);
+}
+
 
 @end
