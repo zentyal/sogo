@@ -17,7 +17,7 @@ var contactSelectorAction = 'calendars-contacts';
 var eventsToDelete = [];
 var calendarsOfEventsToDelete = [];
 
-var usersRightsWindowHeight = 215;
+var usersRightsWindowHeight = 270;
 var usersRightsWindowWidth = 502;
 
 var calendarEvents = null;

@@ -24,7 +24,7 @@ var Mailer = {
     sortByThread: false
 };
 
-var usersRightsWindowHeight = 335;
+var usersRightsWindowHeight = 465;
 var usersRightsWindowWidth = 400;
 
 var pageContent = $("pageContent");
