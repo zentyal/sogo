@@ -1,3 +1,37 @@
+sogo (2.2.7-zentyal2) trusty; urgency=medium
+
+  [ Miguel Julián ]
+  * [941ac4] UI fixes after merge from inverse
+  * [fa71fd] Small UI fixes
+
+  [ Jesús García Sáez ]
+  * [37a017] compile with debug and without optimizations
+  * [49e2c4] oc: MailMessages return correct codepage
+  * [11d392] NSString:objectFromJSONString now can parse single values
+
+  [ Javier Fernández-Carrión ]
+  * [c37f4a] hispa web eliminated and replace sogo logo for Zentyal one
+
+  [ Enrique J. Hernández Blasco ]
+  * [6a27ec] Store FreeBusySimple and FreeBusyDetailed rights as roles
+  * [f53f97] oc-calendar: Retrieve properly event description created on SOGo
+  * [ebee47] oc-rtf: Use what RTF Spec 1.9.1 for control words
+  * [0c9c7f] oc-rtf: Fix current position to match where _bytes pointer is
+  * [441e25] oc-rtf: Be more resilient to spaces while parsing font tables
+  * [3be4c0] oc-mailfolder: Avoid setting seen flag on preloading message bodies
+  * [9ca104] oc-mailfolder: Get seen flag directly from message in preloading
+  * [7d5a47] oc-folder: Flags are now used in indexing db when deleting a msg
+  * [5589e9] oc-calendar: wDay field cannot be negative
+  * [161ed0] oc-calendar: getPidLidClipEnd now follows [MS-OXOCAL]
+  * [55c97e] oc-calendar: Fix PidLidClipStart on recurrent events
+  * [1cad50] oc-folder: Make deleted items synched when shared
+  * [d6dc0a] oc-folder: Uniform call to deleteMessageWithMID
+  * [0a45b5] Fix compilation when samba file is not others readable
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 27 Oct 2014 13:09:35 +0100
+
 sogo (2.2.7-zentyal1) trusty; urgency=medium
 
   [ Wolfgang Sourdeau ]
