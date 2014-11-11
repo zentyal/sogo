@@ -1,3 +1,18 @@
+sogo (2.2.7-zentyal3) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [9fe7ce] oc: monkeypatched NGImap4Connection class from sope
+  * [b762df] oc: NGImap4Connection:fetchUids don't delete RawResponse
+  * [4b9e8f] oc: NGImap4Connection:fetchUids changed error messages
+  * [78e5c6] oc: synchronize folders ChangeNumber <-> modseq
+
+  [ Julio García ]
+  * [4cba28] Updating dependencies on new openchange
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 11 Nov 2014 12:49:11 +0100
+
 sogo (2.2.7-zentyal2) trusty; urgency=medium
 
   [ Miguel Julián ]
