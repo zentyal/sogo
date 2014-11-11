@@ -313,20 +313,22 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
       changeKey = [parentFolder changeKeyForMessageWithKey: nameInContainer];
       if (!changeKey)
         {
-          [self warnWithFormat: @"attempting to get change key"
-                @" by synchronising folder..."];
+          [self warnWithFormat: @"attempting to get ChangeKey of %@ by "
+                                @"synchronising folder...", nameInContainer];
           [(MAPIStoreMailFolder *) container synchroniseCache];
           [parentFolder synchroniseCache];
           changeKey = [parentFolder changeKeyForMessageWithKey: nameInContainer];
-          if (changeKey)
-            [self logWithFormat: @"got one"];
-          else
-            {
-              [self errorWithFormat: @"still nothing. We crash!"];
-              abort ();
-            }
         }
-      *data = [changeKey asBinaryInMemCtx: memCtx];
+
+      if (!changeKey)
+        {
+          [self errorWithFormat: @"ERROR not found ChangeKey of %@", nameInContainer];
+          rc = MAPISTORE_ERR_NOT_FOUND;
+        }
+      else
+        {
+          *data = [changeKey asBinaryInMemCtx: memCtx];
+        }
     }
 
   return rc;
@@ -337,29 +339,33 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 {
   int rc = MAPISTORE_SUCCESS;
   NSData *changeList;
+  NSString *nameInContainer;
 
   if (isNew)
     rc = MAPISTORE_ERR_NOT_FOUND;
   else
     {
+      nameInContainer = [self nameInContainer];
       changeList = [(MAPIStoreMailFolder *)[self container]
-                   predecessorChangeListForMessageWithKey: [self nameInContainer]];
+                   predecessorChangeListForMessageWithKey: nameInContainer];
       if (!changeList)
         {
-          [self warnWithFormat: @"attempting to get predecessor change list"
-                @" by synchronising folder..."];
+          [self warnWithFormat: @"attempting to get PredecessorChangeList of %@ "
+                                @"by synchronising folder...", nameInContainer];
           [(MAPIStoreMailFolder *) container synchroniseCache];
           changeList = [(MAPIStoreMailFolder *)[self container]
-                       predecessorChangeListForMessageWithKey: [self nameInContainer]];
-          if (changeList)
-            [self logWithFormat: @"got one"];
-          else
-            {
-              [self errorWithFormat: @"still nothing. We crash!"];
-              abort ();
-            }
+                       predecessorChangeListForMessageWithKey: nameInContainer];
         }
-      *data = [changeList asBinaryInMemCtx: memCtx];
+
+      if (!changeList)
+        {
+          [self errorWithFormat: @"ERROR not found PredecessorChangeList of %@", nameInContainer];
+          rc = MAPISTORE_ERR_NOT_FOUND;
+        }
+      else
+        {
+          *data = [changeList asBinaryInMemCtx: memCtx];
+        }
     }
 
   return rc;
@@ -368,33 +374,30 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 - (uint64_t) objectVersion
 {
   uint64_t version = ULLONG_MAX;
-  NSString *uid, *changeNumber;
+  NSString *uid, *changeNumber, *nameInContainer;
 
-  uid = [(MAPIStoreMailFolder *)
-          container messageUIDFromMessageKey: [self nameInContainer]];
+  nameInContainer = [self nameInContainer];
+  uid = [(MAPIStoreMailFolder *) container messageUIDFromMessageKey: nameInContainer];
   if (uid)
     {
-      changeNumber = [(MAPIStoreMailFolder *) container
-                         changeNumberForMessageUID: uid];
+      changeNumber = [(MAPIStoreMailFolder *) container changeNumberForMessageUID: uid];
       if (!changeNumber)
         {
-          [self warnWithFormat: @"attempting to get change number"
-                @" by synchronising folder..."];
+          [self warnWithFormat: @"attempting to get ChangeNumber of %@"
+                                @"by synchronising folder...", nameInContainer];
           [(MAPIStoreMailFolder *) container synchroniseCache];
-          changeNumber = [(MAPIStoreMailFolder *) container
-                             changeNumberForMessageUID: uid];
-          if (changeNumber)
-            [self logWithFormat: @"got one"];
-          else
-            {
-              [self errorWithFormat: @"still nothing. We crash!"];
-              abort();
-            }
+          changeNumber = [(MAPIStoreMailFolder *) container changeNumberForMessageUID: uid];
         }
-      version = [changeNumber unsignedLongLongValue] >> 16;
+
+      if (!changeNumber)
+        {
+          [self errorWithFormat: @"ERROR not found ChangeNumber of %@", nameInContainer];
+        }
+      else
+        {
+          version = [changeNumber unsignedLongLongValue] >> 16;
+        }
     }
-  else
-    abort();
 
   return version;
 }
