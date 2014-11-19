@@ -517,7 +517,7 @@ TH.tbtv_headercell IMG.tbtv_sortcell
   text-align: right;
   border: 0px;
   width: 12px;
-  height: 12px; 
+  height: 12px;
   top:0;}
 
 .tableview
@@ -978,6 +978,7 @@ A.button {
   display: block;
   float: right;
   /*height: 23px;*/
+  padding-right: 3px; /* sliding doors padding */
   text-decoration: none;
   text-align: center;
   color: inherit;
@@ -1148,6 +1149,7 @@ DIV.tabsContainer > UL LI
   height: 35px;
   text-decoration: none;
   background-color:#ddd;
+  padding-right: 2px; /* sliding doors padding */
   color: inherit;
   box-shadow: inset 0px 0px 5px rgba(0,0,0,0.2)
 }
@@ -1257,6 +1259,19 @@ DIV.toolbar IMG.buttonImage
   margin-top: 8px;
   padding: 0px;
   display: none;
+}
+
+A.toolbarButton,
+A.toolbarButton:hover,
+A.smallToolbarButton,
+A.smallToolbarButton:hover {
+  display: inline;
+  float: left;
+  height: 49px;
+  padding-right: 3px; /* sliding doors padding */
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 DIV.toolbar A.toolbarButton,

@@ -11,6 +11,8 @@ var Contact = {
     currentContactId: null
 };
 
+var refreshViewCheckTimer;
+
 function openContactsFolder(contactsFolder, reload, idx) {
     hideMessageSelectedButtons();
     if ((contactsFolder && contactsFolder != Contact.currentAddressBook)
@@ -1081,17 +1083,18 @@ function updateAddressBooksMenus() {
 function onAddressBookModify(event) {
     var folders = $("contactFolders");
     var selected = folders.getSelectedNodes()[0];
-    var addressBookID = selected.getAttribute("id");
-    var url = ApplicationBaseURL + addressBookID + "/properties";
-    var windowID = sanitizeWindowName(addressBookID + " properties");
-    var width = 410;
-    var height = 410;
-
-    $(function() {
-            var properties = window.open(url, windowID, "width="+width+",height="+height+",resizable=0");
-            properties.focus();
-        }).delay(0.1);
-
+    if (selected.getAttribute("list-editing") == "available") {
+        var addressBookID = selected.getAttribute("id");
+        var url = ApplicationBaseURL + addressBookID + "/properties";
+        var windowID = sanitizeWindowName(addressBookID + " properties");
+        var width = 410;
+        var height = 410;
+        
+        $(function() {
+          var properties = window.open(url, windowID, "width="+width+",height="+height+",resizable=0");
+          properties.focus();
+          }).delay(0.1);
+    }
 }
 
 function onMenuSharing(event) {
@@ -1373,6 +1376,7 @@ function initContacts(event) {
     configureAddressBooks();
     configureDraggables();
     updateAddressBooksMenus();
+    initRefreshViewCheckTimer();
 
     var table = $("contactsList");
     if (table) {
@@ -1633,6 +1637,26 @@ function dropSelectedContacts(action, toId) {
 
 function onContactsReload () {
     openContactsFolder(Contact.currentAddressBook, true);
+}
+
+function initRefreshViewCheckTimer() {
+  var refreshViewCheck = UserDefaults["SOGoRefreshViewCheck"];
+  if (refreshViewCheck && refreshViewCheck != "manually") {
+    var interval;
+    if (refreshViewCheck == "once_per_hour")
+      interval = 3600;
+    else if (refreshViewCheck == "every_minute")
+      interval = 60;
+    else {
+      interval = parseInt(refreshViewCheck.substr(6)) * 60;
+    }
+    refreshViewCheckTimer = window.setInterval(onRefreshViewCheckCallback,
+                                               interval * 1000);
+  }
+}
+
+function onRefreshViewCheckCallback(event) {
+  onContactsReload();
 }
 
 document.observe("dom:loaded", initContacts);

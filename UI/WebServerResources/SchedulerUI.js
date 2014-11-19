@@ -35,6 +35,7 @@ var categoriesStyleSheet = null;
 var clipboard = null;
 var eventsToCopy = [];
 
+var refreshViewCheckTimer;
 
 // This should probably go in the generic.js
 function printView() {
@@ -673,10 +674,10 @@ function _deleteEventFromTables(calendar, cname, occurenceTime) {
     }
 
     // Delete task from tasks list
-    var row = $(calendar + basename);
-    if (row) {
+    var rows = $$("tr[id^='" + calendar + basename + "']");
+    rows.each(function(row) {
         row.parentNode.removeChild(row);
-    }
+    });
 }
 
 function _deleteCalendarEventCache(calendar, cname, occurenceTime) {
@@ -720,7 +721,6 @@ function _deleteCalendarEventCache(calendar, cname, occurenceTime) {
 function deleteEventCallback(http) {
     if (http.readyState == 4) {
         if (isHttpStatus204(http.status)) {
-            var isTask = false;
             var calendar = http.callbackData.calendar;
             var events = http.callbackData.events;
             for (var i = 0; i < events.length; i++) {
@@ -898,14 +898,14 @@ function performEventDeletion(folder, event, recurrence) {
         if (recurrence) {
             // Only one recurrence
             var occurenceTime = recurrence.substring(9);
-            var nodes = _eventBlocksMatching(folder, event, occurenceTime);
+            //var nodes = _eventBlocksMatching(folder, event, occurenceTime);
             var urlstr = ApplicationBaseURL + "/" + folder + "/" + event  + "/" + recurrence + "/delete";
 
-            if (nodes)
-                document.deleteEventAjaxRequest = triggerAjaxRequest(urlstr,
-                                                                     performDeleteEventCallback,
-                                                                     { nodes: nodes,
-                                                                       occurence: occurenceTime });
+            document.deleteEventAjaxRequest = triggerAjaxRequest(urlstr,
+                                                                 performDeleteEventCallback,
+                                                                 { calendar: folder,
+                                                                   cname: event,
+                                                                   occurence: occurenceTime });
         }
         else {
             // All recurrences
@@ -923,10 +923,10 @@ function performEventDeletion(folder, event, recurrence) {
 function performDeleteEventCallback(http) {
     if (http.readyState == 4) {
         if (isHttpStatus204(http.status)) {
+
             var occurenceTime = http.callbackData.occurence;
-            var nodes = http.callbackData.nodes;
-            var cname = nodes[0].cname;
-            var calendar = nodes[0].calendar;
+            var cname = http.callbackData.cname;
+            var calendar = http.callbackData.calendar;
 
             _deleteCalendarEventBlocks(calendar, cname, occurenceTime);
             _deleteEventFromTables(calendar, cname, occurenceTime);
@@ -1174,8 +1174,11 @@ function tasksListCallback(http) {
             // [9] Editable?
             // [10] Erasable?
             // [11] Priority (0, 1 = important, 9 = low)
-            // [12] Status CSS class (duelater, completed, etc)
-            // (13) Due date (formatted)
+            // [12] Owner
+            // [13] recurrence-id
+            // [14] isException
+            // [15] Status CSS class (duelater, completed, etc)
+            // [16] Due date (formatted)
 
             for (var i = 0; i < data.length; i++) {
                 var row = createElement("tr");
@@ -1185,9 +1188,22 @@ function tasksListCallback(http) {
 
                 var calendar = escape(data[i][1]);
                 var cname = escape(data[i][0]);
-                row.setAttribute("id", calendar + "-" + cname);
+
+                var rTime = data[i][13];
+                var id = escape(data[i][1] + "-" + data[i][0]);
+                if (rTime)
+                    id += "-" + escape(rTime);
+                row.setAttribute("id", id);
+                //row.cname = escape(data[i][0]);
+                //row.calendar = calendar;
+                if (rTime)
+                    row.recurrenceTime = escape(rTime);
+                row.isException = data[i][14];
+
+
+                //row.setAttribute("id", calendar + "-" + cname);
                 //listItem.addClassName(data[i][5]); // Classification
-                row.addClassName(data[i][12]); // status
+                //row.addClassName(data[i][14]); // status
                 row.addClassName("taskRow");
                 row.calendar = calendar;
                 row.cname = cname;
@@ -1232,8 +1248,8 @@ function tasksListCallback(http) {
 
                 cell = createElement("td");
                 row.appendChild(cell);
-                if (data[i][13])
-                    cell.update(data[i][13]); // end date
+                if (data[i][16])
+                    cell.update(data[i][16]); // end date
 
                 cell = createElement("td");
                 row.appendChild(cell);
@@ -1439,6 +1455,26 @@ function onMonthOverview() {
 function refreshEventsAndTasks() {
     refreshEvents();
     refreshTasks();
+}
+
+function initRefreshViewCheckTimer() {
+  var refreshViewCheck = UserDefaults["SOGoRefreshViewCheck"];
+  if (refreshViewCheck && refreshViewCheck != "manually") {
+    var interval;
+    if (refreshViewCheck == "once_per_hour")
+      interval = 3600;
+    else if (refreshViewCheck == "every_minute")
+      interval = 60;
+    else {
+      interval = parseInt(refreshViewCheck.substr(6)) * 60;
+    }
+    refreshViewCheckTimer = window.setInterval(onRefreshViewCheckCallback,
+                                               interval * 1000);
+  }
+}
+
+function onRefreshViewCheckCallback(event) {
+  onCalendarReload();
 }
 
 function onCalendarReload() {
@@ -2319,7 +2355,7 @@ function calendarDisplayCallback(http) {
                 headerCalendarsLabels[i].observe("mousedown", listRowMouseDownHandler);
                 headerDays[i].observe("click", onCalendarSelectDay);
                 headerDays[i].observe("dblclick", onClickableCellsDblClick);
-                days[i].observe("click", onCalendarSelectDay);
+                Event.on(days[i], "mousedown", onCalendarSelectDay);
 
                 var clickableCells = days[i].select("DIV.clickableHourCell");
                 for (var j = 0; j < clickableCells.length; j++)
@@ -3065,7 +3101,12 @@ function marksTasksAsCompleted () {
 
 function _updateTaskCompletion (task, value) {
     url = (ApplicationBaseURL + "/" + task.calendar
-           + "/" + task.cname + "/changeStatus?status=" + value);
+           + "/" + task.cname);
+
+    if (task.recurrenceTime)
+        url += ("/occurence" + task.recurrenceTime);
+
+    url += ("/changeStatus?status=" + value);
 
     triggerAjaxRequest(url, refreshTasks, null);
 
@@ -3095,6 +3136,20 @@ function onMenuSharing(event) {
         var urlstr = URLForFolderID(folderID) + "/acls";
 
         openAclWindow(urlstr);
+    }
+}
+
+function multicolumndayviewCalendarSelector(event, target) {
+    // Select the calendar associated with the day clicked
+    if (currentView == "multicolumndayview") {
+        if (target.getAttribute("calendar"))
+            var calendar = "[id='/" + target.getAttribute("calendar") + "']";
+        else
+            var calendar = "[id='/" + target.up("[calendar]").getAttribute("calendar") + "']";
+        var list = $("calendarList");
+        var selectedCalendar = list.down(calendar);
+
+        onRowClick(event, selectedCalendar);
     }
 }
 
@@ -3154,27 +3209,19 @@ function configureDroppables() {
 }
 
 function startDragging(event, ui) {
-    var row = event.target;
+    var row = Event.findElement(event);
     var handle = ui.helper;
-    var events = $('eventsList').getSelectedRowsId();
-    var tasks = $('tasksList').getSelectedRowsId();
+    var table = row.up('table');
+    var elements = table.getSelectedRowsId();
+    var count = elements.length;
 
-    if (events.length > 0)
-        var count = events.length;
-    else
-        var count = tasks.length;
-
-    if (count == 0 || events.indexOf(row.id) < 0) {
-        onRowClick(event, $(row.id));
-        events = $("eventsList").getSelectedRowsId();
-        tasks = $("tasksList").getSelectedRowsId();
-        if (events.length > 0)
-            var count = events.length;
-        else
-            var count = tasks.length;
+    if (count == 0 || elements.indexOf(row.id) < 0) {
+        onRowClick(event, row);
+        elements = table.getSelectedRowsId();
+        count = elements.length;
     }
-    handle.html(count);
 
+    handle.html(count);
     handle.show();
 }
 
@@ -3189,26 +3236,11 @@ function stopDragging(event, ui) {
 }
 
 function dropAction(event, ui) {
-    var events = $("eventsList").getSelectedRowsId();
-    var tasks = $("tasksList").getSelectedRowsId();
-
-    if(events.length > 0 || tasks.length > 0)
-        dropSelectedItems(this.id.substr(1));
-}
-
-function dropSelectedItems(toId) {
-    var eventIds = $('eventsList').getSelectedRowsId();
-    var taskIds = $('tasksList').getSelectedRowsId();
-    var itemIds = {};
-
-    if (eventIds.length > 0) {
-        itemIds.data = eventIds;
-        itemIds.type = "events";
-    }
-    else {
-        itemIds.data = taskIds;
-        itemIds.type = "tasks";
-    }
+    var toId = this.id.substr(1);
+    var table = ui.draggable.closest('table')[0];
+    var itemIds = { data: table.getSelectedRowsId(),
+                    // The table ID is either eventsList or tasksList
+                    type: table.id.substr(0, table.id.indexOf('List')) };
 
     for (var i = 0; i < itemIds.data.length; i++) {
         // Find the event ID (.ics)
@@ -3351,7 +3383,7 @@ function updateCalendarProperties(calendarID, calendarName, calendarColor) {
     //   log("nodeID: " + nodeID);
     var calendarNode = $(nodeID);
     var displayNameNode = calendarNode.childNodesWithTag("span")[0];
-    displayNameNode.innerHTML = calendarName;
+    displayNameNode.innerHTML = calendarName.escapeHTML();
 
     appendStyleElement(nodeID, calendarColor);
 }
@@ -3625,7 +3657,7 @@ function onCalendarRemove(event) {
 }
 
 function deletePersonalCalendar(folderElement) {
-    var displayName = folderElement.childNodesWithTag("span")[0].innerHTML.strip();
+    var displayName = folderElement.childNodesWithTag("span")[0].innerHTML.strip().unescapeHTML();
     showConfirmDialog(_("Confirmation"),
                       _("Are you sure you want to delete the calendar \"%{0}\"?").formatted(displayName),
                       deletePersonalCalendarConfirm.bind(folderElement));
@@ -3889,6 +3921,8 @@ function initScheduler() {
         $("uploadOK").observe("click", hideImportResults);
         $("calendarView").on("click", "#listCollapse", onListCollapse);
         Event.observe(document, "keydown", onDocumentKeydown);
+
+        initRefreshViewCheckTimer()
     }
 
     onWindowResize.defer();

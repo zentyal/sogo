@@ -1,30 +1,29 @@
-/*
-  Copyright (C) 2008-2013 Inverse inc.
-  Copyright (C) 2004-2005 SKYRIX Software AG
-
-  This file is part of OpenGroupware.org.
-
-  OGo is free software; you can redistribute it and/or modify it under
-  the terms of the GNU Lesser General Public License as published by the
-  Free Software Foundation; either version 2, or (at your option) any
-  later version.
-
-  OGo is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or
-  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
-  License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with OGo; see the file COPYING.  If not, write to the
-  Free Software Foundation, 59 Temple Place - Suite 330, Boston, MA
-  02111-1307, USA.
-*/
+/* iCalRepeatableEntityObject+SOGo.m - this file is part of SOGo
+ *
+ * Copyright (C) 2007-2014 Inverse inc.
+ *
+ * This file is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This file is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSCalendarDate.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSTimeZone.h>
+#import <Foundation/NSValue.h>
 
 #import <NGCards/iCalDateTime.h>
 #import <NGCards/iCalEvent.h>
@@ -33,6 +32,7 @@
 #import <NGCards/iCalTimeZone.h>
 #import <NGCards/NSString+NGCards.h>
 #import <NGCards/NSDictionary+NGCards.h>
+
 #import <NGExtensions/NGCalendarDateRange.h>
 
 #import "iCalRepeatableEntityObject+SOGo.h"
@@ -100,14 +100,33 @@
   return value;
 }
 
+/**
+ * Extract the start and end dates from the event, from which all recurrence
+ * calculations will be based on.
+ * @return the range of the first occurrence.
+ */
 - (NGCalendarDateRange *) firstOccurenceRange
 {
-  [self subclassResponsibility: _cmd];
+  NSCalendarDate *start, *end;
+  NGCalendarDateRange *firstRange;
+  NSArray *dates;
 
-  return nil;
+  firstRange = nil;
+
+  dates = [[[self uniqueChildWithTag: @"dtstart"] valuesForKey: @""] lastObject];
+  if ([dates count] > 0)
+    {
+      start = [[dates lastObject] asCalendarDate]; // ignores timezone
+      end = [start addTimeInterval: [self occurenceInterval]];
+
+      firstRange = [NGCalendarDateRange calendarDateRangeWithStartDate: start
+                                                               endDate: end];
+    }
+  
+  return firstRange;
 }
 
-- (unsigned int) occurenceInterval
+- (NSTimeInterval) occurenceInterval
 {
   [self subclassResponsibility: _cmd];
 
@@ -125,9 +144,8 @@
   NSArray *ranges;
   NGCalendarDateRange *checkRange, *firstRange;
   NSCalendarDate *startDate, *endDate;
-  id firstStartDate, firstEndDate, timeZone;
+  id firstStartDate, timeZone;
   BOOL doesOccur;
-  int offset;
 
   doesOccur = [self isRecurrent];
   if (doesOccur)

@@ -1,8 +1,6 @@
 /* iCalCalendar+SOGo.m - this file is part of SOGo
  *
- * Copyright (C) 2012 Inverse inc
- *
- * Author: Wolfgang Sourdeau <wsourdeau@inverse.ca>
+ * Copyright (C) 2012-2014 Inverse inc
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +25,7 @@
 #import <NGCards/iCalRepeatableEntityObject.h>
 
 #import "iCalCalendar+SOGo.h"
+#import "iCalEntityObject+SOGo.h"
 
 @implementation iCalCalendar (SOGoExtensions)
 
@@ -78,6 +77,27 @@
 - (iCalToDo *) todoWithRecurrenceID: (NSString *) recID;
 {
   return [self _occurrence: recID inArray: [self todos]];
+}
+
+- (NSMutableDictionary *) quickRecordFromContent: (NSString *) theContent
+                                       container: (id) theContainer
+{
+  CardGroup *element;
+  NSArray *elements;
+  
+  unsigned int count;
+ 
+  elements = [self allObjects];
+  count = [elements count];
+  if (count)
+    element = [elements objectAtIndex: 0];
+  else
+    {
+      NSLog(@"ERROR: given calendar contains no elements: %@", self);
+      element = nil;
+    }
+
+  return [(id)element quickRecordFromContent: theContent  container: theContainer];
 }
 
 @end

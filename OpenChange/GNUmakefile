@@ -142,7 +142,6 @@ $(DBMSGREADER_TOOL)_OBJC_FILES += \
 
 $(DBMSGREADER_TOOL)_LIB_DIRS += \
 	-L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
-	-L../OGoContentStore/obj/ -lOGoContentStore \
 	-L../SOPE/GDLContentStore/obj/ -lGDLContentStore \
 	-L../SOPE/NGCards/obj/ -lNGCards \
 	-lNGObjWeb
@@ -166,12 +165,11 @@ LIBMAPISTORE_LIBS = $(shell pkg-config libmapistore --libs) -lmapiproxy -lWEExte
 
 $(MAPISTORESOGO)_INSTALL_DIR = $(DESTDIR)/$(SAMBA_LIB_DIR)/mapistore_backends
 $(MAPISTORESOGO)_LIB_DIRS += \
-        -L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
+        -L../SoObjects/SOGo/SOGo.framework/ -lSOGo -lgnustep-base -lobjc -lNGObjWeb \
 	$(LIBMAPI_LIBS) \
 	$(LIBMAPISTORE_LIBS)
 
 $(SOGOBACKEND)_LIB_DIRS += \
-        -L../OGoContentStore/$(GNUSTEP_OBJ_DIR)/ -lOGoContentStore \
         -L../SoObjects/SOGo/SOGo.framework/ -lSOGo \
 	$(LIBMAPI_LIBS) \
 	$(LIBMAPISTORE_LIBS)

@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2006-2012 Inverse inc.
+  Copyright (C) 2006-2014 Inverse inc.
   Copyright (C) 2004-2005 SKYRIX Software AG
 
   This file is part of SOGo.
@@ -20,6 +20,8 @@
   02111-1307, USA.
 */
 
+#import <Foundation/NSCalendarDate.h>
+#import <Foundation/NSDate.h>
 #import <Foundation/NSException.h>
 
 #import <NGExtensions/NSObject+Logs.h>
@@ -65,12 +67,12 @@
 
 #warning this code should be put in SOGoCalendarComponent once the UID hack\
   in SOGoAppointmentObject is resolved
-- (NSException *) saveContentString: (NSString *) newContent
-                        baseVersion: (unsigned int) newVersion
+- (NSException *) saveComponent: (id) theComponent
+                    baseVersion: (unsigned int) newVersion
 {
   NSException *ex;
 
-  ex = [super saveContentString: newContent baseVersion: newVersion];
+  ex = [super saveComponent: theComponent baseVersion: newVersion];
   [fullCalendar release];
   fullCalendar = nil;
   [safeCalendar release];
@@ -79,6 +81,37 @@
   originalCalendar = nil;
 
   return ex;
+}
+
+- (iCalRepeatableEntityObject *) newOccurenceWithID: (NSString *) theRecurrenceID
+{
+  iCalToDo *newOccurence, *master;
+  NSCalendarDate *date, *firstDate;
+  NSTimeInterval interval;
+
+  newOccurence = (iCalToDo *) [super newOccurenceWithID: theRecurrenceID];
+  date = [newOccurence recurrenceId];
+
+  master = [self component: NO secure: NO];
+  firstDate = [master startDate];
+
+  interval = [[master due]
+               timeIntervalSinceDate: (NSDate *)firstDate];
+  
+  [newOccurence setStartDate: date];
+  [newOccurence setDue: [date addYear: 0
+                                month: 0
+                                  day: 0
+                                 hour: 0
+                               minute: 0
+                               second: interval]];
+
+  return newOccurence;
+}
+
+- (void) prepareDeleteOccurence: (iCalToDo *) occurence
+{
+
 }
 
 @end /* SOGoTaskObject */
