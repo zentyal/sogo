@@ -902,7 +902,6 @@ function openMailbox(mailbox, reload) {
             // the view. Cases that end up here:
             // - performed a search
             // - clicked on Get Mail button
-            urlParams.sortingAttributes.no_headers= "1";
             var content = Object.toJSON(urlParams);
             Mailer.dataTable.load(content);
             Mailer.dataTable.refresh();
@@ -2624,77 +2623,6 @@ function onMenuLabelNone() {
     triggerAjaxRequest(url + "/removeAllLabels", messageFlagCallback, callbackData, content);
 }
 
-function _onMenuLabelFlagX(flag) {
-    var messages = new Hash();
-
-    var flag = this.readAttribute("data-name");
-    var url = ApplicationBaseURL + encodeURI(Mailer.currentMailbox);
-    var operation = "add";
-    var msgUIDs = [];
-    var msgLabels;
-
-    if (!Object.isArray(document.menuTarget)) {
-        msgUIDs.push(Mailer.currentMessages[Mailer.currentMailbox]);
-        if (document.menuTarget.tagName == "DIV")
-            // Menu called from message content view
-            msgLabels = $('row_' + msgUIDs[0]).getAttribute("labels");
-        else
-            // Menu called from one selection in messages list view
-            msgLabels = document.menuTarget.getAttribute("labels");
-
-    if (document.menuTarget.tagName == "DIV")
-        // Menu called from message content view
-        messages.set(Mailer.currentMessages[Mailer.currentMailbox],
-                     $('row_' + Mailer.currentMessages[Mailer.currentMailbox]).getAttribute("labels"));
-    else if (Object.isArray(document.menuTarget))
-        // Menu called from multiple selection in messages list view
-        $(document.menuTarget).collect(function(rowID) {
-            var row = $(rowID);
-            if (row)
-                messages.set(rowID.substr(4),
-                             row.getAttribute("labels"));
-            });
-    else
-        // Menu called from one selection in messages list view
-        messages.set(document.menuTarget.getAttribute("id").substr(4),
-                     document.menuTarget.getAttribute("labels"));
-
-    var url = ApplicationBaseURL + encodeURI(Mailer.currentMailbox) + "/";
-    messages.keys().each(function(id) {
-        var flags = messages.get(id).split(" ");
-        var operation = "add";
-
-        if (flags.indexOf(flag) > -1)
-            operation = "remove";
-    }
-    else {
-        // Menu called from multiple selection in messages list view
-        var rows = $(document.menuTarget);
-        var blockedOperation = false;
-        for (var i = 0; i < rows.length; i++) {
-            var row = $(rows[i]);
-            if (row) {
-                msgUIDs.push(rows[i].substr(4));
-                msgLabels = row.getAttribute("labels");
-
-                var flags = msgLabels.split(" ");
-                if (flags.indexOf(flag) > -1 && !blockedOperation) {
-                    operation = "remove";
-                }
-                else {
-                    blockedOperation = true;
-                    operation = "add";
-                }
-            }
-        }
-    }
-
-    var callbackData = { mailbox: Mailer.currentMailbox, operation: operation, flag: flag, msgUIDs: msgUIDs};
-    var content = {flags: flag.asCSSIdentifier(), msgUIDs: msgUIDs, operation: operation};
-    content = Object.toJSON(content);
-    triggerAjaxRequest(url + "/addOrRemoveLabel", messageFlagCallback, callbackData, content);
-}
-
 function messageFlagCallback(http) {
     if (http.readyState == 4
         && isHttpStatus204(http.status)) {
@@ -2727,26 +2655,6 @@ function messageFlagCallback(http) {
             }
         }
     }
-}
-
-function onMenuLabelFlag1() {
-    _onMenuLabelFlagX(1);
-}
-
-function onMenuLabelFlag2() {
-    _onMenuLabelFlagX(2);
-}
-
-function onMenuLabelFlag3() {
-    _onMenuLabelFlagX(3);
-}
-
-function onMenuLabelFlag4() {
-    _onMenuLabelFlagX(4);
-}
-
-function onMenuLabelFlag5() {
-    _onMenuLabelFlagX(5);
 }
 
 function onMenuToggleMessageFlag(event) {
@@ -3009,13 +2917,13 @@ function getMenus() {
                            onMenuReplyToAll,
                            onMenuForwardMessage, null,
                            "-", "moveMailboxMenu",
-                           "copyMailboxMenu", "label-menu",
+                           "copyMailboxMenu",
                            "mark-menu", "-", saveAs,
                            onMenuViewMessageSource, null,
                            null, onMenuDeleteMessage ],
         messagesListMenu: [ onMenuForwardMessage,
                             "-", "moveMailboxMenu",
-                            "copyMailboxMenu", "label-menu",
+                            "copyMailboxMenu",
                             "mark-menu", "-",
                             saveAs, null, null,
                             onMenuDeleteMessage ],
@@ -3026,7 +2934,7 @@ function getMenus() {
                               onMenuForwardMessage,
                               null, "moveMailboxMenu",
                               "copyMailboxMenu",
-                              "-", "label-menu", "mark-menu",
+                              "-","mark-menu",
                               "-",
                               saveAs, onMenuViewMessageSource,
                               null, onPrintCurrentMessage,
@@ -3035,9 +2943,6 @@ function getMenus() {
                           onMenuChangeToDraftsFolder,
                           onMenuChangeToTrashFolder  ],
 
-        "label-menu": [ onMenuLabelNone, "-", onMenuLabelFlag1,
-                        onMenuLabelFlag2, onMenuLabelFlag3,
-                        onMenuLabelFlag4, onMenuLabelFlag5 ],
         "mark-menu": [ onMenuToggleMessageRead, null, null, null, "-", onMenuToggleMessageFlag ],
 // , "-",
 //                        null, null, null ],
@@ -3046,16 +2951,6 @@ function getMenus() {
                       setSearchCriteria, setSearchCriteria,
                       setSearchCriteria ]
     };
-
-    var labelMenu = $("label-menu");
-    if (labelMenu) {
-        labelMenu.prepareVisibility = onLabelMenuPrepareVisibility;
-    }
-
-    var labelMenu = $("label-menu");
-    if (labelMenu) {
-        labelMenu.prepareVisibility = onLabelMenuPrepareVisibility;
-    }
 
     var markMenu = $("mark-menu");
     if (markMenu) {
