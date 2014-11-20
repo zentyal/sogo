@@ -121,7 +121,6 @@
       <li><!-- separator --></li>
       <li><var:string label:value="Move To"/></li>
       <li><var:string label:value="Copy To"/></li>
-      <li><var:string label:value="Label"/></li>
       <li><var:string label:value="Mark"/></li>
       <li><!-- separator --></li>
       <li><var:string label:value="Save As..."/></li>

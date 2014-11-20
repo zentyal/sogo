@@ -1267,7 +1267,6 @@ A.smallToolbarButton,
 A.smallToolbarButton:hover {
   display: inline;
   float: left;
-  height: 49px;
   padding-right: 3px; /* sliding doors padding */
   text-decoration: none;
   color: inherit;
