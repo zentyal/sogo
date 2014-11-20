@@ -8,10 +8,10 @@ Subject: Link libSOGo with libdl
 
 Index: sogo/SoObjects/SOGo/GNUmakefile.preamble
 ===================================================================
---- sogo.orig/SoObjects/SOGo/GNUmakefile.preamble	2014-06-30 09:41:36.182138969 +0200
-+++ sogo/SoObjects/SOGo/GNUmakefile.preamble	2014-06-30 09:41:36.174138968 +0200
-@@ -49,6 +49,10 @@
- SOGo_LIBRARIES_DEPEND_UPON += -lcrypt
+--- sogo.orig/SoObjects/SOGo/GNUmakefile.preamble	2014-11-20 10:47:13.213354215 +0100
++++ sogo/SoObjects/SOGo/GNUmakefile.preamble	2014-11-20 10:47:13.209354215 +0100
+@@ -52,6 +52,10 @@
+ SOGo_LIBRARIES_DEPEND_UPON += -ldl
  endif
  
 +ifeq ($(findstring gnu, $(GNUSTEP_HOST_OS)), gnu)
