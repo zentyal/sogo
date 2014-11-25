@@ -928,7 +928,7 @@ function openMailbox(mailbox, reload) {
             }
             else {
                 // Data source is cached, query only UIDs from server
-                urlParams.sortingAttributes.no_headers= "1";
+                //urlParams.sortingAttributes.no_headers= "1";
                 var content = Object.toJSON(urlParams);
                 dataSource.load(content);
             }
