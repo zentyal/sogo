@@ -1,3 +1,238 @@
+sogo (2.2.9a-zentyal1) trusty; urgency=medium
+
+  [ Jeroen Dekkers ]
+  * [4d8bff] Link libSOGo with libdl on systems with glibc
+  * [b5dc2e] Link correctly against libraries used
+
+  [ Skruppy ]
+  * [1c3f1a] ModulesConstraints tests all values of a multi-valued attributes
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [33b353] Moved to abstract index_context instead of tdb_wrap
+  * [a6bfb9] Use indexing generic code instead of tdb private funtions
+  * [fd308b] Converted all the indexing code to indexing backends
+  * [f76a6c] Fix mysql cleanup log message
+
+  [ Jesús García Sáez ]
+  * [34b98a] get_new_folderID functions are now on mapistore_indexing
+  * [2aa71c] check ret value properly
+  * [f6d1a3] use properly get_uri function and check ret value
+  * [95298d] avoid infinite loop when trying to update a folder id
+  * [a24f00] mapistoreURI encoding should be done the same way as listContextForUser
+  * [c81476] no need to modify url
+  * [6bef67] fix format logging uint64_t
+  * [d1f542] stringByDecodingImap4FolderName is not neccesary
+  * [a77863] add try catch to all functions on struct mapistore_backend
+  * [c6b8be] use execinfo.h to get backtrace
+  * [3b2174] if there is no password file for specific user, try to read global password file
+  * [7f2ee7] Error message only when initialization hadn't been done
+  * [3eba5f] increase log level of debug message
+  * [1a2fe8] Revert "Merge pull request #2 from Zentyal/jgarcia/fix-encoding-of-mapistoreuris"
+  * [a5550c] avoid decode @ from url with username on it
+  * [f1d14f] multitenancy: adapt openchangedb_* calls
+  * [68c38e] openchange: return proper url for folders with non-ascii chars
+  * [4e3a24] oc-rtf: Don't crash when we don't know the specified font
+  * [5ee8cb] oc-rtf: check valid font name when generating <font> tag
+  * [a7c205] oc: cached usercontext updates indexing_context
+  * [05578b] oc-rtf: control words can also have a space before next tag
+  * [bb9764] Revert "oc: cached usercontext updates indexing_context"
+  * [ed4ca3] oc: add talloc reference to indexing context
+  * [445a1f] oc: MailMessages return correct codepage
+  * [24e351] oc: monkeypatched NGImap4Connection class from sope
+  * [c410a9] oc: NGImap4Connection:fetchUids don't delete RawResponse
+  * [41320a] oc: NGImap4Connection:fetchUids changed error messages
+  * [c4b0ac] NSString:objectFromJSONString now can parse single values
+  * [973ab7] oc: synchronize folders ChangeNumber <-> modseq
+
+  [ Kamen Mazdrashki ]
+  * [f8028b] OpenChange: Avoid crashing when creating embedded message in attachment
+  * [09e6fc] oc-sogo: try/catch to guard only the actual impelementation rather than *everything*
+  * [cbe616] oc-sogo: Clean up AutoRelease pool and unregister threads in Catch handler
+  * [2c94d2] oc-sogo: Use [e name] and [e reason] selectors
+  * [6be768] oc-sogo: Move memory clean up *after* handling the exception
+  * [bcfb67] oc-sogo: Print both [NSException callStackSymbols] and execinfo.h stack trace
+  * [fc9dc0] oc-sogo: pretty print Exceptions in sogo_backend_handle_objc_exception()
+  * [7da888] openchange: getMessageData - replace int literals with ulRecipClass values
+  * [27851e] openchange: FillMessageHeadersFromProperties fix skipping of last value in possible range of recepients
+  * [dd7200] openchange/MAPIStoreFolder: Add private selector for actual folder delete action
+  * [4b3837] openchange: Fix submitWithFlags to submit to BCC-ed recipients also
+  * [2792ba] openchange: don't overflow possible recipient type while creating message headers
+  * [98505c] oc/MAPIStoreContext: Fix log messages to actually print 64bit FMIDs
+  * [6de298] oc/MAPIStoreMapping: Split the check for existing entry so we have better error message
+  * [bf0f2a] oc/MAPIStoreSOGo: Do not destroy current thread context after any API call
+  * [116e73] oc/utils: Move OCDumpPListData() function into plreader - this is the only user for this function
+  * [86e549] oc/utils: Make "plext" category publicly visible
+  * [c91741] oc/dbmsgreader: Fix to work again this time basen on BSON format for msg data
+  * [5b75c8] oc: Log when mapistore backend is successfully initialized
+  * [1fc3a5] oc: Protect backend initialization to happen only once
+  * [1846e1] oc/TallocWrapper: don't handle Threading initialization here
+  * [2b3bc1] Scripts/openchange_user_cleanup: Don't hardcode samba private dir, use samba LoadParm()
+  * [b8366d] oc/util: Tune dbmsgreader for new caching classes names
+  * [0a23f1] oc: Set log level to 0 in samba-get-config script - it is very chatty during builds
+  * [18acdf] oc: Make sure we always use NSString keys in 'messages' dictionary
+  * [dc8b73] oc/MailFolder: Add more logging so we can trace invalid message kyes
+
+  [ Miguel Julián ]
+  * [2458af] All day events deladyed one day if user timezone is +XX:XX
+  * [5d4351] Removing some trail characters at event description
+  * [51df0a] Removed development tip comment
+  * [65ece6] Removing some trail characters at event description
+  * [41f2e9] Removed development tip comment
+  * [01c631] Temporary removed mail labeling as broke the merge
+
+  [ Ludovic Marcotte ]
+  * [b05fcc] Fat commit to refactor the quick record generation
+  * [f43341] Fixed JSON'ification of the admin module
+  * [cde1db] Refactored GCSFolder: -writeContent and fixed sogo-tool restore
+  * [b9dd1d] Fix for bug #2892
+  * [8c8e7d] Modified Apache's config file to handle Apache > 2.3
+  * [e542ff] Fix for bug #1240
+  * [cbc53b] Updated NEWS file
+  * [048379] Updated the documentation for the release
+  * [38cb86] Update ChangeLog
+  * [12a4fd] Support for repetitive alarms and tasks
+  * [b8b351] Initial support for multiple alarms and better iCal compatibility
+  * [8b4a16] NEWS entry for previous commit
+  * [02b3de] Fix for bug #2326
+  * [c5c2bf] Fixed iCal detection for 10.9 (and perhaps even 10.8)
+  * [8ba031] Consider 0x0C as "unsafe"
+  * [f52a08] fixed sending mails to multiple recipients over AS
+  * [ce1896] Fixed typo
+  * [a4ab29] Fix for bugs #2878, #2879
+  * [11adf3] Cleaned the code and fixed #2894 while at it ...
+  * [a338b1] Fix for bug #2838
+  * [d572f2] get rid of control chars before returning the response
+  * [ae6afe] Fixed potential exception when Calendar module is disabled
+  * [6ba85e] Added some comments in the code
+  * [f4372a] Add over DAV a PARTSTAT if none is defined
+  * [1c60ab] Fix for bug #2889
+  * [367522] Refactored code to be more rigorous Unicode-wise.
+  * [0b6e3d] Fix for bug #589
+  * [275eeb] Updated NEWS file for the release
+  * [5744d1] Updated scripts for TB31
+  * [c0e8eb] Adjusted the doc for TB31
+  * [4c5be2] Update ChangeLog
+  * [aa0499] Fixed sanitization char skipping and #2936
+  * [95b122] Simplified even more -safeString
+  * [9cdcfd] Updated for the 2.2.9a release
+
+  [ Francis Lachapelle ]
+  * [5b886e] Fix issue with DnD of tasks with FireFox
+  * [74bd96] Fix encoding of new calendars + new subscriptions
+  * [28f26e] Fix display of users with no possible subscription
+  * [e4a84d] Fix usage of SOGoSubscriptionFolderFormat default
+  * [b2b77c] Fix folders paths of "sogo-tool restore -l"
+  * [dadad3] Fix some compilation warnings
+  * [1af52e] Fix message labels handling
+  * [b639c2] Fixes for IE
+  * [1dcf63] Update translations
+  * [8eb421] Various fix and improvements to Mail module
+  * [7e297a] Remove spaces
+  * [c441fa] Various fix and improvements to Scheduler module
+  * [1dd3db] Various fixes and improvements to the Mail module
+  * [9d6bcb] Fix compilation warning
+  * [ed85a0] Allow alarms to be snoozed for 1 day
+  * [0825a8] Add missing localization string
+  * [4b9db6] Fix warning when generating docbook
+  * [7e281d] Fix encoding of calendar names in Web interface
+  * [9e1423] New font for asciidoc documentation
+  * [4be2dd] Update translations
+  * [80acaf] Fix URL in documentation
+
+  [ Alexandre Cloutier ]
+  * [7794d7] version 1 of the inbox search
+  * [c3e46e] code refactoring and GUI improvement
+  * [f6c7ca] applied comments
+  * [524762] applied comments, fix bug and add sortable results
+  * [8783f0] fix leak
+  * [73fcdc] adjust css for other browser, fix display bug
+  * [c76cb3] Disable the search button on toolbar once it is opened
+  * [e04447] bugFix #2827
+  * [6aeccc] indentations
+  * [38a3b7] print calendars events&Tasks with colors - either borders or backgrounds
+  * [76c9b4] update Localizable.strings
+  * [07a138] applied comments and add the possibility to resize the search inbox window
+  * [84a086] bugfix where it is not possible to delete msg when mailbox is full
+  * [03152e] bugfix with DND from calendar view to calendar list
+  * [da184f] bugfix#2864
+  * [9bd09c] add the location column
+  * [eaf815] update NEWS file
+  * [7e26d8] merge conflicts
+  * [3b65ea] Tagging labels with 1 AJAX request
+  * [32476b] applied comments and fix bug when tagging msgs already tagged
+  * [ca8351] fix IE7, IE8, IE9, IE10, IE11 GUI
+  * [984e20] IE bugfixes
+  * [77c50e] applied comments; fix errors from merge and update NEWS file
+  * [9a380f] bugfix PreventInvitation
+  * [0bface] applied comments
+  * [c5f9dd] Possibility to collapsed threads with persistance
+  * [59023d] applied comments and fix bug where the folded threads were saved only after refreshing the entire page
+  * [c9d129] Manage the collapse UIDs save in the user settings
+  * [267a68] Applied comments
+  * [0c88ed] bugfix where an exception was raised if threadsCollapsed is undefined
+  * [e6002c] applied comments
+  * [df42c3] Update NEWS file
+  * [06f81a] applied comments
+  * [7db526] bugfix for new user without userSettings.mail
+  * [d62c50] Changed the configurable variable SOGoMailMessageCheck to a general refresh associated to the current view
+  * [1fb319] applied comments
+  * [9daab5] update NEWS file
+  * [f3ca4e] bugfix foldingThread; Renaming a foldername with a space was not correctly handled
+  * [574c24] bugfix PreventInvitation; fix object parsing on a blank user
+  * [3c1d6d] bugfix; UserSettings was not refresh properly after toggling threads
+  * [36b833] bugFix InboxSearch IMAP query keywords
+  * [69c8aa] quickfix for IE for searchInbox
+  * [6ec79f] bugfix with threads collapsing for a nested folder
+
+  [ Luc Charland ]
+  * [d749d5] Added tests for prevent invitation and whitelist
+  * [ced096] Added white_listed_attendee to the config file
+  * [4b94a1] urllib.quote needs a string
+  * [c621bb] Those need the same adjustments
+  * [031e4c] more of the same
+  * [e37a60] should help some builds that might timeout
+  * [c6f82d] catch specific exception
+  * [606ee9] dont test prevent invitations
+  * [3ad932] putting test-prevent-invitations back in
+
+  [ Jens Erat ]
+  * [8d4c0f] Converted Installation Guide to asciidoc
+  * [95191c] Added other documentation files as asciidoc
+  * [8a5649] Added makefile for asciidoc-conversion, included docbook-templates
+  * [397d8d] Remove old documentation files
+  * [19b313] Updated some copyright lines from PacketFence to SOGo
+  * [4b49fc] Updated for 2.2.8
+
+  [ Julien Kerihuel ]
+  * [52ad0e] Prevent SOGo backend from crashing when mapistore_set_connection_info is not called beforehand and connInfo is not initialized.
+
+  [ Enrique J. Hernández Blasco ]
+  * [c866bc] Store FreeBusySimple and FreeBusyDetailed rights as roles
+  * [415fb6] oc-calendar: Retrieve properly event description created on SOGo
+  * [cbfcd5] oc-rtf: Use what RTF Spec 1.9.1 for control words
+  * [75ce59] oc-rtf: Fix current position to match where _bytes pointer is
+  * [258444] oc-rtf: Be more resilient to spaces while parsing font tables
+  * [7e0cdd] oc-mailfolder: Avoid setting seen flag on preloading message bodies
+  * [d076e0] oc-mailfolder: Get seen flag directly from message in preloading
+  * [be60fd] oc-folder: Flags are now used in indexing db when deleting a msg
+  * [cd64ca] oc-calendar: wDay field cannot be negative
+  * [c63168] oc-calendar: getPidLidClipEnd now follows [MS-OXOCAL]
+  * [35ca31] oc-calendar: Fix PidLidClipStart on recurrent events
+  * [b67e1d] oc-folder: Make deleted items synched when shared
+  * [391076] oc-folder: Uniform call to deleteMessageWithMID
+  * [616f2a] Fix compilation when samba file is not others readable
+  * [ef7b91] Return MAPISTORE_ERR_NOT_FOUND when a mail is indexed but not in IMAP server
+  * [a8b716] oc: sync old messages as last resort if there are not in cache
+
+  [ Julio García ]
+  * [1a5c06] Refresing quilt patch 0001-Put-private-libraries-in-usr-lib-sogo
+  * [52d0d0] Refreshing patch 0003-Link-libSOGo-with-libdl
+  * [3c15aa] Change the upstream branch for git-buildpackage because now we have the UI changes only in trusty
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 25 Nov 2014 10:40:59 +0100
+
 sogo (2.2.7-zentyal3) trusty; urgency=medium
 
   [ Jesús García Sáez ]
