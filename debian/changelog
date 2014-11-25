@@ -1,3 +1,12 @@
+sogo (2.2.9a-zentyal2) trusty; urgency=medium
+
+  [ Miguel Julián ]
+  * [bbaad8] Fixed javascript error after merge
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 25 Nov 2014 11:06:53 +0100
+
 sogo (2.2.9a-zentyal1) trusty; urgency=medium
 
   [ Jeroen Dekkers ]
