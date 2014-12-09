@@ -1,3 +1,18 @@
+sogo (2.2.9a-zentyal3) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [f4e15e] Fix memory leak on getPidTagSubject
+  * [2c6d83] Remove an attempt to double free content
+  * [7691d6] Attempt to sync an UID in setChangeKey to avoid crashing
+  * [067809] Store changeNumber maps with modseq in cache for subfolders
+
+  [ Jesús García Sáez ]
+  * [97201c] abort if attemp to sync an UID in setChangekey fails
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 09 Dec 2014 08:49:37 +0100
+
 sogo (2.2.9a-zentyal2) trusty; urgency=medium
 
   [ Miguel Julián ]
