@@ -1,3 +1,21 @@
+sogo (2.2.9a-zentyal4) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [dba17f] Create child folder objects using parent context for real
+  * [a56fc9] oc: Guess recipients from some properties while importing PST
+  * [087a85] Require latest libmapi to build
+
+  [ Jesús García Sáez ]
+  * [501ee7] oc-rtf: fix parse \pict tag with \bin data
+  * [838ae8] oc: ignore unhandled properties instead of abort
+
+  [ Miguel Julián ]
+  * [5394dd] Fix dependency to work against proposed versions
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 08 Jan 2015 12:57:11 +0100
+
 sogo (2.2.9a-zentyal3) trusty; urgency=medium
 
   [ Enrique J. Hernández Blasco ]
