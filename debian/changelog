@@ -1,3 +1,30 @@
+sogo (2.2.9a-zentyal5) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [d05235] oc: encoding names must be case insensitive
+  * [7e7d30] oc: warning if codepage not found from headerCharset
+  * [f9550b] oc: several uninitialized variables
+  * [8e7f6d] oc: avoid change number leaking when refreshing folder.
+  * [34efcf] oc: synchroniseCache store modseq for last delete change number.
+  * [47be39] oc: avoid request change number until necessary
+  * [312084] oc: improve modseqFromMessageChangeNumber to return an approximation.
+
+  [ Enrique J. Hernández Blasco ]
+  * [b35fee] oc-contacts: Implement Wedding Anniversary
+  * [d5d97d] oc: PT_SYSTIME is an absolute timestamp
+  * [c6b976] oc-mail: Remove unnecessary time shift in date for new mails
+  * [c89396] oc-tasks: Set right start, due and complete dates
+  * [8b44c0] oc-calendar: Remove unnecessary shifts on start,end and replace time props
+  * [99a36b] oc: Remove a source folder on move folder operation
+  * [0e8bf0] oc-mail: Move mail folders with reserved chars
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [00cef8] Restore multitenancy changes for OpenChange
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 27 Jan 2015 08:57:20 +0100
+
 sogo (2.2.9a-zentyal4) trusty; urgency=medium
 
   [ Enrique J. Hernández Blasco ]
