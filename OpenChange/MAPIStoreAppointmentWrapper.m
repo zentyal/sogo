@@ -1836,15 +1836,26 @@ ReservedBlockEE2Size: 00 00 00 00
   NSUInteger count, max;
   iCalAlarm *currentAlarm;
   NSString *action;
+  NSCalendarDate *now, *alarmDate;
 
   alarms = [event alarms];
   max = [alarms count];
+  now = [NSCalendarDate calendarDate];
   for (count = 0; !alarm && count < max; count++)
     {
       currentAlarm = [alarms objectAtIndex: count];
-      action = [[currentAlarm action] lowercaseString];
-      if (!action || [action isEqualToString: @"display"])
-        ASSIGN (alarm, currentAlarm);
+
+      // Only handle 'display' alarms
+      action = [currentAlarm action];
+      if ([action caseInsensitiveCompare: @"display"] != NSOrderedSame)
+        continue;
+
+      // Only set alarms from the future!
+      alarmDate = [[currentAlarm trigger] nextAlarmDate];
+      if ([alarmDate compare: now] != NSOrderedDescending)
+        continue;
+
+      ASSIGN (alarm, currentAlarm);
     }
 
   alarmSet = YES;
