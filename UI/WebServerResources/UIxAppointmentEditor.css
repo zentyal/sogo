@@ -14,6 +14,9 @@ DIV#eventView
   left: 0px;
   padding: 20px; }
 
+DIV#eventView > DIV
+{ padding: 1em; }
+
 DIV.appointmentRightLabel
 { display: inline;
   vertical-align: middle; }
