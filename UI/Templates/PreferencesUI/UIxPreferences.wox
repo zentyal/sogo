@@ -302,6 +302,7 @@
             </div><!-- #calendarOptionsTabs -->
           </div><!-- #calendarOptionsView -->
         </var:if>
+
         <div id="contactsOptionsView" class="tab">
           <label><var:string label:value="Categories"/></label>
           <div id="contactsCategoriesListWrapper" class="listWrapper"
@@ -333,6 +334,7 @@
           <input type="hidden" const:id="contactsCategoriesValue"
           const:name="contactsCategoriesValue" var:value="contactsCategoriesValue"/>
         </div>
+
         <var:if condition="userHasMailAccess">
           <div id="mailOptionsView" class="tab">
             <dl class="dl-horizontal">
@@ -389,6 +391,9 @@
                 const:name="displayRemoteInlineImages"
                 string="itemDisplayRemoteInlineImagesText"
                 selection="userDisplayRemoteInlineImages"/></dd>
+              <dt><var:string label:value="Auto save every"/></dt>
+              <dd><input const:name="autoSave" const:id="autoSave"
+              type="text" autocomplete="off" var:value="autoSave"/><var:string label:value="minutes"/></dd>
             </dl>
             
             <div class="tabsContainer" id="mailOptionsTabs">
@@ -517,16 +522,22 @@
               </script>
               
               <fieldset const:id="identityInfo">
-                <dl class="dl-horizontal">
-                  <dt><var:string label:value="Full Name:"/></dt>
-                  <dd><input const:name="fullName" const:id="fullName" type="text" const:value=""/></dd>
-                  <dt><var:string label:value="Email:"/></dt>
-                  <dd><input const:name="email" const:id="email" type="text" const:value=""/></dd>
-                  <dt><var:string label:value="Reply To Email:"/></dt>
-                  <dd><input const:name="replyTo" const:id="replyTo" type="text" autocomplete="off" const:value=""/></dd>
-                  <dt><var:string label:value="Signature:"/></dt>
-                  <dd><span id="actSignature"><!--space --></span></dd>
-                </dl>
+                <div class="inline-field">
+                  <label><var:string label:value="Full Name:"/></label>
+                  <input const:name="fullName" const:id="fullName" type="text" const:value=""/>
+                </div>
+                <div class="inline-field">
+                  <label><var:string label:value="Email:"/></label>
+                  <input const:name="email" const:id="email" type="text" const:value=""/>
+                </div>
+                <div>
+                  <label><var:string label:value="Reply To Email:"/></label>
+                  <input const:name="replyTo" const:id="replyTo" type="text" autocomplete="off" const:value=""/>
+                </div>
+                <div>
+                  <label><var:string label:value="Signature:"/></label>
+                  <span id="actSignature"><!--space --></span>
+                </div>
               </fieldset>
               
               <fieldset const:id="returnReceiptsInfo">
@@ -580,11 +591,10 @@
                 var:checked="enableVacation" />
                 <var:string label:value="Enable vacation auto reply"/></label>
               <div id="vacation">
-                <label><var:string label:value="Auto reply message :"/><br/>
+                  <label><var:string label:value="Auto reply message :"/></label>
                   <textarea const:name="autoReplyText"
                   const:id="autoReplyText"
                   var:value="autoReplyText"/>
-                </label><br/>
                 
                 <label><var:string label:value="Email addresses (separated by commas) :"/><br/>
                   <input type="hidden"
@@ -623,6 +633,7 @@
                 />
                 
               </div>
+
             </div>
             </var:if
           ><var:if condition="isForwardEnabled">
@@ -647,9 +658,9 @@
                   <var:string label:value="Keep a copy" /></label><br/>
               </div>
             </div>
-          </var:if>
-        </var:if><!-- userHasMailAccess -->
-        <var:if condition="shouldDisplayPasswordChange">
+          </var:if
+            ></var:if
+          ><var:if condition="shouldDisplayPasswordChange">
           <div id="passwordView" class="tab">
             <p id="passwordFields"><label><var:string label:value="New password:"
               /><input const:id="newPasswordField" class="textField"

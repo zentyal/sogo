@@ -17,7 +17,7 @@ var contactSelectorAction = 'calendars-contacts';
 var eventsToDelete = [];
 var calendarsOfEventsToDelete = [];
 
-var usersRightsWindowHeight = 215;
+var usersRightsWindowHeight = 270;
 var usersRightsWindowWidth = 502;
 
 var calendarEvents = null;
@@ -89,7 +89,7 @@ function newEvent(type, day, hour, duration) {
     if (params.length > 0)
         urlstr += "?" + params.join("&");
 
-    window.open(urlstr, "", "width=490,height=470,resizable=0");
+    window.open(urlstr, "", "width=600,height=600,resizable=0");
 
     return false; /* stop following the link */
 }
@@ -168,10 +168,6 @@ function updateEventFromDraggingCallback(http) {
         if (isHttpStatus204(http.status)) {
             refreshEventsAndDisplay();
         }
-        else {
-            var response = http.responseText.evalJSON(true);
-            showAlertDialog(response['message']);
-        }
     }
 }
 
@@ -228,7 +224,7 @@ function _editEventId(id, calendar, recurrence) {
     }
     urlstr += "/edit";
     var win = window.open(urlstr, "_blank",
-                          "width=490,height=470,resizable=0");
+                          "width=600,height=600,resizable=0");
     if (win)
         win.focus();
 }
@@ -529,20 +525,6 @@ function onMenuRawEvent(event) {
     openGenericWindow.delay(0.1, url);
 }
 
-function modifyEvent(sender, modification, parameters) {
-    var currentLocation = '' + window.location;
-    var arr = currentLocation.split("/");
-    arr[arr.length-1] = modification;
-
-    document.modifyEventAjaxRequest = triggerAjaxRequest(arr.join("/"),
-                                                         modifyEventCallback,
-                                                         modification,
-                                                         parameters,
-                                                         { "Content-type": "application/x-www-form-urlencoded" });
-
-    return false;
-}
-
 function closeInvitationWindow() {
     var closeDiv = document.createElement("div");
     document.body.appendChild(closeDiv);
@@ -798,6 +780,7 @@ function onViewEventCallback(http) {
             var cellDimensions = cell.getDimensions();
             var div = $("eventDialog");
             var divDimensions = div.getDimensions();
+            var viewPosition = $("calendarView").cumulativeOffset();
             var view;
             var left;
             var top = cellPosition[1] - 5;
@@ -817,6 +800,7 @@ function onViewEventCallback(http) {
                 }
             }
             else {
+                view = $("calendarView");
                 top -= cell.up("DIV.day").scrollTop;
             }
 
@@ -1062,7 +1046,7 @@ function eventsListCallback(http) {
                 td.observe("mousedown", listRowMouseDownHandler, true);
                 var colorDiv = createElement("div", false, "colorBox calendarFolder" + calendar);
                 td.appendChild(colorDiv);
-                colorDiv.update('&nbsp;');
+                colorDiv.update('OO');
                 var span = createElement("span");
                 td.appendChild(span);
                 span.update(data[i][4]); // title
@@ -1243,7 +1227,7 @@ function tasksListCallback(http) {
                 row.appendChild(cell);
                 var colorDiv = createElement("div", false, "colorBox calendarFolder" + calendar);
                 cell.appendChild(colorDiv);
-                colorDiv.update('&nbsp;');
+                colorDiv.update('OO');
                 var t = new Element ("span");
                 cell.appendChild(t);
                 t.update(data[i][4]); // title
@@ -1292,6 +1276,7 @@ function tasksListCallback(http) {
                     var node = $(selectedNodesId[i]);
                     if (node) {
                         node.selectElement();
+                        showMessageSelectedButtons();
                     }
                 }
             }
@@ -1319,6 +1304,7 @@ function restoreCurrentDaySelection(div) {
                     if (document.selectedDate)
                         document.selectedDate.deselect();
                     $(td).selectElement();
+                    showMessageSelectedButtons();
                     document.selectedDate = td;
                 }
             }
@@ -1327,11 +1313,13 @@ function restoreCurrentDaySelection(div) {
 }
 
 function loadPreviousView(event) {
-    onCalendarGotoDay($("leftNavigationArrow"));
+    var previousArrow = $$("A.leftNavigationArrow").first();
+    onCalendarGotoDay(previousArrow);
 }
 
 function loadNextView(event) {
-    onCalendarGotoDay($("rightNavigationArrow"));
+    var nextArrow = $$("A.rightNavigationArrow").first();
+    onCalendarGotoDay(nextArrow);
 }
 
 function changeDateSelectorDisplay(day, keepCurrentDay) {
@@ -1866,7 +1854,7 @@ function resetCategoriesStyles() {
         categoriesStyles.keys().each(function(category) {
             var color = UserDefaults['SOGoCalendarCategoriesColors'][category];
             if (color) {
-                rules.push('border-right: 8px solid ' + color);
+                rules[rules.length] = '{ background-color: ' + color + '; }';
                 selectors.push('DIV.' + categoriesStyles.get(category));
             }
         });
@@ -1946,11 +1934,6 @@ function newBaseEventDIV(eventRep, event, eventText) {
 
     var gradientDiv = createElement("div");
     innerDiv.appendChild(gradientDiv);
-    gradientDiv.addClassName("gradient");
-
-    var gradientImg = createElement("img");
-    gradientDiv.appendChild(gradientImg);
-    gradientImg.src = ResourcesURL + "/event-gradient.png";
 
     var textDiv = createElement("div");
     innerDiv.appendChild(textDiv);
@@ -2203,7 +2186,7 @@ function adjustCalendarHeaderDIV() {
     var dv = $("daysView");
     if (dv) {
         var ch = $("calendarHeader");
-        var delta = ch.clientWidth - dv.clientWidth - 1;
+        var delta = ch.clientWidth - dv.clientWidth;
         var styleElement = document.createElement("style");
         styleElement.type = "text/css";
         var selectors = ["DIV#calendarHeader DIV.calendarLabels",
@@ -2663,6 +2646,7 @@ function selectCalendarEvent(calendar, cname, recurrenceTime) {
     if (selection) {
         for (var i = 0; i < selection.length; i++)
             selection[i].selectElement();
+            showMessageSelectedButtons();
         if (selectedCalendarCell) {
             selectedCalendarCell = selectedCalendarCell.concat(selection);
         }
@@ -2750,6 +2734,7 @@ function onCalendarSelectEvent(event, willShowContextualMenu) {
         deselectAll();
         listOfSelection = null;
         this.selectElement();
+        showMessageSelectedButtons();
         if (alreadySelected)
             selectedCalendarCell = [this];
     }
@@ -2763,6 +2748,7 @@ function onCalendarSelectEvent(event, willShowContextualMenu) {
         var div = row.parentNode.parentNode.parentNode;
         div.scrollTop = row.offsetTop - (div.offsetHeight / 2);
         row.selectElement();
+        showMessageSelectedButtons();
     }
 }
 
@@ -2795,7 +2781,8 @@ function onCalendarSelectDay(event) {
         // Target is not an event -- unselect all events.
         listOfSelection = $("eventsList");
         deselectAll();
-        return true;
+        preventDefault(event);
+        return false;
     }
 
     if (listOfSelection) {
@@ -3153,22 +3140,17 @@ function multicolumndayviewCalendarSelector(event, target) {
 }
 
 function onMenuCurrentView(event) {
-    var target = getTarget(event);
     $("eventDialog").hide();
     if (this.hasClassName('event')) {
-        // Select event cell
         var onClick = onCalendarSelectEvent.bind(this);
         onClick(event, true);
-        target = this;
     }
-    multicolumndayviewCalendarSelector(event, target);
-    popupMenu(event, 'currentViewMenu', target);
+    popupMenu(event, 'currentViewMenu', this);
 }
 
 function onMenuAllDayView(event) {
     $("eventDialog").hide();
-    multicolumndayviewCalendarSelector(event, getTarget(event));
-    popupMenu(event, 'allDayViewMenu', getTarget(event));
+    popupMenu(event, 'allDayViewMenu', this);
 }
 
 function configureEventsDraggables() {
@@ -3335,7 +3317,6 @@ function onCalendarSelectionChange(event) {
     if (target.tagName == 'DIV' || target.tagName == 'SPAN') {
         target = target.parentNode;
     }
-
     onRowClick(event, target);
 }
 
@@ -3568,7 +3549,7 @@ function appendCalendar(folderName, folderPath) {
         li.appendChild(document.createTextNode(" "));
 
         var colorBox = document.createElement("div");
-        colorBox.appendChild(document.createTextNode("\u00a0"));
+        colorBox.appendChild(document.createTextNode("OO"));
         li.appendChild(colorBox);
 
         var displayName = document.createElement("span");

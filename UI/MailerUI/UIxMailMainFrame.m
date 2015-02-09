@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2007-2013 Inverse inc.
+  Copyright (C) 2007-2014 Inverse inc.
 
   This file is part of SOGo.
 
@@ -370,7 +370,7 @@
    [self _setupContext];
    height = [moduleSettings objectForKey: @"DragHandleVertical"];
 
-   return ((height && [height intValue] > 0) ? (id)[NSString stringWithFormat: @"%ipx", ([height intValue] - 27)] : nil);
+   return ((height && [height intValue] > 0) ? (id)[NSString stringWithFormat: @"%ipx", ([height intValue])] : nil);
 }
 
 - (WOResponse *) saveDragHandleStateAction

@@ -399,7 +399,7 @@ Object.extend(Function.prototype, (function() {
     var __method = this, args = slice.call(arguments, 1);
 
     var bound = function() {
-      var a = merge(args, arguments);
+      var a = merge(args, arguments), c = context;
       var c = this instanceof bound ? this : context;
       return __method.apply(c, a);
     };
@@ -582,8 +582,7 @@ Object.extend(String.prototype, (function() {
     }
 
     while (source.length > 0) {
-      match = source.match(pattern)
-      if (match && match[0].length > 0) {
+      if (match = source.match(pattern)) {
         result += source.slice(0, match.index);
         result += String.interpret(replacement(match));
         source  = source.slice(match.index + match[0].length);
@@ -658,10 +657,7 @@ Object.extend(String.prototype, (function() {
         var key = decodeURIComponent(pair.shift()),
             value = pair.length > 1 ? pair.join('=') : pair[0];
 
-        if (value != undefined) {
-          value = value.gsub('+', ' ');
-          value = decodeURIComponent(value);
-        }
+        if (value != undefined) value = decodeURIComponent(value);
 
         if (key in hash) {
           if (!Object.isArray(hash[key])) hash[key] = [hash[key]];
@@ -755,17 +751,12 @@ Object.extend(String.prototype, (function() {
     return this.indexOf(pattern) > -1;
   }
 
-  function startsWith(pattern, position) {
-    position = Object.isNumber(position) ? position : 0;
-    return this.lastIndexOf(pattern, position) === position;
+  function startsWith(pattern) {
+    return this.lastIndexOf(pattern, 0) === 0;
   }
 
-  function endsWith(pattern, position) {
-    pattern = String(pattern);
-    position = Object.isNumber(position) ? position : this.length;
-    if (position < 0) position = 0;
-    if (position > this.length) position = this.length;
-    var d = position - pattern.length;
+  function endsWith(pattern) {
+    var d = this.length - pattern.length;
     return d >= 0 && this.indexOf(pattern, d) === d;
   }
 
@@ -807,8 +798,8 @@ Object.extend(String.prototype, (function() {
     isJSON:         isJSON,
     evalJSON:       NATIVE_JSON_PARSE_SUPPORT ? parseJSON : evalJSON,
     include:        include,
-    startsWith:     String.prototype.startsWith || startsWith,
-    endsWith:       String.prototype.endsWith || endsWith,
+    startsWith:     startsWith,
+    endsWith:       endsWith,
     empty:          empty,
     blank:          blank,
     interpolate:    interpolate
@@ -935,8 +926,8 @@ var Enumerable = (function() {
   }
 
   function include(object) {
-    if (Object.isFunction(this.indexOf) && this.indexOf(object) != -1)
-      return true;
+    if (Object.isFunction(this.indexOf))
+      if (this.indexOf(object) != -1) return true;
 
     var found = false;
     this.each(function(value) {
@@ -1420,13 +1411,11 @@ var Hash = Class.create(Enumerable, (function() {
 
 
   function _each(iterator, context) {
-    var i = 0;
     for (var key in this._object) {
       var value = this._object[key], pair = [key, value];
       pair.key = key;
       pair.value = value;
-      iterator.call(context, pair, i);
-      i++;
+      iterator.call(context, pair);
     }
   }
 
@@ -1480,7 +1469,7 @@ var Hash = Class.create(Enumerable, (function() {
   function toQueryPair(key, value) {
     if (Object.isUndefined(value)) return key;
 
-    value = String.interpret(value);
+    var value = String.interpret(value);
 
     value = value.gsub(/(\r)?\n/, '\r\n');
     value = encodeURIComponent(value);
@@ -1596,9 +1585,9 @@ var ObjectRange = Class.create(Enumerable, (function() {
   }
 
   function _each(iterator, context) {
-    var value = this.start, i;
-    for (i = 0; this.include(value); i++) {
-      iterator.call(context, value, i);
+    var value = this.start;
+    while (this.include(value)) {
+      iterator.call(context, value);
       value = value.succ();
     }
   }
@@ -1793,8 +1782,7 @@ Ajax.Request = Class.create(Ajax.Base, {
     }
 
     for (var name in headers)
-      if (headers[name] != null)
-        this.transport.setRequestHeader(name, headers[name]);
+      this.transport.setRequestHeader(name, headers[name]);
   },
 
   success: function() {
@@ -2645,7 +2633,6 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function down(element, expression, index) {
-    if (arguments.length === 1) return firstDescendant(element);
     element = $(element), expression = expression || 0, index = index || 0;
 
     if (Object.isNumber(expression))
@@ -2773,9 +2760,9 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   var PROBLEMATIC_ATTRIBUTE_READING = (function() {
-    DIV.setAttribute('onclick', []);
+    DIV.setAttribute('onclick', Prototype.emptyFunction);
     var value = DIV.getAttribute('onclick');
-    var isFunction = Object.isArray(value);
+    var isFunction = (typeof value === 'function');
     DIV.removeAttribute('onclick');
     return isFunction;
   })();
@@ -2801,7 +2788,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
       name = table.names[attr] || attr;
       value = attributes[attr];
       if (table.values[attr])
-        name = table.values[attr](element, value) || name;
+        name = table.values[attr](element, value);
       if (value === false || value === null)
         element.removeAttribute(name);
       else if (value === true)
@@ -3141,7 +3128,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function hasLayout_IE(element) {
-    if (!element.currentStyle || !element.currentStyle.hasLayout)
+    if (!element.currentStyle.hasLayout)
       element.style.zoom = 1;
     return element;
   }
@@ -3469,14 +3456,6 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   Element.addMethods(methods);
-
-  function destroyCache_IE() {
-    DIV = null;
-    ELEMENT_CACHE = null;
-  }
-
-  if (window.attachEvent)
-    window.attachEvent('onunload', destroyCache_IE);
 
 })(this);
 (function() {
@@ -4119,8 +4098,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   function viewportOffset(forElement) {
     var valueT = 0, valueL = 0, docBody = document.body;
 
-    forElement = $(forElement);
-    var element = forElement;
+    var element = $(forElement);
     do {
       valueT += element.offsetTop  || 0;
       valueL += element.offsetLeft || 0;
@@ -4153,11 +4131,10 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     var layout = element.getLayout();
 
     element.store('prototype_absolutize_original_styles', {
-      position: element.getStyle('position'),
-      left:     element.getStyle('left'),
-      top:      element.getStyle('top'),
-      width:    element.getStyle('width'),
-      height:   element.getStyle('height')
+      left:   element.getStyle('left'),
+      top:    element.getStyle('top'),
+      width:  element.getStyle('width'),
+      height: element.getStyle('height')
     });
 
     element.setStyle({
@@ -6265,23 +6242,18 @@ var Form = {
       accumulator = function(result, key, value) {
         if (key in result) {
           if (!Object.isArray(result[key])) result[key] = [result[key]];
-          result[key] = result[key].concat(value);
+          result[key].push(value);
         } else result[key] = value;
         return result;
       };
     } else {
       initial = '';
-      accumulator = function(result, key, values) {
-        if (!Object.isArray(values)) {values = [values];}
-        if (!values.length) {return result;}
-        var encodedKey = encodeURIComponent(key).gsub(/%20/, '+');
-        return result + (result ? "&" : "") + values.map(function (value) {
-          value = value.gsub(/(\r)?\n/, '\r\n');
-          value = encodeURIComponent(value);
-          value = value.gsub(/%20/, '+');
-          return encodedKey + "=" + value;
-        }).join("&");
-      };
+      accumulator = function(result, key, value) {
+        value = value.gsub(/(\r)?\n/, '\r\n');
+        value = encodeURIComponent(value);
+        value = value.gsub(/%20/, '+');
+        return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
+      }
     }
 
     return elements.inject(initial, function(result, element) {
@@ -6715,14 +6687,17 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
             node = currentTarget;
     }
 
-    return node.nodeType == Node.TEXT_NODE ? node.parentNode : node;
+    if (node.nodeType == Node.TEXT_NODE)
+      node = node.parentNode;
+
+    return Element.extend(node);
   }
 
   function findElement(event, expression) {
-    var element = _element(event), selector = Prototype.Selector;
+    var element = _element(event), match = Prototype.Selector.match;
     if (!expression) return Element.extend(element);
     while (element) {
-      if (Object.isElement(element) && selector.match(element, expression))
+      if (Object.isElement(element) && match(element, expression))
         return Element.extend(element);
       element = element.parentNode;
     }
@@ -7003,8 +6978,8 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
 
   function stopObservingElement(element) {
-    var uid = getUniqueElementID(element), registry = GLOBAL.Event.cache[uid];
-    if (!registry) return;
+    var uid = getUniqueElementID(element),
+     registry = getRegistryForElement(element, uid);
 
     destroyRegistryForElement(element, uid);
 
@@ -7184,9 +7159,9 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
       return createMouseEnterLeaveResponder(uid, eventName, handler);
 
     return function(event) {
-      if (!Event.cache) return;
+      var cacheEntry = Event.cache[uid];
+      var element = cacheEntry.element;
 
-      var element = Event.cache[uid].element;
       Event.extend(event, element);
       handler.call(element, event);
     };
@@ -7194,7 +7169,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   function createResponderForCustomEvent(uid, eventName, handler) {
     return function(event) {
-      var element = Event.cache[uid].element;
+      var cacheEntry = Event.cache[uid], element = cacheEntry.element;
 
       if (Object.isUndefined(event.eventName))
         return false;
@@ -7209,7 +7184,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
   function createMouseEnterLeaveResponder(uid, eventName, handler) {
     return function(event) {
-      var element = Event.cache[uid].element;
+      var cacheEntry = Event.cache[uid], element = cacheEntry.element;
 
       Event.extend(event, element);
       var parent = event.relatedTarget;
@@ -7257,12 +7232,6 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     }
 
     fireContentLoadedEvent();
-  }
-
-
-  if (document.readyState === 'complete') {
-    fireContentLoadedEvent();
-    return;
   }
 
   if (document.addEventListener) {

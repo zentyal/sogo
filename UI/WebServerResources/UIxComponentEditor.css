@@ -5,12 +5,15 @@ form[name="editform"]
   right: 0;
   bottom: 0; }
 
+form[name="editform"] #eventView
+{ padding: 1em; }
+
 SELECT#calendarList,
 SELECT#categoryList,
 SELECT#priorityList,
 SELECT#repeatList,
 SELECT#reminderList
-{ width: 13em; }
+{ width: 100% }
 
 #attendeesLabel
 { display: none; }
@@ -20,10 +23,6 @@ A#changeAttachButton
   position: absolute;
   right: 0;
   display: inline; }
-
-SPAN.datePicker INPUT.textField,
-SPAN.timeDateControl INPUT.textField
-{ width: 7em; } 
 
 SPAN.timeDateControl A.button
 { border: 0; }
@@ -42,13 +41,11 @@ SPAN.content
   overflow: hidden;
   min-height: 22px; }
 
-LABEL, SPAN.checkBoxList
+LABEL
 { display: block;
   position: relative;
-  line-height: 1.5em;
-  height: 1.5em;
   margin-left: 0px;
-  margin-bottom: .5em;
+  margin-top: 1em;
   width: 100%; }
 
 LABEL#commentArea textarea
@@ -125,8 +122,44 @@ IMG#progressIndicator
 
 SPAN.content INPUT,
 SPAN.content SELECT,
-SPAN.content SPAN,
-SPAN.timeDateControl INPUT,
-SPAN.timeDateControl SELECT,
-SPAN.timeDateControl SPAN
+SPAN.content SPAN{
+  vertical-align: top;
+}
+
+
+/* date picker */
+
+.timeDateControl INPUT,
+.timeDateControl SELECT,
+.timeDateControl SPAN
 { vertical-align: top; }
+
+.timeDateControl {
+    display: block;
+}
+
+.datePicker {
+    display: inline-block;
+    position: relative;
+}
+.datePicker a.calendarButton.add-on{
+  padding: 4px 3px 1px 5px;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+}
+.datePicker INPUT:disabled + a.calendarButton,
+.datePicker INPUT:disabled + a.calendarButton:hover{ 
+  cursor: default;
+  opacity: 0.5;
+}
+
+.datePicker INPUT{
+    padding-right: 30px;
+    width: auto;
+    width: 110px;
+}
+.timeDateControl > INPUT {
+    display: inline-block;
+    width: auto;
+}

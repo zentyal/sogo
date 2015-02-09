@@ -288,51 +288,6 @@ function onComponentEditorClose(event) {
         ComponentEditor.reminderWindow.close();
 }
 
-function onWindowResize(event) {
-    var comment = $("commentArea");
-    if (comment) {
-        // Resize comment area of read-write component
-        var document = $("documentLabel");
-        var area = comment.select("textarea").first();
-        var offset = 6;
-        var height;
-        
-        height = window.height() - comment.cumulativeOffset().top - offset;
-        
-        if (document.visible()) {
-            // Component has an attachment
-            if ($("changeAttachButton"))
-                height -= $("changeAttachButton").getHeight();
-            else
-                height -= $("documentHref").getHeight();
-        }
-        
-        if (area)
-            area.setStyle({ height: (height - offset*2) + "px" });
-
-        comment.setStyle({ height: (height - offset) + "px" });
-    }
-    else {
-        // Resize attendees area of a read-only component
-        $("eventView").style.height = window.height () + "px";
-        var height = window.height() - 120;
-        var tmp = $("generalDiv");
-        if (tmp)
-            height -= tmp.offsetHeight;
-        tmp = $("descriptionDiv");
-        if (tmp)
-            height -= tmp.offsetHeight;
-        
-        tmp = $("attendeesDiv");
-        if (tmp) {
-            tmp.style.height = height + "px";
-            $("attendeesMenu").style.height = (height - 20) + "px";
-        }
-    }
-    
-    return true;
-}
-
 function onPopupRecurrenceWindow(event) {
     if (event)
         preventDefault(event);
@@ -371,7 +326,7 @@ function onPopupReminderWindow(event) {
             if (ComponentEditor.reminderWindow && ComponentEditor.reminderWindow.open && !ComponentEditor.reminderWindow.closed)
                 ComponentEditor.reminderWindow.focus();
             else {
-                var height = (emailAlarmsEnabled ? 235 : 150);
+                var height = (emailAlarmsEnabled ? 450 : 300);
                 ComponentEditor.reminderWindow
                     = window.open(ApplicationBaseURL + "/editReminder",
                                   sanitizeWindowName(activeCalendar + activeComponent + "Reminder"),
@@ -386,26 +341,22 @@ function onPopupReminderWindow(event) {
 }
 
 function onOkButtonClick (e) {
-    var item = $("replyList");
-    var value = parseInt(item.options[item.selectedIndex].value);
-    var action = "";
-    var parameters = "";
-  
-    if (value == 0)
-        action = 'accept';
-    else if (value == 1)
-        action = 'decline';
-    else if (value == 2)
-        action = 'needsaction';
-    else if (value == 3)
-        action = 'tentative';
-    else if (value == 4) {
-        var url = ApplicationBaseURL + "/" + activeCalendar + "/" + activeComponent;
-        delegateInvitation(url, modifyEventCallback);
-    }
+    
+    var jsonData = Form.serialize(document.forms['rsvpform'], true);
 
-    if (action != "")
-        modifyEvent (item, action, parameters);
+    var input = $("delegatedTo");
+    if (input && input.readAttribute("uid") != null) {
+        jsonData['delegatedTo'] = input.readAttribute("uid");
+    }
+    
+    triggerAjaxRequest(document.forms['rsvpform'].readAttribute("action"),
+                       modifyEventCallback,
+                       null,
+                       Object.toJSON(jsonData),
+                       { "content-type": "application/json"}
+                       );
+    
+    return false;
 }
 
 function onCancelButtonClick (e) {

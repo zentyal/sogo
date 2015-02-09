@@ -1,10 +1,8 @@
 /* -*- Mode: java; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 /*
-  Copyright (C) 2005 SKYRIX Software AG
-  Copyright (C) 2006-2013 Inverse inc.
-  
- 
+  Copyright (C) 2006-2014 Inverse inc.
+   
   This file is part of SOGo.
  
   SOGo is free software; you can redistribute it and/or modify it under
@@ -54,29 +52,29 @@ function validateAptEditor() {
 
     e = $('startTime_date');
     if (e.value.length != 10) {
-        showAlertDialog(labels.validate_invalid_startdate);
+        alert(labels.validate_invalid_startdate);
         return false;
     }
 
     startdate = getStartDate();
     if (startdate == null) {
-        showAlertDialog(labels.validate_invalid_startdate);
+        alert(labels.validate_invalid_startdate);
         return false;
     }
       
     e = $('endTime_date');
     if (e.value.length != 10) {
-        showAlertDialog(labels.validate_invalid_enddate);
+        alert(labels.validate_invalid_enddate);
         return false;
     }
     enddate = getEndDate();
     if (enddate == null) {
-        showAlertDialog(labels.validate_invalid_enddate);
+        alert(labels.validate_invalid_enddate);
         return false;
     }
     tmpdate = uixEarlierDate(startdate, enddate);
     if (tmpdate == enddate) {
-        showAlertDialog(labels.validate_endbeforestart);
+        alert(labels.validate_endbeforestart);
         return false;
     }
     else if (tmpdate == null /* means: same date */) {
@@ -93,23 +91,23 @@ function validateAptEditor() {
                 endMinute = parseInt(matches[2], 10);
 
                 if (startHour > endHour) {
-                    showAlertDialog(labels.validate_endbeforestart);
+                    alert(labels.validate_endbeforestart);
                     return false;
                 }
                 else if (startHour == endHour) {
                     if (startMinute > endMinute) {
-                        showAlertDialog(labels.validate_endbeforestart);
+                        alert(labels.validate_endbeforestart);
                         return false;
                     }
                 }
             }
             else {
-                showAlertDialog(labels.validate_invalid_enddate);
+                alert(labels.validate_invalid_enddate);
                 return false;
             }
         }
         else {
-            showAlertDialog(labels.validate_invalid_startdate);
+            alert(labels.validate_invalid_startdate);
             return false;
         }
     }
@@ -208,7 +206,7 @@ function onEventPostComplete(response) {
         }
         else {
             var message = jsonResponse["message"];
-            showAlertDialog(jsonResponse["message"]);
+            alert(jsonResponse["message"]);
         }
     }
 }
@@ -329,7 +327,7 @@ function onAdjustTime(event) {
         else {
             var delta = endDate.valueOf() - startDate.valueOf();
             if (delta < 0) {
-                showAlertDialog(labels.validate_endbeforestart);
+                alert(labels.validate_endbeforestart);
                 var oldEndDate = window.getShadowEndDate();
                 window.setEndDate(oldEndDate);
 
@@ -490,7 +488,7 @@ function initializeAttendeesHref() {
 }
 
 function onAttendeesHrefClick(event) {
-    popupMenu(event, 'attendeesMenu', this);
+    popupToolbarMenu(this, 'attendeesMenu');
     preventDefault(event);
     return false;
 }
@@ -539,7 +537,6 @@ function onAppointmentEditorLoad() {
 
     // Extend JSON representation of attendees
     attendees = $H(attendees);
-
     initializeAttendeesHref();
 }
 

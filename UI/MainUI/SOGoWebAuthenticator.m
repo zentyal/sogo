@@ -1,6 +1,6 @@
 /* SOGoWebAuthenticator.m - this file is part of SOGo
  *
- * Copyright (C) 2007-2013 Inverse inc.
+ * Copyright (C) 2007-2014 Inverse inc.
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,17 +39,18 @@
 
 #import <MainUI/SOGoRootPage.h>
 
-#import "SOGoCache.h"
-#import "SOGoCASSession.h"
-#import "SOGoConstants.h"
-#import "SOGoPermissions.h"
-#import "SOGoSession.h"
-#import "SOGoSystemDefaults.h"
-#import "SOGoUser.h"
-#import "SOGoUserManager.h"
+#import <SOGo/SOGoCache.h>
+#import <SOGo/SOGoCASSession.h>
+#import <SOGo/SOGoConstants.h>
+#import <SOGo/SOGoPermissions.h>
+#import <SOGo/SOGoSession.h>
+#import <SOGo/SOGoSystemDefaults.h>
+#import <SOGo/SOGoUser.h>
+#import <SOGo/SOGoUserManager.h>
 #if defined(SAML2_CONFIG)
-#import "SOGoSAML2Session.h"
+#import <SOGo/SOGoSAML2Session.h>
 #endif
+
 #import "SOGoWebAuthenticator.h"
 
 #define COOKIE_SESSIONKEY_LEN 16
