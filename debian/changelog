@@ -1,3 +1,243 @@
+sogo (2.2.15-zentyal1) trusty; urgency=medium
+
+  [ Ludovic Marcotte ]
+  * [9610fc] Bumped version
+  * [25b7ff] Fix for bug #2930
+  * [51ed37] Adjusted debian install files regarding sogo lib move
+  * [68d794] Fixed makefile for teststrings due to sogo lib change
+  * [f93c06] Fixed include
+  * [184319] Fixed makefile
+  * [8875c4] Fixed makefile
+  * [ba4a50] Added rpath kungfu
+  * [fb3ddc] Improved makefiles
+  * [f88cfa] Improved and simplified rpath
+  * [f29a47] Added rpath
+  * [7f49dc] Avoid using SOGO_SYSLIBDIR when testing since it's undefined
+  * [e38371] Updated spec file for SOGo's private libraries move
+  * [20e0cd] Fixed RHEL packaging with lib move to "sogo" app directory
+  * [29295f] Fixed again the spec file
+  * [ab9ba6] More fixes
+  * [435ebb] Fixes
+  * [3e2de9] Fixes
+  * [f1919d] Flag for conditional openchange build
+  * [ff9d49] Dropped rpath since it seems to be ignored on el5
+  * [4b76e2] Added lib64 in the search path
+  * [1a8aa5] Fixed spec file to not build sogo-openchange if disabled
+  * [81ff6b] Removed dependancies when openchange is disabled
+  * [c5a7bc] Fixed the system lib dir to point to the sogo lib dir
+  * [ccabd9] moved system lib dirs to additional lib dirs
+  * [f66395] Adjusted the rpath, removed unnecessary variables/values
+  * [3416bf] Adjusted rpath and removed unusued -L directives
+  * [5f811e] Added rpath for integration tests
+  * [326445] Added back -L directives to properly compile teststrings
+  * [096a0e] Disabled openchange builds on all i386 arch
+  * [c43ad3] Disable OpenChange for now on RHEL 7
+  * [d6ff90] Disable timezone in AS for now
+  * [b2cab0] Handle empty categories
+  * [b4f7ec] Don't send empty <Responses> tag
+  * [231987] Handle empty Attendees tag
+  * [fb95d8] Handle base64 encoded query strings, popular on Windows devices
+  * [42ef0b] Added doc around IMAP word size vs. ActiveSync on large mail folders
+  * [b53c72] TZ fixes on WP devices all day events
+  * [395545] WP fails to sync if an event is changed on the sever and the client sends a modification of another event
+  * [da962a] Added support for multiple calendars/addressbooks over ActiveSync
+  * [b5023e] Fix for bug #2940
+  * [70cd24] Fix for bug #2965
+  * [d76a43] Added one more sanitization pass on decoded content
+  * [08427e]  set userTimeZone if event has no tz
+  * [52fdcc] Fixed typo
+  * [4b9958] Handle base64-encoded command parameters in EAS
+  * [6de70e] sanitize strings before encoding them when using EAS
+  * [e08dd3] Fix for bug #2978
+  * [49da49] Fix for bug #2968
+  * [54d8aa] Added new zone files
+  * [11a4c1] Fixed corrupted PNG files (#2975)
+  * [8cd72a] Fix borken ORGANIZER fields during the PUT action
+  * [395a8d] Updated once more the tz and added missing zones
+  * [624af1] Fixed test
+  * [cb8b0b] Disable lasso for RHEL7 for now
+  * [d8e644] More disable lasso
+  * [5284b5] More EL7 fixes
+  * [c159d5] disable rpm-check-build for now
+  * [715999] Avoid compilation failures on non-RHEL 7 distros
+  * [8e1dc0] Typo in previous commit
+  * [d25fe1] Dramatically improved BSON deserialization speed by avoiding tz name lookups
+  * [ea43f4] Comment improvement
+  * [c0f0f2] added NEWS entry for BSON goodie
+  * [b3cd60] Added WindowSize support for GCS collections
+  * [387234] Added required patch for previous commit
+  * [1f167d] Fixed IMAP searches with non-ASCII folder names
+  * [ac5550] Updated NEWS file regarding the SOPE commit for bug #2957
+  * [6bbaf5] Initial pass of the doc for v2.2.10 on Debian/Ubuntu
+  * [95e3c7] More doc fixes for v2.2.10
+  * [b4718f] More documentation fixes for v2.2.10
+  * [327147] Fixed typo
+  * [f7935c] Bumped version numbers for the releasex
+  * [efff32] Update ChangeLog
+  * [bb2274] Check lenght of string before trying to use parameters
+  * [5f14bc] Report the correct preference keys
+  * [20e728] Remove unnecessary comments
+  * [913a75] Fix for bug #
+  * [89917c] New entry for bug #2381
+  * [5a5464] An other fix for #2930
+  * [be608d] Bug fixes for #2378 and #2377 and documentation improvements
+  * [c3715c] Added additional bugfix for #2982
+  * [1b715e] We now handle correctly the SOGo logout when using SAML (#2376 and #2379)
+  * [9ffa32] Enable SAML support on all Debian-based distro
+  * [fe9ad9] Radically reduced EAS memory usage
+  * [9ef4d1] Fix for bug #3010
+  * [3f3673] Added SOGoSAML2LogoutURL
+  * [ae0cbf] Fix for bug #2982
+  * [9e14a3] Improvements over fixes for #2982
+  * [2b95dd] Avoid generating GUID for "Other user"/"Shared" folders
+  * [12788c] New sogo-tool feature to manage EAS data
+  * [64637d] Prevent compilation failures with old gcc versions
+  * [aac6b2] Preparation for the release
+  * [1c0e64] Update ChangeLog
+  * [3c063e] v2.2.11a release + bug fix
+  * [b8c796] Update ChangeLog
+  * [16bf29] Version bump for the release
+  * [c8b746] Update ChangeLog
+  * [990f78] Allow including or not freebusy info from subscribed calendars
+  * [9dd0d6] Draft autossave feature
+  * [9cb1f8] Fix sogo-tool when cleaning up devices
+  * [e79ea7] Categories and privacy fixes for bug #3022
+  * [175b99] Updated NEWS regarding previous commit
+  * [20b3d4] MeetingStatus fix affecting iOS devices
+  * [f29a74] avoid testing for IMAP ANNOTATION when X-GUID is available
+  * [3eac0f] Improved NEWS file
+  * [fb6ef3] Now possible to set alarms on event invitations
+  * [0f2798] Lucid fixes for EAS
+  * [cbfb92] Properly escape Attendee's email address in case it contains crap
+  * [7380b2] Be a bit more verbose regarding IMAP requirements for EAS
+  * [68655d] Improved rpath handling (#2996)
+  * [bfaaf6] Revert back to using GNUSTEP_SYSTEM_LIBRARIES for teststrings
+  * [70dbcf] Fix for MeetingStatus applied yesterday
+  * [eb4d20] Privacy and categories support for tasks
+  * [cd70be] Fix for bug #3008
+  * [493c36] Fix for bug #3003
+  * [8aea5f] Fix for bug #3028
+  * [fcddb3] Fixed typo and bumped for release
+  * [db911f] Updated ChangeLog and version numbers for the release
+  * [de3d38] Fix for bug #3034
+  * [e6cc56] Bumped version to 2.2.12a
+  * [df8a0d] Update ChangeLog
+  * [b07913] See NEWS file
+  * [801568] Added SOGoMaximumSyncResponseSize to support memory-limited EAS syncs
+  * [ca4a75] Use the right cutoff date
+  * [58f634] Cosmetic improvements to the code
+  * [24a934] Fix small memory leak incase of errors
+  * [727328] Added memory statistics - set SOGoDebugLeaks = YES and call [[self class] memoryStatistics]
+  * [255bcb] Fixed memory leaks in SOGoSyncCacheObject and correctly kill the cache upon each EAS iteration
+  * [31cffd] Fix freebusy info not always returned
+  * [204a62] Improved comments in the code
+  * [a0c1ce] Improved handling of non-existant vs. subscribed folders over EAS
+  * [ead665] fix tz issue when the user one was different from the system one with EAS
+  * [71ad5d] Bumped everything for the release
+  * [b1ac7a] MultipleBookingsFieldName can be set to -1
+  * [24c6c8] Fix for bug #3054
+  * [cb9118] Moved the pool destruction at the correct location
+  * [1cfbea] Make sure we always release local pool
+  * [6b52e9] Fix for bug #2960
+  * [28e449] Updated NEWS file for bugs fixed
+  * [70e45f] fixed birthday offset in EAS
+  * [f4c4f5] fixed From's full name over EAS
+  * [135b46] Updated the EAS doc
+  * [d87056] handle multipart for EAS/ItemOperations
+  * [16c863] Fixed potential issue when handling multiple Add/Change/Delete/Fetch EAS commands (#3057)
+  * [e9e3dd] fixed timezone calculation on recurring event
+  * [e45451] Improved comments over previous commit
+  * [3e59b1] Improved documentation regarding password policies over LDAP
+  * [daa7ab] Fix cosmetic change when fetching fb info
+  * [d98ff6] Version bumps for the release
+  * [d907d5] Avoid using NSLog() where we can
+  * [1a1059] Removed unnecessary NSLog calls
+  * [e2bee2] Avoid unnecessary calls to NSLog
+  * [ab12c8] More NSLog usage cleanups
+  * [086361] Avoid GNUstep warnings
+  * [981c71] improved handling of EAS Push when no heartbeat is provided
+  * [7fd156] fix for #3076
+  * [723a9d] Reverted bug fix from #3054 and added comment
+  * [58a0b0] Updated for the release
+  * [cf35ee] Improved the NEWS file for the release
+  * [2aa528] Preparation for the release
+
+  [ Francis Lachapelle ]
+  * [89284d] Add missing translation
+  * [d7f842] Improve XSL for documentation
+  * [a03170] Card view: don't escape <br>'s in note field
+  * [6cc8f1] Fix display name of subscribed folders
+  * [460ed2] Fix JavaScript warning on undefined variable
+  * [f8a371] Fix folder's name when subscribing to a folder
+  * [27ac9e] Cleanup of unused parameters
+  * [e2136e] Don't leak database passwords in the logs
+  * [6695aa] Fix crash when opening a mailbox with empty filter
+  * [15be48] Fix support for SieveFolderEncoding default
+  * [7052da] Fix rename of subscribed addressbooks
+  * [df648c] Add 'zip' to packages dependencies
+  * [3d18c9] Fix extraction of email addresses in some cases
+  * [78ea14] Update translations
+  * [f7f78e] Update CKEditor to version 4.4.5
+  * [ce5e46] Remove unused templates from SchedulerUI
+  * [6526d5] Localization
+  * [54dabb] Update CKEditor to version 4.4.6 (+ sourcearea)
+  * [e04080] Fix display of dialog in RO appointment editor
+  * [6027cb] Fix CSS and templates of component/apptmt editor
+  * [f8ab3d] Update NEWS file
+  * [8e79d4] Update translations
+  * [59e6d6] Fix selection of calendar in event/task editors
+  * [dd6dd7] Fix selection of calendar in event/task editors
+  * [4cc158] Improve CSS server-side cleaner
+  * [d1d398] Update translations
+
+  [ Jeroen Dekkers ]
+  * [6ded9e] Put private libraries in /usr/lib/sogo
+  * [4cc6b7] Make png files non-executable
+
+  [ Jens Erat ]
+  * [22844a] Minor fixes in documentation
+  * [25f68c] Added missing NGImap4DisableIMAP4Pooling option to documentation
+  * [19221b] Removed erroneous backslash in documentation
+  * [4e6214] Fixed ActiveSync URL in documentation
+  * [39e8f0] Added information on common configuration issues
+
+  [ Alexandre Cloutier ]
+  * [923aa5] bugfix #2952, default sorting for new user
+  * [0327a4] Update NEWS file
+
+  [ Robin McCorkell ]
+  * [b0633b] Add check for remote_user variable for trusted proxy auth
+
+  [ extrafu ]
+  * [47094b] Update SOGoSAML2Metadata.xml
+
+  [ Chris Rosenhain ]
+  * [0e5652] Change ACL modification text to non-gender specific terms
+
+  [ Enrique J. Hernández Blasco ]
+  * [b01de7] oc: Move back and forth folders now are in sync
+  * [57d591] oc: Set right container in dbFolder when moving a folder
+  * [dc8012] oc-mail: Implement move a mail subfolder to root
+  * [142dee] oc: Implement move a DB subfolder to root
+  * [969868] oc-mail: Set content type for a message after upgrading sope 2.2.15
+  * [68ebc9] oc: Use dlinklist from samba for now
+
+  [ Jesús García Sáez ]
+  * [5258ee] oc-appointments: ignore alarms already triggered
+
+  [ Julio García ]
+  * [10abbb] Revert "moved base table creation code into SOGo.framework"
+  * [90742e] Refreshing quilt patches
+  * [2499b3] Fixing warning in the control while compiling
+  * [5e4189] Adapting css after latest merges from upstream
+
+  [ Miguel Julián ]
+  * [20e911] New event toolbar is now clickable
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 12 Feb 2015 10:12:23 +0100
+
 sogo (2.2.9a-zentyal5) trusty; urgency=medium
 
   [ Jesús García Sáez ]
