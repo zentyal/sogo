@@ -157,7 +157,8 @@ TD.activeColumn
 P#passwordFields,
 P#passwordError
 { width: 410px;
-  text-align: right; }
+  text-align: left;
+  margin 10px; }
 
 P.errorMessage#passwordError
 { color: #f00; }
@@ -173,8 +174,7 @@ P.infoMessage#passwordError
   margin: 0px; }
 
 #mailAccountEditor
-{ position: absolute;
-  overflow: auto;
+{ overflow: auto;
   bottom: 30px;
 //  left: 140px;
   padding: 0px;
