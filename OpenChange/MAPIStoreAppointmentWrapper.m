@@ -38,6 +38,7 @@
 #import <NGCards/iCalPerson.h>
 #import <NGCards/iCalTrigger.h>
 #import <NGCards/NSString+NGCards.h>
+#import <SOGo/SOGoObject.h>
 #import <SOGo/SOGoUser.h>
 #import <SOGo/SOGoUserManager.h>
 
@@ -1725,11 +1726,16 @@ ReservedBlockEE2Size: 00 00 00 00
   NSData *binPrefix;
   TALLOC_CTX *localMemCtx;
 
-  localMemCtx = talloc_zero (NULL, TALLOC_CTX);
+  localMemCtx = talloc_zero(NULL, TALLOC_CTX);
 
   memset (&newGlobalId, 0, sizeof (struct GlobalObjectId));
 
   uid = [event uid];
+  if (uid == NULL) {
+    uid = [SOGoObject globallyUniqueObjectId];
+    [event setUid: uid];
+  }
+
   uidLength = [uid length];
   if (uidLength >= 82 && (uidLength % 2) == 0 && [uid hasPrefix: prefix]
       && [[uid stringByTrimmingCharactersInSet: hexCharacterSet] length] == 0)
