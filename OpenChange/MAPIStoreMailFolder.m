@@ -1443,6 +1443,9 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
 {
   uint32_t rights = 0;
 
+  if ([roles containsObject: SoRole_Owner])
+    rights |= RoleOwner;
+
   if ([roles containsObject: SOGoMailRole_Administrator])
     rights |= (RoleOwner ^ RightsAll);
   if ([roles containsObject: SOGoRole_ObjectCreator])
