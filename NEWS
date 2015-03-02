@@ -1,3 +1,14 @@
+master
+------
+
+Enhancements
+ - Complete contact properties saving between profiles
+ - Appointment color and importance work now between Outlooks
+
+Bug fixes
+ - Fix Outlook crashes when modifying the view of a folder
+ - Fix server side crash when reading some recurrence appointments
+
 2.2.15 (2015-01-30)
 -------------------
 
