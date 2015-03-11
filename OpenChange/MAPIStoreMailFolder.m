@@ -657,6 +657,17 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
               [self logWithFormat:@"Message entry not found for UID %@", uid];
             }
         }
+      /* If the SyncLastDeleteChangeNumber does not exist and we have deleted items
+         to return, we have to set, at least, a change number. This avoids a crash when
+         getting the deleted FMIDs. */
+      if (max > 0 && !changeNumber && ![currentProperties objectForKey: @"SyncLastDeleteChangeNumber"])
+        {
+          newChangeNum = [[self context] getNewChangeNumber];
+          changeNumber = [NSString stringWithUnsignedLongLong: newChangeNum];
+          [self logWithFormat: @"Created change number as %d were deleted and no SyncLastDeleteChangeNumber was available",
+                max];
+        }
+
       if (changeNumber)
         {
           [currentProperties setObject: changeNumber
