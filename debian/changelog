@@ -1,3 +1,42 @@
+sogo (2.2.15-zentyal2) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [d3a4b4] oc-calendar: Remove commented code
+  * [eaec3c] oc-calendar: Remove useless method
+  * [2a1b36] oc-calendar: Proper getter for AppointmentWrapper proxy object
+  * [e6ba15] oc-calendar: PidTagImportance and PidTagNormalizedSubject working
+  * [624967] oc-calendar: Implement PidTagSensitivity
+  * [9b847a] oc-calendar: Implement categories to share the colour
+  * [575600] oc-calendar: Return PidTagContainerClass for Calendar folders
+  * [44dfd3] oc-mail: Set sender on email messages without an orig recipient
+  * [316ade] oc: Implement Sharing Message Object
+  * [6af8b4] oc-mail: Return special properties on sharing_metadata.xml attachment
+  * [ae7ac1] oc-mail: Return sharing properties on sharing object mail message
+  * [2b5489] oc-sharing: Guess PidLidSharingFlavor from other props
+
+  [ Jesús García Sáez ]
+  * [b388ee] oc: Add fai properties for custom views
+  * [731934] oc: Add fai properties for custom views
+  * [22196e] Fix change password with DomainBasedUID
+
+  [ Julio García ]
+  * [f4c39b] Fix UI glitches in Preferences dialog when enabling new options
+  * [cd47c9] Update news for next release
+  * [88293d] Preparing release for 2.2.15-zentyal2
+
+  [ Juan Vallés ]
+  * [4c3c74] oc-contacts: Save missing contact properties in database
+
+  [ Javier Amor García ]
+  * [ef6aab] oc-calendar: Don't change event recurrence if parse failed.
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [3b2cbb] oc: Free headerEncoding variable
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 16 Mar 2015 13:26:18 +0100
+
 sogo (2.2.15-zentyal1) trusty; urgency=medium
 
   [ Ludovic Marcotte ]
