@@ -442,48 +442,6 @@ static NSString *recTypes[] = { @"orig", @"to", @"cc", @"bcc" };
   *dataPtr = msgData;
 }
 
-static inline NSString *
-MakeRecipientString (NSDictionary *recipient)
-{
-  NSString *fullName, *email, *fullEmail;
-
-  fullName = [recipient objectForKey: @"fullName"];
-  email = [recipient objectForKey: @"email"];
-  if ([email length] > 0)
-    {
-      if ([fullName length] > 0)
-        fullEmail = [NSString stringWithFormat: @"%@ <%@>", fullName, email];
-      else
-        fullEmail = email;
-    }
-  else
-    {
-      NSLog (@"recipient not generated from record: %@", recipient);
-      fullEmail = nil;
-    }
-
-  return fullEmail;
-}
-
-static inline NSArray *
-MakeRecipientsList (NSArray *recipients)
-{
-  NSMutableArray *list;
-  NSUInteger count, max;
-  NSString *recipient;
-
-  max = [recipients count];
-  list = [NSMutableArray arrayWithCapacity: max];
-  for (count = 0; count < max; count++)
-    {
-      recipient = MakeRecipientString ([recipients objectAtIndex: count]);
-      if (recipient)
-        [list addObject: recipient];
-    }
-
-  return list;
-}
-
 static NSString *
 QuoteSpecials (NSString *address)
 {
@@ -531,6 +489,48 @@ QuoteSpecials (NSString *address)
     result = address;
 
   return result;
+}
+
+static inline NSString *
+MakeRecipientString (NSDictionary *recipient)
+{
+  NSString *fullName, *email, *fullEmail;
+
+  fullName = [recipient objectForKey: @"fullName"];
+  email = [recipient objectForKey: @"email"];
+  if ([email length] > 0)
+    {
+      if ([fullName length] > 0)
+        fullEmail = [NSString stringWithFormat: @"%@ <%@>", fullName, email];
+      else
+        fullEmail = email;
+    }
+  else
+    {
+      NSLog (@"recipient not generated from record: %@", recipient);
+      return  nil;
+    }
+
+  return QuoteSpecials(fullEmail);
+}
+
+static inline NSArray *
+MakeRecipientsList (NSArray *recipients)
+{
+  NSMutableArray *list;
+  NSUInteger count, max;
+  NSString *recipient;
+
+  max = [recipients count];
+  list = [NSMutableArray arrayWithCapacity: max];
+  for (count = 0; count < max; count++)
+    {
+      recipient = MakeRecipientString ([recipients objectAtIndex: count]);
+      if (recipient)
+        [list addObject: recipient];
+    }
+
+  return list;
 }
 
 static inline void

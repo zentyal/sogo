@@ -306,9 +306,7 @@ static NSString *mailETag = nil;
       for (count = 0; !matchingIdentityEMail && count < max; count++)
         {
           address = [recipients objectAtIndex: count];
-          currentEMail = [NSString stringWithFormat: @"%@@%@",
-                                   [address mailbox],
-                                   [address host]];
+          currentEMail = [address baseEMail];
           if ([self _userHasEMail: currentEMail])
             {
               matchingIdentityEMail = currentEMail;

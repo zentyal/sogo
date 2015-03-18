@@ -21,6 +21,7 @@ Bug fixes
  - Fix sender on importing email messages like event invitations
  - Fix Outlook crashes when modifying the view of a folder
  - Fix server side crash when reading some recurrence appointments
+ - Fix MIME encoding appearing in recipients with underscore
 
 2.2.15 (2015-01-30)
 -------------------
