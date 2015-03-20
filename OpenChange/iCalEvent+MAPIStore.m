@@ -450,9 +450,16 @@
       value = [properties objectForKey: MAPIPropertyKey (PR_HTML)];
       if (value)
         {
+          /* Store the HTML in X-ALT-DESC with FMTTYPE to 'text/html' as
+             described in [MS-OXCICAL] Section 2.1.3.1.1.20.27 */
           value = [[NSString alloc] initWithData: value
                                         encoding: NSUTF8StringEncoding];
           [value autorelease];
+
+          CardElement *altDesc = [self uniqueChildWithTag: @"x-alt-desc"];
+          [altDesc setSingleValue: value forKey: @""];
+          [altDesc addAttribute: @"fmttype" value: @"text/html"];
+
           value = [value htmlToText];
         }
     }

@@ -1291,6 +1291,27 @@ static NSCharacterSet *hexCharacterSet = nil;
   return rc;
 }
 
+- (int) getPidTagHtml: (void **) data
+         inMemCtx: (TALLOC_CTX *) memCtx
+{
+  CardElement *elem;
+  enum mapistore_error rc = MAPISTORE_ERR_NOT_FOUND;
+  NSString *html;
+
+  elem = [event uniqueChildWithTag: @"x-alt-desc"];
+  if (elem && [elem hasAttribute: @"fmttype" havingValue: @"text/html"])
+    {
+      html = [elem flattenedValuesForKey: @""];
+      if (html && [html length] > 0)
+        {
+          *data = [[html dataUsingEncoding: NSUTF8StringEncoding] asBinaryInMemCtx: memCtx];
+          rc = MAPISTORE_SUCCESS;
+        }
+    }
+
+  return rc;
+}
+
 - (int) getPidTagInternetCodepage: (void **) data
                          inMemCtx: (TALLOC_CTX *) memCtx
 {

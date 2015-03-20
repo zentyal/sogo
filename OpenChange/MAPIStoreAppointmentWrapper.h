@@ -134,6 +134,8 @@
                inMemCtx: (TALLOC_CTX *) memCtx;
 - (int) getPidTagBody: (void **) data
          inMemCtx: (TALLOC_CTX *) memCtx;
+- (int) getPidTagHtml: (void **) data
+         inMemCtx: (TALLOC_CTX *) memCtx;
 - (int) getPidLidIsRecurring: (void **) data
                     inMemCtx: (TALLOC_CTX *) memCtx;
 - (int) getPidLidRecurring: (void **) data
