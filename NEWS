@@ -2,9 +2,17 @@ master
 ------
 
 Enhancements
+ - Sharing request among different Outlook versions
  - Improve sync speed from Outlook by non-reprocessing already downloaded unread mails
 
 Bug fixes
+ - Does not create a mail folder in other user's mailbox
+ - Fix server-side crash with invalid events
+ - Fix setting permissions for a folder with several users
+ - Fix reception of calendar event invitations on optional attendees
+ - Fix server side crash parsing rtf without color table
+ - Weekly recurring events created in SOGo web interface are now shown in Outlook
+ - Fix exception modifications import in recurrence series
  - Sent mails are not longer in Drafts folder using Outlook
  - Fix server side crash parsing rtf emails with images (with word97 format)
 

@@ -179,6 +179,12 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
     {
       nameInContainer = [NSString stringWithFormat: @"folder%@",
                                   [[folderName stringByEncodingImap4FolderName] asCSSIdentifier]];
+
+      /* it may be the operation is interleaved with operations
+         from other users having cached information in the thread
+         with the other user, so it'd better activate the user again here... */
+      [[self userContext] activateWithUser: [[[self userContext] woContext] activeUser]];
+
       newFolder = [SOGoMailFolderK objectWithName: nameInContainer
                                       inContainer: sogoObject];
       if ([newFolder create])
@@ -962,6 +968,37 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
     }
 
   return list;
+}
+
+/* Management for extra properties once they already hit the IMAP server */
+- (void) setExtraProperties: (NSDictionary *) props
+                 forMessage: (NSString *) messageKey
+{
+  NSMutableDictionary *extraProps, *currentProperties;
+  NSString *messageUid;
+
+  messageUid = [self messageUIDFromMessageKey: messageKey];
+  currentProperties = [versionsMessage properties];
+  extraProps = [currentProperties objectForKey: @"ExtraMessagesProperties"];
+  if (!extraProps)
+    {
+      extraProps = [NSMutableDictionary new];
+      [currentProperties setObject: extraProps forKey: @"ExtraMessagesProperties"];
+      [extraProps release];
+    }
+
+  [extraProps setObject: props
+                 forKey: messageUid];
+  [versionsMessage save];
+}
+
+- (NSDictionary *) extraPropertiesForMessage: (NSString *) messageKey
+{
+  NSString *messageUid;
+
+  messageUid = [self messageUIDFromMessageKey: messageKey];
+  return [[[versionsMessage properties] objectForKey: @"ExtraMessagesProperties"]
+                   objectForKey: messageUid];
 }
 
 - (NSArray *) getDeletedKeysFromChangeNumber: (uint64_t) changeNum
