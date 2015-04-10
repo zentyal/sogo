@@ -47,6 +47,7 @@
 #import "NSObject+MAPIStore.h"
 #import "NSString+MAPIStore.h"
 
+#include <libmapi/libmapi.h>
 #include <mapistore/mapistore.h>
 #include <mapistore/mapistore_errors.h>
 #include <execinfo.h>
@@ -58,8 +59,8 @@ static BOOL initialization_done = NO;
 #define NS_CURRENT_THREAD_REGISTER() \
     BOOL __nsrct_thread_registered = GSRegisterCurrentThread(); \
     if (!initialization_done) { \
-        DEBUG(5, ("[SOGo: %s:%d] You should call sogo_backend_init() first. Current thread: %p, pid: %d\n", \
-		  __FUNCTION__, __LINE__, GSCurrentThread(), getpid())); \
+        OC_DEBUG(5, "[SOGo] You should call sogo_backend_init() first. Current thread: %p, pid: %d\n", \
+                 GSCurrentThread(), getpid());                         \
     }
 #define NS_CURRENT_THREAD_TRY_UNREGISTER() \
     if (__nsrct_thread_registered) { \
@@ -144,7 +145,7 @@ sogo_backend_init (void)
   GSRegisterCurrentThread();
 
   if (initialization_done) {
-      DEBUG(0, ("SOGo backend already initialized.\n"));
+      OC_DEBUG(5, "[SOGo] SOGo backend already initialized.\n");
       return MAPISTORE_SUCCESS;
   }
 
@@ -190,7 +191,7 @@ sogo_backend_init (void)
 
   [pool release];
 
-  DEBUG(0, ("[SOGo: %s:%d] backend init SUCCESS. Current thread: %p, pid: %d\n", __FUNCTION__, __LINE__, GSCurrentThread(), getpid()));
+  OC_DEBUG(5, "[SOGo] backend init SUCCESS. Current thread: %p, pid: %d\n", GSCurrentThread(), getpid());
   initialization_done = YES;
 
   return MAPISTORE_SUCCESS;
@@ -214,7 +215,7 @@ sogo_backend_create_context(TALLOC_CTX *mem_ctx,
   MAPIStoreContext *context;
   int rc;
 
-  DEBUG(0, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   NS_CURRENT_THREAD_REGISTER();
   pool = [NSAutoreleasePool new];
@@ -251,7 +252,7 @@ sogo_backend_create_root_folder (const char *username,
   NSString *mapistoreUri;
   int rc;
 
-  DEBUG(0, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   NS_CURRENT_THREAD_REGISTER();
   pool = [NSAutoreleasePool new];
@@ -288,7 +289,7 @@ sogo_backend_list_contexts(const char *username, struct indexing_context *indexi
   NSString *userName;
   int rc;
 
-  DEBUG(0, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   NS_CURRENT_THREAD_REGISTER();
   pool = [NSAutoreleasePool new];
@@ -336,7 +337,7 @@ sogo_context_get_path(void *backend_object, TALLOC_CTX *mem_ctx,
   MAPIStoreContext *context;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (backend_object)
     {
@@ -370,7 +371,7 @@ sogo_context_get_root_folder(void *backend_object, TALLOC_CTX *mem_ctx,
   MAPIStoreFolder *folder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (backend_object)
     {
@@ -413,7 +414,7 @@ sogo_folder_open_folder(void *folder_object, TALLOC_CTX *mem_ctx, uint64_t fid, 
   MAPIStoreFolder *folder, *childFolder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -457,7 +458,7 @@ sogo_folder_create_folder(void *folder_object, TALLOC_CTX *mem_ctx,
   MAPIStoreFolder *folder, *childFolder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -500,7 +501,7 @@ sogo_folder_delete(void *folder_object)
   MAPIStoreFolder *folder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -532,7 +533,7 @@ sogo_folder_get_child_count(void *folder_object, enum mapistore_table_type table
   MAPIStoreFolder *folder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -568,7 +569,7 @@ sogo_folder_open_message(void *folder_object,
   MAPIStoreMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -610,7 +611,7 @@ sogo_folder_create_message(void *folder_object,
   MAPIStoreMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -646,7 +647,7 @@ sogo_folder_delete_message(void *folder_object, uint64_t mid, uint8_t flags)
   MAPIStoreFolder *folder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -684,7 +685,7 @@ sogo_folder_move_copy_messages(void *folder_object,
   struct MAPIStoreTallocWrapper *wrapper;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -728,7 +729,7 @@ sogo_folder_move_folder(void *folder_object, void *target_folder_object,
   struct MAPIStoreTallocWrapper *wrapper;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -778,7 +779,7 @@ sogo_folder_copy_folder(void *folder_object, void *target_folder_object, TALLOC_
   struct MAPIStoreTallocWrapper *wrapper;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -822,7 +823,7 @@ sogo_folder_get_deleted_fmids(void *folder_object, TALLOC_CTX *mem_ctx,
   MAPIStoreFolder *folder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -861,7 +862,7 @@ sogo_folder_open_table(void *folder_object, TALLOC_CTX *mem_ctx,
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -900,7 +901,7 @@ sogo_folder_modify_permissions(void *folder_object, uint8_t flags,
   MAPIStoreFolder *folder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -934,7 +935,7 @@ sogo_folder_preload_message_bodies(void *folder_object, enum mapistore_table_typ
   MAPIStoreFolder *folder;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (folder_object)
     {
@@ -969,7 +970,7 @@ sogo_message_get_message_data(void *message_object,
   MAPIStoreMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (message_object)
     {
@@ -1004,7 +1005,7 @@ sogo_message_create_attachment (void *message_object, TALLOC_CTX *mem_ctx, void 
   MAPIStoreAttachment *attachment;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (message_object)
     {
@@ -1041,7 +1042,7 @@ sogo_message_open_attachment (void *message_object, TALLOC_CTX *mem_ctx,
   MAPIStoreAttachment *attachment;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (message_object)
     {
@@ -1077,7 +1078,7 @@ sogo_message_get_attachment_table (void *message_object, TALLOC_CTX *mem_ctx, vo
   MAPIStoreAttachmentTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (message_object)
     {
@@ -1116,7 +1117,8 @@ sogo_message_modify_recipients (void *message_object,
   MAPIStoreMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (message_object)
     {
@@ -1151,7 +1153,8 @@ sogo_message_set_read_flag (void *message_object, uint8_t flag)
   MAPIStoreMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (message_object)
     {
@@ -1184,7 +1187,8 @@ sogo_message_save (void *message_object, TALLOC_CTX *mem_ctx)
   MAPIStoreMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (message_object)
     {
@@ -1217,7 +1221,8 @@ sogo_message_submit (void *message_object, enum SubmitFlags flags)
   MAPIStoreMailVolatileMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (message_object)
     {
@@ -1255,7 +1260,8 @@ sogo_message_attachment_open_embedded_message (void *attachment_object,
   MAPIStoreEmbeddedMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (attachment_object)
     {
@@ -1296,7 +1302,8 @@ sogo_message_attachment_create_embedded_message (void *attachment_object,
   MAPIStoreEmbeddedMessage *message;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (attachment_object)
     {
@@ -1332,7 +1339,8 @@ static enum mapistore_error sogo_table_get_available_properties(void *table_obje
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (table_object)
     {
@@ -1364,7 +1372,8 @@ sogo_table_set_columns (void *table_object, uint16_t count, enum MAPITAGS *prope
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (table_object)
     {
@@ -1397,7 +1406,8 @@ sogo_table_set_restrictions (void *table_object, struct mapi_SRestriction *restr
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (table_object)
     {
@@ -1432,7 +1442,8 @@ sogo_table_set_sort_order (void *table_object, struct SSortOrderSet *sort_order,
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (table_object)
     {
@@ -1469,7 +1480,8 @@ sogo_table_get_row (void *table_object, TALLOC_CTX *mem_ctx,
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (table_object)
     {
@@ -1504,7 +1516,8 @@ sogo_table_get_row_count (void *table_object,
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (table_object)
     {
@@ -1537,7 +1550,8 @@ sogo_table_handle_destructor (void *table_object, uint32_t handle_id)
   MAPIStoreTable *table;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (table_object)
     {
@@ -1571,7 +1585,8 @@ static enum mapistore_error sogo_properties_get_available_properties(void *objec
   MAPIStoreObject *propObject;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (object)
     {
@@ -1606,7 +1621,8 @@ sogo_properties_get_properties (void *object,
   MAPIStoreObject *propObject;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (object)
     {
@@ -1640,7 +1656,8 @@ sogo_properties_set_properties (void *object, struct SRow *aRow)
   MAPIStoreObject *propObject;
   int rc;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
+
 
   if (object)
     {
@@ -1675,7 +1692,7 @@ sogo_manager_generate_uri (TALLOC_CTX *mem_ctx,
   NSAutoreleasePool *pool;
   NSString *partialURLString, *username, *directory;
 
-  DEBUG (5, ("[SOGo: %s:%d]\n", __FUNCTION__, __LINE__));
+  OC_DEBUG(5, "[SOGo]");
 
   if (uri == NULL) return MAPISTORE_ERR_INVALID_PARAMETER;
 
@@ -1780,7 +1797,7 @@ int mapistore_init_backend(void)
       /* Register ourselves with the MAPISTORE subsystem */
       ret = mapistore_backend_register (&backend);
       if (ret != MAPISTORE_SUCCESS)
-        DEBUG(0, ("Failed to register the '%s' mapistore backend!\n", backend.backend.name));
+        OC_DEBUG(0, "[SOGo] Failed to register the '%s' mapistore backend!\n", backend.backend.name);
     }
 
   return ret;
