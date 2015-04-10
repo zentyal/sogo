@@ -24,7 +24,7 @@ var Mailer = {
     sortByThread: false
 };
 
-var usersRightsWindowHeight = 335;
+var usersRightsWindowHeight = 465;
 var usersRightsWindowWidth = 400;
 
 var pageContent = $("pageContent");
@@ -440,6 +440,7 @@ function onDocumentKeydown(event) {
 
                     // Select and load the next message
                     nextRow.selectElement();
+                    showMessageSelectedButtons();
                     loadMessage(Mailer.currentMessages[Mailer.currentMailbox]);
                     // from generic.js
                     lastClickedRow = nextRow.rowIndex;
@@ -688,6 +689,7 @@ function onMailboxTreeItemClick(event) {
     if (topNode.selectedEntry)
         topNode.selectedEntry.deselect();
     this.selectElement();
+    hideMessageSelectedButtons();
     topNode.selectedEntry = this;
 
     search = {};
@@ -705,7 +707,7 @@ function onMailboxTreeItemClick(event) {
     }
     else {
         var datatype = this.parentNode.getAttribute("datatype");
-        if (datatype == 'draft' || datatype == 'sent')
+        if (datatype == 'draft' || datatype == 'draft/folder' || datatype == 'sent' || datatype == 'sent/folder')
             toggleAddressColumn("from", "to");
         else
             toggleAddressColumn("to", "from");
@@ -900,7 +902,6 @@ function openMailbox(mailbox, reload) {
             // the view. Cases that end up here:
             // - performed a search
             // - clicked on Get Mail button
-            urlParams.sortingAttributes.no_headers= "1";
             var content = Object.toJSON(urlParams);
             Mailer.dataTable.load(content);
             Mailer.dataTable.refresh();
@@ -927,7 +928,7 @@ function openMailbox(mailbox, reload) {
             }
             else {
                 // Data source is cached, query only UIDs from server
-                urlParams.sortingAttributes.no_headers= "1";
+                //urlParams.sortingAttributes.no_headers= "1";
                 var content = Object.toJSON(urlParams);
                 dataSource.load(content);
             }
@@ -1363,7 +1364,29 @@ function loadMessage(msguid) {
  * Hide the "Load Images" button when there's no unsafe content
  */
 function configureLoadImagesButton() {
+    // We show/hide the "Load Images" button
     var loadImagesButton = $("loadImagesButton");
+    var content = $("messageContent");
+    var hiddenImgs = [];
+    var imgs = content.select("IMG");
+    $(imgs).each(function(img) {
+            var unsafeSrc = img.getAttribute("unsafe-src");
+            if (unsafeSrc) {
+                hiddenImgs.push(img);
+            }
+        });
+    content.hiddenImgs = hiddenImgs;
+
+    var hiddenObjects = [];
+    var objects = content.select("OBJECT");
+    $(objects).each(function(obj) {
+            if (obj.getAttribute("unsafe-data")
+                || obj.getAttribute("unsafe-classid")) {
+                hiddenObjects.push(obj);
+            }
+        });
+    content.hiddenObjects = hiddenObjects;
+
     if (typeof(loadImagesButton) == "undefined" ||
         loadImagesButton == null ) {
             return;
@@ -1372,9 +1395,6 @@ function configureLoadImagesButton() {
     var unsafeElements = content.select('[unsafe-src], [unsafe-data], [unsafe-classid], [unsafe-background], [unsafe-style]');
     if (unsafeElements.length == 0) {
         loadImagesButton.setStyle({ display: 'none' });
-    }
-    else {
-        content.hiddenElements = unsafeElements;
     }
 }
 
@@ -1440,25 +1460,26 @@ function configureLinksInMessage() {
     if (!$(document.body).hasClassName("popup"))
         mailContentDiv.observe("contextmenu", onMessageContentMenu);
 
-    configureLinks(messageDiv);
-
-    var attachmentsMenu = $("attachmentsMenu");
-    if (attachmentsMenu) {
-        var options = attachmentsMenu.select("li");
-        var callbacks = [];
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].className == 'separator')
-                callbacks.push(null);
-            else
-                callbacks.push(saveAttachment);
+    var anchors = messageDiv.getElementsByTagName('a');
+    for (var i = 0; i < anchors.length; i++) {
+        var anchor = $(anchors[i]);
+        if (!anchor.href && anchor.readAttribute("moz-do-not-send")) {
+            anchor.writeAttribute("moz-do-not-send", false);
+            anchor.removeClassName("moz-txt-link-abbreviated");
+            anchor.href = "mailto:" + anchors[i].innerHTML;
         }
-        initMenu(attachmentsMenu, callbacks);
-        $("attachmentsHref").on("click", function (event) {
-            popupMenu(event, 'attachmentsMenu', this);
-            preventDefault(event);
-            return false;
-        });
+        if (anchor.href.substring(0,7) == "mailto:") {
+            anchor.observe("click", onEmailTo);
+            anchor.observe("contextmenu", onEmailAddressClick);
+            anchor.writeAttribute("moz-do-not-send", false);
+        }
+        else
+            anchor.observe("click", onMessageAnchorClick);
     }
+
+    var attachments = messageDiv.select ("DIV.linked_attachment_body");
+    for (var i = 0; i < attachments.length; i++)
+        $(attachments[i]).observe("contextmenu", onAttachmentClick);
 
     var images = messageDiv.select("IMG.mailer_imagecontent");
     for (var i = 0; i < images.length; i++)
@@ -1466,11 +1487,12 @@ function configureLinksInMessage() {
 
     var editDraftButton = $("editDraftButton");
     if (editDraftButton)
-        editDraftButton.on("click", onMessageEditDraft);
+        editDraftButton.observe("click",
+                                onMessageEditDraft.bindAsEventListener(editDraftButton));
 
     var loadImagesButton = $("loadImagesButton");
     if (loadImagesButton)
-        loadImagesButton.on("click", onMessageLoadImages);
+        $(loadImagesButton).observe("click", onMessageLoadImages);
 
     configureiCalLinksInMessage();
 }
@@ -1656,29 +1678,40 @@ function onMessageContentMenu(event) {
 }
 
 function onMessageEditDraft(event) {
-    Event.stop(event);
     return openMessageWindowsForSelection("edit", true);
 }
 
+function onMessageAnchorClick(event) {
+    if (this.href)
+        window.open(this.href);
+    preventDefault(event);
+}
+
 function onMessageLoadImages(event) {
-    Event.stop(event);
     loadRemoteImages();
+    Event.stop(event);
 }
 
 function loadRemoteImages() {
     var content = $("messageContent");
-    if (content.hiddenElements) {
-        $(content.hiddenElements).each(function(element) {
-            ['src', 'data', 'classid', 'background', 'style'].each(function(attr) {
-                var unsafeAttr = element.readAttribute('unsafe-' + attr);
-                if (unsafeAttr) {
-                    log ('unsafe ' +  attr + ': ' + unsafeAttr);
-                    element.writeAttribute(attr, unsafeAttr);
-                }
-            });
+    $(content.hiddenImgs).each(function(img) {
+            var unSafeSrc = img.getAttribute("unsafe-src");
+            log ("unsafesrc: " + unSafeSrc);
+            img.src = img.getAttribute("unsafe-src");
         });
-        content.hiddenElements = null;
-    }
+    content.hiddenImgs = null;
+    $(content.hiddenObjects).each(function(obj) {
+            var unSafeData = obj.getAttribute("unsafe-data");
+            if (unSafeData) {
+                obj.setAttribute("data", unSafeData);
+            }
+            var unSafeClassId = obj.getAttribute("unsafe-classid");
+            if (unSafeClassId) {
+                obj.setAttribute("classid", unSafeClassId);
+            }
+        });
+    content.hiddenObjects = null;
+
     var loadImagesButton = $("loadImagesButton");
     if (loadImagesButton)
         loadImagesButton.setStyle({ display: 'none' });
@@ -1693,6 +1726,12 @@ function onEmailAddressClick(event) {
 function onImageClick(event) {
     popupMenu(event, 'imageMenu', this);
     preventDefault(event);
+    return false;
+}
+
+function onAttachmentClick (event) {
+    popupMenu (event, 'attachmentMenu', this);
+    preventDefault (event);
     return false;
 }
 
@@ -1863,16 +1902,12 @@ function download(url) {
 }
 
 function saveAttachment(event) {
-    var url = $(this).readAttribute('data-url');
-    if (url) {
-        download(url);
-    }
-    else {
-        $(this).up('ul').select('li[data-url]').each(function (item) {
-            url = $(item).readAttribute('data-url');
-            download(url);
-        });
-    }
+    var div = document.menuTarget;
+    var link = div.select ("a").first ();
+    var url = link.getAttribute("href");
+    var urlAsAttachment = url.replace(/(\/[^\/]*)$/,"/asAttachment$1");
+
+    window.location.href = urlAsAttachment;
 }
 
 /* contacts */
@@ -2002,7 +2037,7 @@ function configureDragHandles() {
 }
 
 function onMessageListResize(event) {
-    var h = $("mailboxContent").getHeight() - $("messageListHeader").getHeight();
+    var h = $("mailboxContent").getHeight() - $("messageListHeader").getHeight() - 27;
     $("mailboxList").setStyle({'height': h + 'px'});
 }
 
@@ -2072,7 +2107,10 @@ function initMailer(event) {
         initMailboxTree();
         initRefreshViewCheckTimer();
 
-        Event.observe(document, "keydown", onDocumentKeydown);
+        if (Prototype.Browser.Gecko)
+            Event.observe(document, "keypress", onDocumentKeydown); // for FF2
+        else
+            Event.observe(document, "keydown", onDocumentKeydown);
 
         /* Perform an expunge when leaving the webmail */
         //        if (isSafari()) {
@@ -2120,7 +2158,7 @@ function initMailboxTree() {
         node.parentNode.removeChild(node);
     mailboxTree = new dTree("mailboxTree");
     mailboxTree.config.hideRoot = true;
-    mailboxTree.icon.root = ResourcesURL + "/tbtv_account_17x17.png";
+    mailboxTree.icon.root = ResourcesURL + "/tbtv_account_17x17.gif";
     mailboxTree.icon.folder = ResourcesURL + "/tbtv_leaf_corner_17x17.png";
     mailboxTree.icon.folderOpen = ResourcesURL + "/tbtv_leaf_corner_17x17.png";
     mailboxTree.icon.node = ResourcesURL + "/tbtv_leaf_corner_17x17.png";
@@ -2322,15 +2360,12 @@ function generateMenuForMailbox(mailbox, prefix, callback) {
 function updateMailboxMenus() {
     var mailboxActions = { move: onMailboxMenuMove,
                            copy: onMailboxMenuCopy };
-    var accountsMenus = { move: $$('#moveMailboxMenu li'),
-                          copy: $$('#copyMailboxMenu li') };
 
     for (var key in mailboxActions) {
         for (var i = 0; i < mailAccounts.length; i++) {
             var mailbox = accounts[i];
-            var id = generateMenuForMailbox(mailbox, key + "-" + i,
-                                            mailboxActions[key]);
-            accountsMenus[key][i].submenu = id;
+            generateMenuForMailbox(mailbox, key + "-" + i,
+                                   mailboxActions[key]);
         }
     }
 }
@@ -2588,54 +2623,6 @@ function onMenuLabelNone() {
     triggerAjaxRequest(url + "/removeAllLabels", messageFlagCallback, callbackData, content);
 }
 
-function onMenuLabelFlag() {
-    var flag = this.readAttribute("data-name");
-    var url = ApplicationBaseURL + encodeURI(Mailer.currentMailbox);
-    var operation = "add";
-    var msgUIDs = [];
-    var msgLabels;
-
-    if (!Object.isArray(document.menuTarget)) {
-        msgUIDs.push(Mailer.currentMessages[Mailer.currentMailbox]);
-        if (document.menuTarget.tagName == "DIV")
-            // Menu called from message content view
-            msgLabels = $('row_' + msgUIDs[0]).getAttribute("labels");
-        else
-            // Menu called from one selection in messages list view
-            msgLabels = document.menuTarget.getAttribute("labels");
-
-        var flags = msgLabels.split(" ");
-        if (flags.indexOf(flag) > -1)
-            operation = "remove";
-    }
-    else {
-        // Menu called from multiple selection in messages list view
-        var rows = $(document.menuTarget);
-        var blockedOperation = false;
-        for (var i = 0; i < rows.length; i++) {
-            var row = $(rows[i]);
-            if (row) {
-                msgUIDs.push(rows[i].substr(4));
-                msgLabels = row.getAttribute("labels");
-
-                var flags = msgLabels.split(" ");
-                if (flags.indexOf(flag) > -1 && !blockedOperation) {
-                    operation = "remove";
-                }
-                else {
-                    blockedOperation = true;
-                    operation = "add";
-                }
-            }
-        }
-    }
-
-    var callbackData = { mailbox: Mailer.currentMailbox, operation: operation, flag: flag, msgUIDs: msgUIDs};
-    var content = {flags: flag.asCSSIdentifier(), msgUIDs: msgUIDs, operation: operation};
-    content = Object.toJSON(content);
-    triggerAjaxRequest(url + "/addOrRemoveLabel", messageFlagCallback, callbackData, content);
-}
-
 function messageFlagCallback(http) {
     if (http.readyState == 4
         && isHttpStatus204(http.status)) {
@@ -2832,13 +2819,11 @@ function onLabelMenuPrepareVisibility() {
 
         if (flags[flag]) {
             isFlagged = true;
-            lis[i].addClassName("_chosen");
+            lis[1 + i].addClassName("_chosen");
         }
-        else {
-            lis[i].removeClassName("_chosen");
-        }
+        else
+            lis[1 + i].removeClassName("_chosen");
     }
-
     if (isFlagged)
         lis[0].removeClassName("_chosen");
     else
@@ -2932,23 +2917,24 @@ function getMenus() {
                            onMenuReplyToAll,
                            onMenuForwardMessage, null,
                            "-", "moveMailboxMenu",
-                           "copyMailboxMenu", "label-menu",
+                           "copyMailboxMenu",
                            "mark-menu", "-", saveAs,
                            onMenuViewMessageSource, null,
                            null, onMenuDeleteMessage ],
         messagesListMenu: [ onMenuForwardMessage,
                             "-", "moveMailboxMenu",
-                            "copyMailboxMenu", "label-menu",
+                            "copyMailboxMenu",
                             "mark-menu", "-",
                             saveAs, null, null,
                             onMenuDeleteMessage ],
         imageMenu: [ saveImage ],
+        attachmentMenu: [ saveAttachment ],
         messageContentMenu: [ onMenuReplyToSender,
                               onMenuReplyToAll,
                               onMenuForwardMessage,
                               null, "moveMailboxMenu",
                               "copyMailboxMenu",
-                              "-", "label-menu", "mark-menu",
+                              "-","mark-menu",
                               "-",
                               saveAs, onMenuViewMessageSource,
                               null, onPrintCurrentMessage,
@@ -2957,29 +2943,26 @@ function getMenus() {
                           onMenuChangeToDraftsFolder,
                           onMenuChangeToTrashFolder  ],
 
-        "label-menu": [ onMenuLabelNone, "-" ],
-
         "mark-menu": [ onMenuToggleMessageRead, null, null, null, "-", onMenuToggleMessageFlag ],
+// , "-",
+//                        null, null, null ],
 
         searchMenu: [ setSearchCriteria, setSearchCriteria,
                       setSearchCriteria, setSearchCriteria,
                       setSearchCriteria ]
     };
 
-
-    if (typeof mailAccounts != 'undefined') {
-        menus['moveMailboxMenu'] = mailAccounts.collect(function (account) { return account.asCSSIdentifier() });
-        menus['copyMailboxMenu'] = mailAccounts.collect(function (account) { return account.asCSSIdentifier() });
-    }
-
-    var labelMenu = $("label-menu");
-    if (labelMenu) {
-        labelMenu.prepareVisibility = onLabelMenuPrepareVisibility;
-    }
-
     var markMenu = $("mark-menu");
     if (markMenu) {
         markMenu.prepareVisibility = onMarkMenuPrepareVisibility;
+    }
+
+    var listMenus = [ "messageListMenu", "messagesListMenu", "messageContentMenu" ];
+    for (var i = 0; i < listMenus.length; i++) {
+        var menu = $(listMenus[i]);
+        if (menu) {
+            menu.prepareVisibility = onMessageListMenuPrepareVisibility;
+        }
     }
 
     var accountIconMenu = $("accountIconMenu");
@@ -3113,14 +3096,20 @@ function stopDragging(event, ui) {
 
 function dropAction(event, ui) {
     var destination = $(this).up("div.dTreeNode");
-    var f;
-    if (ui.helper.hasClass("copy")) {
-        // Message(s) copied
-        f = onMailboxMenuCopy.bind(destination);
+
+    var sourceAct = Mailer.currentMailbox.split("/")[1];
+    var destAct = destination.getAttribute("dataname").split("/")[1];
+    if (sourceAct == destAct) {
+        var f;
+        if (ui.helper.hasClass("copy")) {
+            // Message(s) copied
+            f = onMailboxMenuCopy.bind(destination);
+        }
+        else {
+            // Message(s) moved
+            f = onMailboxMenuMove.bind(destination);
+        }
+
+        f();
     }
-    else {
-        // Message(s) moved
-        f = onMailboxMenuMove.bind(destination);
-    }
-    f();
 }

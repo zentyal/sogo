@@ -1,0 +1,979 @@
+sogo (2.2.15-zentyal2) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [d3a4b4] oc-calendar: Remove commented code
+  * [eaec3c] oc-calendar: Remove useless method
+  * [2a1b36] oc-calendar: Proper getter for AppointmentWrapper proxy object
+  * [e6ba15] oc-calendar: PidTagImportance and PidTagNormalizedSubject working
+  * [624967] oc-calendar: Implement PidTagSensitivity
+  * [9b847a] oc-calendar: Implement categories to share the colour
+  * [575600] oc-calendar: Return PidTagContainerClass for Calendar folders
+  * [44dfd3] oc-mail: Set sender on email messages without an orig recipient
+  * [316ade] oc: Implement Sharing Message Object
+  * [6af8b4] oc-mail: Return special properties on sharing_metadata.xml attachment
+  * [ae7ac1] oc-mail: Return sharing properties on sharing object mail message
+  * [2b5489] oc-sharing: Guess PidLidSharingFlavor from other props
+
+  [ Jesús García Sáez ]
+  * [b388ee] oc: Add fai properties for custom views
+  * [731934] oc: Add fai properties for custom views
+  * [22196e] Fix change password with DomainBasedUID
+
+  [ Julio García ]
+  * [f4c39b] Fix UI glitches in Preferences dialog when enabling new options
+  * [cd47c9] Update news for next release
+  * [88293d] Preparing release for 2.2.15-zentyal2
+
+  [ Juan Vallés ]
+  * [4c3c74] oc-contacts: Save missing contact properties in database
+
+  [ Javier Amor García ]
+  * [ef6aab] oc-calendar: Don't change event recurrence if parse failed.
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [3b2cbb] oc: Free headerEncoding variable
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 16 Mar 2015 13:26:18 +0100
+
+sogo (2.2.15-zentyal1) trusty; urgency=medium
+
+  [ Ludovic Marcotte ]
+  * [9610fc] Bumped version
+  * [25b7ff] Fix for bug #2930
+  * [51ed37] Adjusted debian install files regarding sogo lib move
+  * [68d794] Fixed makefile for teststrings due to sogo lib change
+  * [f93c06] Fixed include
+  * [184319] Fixed makefile
+  * [8875c4] Fixed makefile
+  * [ba4a50] Added rpath kungfu
+  * [fb3ddc] Improved makefiles
+  * [f88cfa] Improved and simplified rpath
+  * [f29a47] Added rpath
+  * [7f49dc] Avoid using SOGO_SYSLIBDIR when testing since it's undefined
+  * [e38371] Updated spec file for SOGo's private libraries move
+  * [20e0cd] Fixed RHEL packaging with lib move to "sogo" app directory
+  * [29295f] Fixed again the spec file
+  * [ab9ba6] More fixes
+  * [435ebb] Fixes
+  * [3e2de9] Fixes
+  * [f1919d] Flag for conditional openchange build
+  * [ff9d49] Dropped rpath since it seems to be ignored on el5
+  * [4b76e2] Added lib64 in the search path
+  * [1a8aa5] Fixed spec file to not build sogo-openchange if disabled
+  * [81ff6b] Removed dependancies when openchange is disabled
+  * [c5a7bc] Fixed the system lib dir to point to the sogo lib dir
+  * [ccabd9] moved system lib dirs to additional lib dirs
+  * [f66395] Adjusted the rpath, removed unnecessary variables/values
+  * [3416bf] Adjusted rpath and removed unusued -L directives
+  * [5f811e] Added rpath for integration tests
+  * [326445] Added back -L directives to properly compile teststrings
+  * [096a0e] Disabled openchange builds on all i386 arch
+  * [c43ad3] Disable OpenChange for now on RHEL 7
+  * [d6ff90] Disable timezone in AS for now
+  * [b2cab0] Handle empty categories
+  * [b4f7ec] Don't send empty <Responses> tag
+  * [231987] Handle empty Attendees tag
+  * [fb95d8] Handle base64 encoded query strings, popular on Windows devices
+  * [42ef0b] Added doc around IMAP word size vs. ActiveSync on large mail folders
+  * [b53c72] TZ fixes on WP devices all day events
+  * [395545] WP fails to sync if an event is changed on the sever and the client sends a modification of another event
+  * [da962a] Added support for multiple calendars/addressbooks over ActiveSync
+  * [b5023e] Fix for bug #2940
+  * [70cd24] Fix for bug #2965
+  * [d76a43] Added one more sanitization pass on decoded content
+  * [08427e]  set userTimeZone if event has no tz
+  * [52fdcc] Fixed typo
+  * [4b9958] Handle base64-encoded command parameters in EAS
+  * [6de70e] sanitize strings before encoding them when using EAS
+  * [e08dd3] Fix for bug #2978
+  * [49da49] Fix for bug #2968
+  * [54d8aa] Added new zone files
+  * [11a4c1] Fixed corrupted PNG files (#2975)
+  * [8cd72a] Fix borken ORGANIZER fields during the PUT action
+  * [395a8d] Updated once more the tz and added missing zones
+  * [624af1] Fixed test
+  * [cb8b0b] Disable lasso for RHEL7 for now
+  * [d8e644] More disable lasso
+  * [5284b5] More EL7 fixes
+  * [c159d5] disable rpm-check-build for now
+  * [715999] Avoid compilation failures on non-RHEL 7 distros
+  * [8e1dc0] Typo in previous commit
+  * [d25fe1] Dramatically improved BSON deserialization speed by avoiding tz name lookups
+  * [ea43f4] Comment improvement
+  * [c0f0f2] added NEWS entry for BSON goodie
+  * [b3cd60] Added WindowSize support for GCS collections
+  * [387234] Added required patch for previous commit
+  * [1f167d] Fixed IMAP searches with non-ASCII folder names
+  * [ac5550] Updated NEWS file regarding the SOPE commit for bug #2957
+  * [6bbaf5] Initial pass of the doc for v2.2.10 on Debian/Ubuntu
+  * [95e3c7] More doc fixes for v2.2.10
+  * [b4718f] More documentation fixes for v2.2.10
+  * [327147] Fixed typo
+  * [f7935c] Bumped version numbers for the releasex
+  * [efff32] Update ChangeLog
+  * [bb2274] Check lenght of string before trying to use parameters
+  * [5f14bc] Report the correct preference keys
+  * [20e728] Remove unnecessary comments
+  * [913a75] Fix for bug #
+  * [89917c] New entry for bug #2381
+  * [5a5464] An other fix for #2930
+  * [be608d] Bug fixes for #2378 and #2377 and documentation improvements
+  * [c3715c] Added additional bugfix for #2982
+  * [1b715e] We now handle correctly the SOGo logout when using SAML (#2376 and #2379)
+  * [9ffa32] Enable SAML support on all Debian-based distro
+  * [fe9ad9] Radically reduced EAS memory usage
+  * [9ef4d1] Fix for bug #3010
+  * [3f3673] Added SOGoSAML2LogoutURL
+  * [ae0cbf] Fix for bug #2982
+  * [9e14a3] Improvements over fixes for #2982
+  * [2b95dd] Avoid generating GUID for "Other user"/"Shared" folders
+  * [12788c] New sogo-tool feature to manage EAS data
+  * [64637d] Prevent compilation failures with old gcc versions
+  * [aac6b2] Preparation for the release
+  * [1c0e64] Update ChangeLog
+  * [3c063e] v2.2.11a release + bug fix
+  * [b8c796] Update ChangeLog
+  * [16bf29] Version bump for the release
+  * [c8b746] Update ChangeLog
+  * [990f78] Allow including or not freebusy info from subscribed calendars
+  * [9dd0d6] Draft autossave feature
+  * [9cb1f8] Fix sogo-tool when cleaning up devices
+  * [e79ea7] Categories and privacy fixes for bug #3022
+  * [175b99] Updated NEWS regarding previous commit
+  * [20b3d4] MeetingStatus fix affecting iOS devices
+  * [f29a74] avoid testing for IMAP ANNOTATION when X-GUID is available
+  * [3eac0f] Improved NEWS file
+  * [fb6ef3] Now possible to set alarms on event invitations
+  * [0f2798] Lucid fixes for EAS
+  * [cbfb92] Properly escape Attendee's email address in case it contains crap
+  * [7380b2] Be a bit more verbose regarding IMAP requirements for EAS
+  * [68655d] Improved rpath handling (#2996)
+  * [bfaaf6] Revert back to using GNUSTEP_SYSTEM_LIBRARIES for teststrings
+  * [70dbcf] Fix for MeetingStatus applied yesterday
+  * [eb4d20] Privacy and categories support for tasks
+  * [cd70be] Fix for bug #3008
+  * [493c36] Fix for bug #3003
+  * [8aea5f] Fix for bug #3028
+  * [fcddb3] Fixed typo and bumped for release
+  * [db911f] Updated ChangeLog and version numbers for the release
+  * [de3d38] Fix for bug #3034
+  * [e6cc56] Bumped version to 2.2.12a
+  * [df8a0d] Update ChangeLog
+  * [b07913] See NEWS file
+  * [801568] Added SOGoMaximumSyncResponseSize to support memory-limited EAS syncs
+  * [ca4a75] Use the right cutoff date
+  * [58f634] Cosmetic improvements to the code
+  * [24a934] Fix small memory leak incase of errors
+  * [727328] Added memory statistics - set SOGoDebugLeaks = YES and call [[self class] memoryStatistics]
+  * [255bcb] Fixed memory leaks in SOGoSyncCacheObject and correctly kill the cache upon each EAS iteration
+  * [31cffd] Fix freebusy info not always returned
+  * [204a62] Improved comments in the code
+  * [a0c1ce] Improved handling of non-existant vs. subscribed folders over EAS
+  * [ead665] fix tz issue when the user one was different from the system one with EAS
+  * [71ad5d] Bumped everything for the release
+  * [b1ac7a] MultipleBookingsFieldName can be set to -1
+  * [24c6c8] Fix for bug #3054
+  * [cb9118] Moved the pool destruction at the correct location
+  * [1cfbea] Make sure we always release local pool
+  * [6b52e9] Fix for bug #2960
+  * [28e449] Updated NEWS file for bugs fixed
+  * [70e45f] fixed birthday offset in EAS
+  * [f4c4f5] fixed From's full name over EAS
+  * [135b46] Updated the EAS doc
+  * [d87056] handle multipart for EAS/ItemOperations
+  * [16c863] Fixed potential issue when handling multiple Add/Change/Delete/Fetch EAS commands (#3057)
+  * [e9e3dd] fixed timezone calculation on recurring event
+  * [e45451] Improved comments over previous commit
+  * [3e59b1] Improved documentation regarding password policies over LDAP
+  * [daa7ab] Fix cosmetic change when fetching fb info
+  * [d98ff6] Version bumps for the release
+  * [d907d5] Avoid using NSLog() where we can
+  * [1a1059] Removed unnecessary NSLog calls
+  * [e2bee2] Avoid unnecessary calls to NSLog
+  * [ab12c8] More NSLog usage cleanups
+  * [086361] Avoid GNUstep warnings
+  * [981c71] improved handling of EAS Push when no heartbeat is provided
+  * [7fd156] fix for #3076
+  * [723a9d] Reverted bug fix from #3054 and added comment
+  * [58a0b0] Updated for the release
+  * [cf35ee] Improved the NEWS file for the release
+  * [2aa528] Preparation for the release
+
+  [ Francis Lachapelle ]
+  * [89284d] Add missing translation
+  * [d7f842] Improve XSL for documentation
+  * [a03170] Card view: don't escape <br>'s in note field
+  * [6cc8f1] Fix display name of subscribed folders
+  * [460ed2] Fix JavaScript warning on undefined variable
+  * [f8a371] Fix folder's name when subscribing to a folder
+  * [27ac9e] Cleanup of unused parameters
+  * [e2136e] Don't leak database passwords in the logs
+  * [6695aa] Fix crash when opening a mailbox with empty filter
+  * [15be48] Fix support for SieveFolderEncoding default
+  * [7052da] Fix rename of subscribed addressbooks
+  * [df648c] Add 'zip' to packages dependencies
+  * [3d18c9] Fix extraction of email addresses in some cases
+  * [78ea14] Update translations
+  * [f7f78e] Update CKEditor to version 4.4.5
+  * [ce5e46] Remove unused templates from SchedulerUI
+  * [6526d5] Localization
+  * [54dabb] Update CKEditor to version 4.4.6 (+ sourcearea)
+  * [e04080] Fix display of dialog in RO appointment editor
+  * [6027cb] Fix CSS and templates of component/apptmt editor
+  * [f8ab3d] Update NEWS file
+  * [8e79d4] Update translations
+  * [59e6d6] Fix selection of calendar in event/task editors
+  * [dd6dd7] Fix selection of calendar in event/task editors
+  * [4cc158] Improve CSS server-side cleaner
+  * [d1d398] Update translations
+
+  [ Jeroen Dekkers ]
+  * [6ded9e] Put private libraries in /usr/lib/sogo
+  * [4cc6b7] Make png files non-executable
+
+  [ Jens Erat ]
+  * [22844a] Minor fixes in documentation
+  * [25f68c] Added missing NGImap4DisableIMAP4Pooling option to documentation
+  * [19221b] Removed erroneous backslash in documentation
+  * [4e6214] Fixed ActiveSync URL in documentation
+  * [39e8f0] Added information on common configuration issues
+
+  [ Alexandre Cloutier ]
+  * [923aa5] bugfix #2952, default sorting for new user
+  * [0327a4] Update NEWS file
+
+  [ Robin McCorkell ]
+  * [b0633b] Add check for remote_user variable for trusted proxy auth
+
+  [ extrafu ]
+  * [47094b] Update SOGoSAML2Metadata.xml
+
+  [ Chris Rosenhain ]
+  * [0e5652] Change ACL modification text to non-gender specific terms
+
+  [ Enrique J. Hernández Blasco ]
+  * [b01de7] oc: Move back and forth folders now are in sync
+  * [57d591] oc: Set right container in dbFolder when moving a folder
+  * [dc8012] oc-mail: Implement move a mail subfolder to root
+  * [142dee] oc: Implement move a DB subfolder to root
+  * [969868] oc-mail: Set content type for a message after upgrading sope 2.2.15
+  * [68ebc9] oc: Use dlinklist from samba for now
+
+  [ Jesús García Sáez ]
+  * [5258ee] oc-appointments: ignore alarms already triggered
+
+  [ Julio García ]
+  * [10abbb] Revert "moved base table creation code into SOGo.framework"
+  * [90742e] Refreshing quilt patches
+  * [2499b3] Fixing warning in the control while compiling
+  * [5e4189] Adapting css after latest merges from upstream
+
+  [ Miguel Julián ]
+  * [20e911] New event toolbar is now clickable
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 12 Feb 2015 10:12:23 +0100
+
+sogo (2.2.9a-zentyal5) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [d05235] oc: encoding names must be case insensitive
+  * [7e7d30] oc: warning if codepage not found from headerCharset
+  * [f9550b] oc: several uninitialized variables
+  * [8e7f6d] oc: avoid change number leaking when refreshing folder.
+  * [34efcf] oc: synchroniseCache store modseq for last delete change number.
+  * [47be39] oc: avoid request change number until necessary
+  * [312084] oc: improve modseqFromMessageChangeNumber to return an approximation.
+
+  [ Enrique J. Hernández Blasco ]
+  * [b35fee] oc-contacts: Implement Wedding Anniversary
+  * [d5d97d] oc: PT_SYSTIME is an absolute timestamp
+  * [c6b976] oc-mail: Remove unnecessary time shift in date for new mails
+  * [c89396] oc-tasks: Set right start, due and complete dates
+  * [8b44c0] oc-calendar: Remove unnecessary shifts on start,end and replace time props
+  * [99a36b] oc: Remove a source folder on move folder operation
+  * [0e8bf0] oc-mail: Move mail folders with reserved chars
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [00cef8] Restore multitenancy changes for OpenChange
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 27 Jan 2015 08:57:20 +0100
+
+sogo (2.2.9a-zentyal4) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [dba17f] Create child folder objects using parent context for real
+  * [a56fc9] oc: Guess recipients from some properties while importing PST
+  * [087a85] Require latest libmapi to build
+
+  [ Jesús García Sáez ]
+  * [501ee7] oc-rtf: fix parse \pict tag with \bin data
+  * [838ae8] oc: ignore unhandled properties instead of abort
+
+  [ Miguel Julián ]
+  * [5394dd] Fix dependency to work against proposed versions
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 08 Jan 2015 12:57:11 +0100
+
+sogo (2.2.9a-zentyal3) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [f4e15e] Fix memory leak on getPidTagSubject
+  * [2c6d83] Remove an attempt to double free content
+  * [7691d6] Attempt to sync an UID in setChangeKey to avoid crashing
+  * [067809] Store changeNumber maps with modseq in cache for subfolders
+
+  [ Jesús García Sáez ]
+  * [97201c] abort if attemp to sync an UID in setChangekey fails
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 09 Dec 2014 08:49:37 +0100
+
+sogo (2.2.9a-zentyal2) trusty; urgency=medium
+
+  [ Miguel Julián ]
+  * [bbaad8] Fixed javascript error after merge
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 25 Nov 2014 11:06:53 +0100
+
+sogo (2.2.9a-zentyal1) trusty; urgency=medium
+
+  [ Jeroen Dekkers ]
+  * [4d8bff] Link libSOGo with libdl on systems with glibc
+  * [b5dc2e] Link correctly against libraries used
+
+  [ Skruppy ]
+  * [1c3f1a] ModulesConstraints tests all values of a multi-valued attributes
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [33b353] Moved to abstract index_context instead of tdb_wrap
+  * [a6bfb9] Use indexing generic code instead of tdb private funtions
+  * [fd308b] Converted all the indexing code to indexing backends
+  * [f76a6c] Fix mysql cleanup log message
+
+  [ Jesús García Sáez ]
+  * [34b98a] get_new_folderID functions are now on mapistore_indexing
+  * [2aa71c] check ret value properly
+  * [f6d1a3] use properly get_uri function and check ret value
+  * [95298d] avoid infinite loop when trying to update a folder id
+  * [a24f00] mapistoreURI encoding should be done the same way as listContextForUser
+  * [c81476] no need to modify url
+  * [6bef67] fix format logging uint64_t
+  * [d1f542] stringByDecodingImap4FolderName is not neccesary
+  * [a77863] add try catch to all functions on struct mapistore_backend
+  * [c6b8be] use execinfo.h to get backtrace
+  * [3b2174] if there is no password file for specific user, try to read global password file
+  * [7f2ee7] Error message only when initialization hadn't been done
+  * [3eba5f] increase log level of debug message
+  * [1a2fe8] Revert "Merge pull request #2 from Zentyal/jgarcia/fix-encoding-of-mapistoreuris"
+  * [a5550c] avoid decode @ from url with username on it
+  * [f1d14f] multitenancy: adapt openchangedb_* calls
+  * [68c38e] openchange: return proper url for folders with non-ascii chars
+  * [4e3a24] oc-rtf: Don't crash when we don't know the specified font
+  * [5ee8cb] oc-rtf: check valid font name when generating <font> tag
+  * [a7c205] oc: cached usercontext updates indexing_context
+  * [05578b] oc-rtf: control words can also have a space before next tag
+  * [bb9764] Revert "oc: cached usercontext updates indexing_context"
+  * [ed4ca3] oc: add talloc reference to indexing context
+  * [445a1f] oc: MailMessages return correct codepage
+  * [24e351] oc: monkeypatched NGImap4Connection class from sope
+  * [c410a9] oc: NGImap4Connection:fetchUids don't delete RawResponse
+  * [41320a] oc: NGImap4Connection:fetchUids changed error messages
+  * [c4b0ac] NSString:objectFromJSONString now can parse single values
+  * [973ab7] oc: synchronize folders ChangeNumber <-> modseq
+
+  [ Kamen Mazdrashki ]
+  * [f8028b] OpenChange: Avoid crashing when creating embedded message in attachment
+  * [09e6fc] oc-sogo: try/catch to guard only the actual impelementation rather than *everything*
+  * [cbe616] oc-sogo: Clean up AutoRelease pool and unregister threads in Catch handler
+  * [2c94d2] oc-sogo: Use [e name] and [e reason] selectors
+  * [6be768] oc-sogo: Move memory clean up *after* handling the exception
+  * [bcfb67] oc-sogo: Print both [NSException callStackSymbols] and execinfo.h stack trace
+  * [fc9dc0] oc-sogo: pretty print Exceptions in sogo_backend_handle_objc_exception()
+  * [7da888] openchange: getMessageData - replace int literals with ulRecipClass values
+  * [27851e] openchange: FillMessageHeadersFromProperties fix skipping of last value in possible range of recepients
+  * [dd7200] openchange/MAPIStoreFolder: Add private selector for actual folder delete action
+  * [4b3837] openchange: Fix submitWithFlags to submit to BCC-ed recipients also
+  * [2792ba] openchange: don't overflow possible recipient type while creating message headers
+  * [98505c] oc/MAPIStoreContext: Fix log messages to actually print 64bit FMIDs
+  * [6de298] oc/MAPIStoreMapping: Split the check for existing entry so we have better error message
+  * [bf0f2a] oc/MAPIStoreSOGo: Do not destroy current thread context after any API call
+  * [116e73] oc/utils: Move OCDumpPListData() function into plreader - this is the only user for this function
+  * [86e549] oc/utils: Make "plext" category publicly visible
+  * [c91741] oc/dbmsgreader: Fix to work again this time basen on BSON format for msg data
+  * [5b75c8] oc: Log when mapistore backend is successfully initialized
+  * [1fc3a5] oc: Protect backend initialization to happen only once
+  * [1846e1] oc/TallocWrapper: don't handle Threading initialization here
+  * [2b3bc1] Scripts/openchange_user_cleanup: Don't hardcode samba private dir, use samba LoadParm()
+  * [b8366d] oc/util: Tune dbmsgreader for new caching classes names
+  * [0a23f1] oc: Set log level to 0 in samba-get-config script - it is very chatty during builds
+  * [18acdf] oc: Make sure we always use NSString keys in 'messages' dictionary
+  * [dc8b73] oc/MailFolder: Add more logging so we can trace invalid message kyes
+
+  [ Miguel Julián ]
+  * [2458af] All day events deladyed one day if user timezone is +XX:XX
+  * [5d4351] Removing some trail characters at event description
+  * [51df0a] Removed development tip comment
+  * [65ece6] Removing some trail characters at event description
+  * [41f2e9] Removed development tip comment
+  * [01c631] Temporary removed mail labeling as broke the merge
+
+  [ Ludovic Marcotte ]
+  * [b05fcc] Fat commit to refactor the quick record generation
+  * [f43341] Fixed JSON'ification of the admin module
+  * [cde1db] Refactored GCSFolder: -writeContent and fixed sogo-tool restore
+  * [b9dd1d] Fix for bug #2892
+  * [8c8e7d] Modified Apache's config file to handle Apache > 2.3
+  * [e542ff] Fix for bug #1240
+  * [cbc53b] Updated NEWS file
+  * [048379] Updated the documentation for the release
+  * [38cb86] Update ChangeLog
+  * [12a4fd] Support for repetitive alarms and tasks
+  * [b8b351] Initial support for multiple alarms and better iCal compatibility
+  * [8b4a16] NEWS entry for previous commit
+  * [02b3de] Fix for bug #2326
+  * [c5c2bf] Fixed iCal detection for 10.9 (and perhaps even 10.8)
+  * [8ba031] Consider 0x0C as "unsafe"
+  * [f52a08] fixed sending mails to multiple recipients over AS
+  * [ce1896] Fixed typo
+  * [a4ab29] Fix for bugs #2878, #2879
+  * [11adf3] Cleaned the code and fixed #2894 while at it ...
+  * [a338b1] Fix for bug #2838
+  * [d572f2] get rid of control chars before returning the response
+  * [ae6afe] Fixed potential exception when Calendar module is disabled
+  * [6ba85e] Added some comments in the code
+  * [f4372a] Add over DAV a PARTSTAT if none is defined
+  * [1c60ab] Fix for bug #2889
+  * [367522] Refactored code to be more rigorous Unicode-wise.
+  * [0b6e3d] Fix for bug #589
+  * [275eeb] Updated NEWS file for the release
+  * [5744d1] Updated scripts for TB31
+  * [c0e8eb] Adjusted the doc for TB31
+  * [4c5be2] Update ChangeLog
+  * [aa0499] Fixed sanitization char skipping and #2936
+  * [95b122] Simplified even more -safeString
+  * [9cdcfd] Updated for the 2.2.9a release
+
+  [ Francis Lachapelle ]
+  * [5b886e] Fix issue with DnD of tasks with FireFox
+  * [74bd96] Fix encoding of new calendars + new subscriptions
+  * [28f26e] Fix display of users with no possible subscription
+  * [e4a84d] Fix usage of SOGoSubscriptionFolderFormat default
+  * [b2b77c] Fix folders paths of "sogo-tool restore -l"
+  * [dadad3] Fix some compilation warnings
+  * [1af52e] Fix message labels handling
+  * [b639c2] Fixes for IE
+  * [1dcf63] Update translations
+  * [8eb421] Various fix and improvements to Mail module
+  * [7e297a] Remove spaces
+  * [c441fa] Various fix and improvements to Scheduler module
+  * [1dd3db] Various fixes and improvements to the Mail module
+  * [9d6bcb] Fix compilation warning
+  * [ed85a0] Allow alarms to be snoozed for 1 day
+  * [0825a8] Add missing localization string
+  * [4b9db6] Fix warning when generating docbook
+  * [7e281d] Fix encoding of calendar names in Web interface
+  * [9e1423] New font for asciidoc documentation
+  * [4be2dd] Update translations
+  * [80acaf] Fix URL in documentation
+
+  [ Alexandre Cloutier ]
+  * [7794d7] version 1 of the inbox search
+  * [c3e46e] code refactoring and GUI improvement
+  * [f6c7ca] applied comments
+  * [524762] applied comments, fix bug and add sortable results
+  * [8783f0] fix leak
+  * [73fcdc] adjust css for other browser, fix display bug
+  * [c76cb3] Disable the search button on toolbar once it is opened
+  * [e04447] bugFix #2827
+  * [6aeccc] indentations
+  * [38a3b7] print calendars events&Tasks with colors - either borders or backgrounds
+  * [76c9b4] update Localizable.strings
+  * [07a138] applied comments and add the possibility to resize the search inbox window
+  * [84a086] bugfix where it is not possible to delete msg when mailbox is full
+  * [03152e] bugfix with DND from calendar view to calendar list
+  * [da184f] bugfix#2864
+  * [9bd09c] add the location column
+  * [eaf815] update NEWS file
+  * [7e26d8] merge conflicts
+  * [3b65ea] Tagging labels with 1 AJAX request
+  * [32476b] applied comments and fix bug when tagging msgs already tagged
+  * [ca8351] fix IE7, IE8, IE9, IE10, IE11 GUI
+  * [984e20] IE bugfixes
+  * [77c50e] applied comments; fix errors from merge and update NEWS file
+  * [9a380f] bugfix PreventInvitation
+  * [0bface] applied comments
+  * [c5f9dd] Possibility to collapsed threads with persistance
+  * [59023d] applied comments and fix bug where the folded threads were saved only after refreshing the entire page
+  * [c9d129] Manage the collapse UIDs save in the user settings
+  * [267a68] Applied comments
+  * [0c88ed] bugfix where an exception was raised if threadsCollapsed is undefined
+  * [e6002c] applied comments
+  * [df42c3] Update NEWS file
+  * [06f81a] applied comments
+  * [7db526] bugfix for new user without userSettings.mail
+  * [d62c50] Changed the configurable variable SOGoMailMessageCheck to a general refresh associated to the current view
+  * [1fb319] applied comments
+  * [9daab5] update NEWS file
+  * [f3ca4e] bugfix foldingThread; Renaming a foldername with a space was not correctly handled
+  * [574c24] bugfix PreventInvitation; fix object parsing on a blank user
+  * [3c1d6d] bugfix; UserSettings was not refresh properly after toggling threads
+  * [36b833] bugFix InboxSearch IMAP query keywords
+  * [69c8aa] quickfix for IE for searchInbox
+  * [6ec79f] bugfix with threads collapsing for a nested folder
+
+  [ Luc Charland ]
+  * [d749d5] Added tests for prevent invitation and whitelist
+  * [ced096] Added white_listed_attendee to the config file
+  * [4b94a1] urllib.quote needs a string
+  * [c621bb] Those need the same adjustments
+  * [031e4c] more of the same
+  * [e37a60] should help some builds that might timeout
+  * [c6f82d] catch specific exception
+  * [606ee9] dont test prevent invitations
+  * [3ad932] putting test-prevent-invitations back in
+
+  [ Jens Erat ]
+  * [8d4c0f] Converted Installation Guide to asciidoc
+  * [95191c] Added other documentation files as asciidoc
+  * [8a5649] Added makefile for asciidoc-conversion, included docbook-templates
+  * [397d8d] Remove old documentation files
+  * [19b313] Updated some copyright lines from PacketFence to SOGo
+  * [4b49fc] Updated for 2.2.8
+
+  [ Julien Kerihuel ]
+  * [52ad0e] Prevent SOGo backend from crashing when mapistore_set_connection_info is not called beforehand and connInfo is not initialized.
+
+  [ Enrique J. Hernández Blasco ]
+  * [c866bc] Store FreeBusySimple and FreeBusyDetailed rights as roles
+  * [415fb6] oc-calendar: Retrieve properly event description created on SOGo
+  * [cbfcd5] oc-rtf: Use what RTF Spec 1.9.1 for control words
+  * [75ce59] oc-rtf: Fix current position to match where _bytes pointer is
+  * [258444] oc-rtf: Be more resilient to spaces while parsing font tables
+  * [7e0cdd] oc-mailfolder: Avoid setting seen flag on preloading message bodies
+  * [d076e0] oc-mailfolder: Get seen flag directly from message in preloading
+  * [be60fd] oc-folder: Flags are now used in indexing db when deleting a msg
+  * [cd64ca] oc-calendar: wDay field cannot be negative
+  * [c63168] oc-calendar: getPidLidClipEnd now follows [MS-OXOCAL]
+  * [35ca31] oc-calendar: Fix PidLidClipStart on recurrent events
+  * [b67e1d] oc-folder: Make deleted items synched when shared
+  * [391076] oc-folder: Uniform call to deleteMessageWithMID
+  * [616f2a] Fix compilation when samba file is not others readable
+  * [ef7b91] Return MAPISTORE_ERR_NOT_FOUND when a mail is indexed but not in IMAP server
+  * [a8b716] oc: sync old messages as last resort if there are not in cache
+
+  [ Julio García ]
+  * [1a5c06] Refresing quilt patch 0001-Put-private-libraries-in-usr-lib-sogo
+  * [52d0d0] Refreshing patch 0003-Link-libSOGo-with-libdl
+  * [3c15aa] Change the upstream branch for git-buildpackage because now we have the UI changes only in trusty
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 25 Nov 2014 10:40:59 +0100
+
+sogo (2.2.7-zentyal3) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [9fe7ce] oc: monkeypatched NGImap4Connection class from sope
+  * [b762df] oc: NGImap4Connection:fetchUids don't delete RawResponse
+  * [4b9e8f] oc: NGImap4Connection:fetchUids changed error messages
+  * [78e5c6] oc: synchronize folders ChangeNumber <-> modseq
+
+  [ Julio García ]
+  * [4cba28] Updating dependencies on new openchange
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 11 Nov 2014 12:49:11 +0100
+
+sogo (2.2.7-zentyal2) trusty; urgency=medium
+
+  [ Miguel Julián ]
+  * [941ac4] UI fixes after merge from inverse
+  * [fa71fd] Small UI fixes
+
+  [ Jesús García Sáez ]
+  * [37a017] compile with debug and without optimizations
+  * [49e2c4] oc: MailMessages return correct codepage
+  * [11d392] NSString:objectFromJSONString now can parse single values
+
+  [ Javier Fernández-Carrión ]
+  * [c37f4a] hispa web eliminated and replace sogo logo for Zentyal one
+
+  [ Enrique J. Hernández Blasco ]
+  * [6a27ec] Store FreeBusySimple and FreeBusyDetailed rights as roles
+  * [f53f97] oc-calendar: Retrieve properly event description created on SOGo
+  * [ebee47] oc-rtf: Use what RTF Spec 1.9.1 for control words
+  * [0c9c7f] oc-rtf: Fix current position to match where _bytes pointer is
+  * [441e25] oc-rtf: Be more resilient to spaces while parsing font tables
+  * [3be4c0] oc-mailfolder: Avoid setting seen flag on preloading message bodies
+  * [9ca104] oc-mailfolder: Get seen flag directly from message in preloading
+  * [7d5a47] oc-folder: Flags are now used in indexing db when deleting a msg
+  * [5589e9] oc-calendar: wDay field cannot be negative
+  * [161ed0] oc-calendar: getPidLidClipEnd now follows [MS-OXOCAL]
+  * [55c97e] oc-calendar: Fix PidLidClipStart on recurrent events
+  * [1cad50] oc-folder: Make deleted items synched when shared
+  * [d6dc0a] oc-folder: Uniform call to deleteMessageWithMID
+  * [0a45b5] Fix compilation when samba file is not others readable
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 27 Oct 2014 13:09:35 +0100
+
+sogo (2.2.7-zentyal1) trusty; urgency=medium
+
+  [ Wolfgang Sourdeau ]
+  * [ce4084] getNewChangeNumbers: new wrapper for openchangedb_get_new_changeNumbers
+
+  [ Jean Raby ]
+  * [f049e2] Added ldap attribute mapping table
+
+  [ Ludovic Marcotte ]
+  * [045b27] Properly escape the foldername to avoid XSS issues
+  * [e26e3d] Revert "Properly escape the foldername to avoid XSS issues"
+  * [333b56] Applied patch from bug #2736
+  * [e04834] Include, in our private NS, all ACLs defined on a calendar collectiob
+  * [9fa0b4] Ignore SCHEDULE-AGENT for Thunderbird/Lightning
+  * [3523dc] Fix for bug #2825
+  * [22f5ed] Fixed tests regarding default permissions on CalDAV collections
+  * [5419f4] Fix for bug #2734
+  * [b6be4e] Applied patch from bug #2810
+  * [6da03b] Cleaned up code for older gcc
+  * [ff015a] Fixed indent
+  * [899a1e] Updated NEWS file
+  * [55422b] Fixed typo
+  * [9c3c2c] Updated the doc for the release
+  * [5dd208] Updated for the release
+  * [6e13f1] Update ChangeLog
+  * [4843c6] Renamed Multi-Column to Multicolumn and refactored some code
+  * [8a1724] Cleaned up code and fixed the translation of the weekdays in the datepicker
+  * [dbdb7d] Fix sending of METHOD:REPLY for DAV clients
+  * [1cc93c] Updated NEWS file for changes occurred right after v2.2.6 was released
+  * [08cd08] Fixed charset substitution in meta tags
+  * [8dd967] Updated NEWS file for two merged pull requests
+  * [006727] Properly destroy cache objects of vanished folders
+  * [f6ef94] improved handling of SOGoSubscriptionFolderFormat
+  * [4c21a0] JSON interface to folder subscriptions
+  * [4eefa4] Fixed test since we now return a 200 instead of a 204
+  * [1df7e9] Removed worthless declaration
+  * [94f324] Improved error message when you cannot invite users
+
+  [ Alexandre Cloutier ]
+  * [43ac57] display the number of active tasks in calendar view
+  * [de2ee2] Change the NSString with NSNumber and add some JavaScript
+  * [0e182f] Update SOGoAppointmentFolder.m
+  * [eb3cc8] The multiColumns view
+  * [5b3de0] Fix error from the last commit
+  * [d7d458] multiColumns print view + bugFixes
+  * [dabd8d] Fix list view printing with multiColumns view
+  * [302e40] bugFix#2823
+  * [7a69bc] applied comments
+  * [5b9c7e] text wraping and text alignment in list view
+  * [5b61df] activeTasks updates dynamically
+  * [2b119c] Applied comments
+  * [6b58e0] printView display the parentView by default
+  * [0fb713] bugfixes
+  * [8335c3] fix infinite loop bug
+  * [660f39] delete notice and put grey background for multi-columns view
+  * [8c8e47] fix spacing between events and categorie display
+  * [017a85] fix month events categories display
+  * [1cf484] fix display glitch
+  * [8ded5a] Prevent Invitations and whitelist GUI
+  * [16d024] Serialization of the whiteList
+  * [f0b8eb] server side code to integrate the whitelist
+  * [b5c036] applied comment and refactor code
+  * [ef2010] fix bug where the user could enter any names in the whitelist
+  * [05fb7a] applied comments
+  * [7c3e85] applied comments
+  * [89d116] replace ampersands with commas
+  * [17319c] reverted UIxListEditor.wox
+  * [5217be] Organized the categories and appointments invitations inside a tabContainer
+  * [eaec5a] Change exception 403 to 409 and fix indentation in the javascript
+  * [a71013] javascript indentation
+  * [ce6a31] Adjust line of code to make it easier to read
+  * [c2027f] indentation
+  * [e478b2] creating and dragNDrop between calendars in multicolumndayview
+  * [ccf181] applied comments and fix repeated events dragNdrop between calendars
+  * [6dddb5] dragNdrop from the events table to the calendars list
+  * [01af72] DnD from eventList to the calendarList
+  * [9bd7ae] DnD from calendarView to CalendarList
+  * [a5ecb2] added event7.png and adjust javascript indentation
+  * [a2a701] fix dnd repeated event bug + applied comments
+  * [8f9b24] visual helper while dragging from calendar view to calendarList
+  * [3cac79] move line
+  * [cdf4cc] fix DnD from eventList to calendarList for repeated event
+  * [b892b3] Add RegEx
+  * [28e6bb] Applied comments
+  * [a43dd9] Fix bug with DnD; leftPanelController.stopEvent()
+  * [c38963] DnD tasksList
+  * [b52289] task.png for DnD taskList
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [efa65b] Encode @ character from usernames
+
+  [ Jesús García Sáez ]
+  * [b089bf] removed encode @ on stuff different from username
+  * [30360a] avoid decode @ from url with username on it
+  * [98f56d] multitenancy: adapt openchangedb_* calls
+
+  [ Francis Lachapelle ]
+  * [45553b] Fix rename of calendars, improve tasks count badge
+  * [e343ed] Fix regression of word breaking
+  * [44d0cb] Fix refresh of list when forwarding a message
+  * [24f9d8] Fix JavaScript from merge leftover
+  * [06fe36] Add missing localizable strings
+  * [192659] Add missing localizable string
+  * [08fd2f] Fix JavaScript after bad merge
+  * [5de51e] Fix missing argument with new DnD controller
+  * [d9ca10] Improve headers of multicolumns view
+  * [ea4430] Fix all-day events display in IE
+  * [bd5c05] Indentation in JavaScript files
+  * [571322] Update fi, fr, de, and es_ES translations
+  * [ef2432] Update NEWS file
+  * [c24093] Update CKEditor to version 4.4.3
+  * [397a36] Preparation for release 2.2.7
+  * [07324e] Update ChangeLog
+
+  [ Jeroen Dekkers ]
+  * [661984] Add Mailer and Appointments to product.list requires of MailPartViewers
+
+  [ Julio García ]
+  * [adbfb8] Fixed merge errors
+  * [9ab0ab] Updating the build depends to the new openchange package
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 10 Sep 2014 09:47:08 +0200
+
+sogo (2.2.6-zentyal2) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [849419] Revert "oc: cached usercontext updates indexing_context"
+  * [ca548e] oc: add talloc reference to indexing context
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 03 Sep 2014 14:20:07 +0200
+
+sogo (2.2.6-zentyal1) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [601740] Error message only when initialization hadn't been done
+  * [96b3f9] increase log level of debug message
+  * [48a4e3] openchange: return proper url for folders with non-ascii chars
+  * [287b31] oc-rtf: Don't crash when we don't know the specified font
+  * [b6283a] oc-rtf: check valid font name when generating <font> tag
+  * [0750f6] oc: cached usercontext updates indexing_context
+  * [7581c0] oc-rtf: control words can also have a space before next tag
+
+  [ Kamen Mazdrashki ]
+  * [e75afe] Scripts/openchange_user_cleanup: Don't hardcode samba private dir, use samba LoadParm()
+  * [44f9ad] oc/util: Tune dbmsgreader for new caching classes names
+  * [8fa0b6] oc: Set log level to 0 in samba-get-config script - it is very chatty during builds
+  * [e54151] oc: Make sure we always use NSString keys in 'messages' dictionary
+  * [220cd9] oc/MailFolder: Add more logging so we can trace invalid message kyes
+
+  [ Miguel Julián ]
+  * [89dd35] Compose new mail windows is now larger
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [ad29a9] Fix mysql cleanup log message
+
+  [ Julien Kerihuel ]
+  * [7a2649] Prevent SOGo backend from crashing when mapistore_set_connection_info is not called beforehand and connInfo is not initialized.
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 27 Aug 2014 17:17:13 +0200
+
+sogo (2.2.5-zentyal1~20140724-1) trusty; urgency=medium
+
+  * New upstream release
+
+ -- José A. Calvo <jacalvo@zentyal.com>  Thu, 24 Jul 2014 15:57:21 +0200
+
+sogo (2.2.5-zentyal1~20140618-1) trusty; urgency=medium
+
+  * New upstream release
+
+ -- Julio J. García Martín <jjgarcia@zentyal.com>  Wed, 18 Jun 2014 14:14:22 +0200
+
+sogo (2.1.2-zentyal3~20140327-2) trusty; urgency=low
+
+  * trusty build
+
+ -- José A. Calvo <jacalvo@zentyal.com>  Fri, 28 Mar 2014 15:52:32 +0100
+
+sogo (2.1.2-zentyal3~20140327-1) saucy; urgency=low
+
+  * saucy New upstream release
+
+ -- Julio J. García Martín <jjgarcia@zentyal.com>  Thu, 27 Mar 2014 18:44:02 +0100
+
+sogo (2.1.2~20140226-1) saucy; urgency=low
+
+  * Fix mapistore backend bundle search path
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 26 Feb 2014 05:38:11 +0100
+
+sogo (2.1.2~20140225-1) saucy; urgency=low
+
+  * Fix SoObject libraries not linked using rpath
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Tue, 25 Feb 2014 19:27:30 +0100
+
+sogo (2.1.2~20140221-1) saucy; urgency=low
+
+  * restyle fixes
+
+ -- José A. Calvo <jacalvo@zentyal.com>  Fri, 21 Feb 2014 01:30:47 +0100
+
+sogo (2.1.2~20140217-2) saucy; urgency=low
+
+  * debian/control:
+    Add missing python-samba dependency
+  * debian/rules:
+    Delete files not deleted by distclean
+  * debian/patches/0001-Put-private-libraries-in-usr-lib-sogo.patch
+    Link with rpath, fixing libSOGo not found
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Tue, 18 Feb 2014 00:12:41 +0100
+
+sogo (2.1.2~20140217-1) saucy; urgency=low
+
+  * Update upstream
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Mon, 17 Feb 2014 19:11:00 +0100
+
+sogo (2.1.2~20140214-2) saucy; urgency=low
+
+  * Merge mysql backend changes from master
+
+ -- José A. Calvo <jacalvo@zentyal.com>  Fri, 14 Feb 2014 16:54:31 +0100
+
+sogo (2.1.2~20140214-1) saucy; urgency=low
+
+  * Update upstream
+  * Some restyling issues fixed by jcarrion
+  * small style fixes on write mail contacts list
+  * reload image
+  * search box correction and refresh button added removed from top tool bar
+  * calendar view buttons moved from upper toolbar
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Fri, 14 Feb 2014 16:40:44 +0100
+
+sogo (2.1.2~20140205-2) saucy; urgency=low
+
+  * Set openchange dependency versions
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 05 Feb 2014 18:42:27 +0100
+
+sogo (2.1.2~20140205-1) saucy; urgency=low
+
+  [ Javier Fernández-Carrión ]
+  * UI restyle
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 05 Feb 2014 03:19:12 +0100
+
+sogo (2.1.2~20140204-1) saucy; urgency=low
+
+  [ Samuel Cabrero ]
+  * Align packaging with ubuntu releases.
+  * Build MAPI store backend.
+  * Build sogo-activesync package.
+
+  [ Carlos Perelló Marín ]
+  * Force memcache dependency.
+
+  [José A. Calvo ]
+  * Added WOxElemBuilders
+
+ -- Samuel Cabrero <scabrero@zentyal.com>  Wed, 29 Jan 2014 23:59:40 +0100
+
+sogo (2.1.1b-1) unstable; urgency=medium
+
+  * New upstream release. (Closes: #732189)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Sat, 28 Dec 2013 23:15:41 +0100
+
+sogo (2.0.7-2) unstable; urgency=high
+
+  * Do not call make distclean if config.make does not exist, fixes FTBFS
+    with latest debhelper. (Closes: #720974)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Mon, 26 Aug 2013 20:07:08 +0200
+
+sogo (2.0.7-1) unstable; urgency=low
+
+  * New upstream release.
+  * Update version of sope build dependency to 2.0.7.
+  * Remove patch applied upstream:
+    - 0001-Set-SOGoMailSpoolPath-to-var-spool-sogo-by-default
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Tue, 13 Aug 2013 20:32:13 +0200
+
+sogo (2.0.5a-1) unstable; urgency=low
+
+  * New upstream release.
+  * Include updated watch file written by Bart Martens.
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Mon, 06 May 2013 02:04:16 +0200
+
+sogo (2.0.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Remove patches applied upstream:
+    - 0001-make-check
+    - 0002-link-everything-correctly
+    - 0003-Read-configuration-from-etc
+    - 0004-Add-support-for-GnuTLS
+    - 0007-Compile-daemon-as-PIE
+  * Fix cronjob error after package removal. (Closes: #682843)
+  * Update standards version to 3.9.4.
+  * Enable SAML support.
+  * Move sogo-backup.sh to /usr/sbin/sogo-backup and change backup
+    location to /var/backups/sogo. Also change the locations in the
+    cronjob. (Closes: #681797)
+  * Use systemd-tmpfiles instead of tmpreaper for systems running
+    systemd. (Closes: #677951)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Sat, 13 Apr 2013 16:08:45 +0200
+
+sogo (1.3.16-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #677119)
+    - 0004-Add-support-for-GnuTLS.patch: Updated to new hashes in 1.3.16.
+    - 0007-GNUstep-1.24-fix.patch: Removed, was backported from upstream.
+  * Do not assume deluser is available in postrm. (Closes: #678099)
+  * Suggest postgresql or mysql-server. (Closes: #678047)
+  * Build with hardening
+    - 0007-Compile-daemon-as-PIE.patch: Compile the daemon as a PIE.
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Sat, 30 Jun 2012 02:55:17 +0200
+
+sogo (1.3.15a-2) unstable; urgency=low
+
+  * 0007-GNUstep-1.24-fix.patch:
+    - Fix to cope with changes in GNUstep 1.24. (Closes: #675201)
+  * Fix the cron.daily job:
+    - Delete the directories in a proper way. (Closes: #676161)
+    - Test whether tmpreaper is still installed before executing it.
+      (Closes: #675238)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Thu, 14 Jun 2012 14:28:31 +0200
+
+sogo (1.3.15a-1) unstable; urgency=low
+
+  * Initial release. (Closes: #584073)
+
+ -- Jeroen Dekkers <jeroen@dekkers.ch>  Wed, 23 May 2012 19:17:40 +0200

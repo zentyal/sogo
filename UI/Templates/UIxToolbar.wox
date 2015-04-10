@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="yes"?>
-  <var:if condition="hasButtons"
+<var:if condition="hasButtons"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:var="http://www.skyrix.com/od/binding"
     xmlns:const="http://www.skyrix.com/od/constant"
@@ -7,7 +7,7 @@
     xmlns:label="OGo:label"
     xmlns:so="http://www.skyrix.com/od/so-lookup">
     <div id="toolbar" class="toolbar">
-      
+
       <var:foreach list="toolbarConfig" item="toolbarGroup">
         <var:foreach list="toolbarGroup" item="buttonInfo">
           <var:if condition="isButtonEnabled">
@@ -22,21 +22,21 @@
                   <var:if condition="hasMenu">
                     <img class="buttonMenuArrow"
                     rsrc:src="arrow-dwn-sharp.gif"
-                    var:alt="buttonTooltip"/></var:if><br/>
+                    var:alt="buttonTooltip"/></var:if>
                   <var:string value="buttonLabel"/></span></a></var:if>
-          
+
           <var:if condition="isButtonEnabled" const:negate="YES">
             <span var:class="cssClasses">
               <img class="buttonImage"
                 var:src="buttonImage"
-                var:alt="buttonTooltip"/><br/>
+                var:alt="buttonTooltip"/>
                 <span class="buttonLabel">
                   <var:string value="buttonLabel"/></span></span></var:if></var:foreach>
-        
+
         <var:if condition="isLastGroup" const:negate="YES">
           <span class="toolbarSeparator">
             <var:entity const:name="nbsp"/></span></var:if></var:foreach>
-      
+
       <img id="progressIndicator" rsrc:src="busy.gif" />
     </div>
   </var:if>
