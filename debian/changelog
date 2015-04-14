@@ -1,3 +1,40 @@
+sogo (2.2.15-zentyal3) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [6e0027] oc-rtf: safe parse ignoring content
+  * [637ac1] oc-rtf: no color table definition
+  * [dc869c] oc-mail: Support for PidTagTransportMessageHeaders property
+
+  [ Enrique J. Hernández Blasco ]
+  * [6d6053] Revert "oc-mailfolder: Get seen flag directly from message in preloading"
+  * [f04886] Revert "oc-mailfolder: Avoid setting seen flag on preloading message bodies"
+  * [1c1a75] oc-mail: Use body.peek to preload message bodies
+  * [9f3f2a] oc-mail: Register source message as soft deleted on movement
+  * [6f44ec] oc-calendar: Fix import in SOGo exceptions from recurring series
+  * [fb4c3a] oc-calendar: Fix weekly recurring events exported to Outlook from SOGo
+  * [8ee230] oc: Empty ACL from a folder works with several users
+  * [6204ae] oc-calendar: do not crash with invalid events
+  * [a663fd] oc-mail: Give support to store extra properties in versions message
+  * [514b1c] oc-mail: Store request properties
+  * [661b66] oc-mail: Fix several sharing properties managing
+  * [f9c866] oc-mail: Use constant names in props value
+  * [82fb03] oc-mail: Ensure we are creating folder to the right user
+  * [a47f1d] oc-mail: Update place for Sharing Flavour prop values
+  * [06476a] oc-mail: return soft-deleted mails while syncing
+  * [dfde49] oc-mail: Include Deleted flagged messages on syncing cache
+  * [95a8a9] oc: Use new OC_DEBUG macro
+
+  [ Julio García ]
+  * [0be36d] Preparing release for 2.2.15-zentyal2
+  * [914e7b] Prepare for new 2.2.15-zentyal3 version
+
+  [ José Antonio Calvo ]
+  * [2668bc] oc-calendar: Fix event invitations for optional attendees
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 14 Apr 2015 14:27:14 +0200
+
 sogo (2.2.15-zentyal2) trusty; urgency=medium
 
   [ Enrique J. Hernández Blasco ]
