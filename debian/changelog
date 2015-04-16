@@ -1,3 +1,84 @@
+sogo (2.2.17a-zentyal1) trusty; urgency=medium
+
+  [ Francis Lachapelle ]
+  * [776b17] Fix mail editor when not called from mail module
+  * [0b44fa] Update NEWS file
+  * [601a9c] Update translations
+  * [c20ca0] Fix exception in set operation of sogo-tool
+  * [619232] Fix some gcc warnings
+  * [8e0849] Fix contacts lookup by UID
+  * [cbba07] Fix exception in SOGoUserManager
+  * [517f4b] Fix possible JS exception in Contacts module
+  * [f1fda8] Return a single phone number in JSON contacts list
+  * [1d5ae2] Fix issues with freebusy (Web, busyOffHours)
+  * [699748] Fix Language-Region tags in Web interface
+  * [26d876] Improve event attendees editor
+
+  [ Ludovic Marcotte ]
+  * [923bcf] Applied patch for #3092
+  * [eca22c] Fix for bug #3078
+  * [373181] Added patch from tfu for #2995
+  * [98e4c8] Fixed doc regarder domain vs. system settings
+  * [6c9b1a] Fix for bug #2332
+  * [6cf1ec] Updated NEWS file for the #3095 bug fix in SOPE
+  * [82178f] Initial patch from tfu for bug #3055
+  * [e5d014] now possible for SOGo to change the sambaNTPassword/sambaLMPassword
+  * [55ae4c] First pass at EAS' best practices for SOGo
+  * [322f72] now possible to limit automatic forwards to internal/external domains
+  * [944743] Added missing strings from previous commit
+  * [b4ea4d] Improvement over previous commit
+  * [f3325b] Updated NEWS file wrt fixes
+  * [d7c283] improved fetching of text parts over EAS
+  * [aae76d] Limit curl request for webcalendars to 60 seconds
+  * [a80d75] Preparation for the release
+  * [72b210] Fixed typo
+  * [b26ea3] Update ChangeLog
+  * [b97002] Updated NEWS file regarding previous commit
+  * [5ceddc] Fix for bug #3116
+  * [9160e3] multiple collections support for GetItemEstimate - patch from tfu
+  * [33c485] fixed empty sync responses for EAS 2.5 and 12.0 clients - patch from tfu
+  * [22888b] use the correct mail body element for EAS 2.5 clients - patch from tfu
+  * [733e33] fixed tasks disappearing issue with RoadSync - patch from tfu
+  * [38d61f] use the correct body element for events for EAS 2.5 clients - patch from tfu
+  * [b593dd] SmartReply improvements for missing body attributes - patch from tfu
+  * [a5672f] do not use syncKey from cache when davCollectionTag = -1 - patch from tfu
+  * [df59b7] use correct mail attachment elements for EAS 2.5 clients - patch from tfu
+  * [e25a7e] Fix for bug #3138
+  * [cdb766] Documented NGMimeBuildMimeTempDirectory
+  * [6d9922] Always add DisplayName no matter EAS client version
+  * [bff21a] support for mail prority using EAS
+  * [afd732] properly fallback over EAS to UTF-8 and then Latin1 for messages w/o charset (#3103)
+  * [ecd336] Fix compilation warning and error
+  * [baf3d1] immediately delete mails from EAS clients when they are marked as deleted on the IMAP server
+  * [9eb138] prevent potential freebusy lookup crashes during timezone changes with repetitive events
+  * [67139c] improved GetItemEstimate to count all vasnished/deleted mails too
+  * [d2915a] now favor login@domain as the default email address if multiple mail: fields are specified
+  * [9d7bbb] enable by default HTML mails support using EAS on Windows and BB phones
+  * [cc3652] improvements to EAS SyncKey handling to avoid missing mails (#3048, #3058)
+  * [d75fb0] Code cleanups
+  * [097d5c] now possible to configure objectClass names for LDAP groups using GroupObjectClasses (#1499)
+  * [b933f5] Changes for the 2.2.17 release
+  * [f11bcd] Avoid using stringByReplacing... since old runtimes don't support it
+  * [ddcae9] Updates for the release
+
+  [ Jesús García Sáez ]
+  * [8d21bc] Fix change password with DomainBasedUID
+  * [1d6f1a] use full login for sogo_cache_folder tables
+  * [f0a3fd] configure: Fix gnulib/crypto/md4 dependency
+
+  [ Jens Erat ]
+  * [37fbd7] Rename "Archive" to "Export" in Webmail, ctd.
+  * [1bdd5d] Remove obsolete archive string from translations
+
+  [ Julio García ]
+  * [210053] Adding missing build dependency gnulib
+  * [a8e8ec] Prepare for 2.2.17a-zentyal1
+  * [6c9e53] Adding gnulib dependency in our debian/control
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 16 Apr 2015 10:13:57 +0200
+
 sogo (2.2.15-zentyal3) trusty; urgency=medium
 
   [ Jesús García Sáez ]
