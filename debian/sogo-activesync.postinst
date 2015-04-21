@@ -18,7 +18,10 @@ case "$1" in
             cp /usr/share/doc/sogo-activesync/LICENSE $FULL_LICENSE
             echo -e "\n\n---\n" >> $FULL_LICENSE
             cat /usr/share/doc/sogo-activesync/README.zentyal >> $FULL_LICENSE
-            dialog --title "License Agreement" --exit-label Accept --textbox $FULL_LICENSE $HEIGHT $WIDTH
+            if [ "$DEBIAN_FRONTEND" != "noninteractive" ]
+            then
+                dialog --title "License Agreement" --exit-label Accept --textbox $FULL_LICENSE $HEIGHT $WIDTH
+            fi
             rm -f $FULL_LICENSE
         fi
         ;;
