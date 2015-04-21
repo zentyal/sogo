@@ -4,8 +4,8 @@ set -e
 
 case "$1" in
     configure)
-        service zentyal webserver restart || true
-        service zentyal sogo restart || true
+        service apache2 reload || true
+        service zentyal openchange restart || true
 
         # Display License Agreement only in the first install
         if [ -z "$2" ]
