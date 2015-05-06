@@ -5,6 +5,7 @@ Enhancements
  - Synchronize events, contacts and tasks in reverse chronological order
 
 Bug fixes
+ - Recurrent all day events are now shown properly in Outlook
  - Optional attendes on events are now shown properly
 
 2.2.17a-zentyal2 (2015-05-08)
