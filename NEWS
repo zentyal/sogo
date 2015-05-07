@@ -2,6 +2,8 @@ master
 ------
 
 Enhancements
+ - Mail subfolders created in WebMail are created when Outlook synchronises.
+ - Mail root folder created in WebMail (same level INBOX) are created on Outlook logon.
  - Synchronize events, contacts and tasks in reverse chronological order
 
 Bug fixes
