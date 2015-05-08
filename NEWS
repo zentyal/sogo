@@ -1,4 +1,10 @@
-2.2.17a-zentyal1 (2014-04-15)
+2.2.17a-zentyal2 (2015-05-08)
+--------------------
+
+Bug fixes
+ - Outlook clients can use reply all functionality on multidomain environment
+
+2.2.17a-zentyal1 (2015-04-15)
 --------------------
 
 Bug fixes
