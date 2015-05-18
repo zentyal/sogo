@@ -1,3 +1,12 @@
+master
+------
+
+Enhancements
+ - Synchronize events, contacts and tasks in reverse chronological order
+
+Bug fixes
+ - Optional attendes on events are now shown properly
+
 2.2.17a-zentyal2 (2015-05-08)
 --------------------
 
@@ -10,7 +19,7 @@ Bug fixes
 Bug fixes
  - Do not share Outlook metadata between users with the same name and different domain
 
-2.2.17a (2014-03-15)
+2.2.17a (2015-03-15)
 --------------------
 
 Bug fixes
