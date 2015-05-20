@@ -1,3 +1,50 @@
+sogo (2.2.17a-zentyal3) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [1ee47b] oc: return last modified messages when sorted by PidMessageTagDeliveryTime
+  * [fa23b5] oc: Search for properties in a SOGoMAPIDB object now works
+  * [bddd67] oc: Enforce the folder creation mapping when the FID exists
+  * [030d34] oc: Do not create indexing entry for a root folder
+  * [2d65b7] oc-mail: Flush IMAP hierarchy cache to update Outlook folders
+  * [15f95c] oc-mail: Support restricitions on name for MAPIStoreMailFolderTable
+  * [a3c60f] oc: return last modified messages when sorted by PidMessageTagDeliveryTime
+  * [d9786e] oc: Search for properties in a SOGoMAPIDB object now works
+  * [5811ca] oc: Enforce the folder creation mapping when the FID exists
+  * [ee9b47] oc: Do not create indexing entry for a root folder
+  * [fa6809] oc-mail: Flush IMAP hierarchy cache to update Outlook folders
+  * [d492a9] oc-mail: Support restricitions on name for MAPIStoreMailFolderTable
+  * [e2ef01] oc-calendar: Fix regression on AppointmentTimeZoneDefinitionStartDisplay
+
+  [ Jesús García Sáez ]
+  * [0f432b] oc: Fix internal EntryIds properties on multidomain
+
+  [ Julien Kerihuel ]
+  * [d4930a] oc: Remove deprecated notification code.
+  * [5e9abd] oc: Remove deprecated notification code.
+
+  [ José Antonio Calvo ]
+  * [539060] oc-calendar: Fix recipient type for invitations
+  * [3b1078] oc-calendar: Fix recipient type for invitations
+
+  [ Julio García ]
+  * [9e19eb] Adapting posinst from sogo-activesync to new Zentyal Server
+  * [a72cb7] Do not show interactive dialog when DEBIAN_FRONTEND=noninteractive
+  * [1e6392] Add NEWS for PR #132
+  * [75c276] Adding NEWS entries for PR #133
+  * [5b4899] Add NEWS for PR #135
+  * [ca9676] Preparing for next release 2.2.17a-zentyal3
+
+  [ Juan Vallés ]
+  * [7e89c4] oc-calendar: Compute time offset in floating time in all-day recurring events
+  * [ebe2a4] oc-calendar: Compute PidLidAppointmentDefinitionStartWhole for all-day events
+  * [0a285e] oc-calendar: Fix property values of invitation responses
+  * [8470f6] oc-calendar: Compute time offset in floating time in all-day recurring events
+  * [5a77de] oc-calendar: Compute PidLidAppointmentDefinitionStartWhole for all-day events
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 20 May 2015 15:57:48 +0200
+
 sogo (2.2.17a-zentyal2) trusty; urgency=medium
 
   [ Jesús García Sáez ]
