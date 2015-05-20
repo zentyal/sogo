@@ -2,9 +2,13 @@ master
 ------
 
 Enhancements
+ - Event invitation response mails are now sent
+ - Mail subfolders created in WebMail are created when Outlook synchronises.
+ - Mail root folder created in WebMail (same level INBOX) are created on Outlook logon.
  - Synchronize events, contacts and tasks in reverse chronological order
 
 Bug fixes
+ - Recurrent all day events are now shown properly in Outlook
  - Optional attendes on events are now shown properly
 
 2.2.17a-zentyal2 (2015-05-08)
