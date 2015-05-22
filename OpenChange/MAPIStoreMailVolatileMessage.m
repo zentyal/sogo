@@ -1054,7 +1054,7 @@ MakeMessageBody (NSDictionary *mailProperties, NSDictionary *attachmentParts, NS
   id <SOGoAuthenticator> authenticator;
 
   msgClass = [properties objectForKey: MAPIPropertyKey (PidTagMessageClass)];
-  if ([msgClass isEqualToString: @"IPM.Note"] || [msgClass isEqualToString: @"IPM.Sharing"]) /* we skip invitation replies */
+  if ([msgClass isEqualToString: @"IPM.Note"] || [msgClass isEqualToString: @"IPM.Sharing"] || [msgClass hasPrefix: @"IPM.Schedule.Meeting"])
     {
       /* send mail */
 
