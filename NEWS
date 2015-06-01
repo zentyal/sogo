@@ -2,6 +2,8 @@ master
 ------
 
 Bug fixes
+ - Dates stored in metadata works along TimeZone updates which fixes several
+   situations such as last modified date for a folder to be returned in the right timezone.
  - Fixed reading emails from another user with same uid but from a different domain
 
 2.2.17a-zentyal3 (2015-05-20)
