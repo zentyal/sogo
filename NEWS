@@ -1,6 +1,9 @@
 master
 ------
 
+New features
+ - Added create-folder subcommand to sogo-tool to create contacts and calendar folders
+
 Bug fixes
  - Appointment update notification mails are now sent
  - Dates stored in metadata works along TimeZone updates which fixes several
