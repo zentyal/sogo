@@ -142,12 +142,9 @@ function onMatchTypeChange() {
     var otherContainerTop;
     if (matchType == "allmessages") {
         container.hide();
-        otherContainerTop = 130;
     } else {
         container.show();
-        otherContainerTop = 240;
     }
-    otherContainer.setStyle({ top: otherContainerTop + "px" });
 }
 
 function onFilterRulesDivClick(event) {
