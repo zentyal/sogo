@@ -2,6 +2,15 @@
 -------------------
 
 New features
+ - Added create-folder subcommand to sogo-tool to create contacts and calendar folders
+
+Bug fixes
+ - Appointment update notification mails are now sent
+ - Dates stored in metadata works along TimeZone updates which fixes several
+   situations such as last modified date for a folder to be returned in the right timezone.
+ - Fixed reading emails from another user with same uid but from a different domain
+
+New features
  - Internet headers are now shown in Outlook (Zentyal)
 
 Enhancements
