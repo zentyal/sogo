@@ -1,5 +1,17 @@
-2.2.17a-zentyal3 (2015-05-20)
+master
 ------
+
+New features
+ - Added create-folder subcommand to sogo-tool to create contacts and calendar folders
+
+Bug fixes
+ - Appointment update notification mails are now sent
+ - Dates stored in metadata works along TimeZone updates which fixes several
+   situations such as last modified date for a folder to be returned in the right timezone.
+ - Fixed reading emails from another user with same uid but from a different domain
+
+2.2.17a-zentyal3 (2015-05-20)
+-----------------------------
 
 Enhancements
  - Event invitation response mails are now sent
@@ -12,13 +24,13 @@ Bug fixes
  - Optional attendes on events are now shown properly
 
 2.2.17a-zentyal2 (2015-05-08)
---------------------
+-----------------------------
 
 Bug fixes
  - Outlook clients can use reply all functionality on multidomain environment
 
 2.2.17a-zentyal1 (2015-04-15)
---------------------
+-----------------------------
 
 Bug fixes
  - Do not share Outlook metadata between users with the same name and different domain
