@@ -1,5 +1,5 @@
-master
-------
+2.2.17a-zentyal4 (2015-06-04)
+-----------------------------
 
 New features
  - Added create-folder subcommand to sogo-tool to create contacts and calendar folders
