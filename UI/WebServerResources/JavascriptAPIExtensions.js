@@ -94,7 +94,7 @@ Date.prototype.clone = function() {
     newDate.setTime(this.getTime());
 
     return newDate;
-}
+};
 
 Date.prototype.deltaDays = function(otherDate) {
     var day1 = this.getTime();
@@ -105,8 +105,8 @@ Date.prototype.deltaDays = function(otherDate) {
         day1 = tmp;
     }
 
-    return Math.floor((day2 - day1) / 86400000);
-}
+    return Math.round((day2 - day1) / 86400000);
+};
 
 Date.prototype.daysUpTo = function(otherDate) {
     var days = new Array();
@@ -127,7 +127,7 @@ Date.prototype.daysUpTo = function(otherDate) {
     //   var day1 = day1Date.getTime();
     //   var day2 = day2Date.getTime();
 
-    var nbrDays = Math.floor((day2 - day1) / 86400000) + 1;
+    var nbrDays = Math.round((day2 - day1) / 86400000) + 1;
     for (var i = 0; i < nbrDays; i++) {
         var newDate = new Date();
         newDate.setTime(day1 + (i * 86400000));
@@ -192,9 +192,8 @@ Date.prototype.stringWithSeparator = function(separator) {
 };
 
 Date.prototype.addDays = function(nbrDays) {
-    var milliSeconds = this.getTime();
-    milliSeconds += 86400000 * Math.round(nbrDays);
-    this.setTime(milliSeconds);
+    var dat = new Date(this.valueOf());
+    this.setDate(dat.getDate() + Math.round(nbrDays));
 };
 
 Date.prototype.earlierDate = function(otherDate) {
@@ -224,7 +223,7 @@ Date.prototype.beginOfDay = function() {
     beginOfDay.setMilliseconds(0);
 
     return beginOfDay;
-}
+};
   
 Date.prototype.beginOfWeek = function() {
     var offset = firstDayOfWeek - this.getDay();
