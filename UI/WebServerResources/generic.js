@@ -2337,4 +2337,27 @@ function SetLogMessage(containerId, message, msgType) {
     }
 }
 
+function getJSONResponse(http) {
+    var data;
+    try {
+        data = http.responseText.evalJSON(true);
+    } catch(e) {
+        if (e instanceof SyntaxError) {
+            /* Check if we have a login form */
+            var re = /<form (.*id=["']connectForm["'].*)>/i;
+            var reMatches = re.exec(http.responseText);
+            if (reMatches) {
+                re = /action=['"](.*)\/.*?["']/i;
+                var formLine = reMatches[1];
+                reMatches = re.exec(formLine);
+                if (reMatches) {
+                    window.location = reMatches[1];
+                }
+            }
+        }
+        throw e;
+    }
+    return data;
+}
+
 document.observe("dom:loaded", onLoadHandler);
