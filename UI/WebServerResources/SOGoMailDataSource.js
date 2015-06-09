@@ -82,9 +82,10 @@ SOGoMailDataSource = Class.create({
         },
 
         _loadCallback: function(http) {
+            var data;
             if (http.status == 200) {
                 if (http.responseText.length > 0) {
-                    var data = http.responseText.evalJSON(true);
+                    var data = getJSONResponse(http);
                     if (data.uids)
                         this.init(data.uids, data.threaded, data.headers, data.quotas);
                     else
