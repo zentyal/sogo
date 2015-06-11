@@ -1,3 +1,141 @@
+sogo (2.3.0-zentyal1) trusty; urgency=medium
+
+  [ Ludovic Marcotte ]
+  * [491d7a] improved multipart handling using EAS
+  * [f5607b] now keep the BodyPreference for future EAS use and default to MIME if none set (#3146)
+  * [c428ac] EAS reply fix when message/rfc822 parts are included in the original mail (#3153)
+  * [db9536] (fix) fix yet an other potential crash during freebusy lookups during timezone changes
+  * [94d546] (feat) added systemd startup script (PR#76)
+  * [b2d7eb] (fix) fixed a potential EAS error with multiple email priority flags
+  * [9b320e] Improvements over 491d7aaffcc2fc2b8acb468e6387501c2af376e4
+  * [779177] (fix) packaging issue on RHEL
+  * [1e4596] (fix) fixed serialization of PreventInvitationsWhitelist
+  * [beb666] (fix) fixed md4 support (for NTLM password changes) with GNU TLS
+  * [3872af] (fix) Improve prevent invitations error handling
+  * [836095] Removed old TODO file
+  * [d0c173] Removed TODO refs
+  * [dfb960] Disabled -Werr for now
+  * [f2b5f5] Fixed dot notation
+  * [7ff12c] Updated NEWS file regarding Zentyal's PRs
+  * [a37f43] (fix) the EAS maximum response size being per-folder, and not global
+  * [fbb779] (fix) During login, we now extract the domain from the user to accelerate authentication requests on sources
+  * [4826f0] (fix) fixed EAS replies decoding from Outlook (#3123)
+  * [f666b4] (fix) make sure sure email invitations can always be read by EAS clients
+  * [ee8caa] (fix) now set MeetingMessageType only for EAS 14.1
+  * [2c78d6] (fix) now correct handle external invitations using EAS
+  * [364a07] set the preferred body type for meeting response
+  * [64da65] (fix) fallback to Latin1 when trying to parse versit data
+  * [619e9f] (fix) now correctly handle multiple email addresses in the GAL over EAS
+  * [a145fd] (fix) ensure calendar objects have a (fake) filename
+  * [96b2e0] (fix) use dateTime instead of compact format for meeting requests
+  * [e71a1c] (fix) addition fix for #3152
+  * [c1ce32] (fix) now handle very large amount of participants correctly (#3175)
+  * [5cf500] (feat) added c_description to calendar quick tables
+  * [f8b7eb] Adjust OCS files regarding previous commit
+  * [0ea0a7] fixed typo in previous commit
+  * [dc48e0] (feat) print event/task description in list view (#2881)
+  * [39aa9a] (fix) make sure we return event blocks sorted by start date (#2939)
+  * [fb1219] refactored previous commit
+  * [4de814] (fix) first pass (and hopefully only) at Apache 2.2->2.4 mess
+  * [d97813] (fix) moved stuff to multiarch
+  * [fbf5c4] (fix) always include SrcMsgId in the MoveItems's response
+  * [541259] (feat) now possible to log EAS commands using the SOGoEASDebugEnabled system defaults
+  * [9dc0a0] (fix) removed unused import
+  * [cc1e9f] (fix) additional fix for #3152
+  * [c98a00] (feat) many improvements to EAS SmartReply/SmartForward commands
+  * [037a3a] (fix) message bodies not shown on some EAS devices (#3173)
+  * [143ee5] Improved debian packaging regarding apache 2.2 -> 2.4
+  * [ae72c2] Renamed scripts
+  * [416711] (fix) avoid appending the domain unconditionally when SOGoEnableDomainBasedUID is set to YES
+  * [7e8c79] (fix) use the contact-info, not the user/group bit identifier
+  * [54ab0b] (fix) rhel7 packaging fix
+  * [79bfc7] (fix) more rhel7 fix
+  * [e40be9] Updated NEWS file regarding PR#84
+  * [2ae5f3] Fix a crasher
+  * [c89950] Small improvements to the docs
+  * [4f303f] Fixed mess regarding uid/realUID
+  * [55d919] Improved the doc for the release
+  * [e0c1d5] Improved the doc for the 2.3 release
+  * [ed42d1] (fix) more multi-domain fixes and cleanups
+  * [772c3b] (fix) formatting fixes
+  * [d07df5] (fix) more fixes and clarifications on the mutli-domain settings
+  * [abcd48] Added missing image used in the documentation
+  * [ce3d55] (fix) do not rewrite the username when using the session from the db
+  * [db4cd9] (fix) doc update regarding samba 4.1.18
+  * [2fd0be] Added precision on supported architectures
+  * [c95568] Added control file for i386/i686 distro to not build OC
+  * [6cf2fd] Adjusted the doc for the procedure on Wheezy/Precise
+  * [7da6b0] (fix) only dump broken eas data to file if SOGoEASDebugEnabled is enabled
+  * [289100] Updated files for the 2.3 release
+
+  [ peruchi ]
+  * [784f01] Create sogo-systemd-redhat.spec
+  * [36a70b] Create sogo-systemd-redhat
+  * [c9ec63] Update sogo.spec
+  * [06ef3f] Delete sogo-systemd-redhat.spec
+
+  [ Francis Lachapelle ]
+  * [ab121e] [fix] Issues with freebusy in attendees editor
+  * [e2c325] [fix] Issues with freebusy in attendees editor
+  * [01857a] [fix] Timezone of MS Exchange freebusy information
+  * [eae327] [fix] Paragraph margins in HTML message
+  * [755efa] [fix] initial loading of inbox uids and headers
+  * [cdc74e] Update translations
+  * [a7306a] (fix) JavaScript error when saving preferences
+  * [5847e0] (fix) Edition and access of attach URL in editor
+  * [07ac3f] Simplify some calls in SOGoAppointmentFolder.m
+  * [a1406d] Initial Basque translation
+  * [50896e] (i18n) Improve Basque Locale file
+  * [789334] TimePicker: allow entries from numpad
+  * [1e0473] Localization
+  * [b43c3f] Fix asciidoc of Installation guide
+  * [bd12a8] Update languages in Installation Guide
+  * [f65076] Update NEWS file
+  * [617e6f] Update NEWS file
+
+  [ Julio García ]
+  * [870644] Prepare for 2.2.17a-zentyal1
+  * [6b3454] Revert "configure: Fix gnulib/crypto/md4 dependency"
+  * [cdb608] Revert "Adding missing build dependency gnulib"
+  * [f6370d] Revert "Prepare for new 2.2.15-zentyal3 version"
+  * [8e39f0] Revert "Prepare for 2.2.17a-zentyal1"
+  * [990178] Revert "Update news for next release"
+  * [1d9e08] Revert "oc: NGImap4Connection:fetchUids changed error messages"
+  * [255b3d] Revert "oc: NGImap4Connection:fetchUids don't delete RawResponse"
+  * [78f5f6] Revert "oc: monkeypatched NGImap4Connection class from sope"
+  * [3dd8bd] Revert "(fix) more fixes and clarifications on the mutli-domain settings"
+  * [90e11d] Revert "(fix) more multi-domain fixes and cleanups"
+  * [96d88d] Revert "Fixed mess regarding uid/realUID"
+  * [d4c2e1] Preparing for release 2.3.0-zentyal1
+
+  [ Luc Charland ]
+  * [a86b16] uses a dict instead of a string of a dict for preventInvitationsTest
+
+  [ Jeroen Dekkers ]
+  * [769045] Do not include nonexistent config.h
+  * [84c199] Spelling fix: dictionnary -> dictionary
+
+  [ Javier Amor García ]
+  * [5a8f31] Show 'complexity password' error instead of a generic error.
+  * [7540cc] oc: can use client data to get recipient address
+
+  [ Jesús García Sáez ]
+  * [9922ec] Avoid uid+attributes entries on shared cache
+  * [37461e] Fix conflicts with externalLoginWithEmail + DomainBasedUid
+  * [04ce8d] Avoid cache entries with uid@domain@domain prefix
+  * [7990e2] Fix warning distinct Objective-C type
+
+  [ Gilles Gagniard ]
+  * [84dfba] honor PREFORK setting in /etc/sysconfig/sogo when starting sogod with systemd
+  * [bea9b2] systemd needs to reload the newly installed sogod.service, otherwise enable/start will fail on first sogo installation
+
+  [ José Antonio Calvo ]
+  * [0acf5b] Migrate MySQL DB on postinst when upgrading
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 11 Jun 2015 12:53:26 +0200
+
 sogo (2.2.17a-zentyal4) trusty; urgency=medium
 
   [ Jesús García Sáez ]
