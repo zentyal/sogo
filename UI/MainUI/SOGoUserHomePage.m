@@ -40,7 +40,6 @@
 #import <SOGo/SOGoSAML2Session.h>
 #endif
 #import <SOGo/SOGoUserManager.h>
-#import <SOGo/SOGoWebAuthenticator.h>
 #import <SOGo/SOGoUser.h>
 #import <SOGo/SOGoUserDefaults.h>
 #import <SOGo/SOGoUserFolder.h>
@@ -48,6 +47,7 @@
 #import <SOGo/SOGoSystemDefaults.h>
 #import <SOGo/NSCalendarDate+SOGo.h>
 #import <SOGo/NSDictionary+Utilities.h>
+#import <MainUI/SOGoWebAuthenticator.h>
 #import <SOGoUI/UIxComponent.h>
 
 #import <SBJson/NSObject+SBJSON.h>
