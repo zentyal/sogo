@@ -1,5 +1,11 @@
+master
+------
+
+New features
+ - Added 'ActiveSync' module constraint
+
 2.3.0-zentyal1 (2015-06-11)
--------------------
+---------------------------
 
 New features
  - Internet headers are now shown in Outlook (Zentyal)
