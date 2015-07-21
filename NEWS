@@ -5,6 +5,10 @@ New features
  - Group mail addresses can be used as recipient in Outlook
  - Added 'ActiveSync' module constraint
 
+Bug fixes
+ - Fixed several sync issues on environments with multiple users
+ - Folders from other users will no longer appear on your Outlook
+
 2.3.0-zentyal1 (2015-06-11)
 ---------------------------
 
