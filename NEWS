@@ -1,5 +1,17 @@
+2.3.0-zentyal2 (2015-07-28)
+---------------------------
+
+New features
+ - Group mail addresses can be used as recipient in Outlook
+ - Added 'ActiveSync' module constraint
+
+Bug fixes
+ - Non-latin subfolder names are displayed correctly on Outlook
+ - Fixed several sync issues on environments with multiple users
+ - Folders from other users will no longer appear on your Outlook
+
 2.3.0 (2015-06-01)
--------------------
+------------------
 
 New features
  - Internet headers are now shown in Outlook (Zentyal)
