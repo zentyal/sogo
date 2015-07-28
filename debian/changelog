@@ -1,3 +1,95 @@
+sogo (2.3.0-zentyal2) trusty; urgency=medium
+
+  [ Ludovic Marcotte ]
+  * [15bbfe] (fix) renamed scripts 2.1.17 -> 2.2.17
+  * [9435a2] (fix) added tmpfs systemd script
+  * [4df323] (fix) fixed the target path and name
+  * [2f533f] (fix) create ${RPM_BUILD_ROOT}/etc/tmpfiles.d/ if not present (test)
+  * [18a042] (fix) wrong filename for chmod
+  * [75206f] (fix) improved EAS speed, especially when fetching big attachments
+  * [ccbaea] (fix) EAS's GetItemEstimate/ItemOperations now support fetching mails and empty folders
+  * [8c4cb6] (fix) now always enforce the organizer's default identity in appointments
+  * [052325] (fix) small improvement over previous commit
+  * [24edb2] (fix) code improvemnent to previous commits
+  * [f3c2d3] Slightly improvement to the text displayed to users
+  * [b93cbe] (fix) fixed some rare cornercases in multidomain configurations
+  * [aa623c] (fix) don't add the domain if already in the uid
+  * [763609] (fix) make sure PRODID is set to Inverse/SOGo when importing events
+  * [a56dbe] (fix) improved the handling of default calendar categories/colors (#3200)
+  * [88cab6] (fix) properly escape folder after creation using EAS (#3237)
+  * [b1453e] (fix) fixed potential organizer highjacking when using EAS (#3131)
+  * [6bc471] (fix) properly support big characters in EAS and fix encoding QP EAS error for Outlook (#3082)
+  * [1f83ba] (fix) fixed multidomain issue where UID isn't part of the email address
+  * [662d06] Revert "(fix) JavaScript syntax error in 'asCSSIdentifier'"
+  * [7d0182] Revert "Improve creation of CSS identifier"
+  * [977406] Improved rationale
+  * [6994c0] Revert "Improved rationale"
+  * [ac30c8] Revert "(fix) fixed multidomain issue where UID isn't part of the email address"
+  * [2c5f59] Revert "Revert "(fix) fixed multidomain issue where UID isn't part of the email address""
+  * [85ad84] Revert "Revert "Improved rationale""
+  * [d98961] Revert "Revert "Improve creation of CSS identifier""
+  * [542246] Revert "Revert "(fix) JavaScript syntax error in 'asCSSIdentifier'""
+  * [44af47] (fix) avoid method clash from categories that would lead to unexpected behaviors
+  * [5e66e8] (fix) improvement over previous commit to avoid double-bind
+  * [5ad366] (fix) fixed multi-domain support for sogo-tool backup/restore (#2600)
+  * [d9b4ab] (fix) improved memory usage
+  * [3809c0] Revert "(fix) ensure calendar objects have a (fake) filename"
+  * [dfecce] (feat) added support for DeletesAsMoves over EAS
+
+  [ Francis Lachapelle ]
+  * [e1ecf7] Use double-quotes for setTimeout of UIxJSClose.wox
+  * [e40a19] Improve creation of CSS identifier
+  * [9897ce] (fix) JavaScript syntax error in 'asCSSIdentifier'
+  * [a70ea3] New method [NSString+Utilities asSafeJSString]
+  * [5435c2] (js) New method String.prototype.fromCSSIdentifier
+  * [76196b] (fix) Handling of cards with unexpected UID
+  * [667e38] (fix) Escaping of unexpected characters in emails
+  * [82798c] Change signature of [iCalAlarm alarmForEvent:..]
+  * [b52709] (fix) Events list display in Calendar module
+  * [d16bf7] (fix) Tasks list display in Calendar module
+
+  [ José Antonio Calvo ]
+  * [e21d3f] do not exec tput commands when running in noninteractive
+
+  [ Javier Amor García ]
+  * [72aab7] ActiveSync: can be controlled by module constraint
+  * [2ce85f] oc-mail: Added [MAPIStoreFolder getPidTagDisplayName:inMemCtx:]
+  * [959b4e] [SOgoMailFolder displayName] decodes IMAP4
+
+  [ Julio García ]
+  * [67d0d9] Revert "Revert "Fixed mess regarding uid/realUID""
+  * [3f1a43] Revert "Revert "(fix) more multi-domain fixes and cleanups""
+  * [dc2cc1] Revert "Revert "(fix) more fixes and clarifications on the mutli-domain settings""
+  * [936c38] Remove not needed block in SoObjects/SOGo/SOGoUserManager.m
+
+  [ Enrique J. Hernández Blasco ]
+  * [62b16f] oc: Check PidTagObjectType before dereferencing on ModifyRecipients
+  * [6b3157] Update NEWS from PR #153
+  * [f4b76b] Update NEWS from PR #100
+  * [bb151b] Update NEWS from PR #157
+  * [c5b5a4] oc: Fix compilation warning in MAPIStoreContext
+  * [10ac44] oc-mail: Fallback to PidTagSubject unicode when creating new mail
+
+  [ Jesús García Sáez ]
+  * [928b6b] oc: OC_DEBUG inside macros
+  * [503a70] oc: remove tabs and unused code
+  * [3bf7af] oc: remove and disable userContext after each call
+  * [7d2f96] oc: use activate instead of activateWithUser
+  * [cfab18] oc: activate user context on initialization
+  * [f4e3b9] Nothing changed: format and hoarding code removed
+  * [68ae97] oc-mail: activate user context needed
+  * [393b6d] oc-folder: simplify lookupFolder method
+  * [10bc15] oc-folder: activate user context when needed
+  * [c9f2fe] oc-folder: user context activation on rootFolders
+  * [1336a1] oc: remove useless mapistore_indexing call
+  * [7bde18] oc: check ret value get_new_folderID
+  * [3dc8cc] Revert merge from inverse
+  * [ae0ac6] Update NEWS from PR #158
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 28 Jul 2015 19:34:55 +0200
+
 sogo (2.3.0-zentyal1) trusty; urgency=medium
 
   [ Ludovic Marcotte ]
