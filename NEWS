@@ -3,6 +3,7 @@ master
 
 Bug fixes
  - Less conflicting messages in Outlook while moving messages between folders
+ - Use right auth in multidomain environments in contacts and calendar from Outlook
 
 
 2.3.0-zentyal2 (2015-07-28)
