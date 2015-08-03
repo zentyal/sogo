@@ -699,7 +699,7 @@ static BOOL debugOn = NO;
   SOGoMailAccount *accountFolder;
   NSMutableString *s, *commands;
   SOGoUserFolder *userFolder;
-  NSMutableArray *folders;
+  NSMutableArray *folders, *processedFolders;
   SoSecurityManager *sm;
   SOGoCacheGCSObject *o;
   id currentFolder;
@@ -719,6 +719,8 @@ static BOOL debugOn = NO;
   command_count = 0;
   commands = [NSMutableString string];
 
+  processedFolders = [NSMutableArray array];
+
   [s appendString: @"<?xml version=\"1.0\" encoding=\"utf-8\"?>"];
   [s appendString: @"<!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\">"];
 
@@ -727,7 +729,7 @@ static BOOL debugOn = NO;
       first_sync = YES;
       syncKey = @"1";
     }
-  else if (![syncKey isEqualToString: [metadata objectForKey: @"FolderSyncKey"]])
+  else if (![metadata objectForKey: @"FolderSyncKey"])
     {
       // Synchronization key mismatch or invalid synchronization key
       //NSLog(@"FolderSync syncKey mismatch %@ <> %@", syncKey, metadata);
@@ -862,7 +864,13 @@ static BOOL debugOn = NO;
 
      serverId = [NSString stringWithFormat: @"mail/%@",  [[imapGUIDs objectForKey: nameInCache] substringFromIndex: 6]];
      name = [folderMetadata objectForKey: @"displayName"];
-          
+
+     // avoid duplicate folders if folder is returned by different imap namespaces
+     if ([processedFolders indexOfObject: serverId] == NSNotFound)
+       [processedFolders addObject: serverId];
+     else
+       continue;
+
      if ([name hasPrefix: @"/"])
        name = [name substringFromIndex: 1];
           
@@ -874,7 +882,10 @@ static BOOL debugOn = NO;
          
      if ([folderMetadata objectForKey: @"parent"])
        {
-         parentId = [NSString stringWithFormat: @"mail/%@", [[imapGUIDs objectForKey: [NSString stringWithFormat: @"folder%@",  [[folderMetadata objectForKey: @"parent"] substringFromIndex: 1]]] substringFromIndex: 6]];
+         // make sure that parent of main-folders is always 0
+         if (type == 12)
+            parentId = [NSString stringWithFormat: @"mail/%@", [[imapGUIDs objectForKey: [NSString stringWithFormat: @"folder%@",  [[folderMetadata objectForKey: @"parent"] substringFromIndex: 1]]] substringFromIndex: 6]];
+
          name = [[name pathComponents] lastObject];
        }
           
@@ -2565,7 +2576,7 @@ static BOOL debugOn = NO;
       NGMimeFileData *fdata;
       NSException *error;
       NSArray *attachmentKeys;
-      NSMutableArray *attachments;
+      NSMutableArray *attachments, *references;
 
       id body, bodyFromSmartForward, htmlPart, textPart;
       NSString *fullName, *email, *charset, *s;
@@ -2604,7 +2615,25 @@ static BOOL debugOn = NO;
         [map setObject: email forKey: @"from"];
 
       if ([mailObject messageId])
-        [map setObject: [mailObject messageId] forKey: @"in-reply-to"];
+        {
+          [map setObject: [mailObject messageId] forKey: @"in-reply-to"];
+
+          references = [[[[[mailObject mailHeaders] objectForKey: @"references"] componentsSeparatedByString: @" "] mutableCopy] autorelease];
+          if ([references count] > 0)
+            {
+              // If there are more than ten identifiers listed, we eliminate the second one.
+              if ([references count] >= 10)
+                [references removeObjectAtIndex: 1];
+
+              [references addObject: [mailObject messageId]];
+
+              [map setObject: [references componentsJoinedByString:@" "] forKey: @"references"];
+            }
+          else
+            {
+              [map setObject: [mailObject messageId] forKey: @"references"];
+            }
+        }
 
       messageToSend = [[[NGMimeMessage alloc] initWithHeader: map] autorelease];
       body = [[[NGMimeMultipartBody alloc] initWithPart: messageToSend] autorelease];
@@ -2874,7 +2903,7 @@ static BOOL debugOn = NO;
   activeUser = [context activeUser];
   if (![activeUser canAccessModule: @"ActiveSync"]) 
     {
-      [theResponse setStatus: 403];
+      [(WOResponse *)theResponse setStatus: 403];
       [self logWithFormat: @"EAS - Forbidden access for user %@", [activeUser loginInDomain]];
       return nil;
     }     
