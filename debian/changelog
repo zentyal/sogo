@@ -1,3 +1,26 @@
+sogo (2.3.1-zentyal1) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [9414df] getUIDForEmail works on multidomain: returns login
+  * [216586] Update NEWS from PR 159
+
+  [ Enrique J. Hernández Blasco ]
+  * [2aba08] oc: Update ChangeNumber after setting folder properties
+  * [9e196e] Update NEWS from PR #165
+  * [1dbfc1] oc: Update to new XID structure definition
+  * [8d9b54] oc: Receive new predecessor change list parameter on move copy op
+  * [321672] oc: Update predecessor change list on saving
+
+  [ Julio García ]
+  * [26bd1b] Revert "Merge pull request #164 from Zentyal/jgarcia/revert-merge-inverse"
+
+  [ José Antonio Calvo ]
+  * [66df0e] Preparing for release 2.3.1-zentyal1
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 06 Aug 2015 14:57:09 +0200
+
 sogo (2.3.0-zentyal2) trusty; urgency=medium
 
   [ Ludovic Marcotte ]
