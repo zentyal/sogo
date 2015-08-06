@@ -8,6 +8,8 @@ Enhancements
  - added support for DeletesAsMoves over EAS
 
 Bug fixes
+ - Less conflicting messages in Outlook while moving messages between folders
+ - Use right auth in multidomain environments in contacts and calendar from Outlook
  - EAS's GetItemEstimate/ItemOperations now support fetching mails and empty folders
  - fixed some rare cornercases in multidomain configurations
  - properly escape folder after creation using EAS (#3237)
