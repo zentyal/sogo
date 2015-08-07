@@ -11,8 +11,8 @@ Vcs-Git: git://git.debian.org/git/collab-maint/sogo.git
 
 Package: sogo
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, tmpreaper | systemd, sogo-common (= ${source:Version}), adduser, zip, memcached
-Suggests: postgresql | mysql-server
+Depends: ${shlibs:Depends}, ${misc:Depends}, tmpreaper | systemd, sogo-common (= ${source:Version}), adduser, zip
+Suggests: postgresql | mysql-server, memcached
 Description: Scalable groupware server
  SOGo is a groupware server built around OpenGroupware.org (OGo) and
  the SOPE application server with focus on scalability. It has many
