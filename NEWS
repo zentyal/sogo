@@ -1,3 +1,9 @@
+master
+------
+
+Bug fixes
+ - Avoid conflicting message on saving a draft mail.
+
 2.3.1-zentyal1 (2015-08-06)
 ---------------------------
 
