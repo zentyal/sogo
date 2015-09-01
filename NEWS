@@ -2,6 +2,7 @@ master
 ------
 
 Bug fixes
+ - Attachments with no-latin filenames sent by Outlook are now received
  - Support attachments from more mail clients
  - Avoid conflicting message on saving a draft mail.
 
