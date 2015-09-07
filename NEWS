@@ -1,3 +1,12 @@
+master
+------
+
+Bug fixes
+ - Less sync issues when setting read flag
+ - Attachments with no-latin filenames sent by Outlook are now received
+ - Support attachments from more mail clients
+ - Avoid conflicting message on saving a draft mail.
+
 2.3.1-zentyal1 (2015-08-06)
 ---------------------------
 
