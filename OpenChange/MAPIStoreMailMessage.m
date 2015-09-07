@@ -1569,9 +1569,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   NSDictionary *parameters;
   NSUInteger count, max;
 
-  parameters = [[bodyInfo objectForKey: @"disposition"]
-                 objectForKey: @"parameterList"];
-  if ([[parameters objectForKey: @"filename"] length] > 0)
+  if ([[bodyInfo filename] length] > 0)
     {
       if ([keyPrefix length] == 0)
         keyPrefix = @"0";
@@ -1645,15 +1643,29 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   return attachment;
 }
 
-- (int) setReadFlag: (uint8_t) flag
+- (enum mapistore_error) setReadFlag: (uint8_t) flag
 {
+  BOOL modified = NO;
+  BOOL alreadyRead = NO;
   NSString *imapFlag = @"\\Seen";
+
+  alreadyRead = [[[sogoObject fetchCoreInfos] objectForKey: @"flags"]
+                  containsObject: @"seen"];
 
   /* TODO: notifications should probably be emitted from here */
   if (flag & CLEAR_READ_FLAG)
-    [sogoObject removeFlags: imapFlag];
+    {
+      [sogoObject removeFlags: imapFlag];
+      modified = alreadyRead;
+    }
   else
-    [sogoObject addFlags: imapFlag];
+    {
+      [sogoObject addFlags: imapFlag];
+      modified = !alreadyRead;
+    }
+
+  if (modified)
+    [(MAPIStoreMailFolder *)[self container] synchroniseCache];
 
   return MAPISTORE_SUCCESS;
 }
