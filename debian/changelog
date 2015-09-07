@@ -1,3 +1,33 @@
+sogo (2.3.1-zentyal2) trusty; urgency=medium
+
+  [ Julio García ]
+  * [f2d5dc] Remove memcached as a compulsory dependency and suggest it only
+
+  [ Enrique J. Hernández Blasco ]
+  * [27b9b7] oc-mail: Increase Change Number after modifying seen flag
+  * [3a60b6] oc-mail: Implement ChangeNumber >= restriction
+  * [47859b] oc-mail: Return right change key after saving a draft mail
+  * [839b95] Update NEWS from PR #174
+  * [b702e4] oc: load versionsMessage on setting up
+  * [f19074] oc: Use enum mapistore_error as returned value for setReadFlag
+  * [6280e4] oc: Implement setReadFlag for MAPIStoreDBMessage
+
+  [ Javier Amor García ]
+  * [ae3ac0] oc-mail: Support attachments with filename extended parameter
+  * [361d5e] Added method [SOGoTest stringFromDiffBetween:and:]
+  * [cbc3e3] Test for [NGMimeMessageGenerator generateDataForHeaderField:value:]
+
+  [ Jesús García Sáez ]
+  * [238497] Update NEWS from PR #172
+  * [a49be2] Update NEWS from PR #170
+  * [e62522] Update NEWS from PR #169
+  * [5b861c] Preparing NEWS for 2.3.1-zentyal2
+  * [5fc2ab] Prepare for 2.3.1-zentyal2
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 07 Sep 2015 20:21:43 +0200
+
 sogo (2.3.1-zentyal1) trusty; urgency=medium
 
   [ Jesús García Sáez ]
