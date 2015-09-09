@@ -30,6 +30,8 @@ Enhancements
  - added Chinese (Taiwan) translation
 
 Bug fixes
+ - Less conflicting messages in Outlook while moving messages between folders
+ - Use right auth in multidomain environments in contacts and calendar from Outlook
  - EAS's GetItemEstimate/ItemOperations now support fetching mails and empty folders
  - fixed some rare cornercases in multidomain configurations
  - properly escape folder after creation using EAS (#3237)
@@ -47,12 +49,17 @@ Bug fixes
  - optimized Calendar module in multidomain configurations
 
 2.3.0 (2015-06-01)
--------------------
+------------------
 
 New features
  - Internet headers are now shown in Outlook (Zentyal)
+ - Added create-folder subcommand to sogo-tool to create contacts and calendar folders
 
 Enhancements
+ - Appointment update notification mails are now sent
+ - Dates stored in metadata works along TimeZone updates which fixes several
+   situations such as last modified date for a folder to be returned in the right timezone.
+ - Fixed reading emails from another user with same uid but from a different domain
  - improved multipart handling using EAS
  - added systemd startup script (PR#76)
  - added Basque translation - thanks to Gorka Gonzalez

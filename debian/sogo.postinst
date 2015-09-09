@@ -1,0 +1,79 @@
+#!/bin/bash
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+#
+
+# Migration code adapted from original interactive script: sql-update-2.1.17_to_2.3.0-mysql.sh
+
+sqlscript=""
+
+function adjustSchema() {
+    oldIFS="$IFS"
+    IFS=" "
+    part1="`echo -e \"ALTER TABLE $table MODIFY c_partstates mediumtext;\\n\"`";
+    part2="`echo -e \"ALTER TABLE $table ADD COLUMN c_description mediumtext;\\n\"`";
+    sqlscript="$sqlscript$part1$part2"
+    IFS="$oldIFS"
+}
+
+function runDBMigration() {
+    username=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f2|cut -d/ -f3)
+    password=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f3|cut -d@ -f1)
+    hostname=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d@ -f2|cut -d: -f1)
+    database=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d/ -f4)
+    indextable=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}' |  awk -F/ '{print $NF}')
+
+    tables=`mysql -s -u$username -p$password -h $hostname $database -e "select SUBSTRING_INDEX(c_quick_location, '/', -1) from $indextable where c_path3 = 'Calendar';" || true`
+
+    for table in $tables;
+    do
+        adjustSchema
+    done
+
+    echo "$sqlscript" | mysql -s -u$username -p$password -h $hostname $database || true
+}
+
+case "$1" in
+    configure)
+	if ! getent passwd sogo > /dev/null ; then
+          echo 'Adding system-user for sogo' 1>&2
+          adduser --system --group --quiet --home /var/run/sogo \
+            --no-create-home --disabled-login sogo
+        fi
+
+        chown -R sogo:adm /var/log/sogo
+        chmod -R 750 /var/log/sogo
+        chown -R sogo: /var/spool/sogo
+        chmod -R 750 /var/spool/sogo
+
+        # Migrate MySQL schemas if upgrading from a previous version
+        if [ -n "$2" ] && dpkg --compare-versions "$2" lt "2.3-zentyal1"
+        then
+            runDBMigration
+        fi
+
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
 <!DOCTYPE container>
-<container 
+<container
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:xml="http://www.w3.org/XML/1998/namespace"
   xmlns:var="http://www.skyrix.com/od/binding"
@@ -36,14 +36,14 @@
           <script type="text/javascript" rsrc:src="XMLHttpRequest.js"><!-- space --></script>
         </var:if-ie>
       </head>
-      
+
 <!-- Body -->
       <body var:class="bodyClasses">
         <var:if condition="isCompatibleBrowser">
           <var:if condition="singleWindowModeEnabled">
             <div id="popupFrame" style="display: none;">
               <iframe width="100%" height="100%" src="/SOGo/loading"><!-- space --></iframe></div></var:if>
-          
+
           <var:if condition="shortUserNameForDisplay" const:value="anonymous" const:negate="YES">
             <var:if condition="hasUserSettingsKeys">
               <script type="text/javascript">
@@ -51,43 +51,69 @@
             <var:if condition="hasUserDefaultsKeys">
               <script type="text/javascript">
                 var UserDefaults = <var:string value="userDefaults" const:escapeHTML="NO"/>;</script></var:if></var:if>
-          
-          <var:if condition="isPopup" const:negate="YES">
-            <var:if condition="isUIxDebugEnabled">
-              <div id="logConsole"><!-- space --></div></var:if>
 
-<!-- Link banner -->
-            <div id="linkBanner" class="linkbanner">
+          <var:if conditionsx="isPopup" const:negate="YES">
+            <var:if condition="isUIxDebugEnabled">
+              <div id="logConsole"><!-- space --></div></var:if></var:if>
+
+          <!-- Link banner -->
+
+          <div id="linkBanner" class="linkbanner">
+
+          <var:if condition="isPopup" const:negate="YES">
+            <a var:href="relativeMailPath" class="logo"><img alt="zentyal logo" style="float:left;" rsrc:src="zentyal_w_logo.png"/></a>
+            <div id="appNav" class="appNav">
+                <span onclick="ToggleAppNavMenu()" class="dropdown" id="dropdown-NavMenu">
+
+                <var:if condition="userHasCalendarAccess">
+                <var:if condition="isCalendar">
+                    <span class="active" style=" padding-right: 10px;"><var:string label:value="Calendar" /></span>
+                </var:if></var:if>
+
+                <var:if condition="isContacts">
+                  <span class="active"><var:string label:value="Address Book" /></span>
+                </var:if>
+                <var:if condition="userHasMailAccess">
+                <var:if condition="isMail">
+                  <span class="active" style=" padding-right: 10px;"><var:string label:value="Mail" /></span>
+                </var:if></var:if>
+
+                <img class="buttonMenuArrow" alt="" rsrc:src="arrow-down-w.png"/>
+                </span>
+
+                <div id="appNavMenu" class="appNavMenu">
+                  <var:if condition="userHasMailAccess">
+                    <var:if condition="isMail" const:negate="YES">
+                      <a id="mailBannerLink" var:href="relativeMailPath"><var:string label:value="Mail" /></a>
+                    </var:if>
+                  </var:if>
+                  <var:if condition="userHasCalendarAccess">
+                    <var:if condition="isCalendar" const:negate="YES">
+                        <a id="calendarBannerLink" var:href="relativeCalendarPath"><var:string label:value="Calendar" /></a>
+                    </var:if>
+                  </var:if>
+                  <var:if condition="isContacts" const:negate="YES">
+                    <a id="contactsBannerLink" var:href="relativeContactsPath"><var:string label:value="Address Book" /></a>
+                  </var:if>
+                </div>
+
+            </div>
+          </var:if>
+
+          <var:component className="UIxToolbar" var:toolbar="toolbar" />
+
+          <var:if condition="isPopup" const:negate="YES">
+            <div class="userMenu">
               <var:if condition="canLogoff">
-                <a id="logoff" var:href="logoffPath">
-                  <var:string label:value="Disconnect"/></a>
                 <span id="userIdentificationDisplay">
                   <var:if condition="userHasVacationEnabled">
                     <img rsrc:src="status.vacation-msg.png" label:title="Vacation message is enabled" /></var:if>
                   <var:string var:value="userIdentification"/></span></var:if>
-              
-              <var:if condition="userHasCalendarAccess">
-                <var:if condition="isCalendar">
-                  <span class="active"><var:string label:value="Calendar"/><!-- space --></span></var:if>
-                <var:if condition="isCalendar" const:negate="YES">
-                  <a id="calendarBannerLink" var:href="relativeCalendarPath">
-                    <var:string label:value="Calendar" /></a></var:if></var:if>
-              
-              <var:if condition="isContacts">
-                <span class="active"><var:string label:value="Address Book"/><!-- space --></span></var:if>
-              <var:if condition="isContacts" const:negate="YES">
-                <a id="contactsBannerLink" var:href="relativeContactsPath">
-                  <var:string label:value="Address Book" /></a></var:if>
-              <var:if condition="userHasMailAccess">
-                
-                <var:if condition="isMail">
-                  <span class="active"><var:string label:value="Mail"/><!-- space --></span></var:if>
-                <var:if condition="isMail" const:negate="YES">
-                  <a id="mailBannerLink" var:href="relativeMailPath">
-                    <var:string label:value="Mail" /></a></var:if></var:if>
-              
               <a id="preferencesBannerLink" var:href="relativePreferencesPath">
                 <var:string label:value="Preferences" /></a>
+              <var:if condition="canLogoff">
+                  <a id="logoff" var:href="logoffPath">
+                    <var:string label:value="Disconnect"/></a></var:if>
               <var:if condition="isSuperUser">
                 <var:if condition="isAdministration">
                   <span class="active"><var:string label:value="Administration"/></span></var:if>
@@ -97,9 +123,10 @@
               <var:if condition="isUIxDebugEnabled">
                 <a id="consoleBannerLink" href="#">
                   <var:string label:value="Log Console (dev.)" /></a></var:if></div></var:if>
-          
-<!-- ToolBar -->
-          <var:component className="UIxToolbar" var:toolbar="toolbar" />
+
+          <!-- ToolBar -->
+
+          </div>
 
 <!-- Page Content -->
           <div id="pageContent"><var:component-content/><!-- space --></div>
@@ -122,7 +149,7 @@
               var UserLanguage = '<var:string value="userLanguage" const:escapeHTML="NO"/>'; </var:if>
             <var:string value="commonLocalizableStrings" const:escapeHTML="NO"/>
             <var:string value="productLocalizableStrings" const:escapeHTML="NO"/></script>
-          
+
           <script type="text/javascript" rsrc:src="prototype.js"><!-- space --></script>
           <script type="text/javascript" rsrc:src="jquery.js"><!-- space --></script>
           <script>jQuery.noConflict();</script>
@@ -146,7 +173,7 @@
             <script type="text/javascript" var:src="item"><!-- space --></script></var:foreach></var:if>
         <var:if condition="isCompatibleBrowser" const:negate="YES">
           <var:component className="SOGoBrowsersPanel"/></var:if>
-        
+
         <noscript>
           <div class="javascriptPopupBackground"><!-- space --></div>
           <div class="javascriptMessagePseudoWindow noJavascriptErrorMessage">

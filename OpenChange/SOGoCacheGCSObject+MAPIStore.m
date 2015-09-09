@@ -32,6 +32,7 @@
 {
   NSString *className, *mapiMsgClass;
 
+  className = NULL;
   switch (objectType)
     {
     case MAPIMessageCacheObject:
@@ -60,6 +61,11 @@
       [NSException raise: @"MAPIStoreIOException"
                   format: @"message class should not be queried for objects"
                    @" of type '%d'", objectType];
+    }
+    if (className == NULL) {
+        [NSException raise: @"MAPIStoreIOException"
+                    format: @"message class should not be queried for objects"
+                     @" of type '%d'", objectType];
     }
 
   return NSClassFromString (className);

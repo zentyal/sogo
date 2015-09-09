@@ -14,6 +14,7 @@ var Contact = {
 var refreshViewCheckTimer;
 
 function openContactsFolder(contactsFolder, reload, idx) {
+    hideMessageSelectedButtons();
     if ((contactsFolder && contactsFolder != Contact.currentAddressBook)
         || reload) {
         Contact.currentAddressBook = contactsFolder;
@@ -24,6 +25,9 @@ function openContactsFolder(contactsFolder, reload, idx) {
         if (searchValue && searchValue.length > 0)
             url += ("&search=" + search["contacts"]["criteria"]
                     + "&value=" + escape(searchValue.utf8encode()));
+        else if (currentFolderIsRemote())
+            url += ("&search=name_or_address"
+                    + "&value=.");
         var sortAttribute = sorting["attribute"];
         if (sortAttribute && sortAttribute.length > 0)
             url += ("&sort=" + sorting["attribute"]
@@ -201,6 +205,8 @@ function contactsListCallback(http) {
                         if (div.getHeight() < rowPosition)
                             div.scrollTop = rowPosition; // scroll to selected contact
                         row.selectElement();
+                        hideMessageSelectedButtons();
+                        console.log("restore selection and scroll");
                         break;
                     }
                 }
@@ -796,6 +802,8 @@ function onFolderUnsubscribeCB(folderId) {
     var personal = $("/personal");
     personal.selectElement();
     onFolderSelectionChange();
+
+    hideMessageSelectedButtons();
 }
 
 function onAddressBookExport(event) {
@@ -945,6 +953,7 @@ function deletePersonalAddressBookCallback(http) {
             }
             var personal = $("/personal");
             personal.selectElement();
+            hideMessageSelectedButtons();
             onFolderSelectionChange();
         }
         document.deletePersonalABAjaxRequest = null;
@@ -1013,6 +1022,7 @@ function configureAddressBooks() {
 
         // Select initial addressbook
         $(Contact.currentAddressBook).selectElement();
+        hideMessageSelectedButtons();
     }
 }
 

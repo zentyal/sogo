@@ -1,7 +1,3 @@
-DIV#pageContent
-{ padding: 10px;
-  padding-top: 15px; }
-
 #splitter
 { cursor: n-resize;
   top: 230px;
@@ -9,62 +5,47 @@ DIV#pageContent
   right: 0px;
   height: 5px; }
 
-LABEL
-{ margin: 0px;
-  padding: 0px; }
+FIELDSET{
+  margin-bottom: 0px;
+}
+LABEL{
+ margin: 0px;
+ padding: 0px; }
 
-#pageContent INPUT,
-#pageContent SELECT
-{ background-color: #ccddec;
-  padding: 1px;
-  margin: 1px;
-  border-width: 1px; }
-
-#pageContent INPUT
-{ padding-left: 2px; }
-
-DIV.container
-{ margin-bottom: 14px; }
-
+DIV.container{
+ margin-bottom: 14px; 
+}
 DIV#filterRulesContainer,
-DIV#filterActionsContainer
-{ position: absolute;
-  margin: 0px;
-  border: 0px;
-  padding: 0px;
-  left: 10px;
-  right: 10px; }
-
-DIV#filterRulesContainer
-{ top: 128px;
-  height: 102px; }
-
-DIV#filterActionsContainer
-{ top: 235px;
-  bottom: 0px; }
-
+DIV#filterActionsContainer{
+ position: relative; 
+}
+DIV#filterRulesContainer{
+ height: 120px; 
+}
+DIV#filterActionsContainer{
+ height: 200px; 
+ margin-bottom: 0px;
+}
 DIV#filterRules, DIV#filterActions
 { position: absolute;
   cursor: default;
   left: 0px;
   right: 0px;
   bottom: 21px;
-  border-top: 1px solid #909090;
-  border-left: 1px solid #909090;
-  border-bottom: 1px solid #ffffff;
-  border-right: 1px solid #ffffff;
-  background: #ccddec;
+  border: 1px solid #ccc;
+  background: #fff;
   overflow: hidden;
-  overflow-y: auto; }
+  overflow-y: auto;
+  margin-bottom: 0px;
+}
+DIV#filterRules{
+ top: 0px; }
 
-DIV#filterRules
-{ top: 0px; }
+DIV#filterActions{
+ top: 20px; }
 
-DIV#filterActions
-{ top: 20px; }
-
-DIV.bottomToolbar
-{ position: absolute;
+DIV.bottomToolbar{ 
+  position: absolute;
   left: 0px;
   right: 0px;
   margin: 0px;
@@ -72,35 +53,68 @@ DIV.bottomToolbar
   bottom: 0px; }
 
 DIV.rule,
-DIV.action
-{ overflow: hidden;
-  padding-left: 2px;
-  padding-right: 2px;
+DIV.action{ 
+  overflow: hidden;
   width: 100%;
-  border-bottom: 1px solid #9b9b9b; }
+  padding: 0px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 0px;}
 
 DIV.rule._selected,
-DIV.action._selected
-{ background-color: #9abcd8;
-  color: #fff; }
+DIV.action._selected{ 
+  background-color: #FFFFD0;}
 
-SPAN.fieldContainer
-{ width: 100px; }
+DIV.action select,
+DIV.rule select,
+DIV.action INPUT,
+DIV.rule INPUT,
+DIV.action TEXTAREA  {
+  border-color: #CCCCCC;
+  border-style: solid;
+  border-width: 0 0 0 1px;
+  border-radius: 0px;
+  background-color: transparent;
+  float: left;
+  padding: 6px ;
+  width: 100%;
+}
+DIV.action select,
+DIV.rule select{
+  -webkit-appearance:none;
+  background: url('select-down.png') no-repeat center right;
+}
+SPAN.fieldContainer input {
+  padding: 6px 5px 5px 5px ;
+  width: 40px !important;
+}
+SPAN.operatorContainer,
+SPAN.valueContainer{
+ display: table-cell;
+}
+SPAN.operatorContainer {
+    width: 30%;
+}
+SPAN.valueContainer INPUT,
+SPAN.argumentContainer INPUT {
+    padding: 7px 2%;
+    width: 96%; 
+}
+SPAN.fieldContainer > select {
+    width: 80px;
+}
+SPAN.methodContainer,
+SPAN.argumentContainer{
+ float: left;
+ width: 50%;
+}
+SPAN.rejectArgument TEXTAREA{
+  height: 54px;
+  padding: 6px 3%;
+  width: 94%;
+  resize: none;
+}
 
-SPAN.operatorContainer
-{ width: 300px; }
-
-SPAN.valueContainer INPUT
-{ width: 160px; }
-
-SPAN.redirectArgument INPUT
-{ width: 160px; }
-
-SPAN.fileintoArgument SELECT
-{ max-width: 250px; }
-
-SPAN.rejectArgument TEXTAREA
-{ height: 54px;
-  width: 90%;
-  margin-left: 5%;
-  padding-right: -50px; }
+SPAN.methodContainer select,
+SPAN.fieldContainer select{
+  border-left: 0px;
+}
