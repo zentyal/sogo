@@ -1,3 +1,9 @@
+master
+------
+
+Bug fixes
+ - Fix creation of root folders with Chinese characters
+
 2.3.1-zentyal2 (2015-09-07)
 ---------------------------
 
