@@ -1,5 +1,5 @@
-master
-------
+2.3.1-zentyal3 (2015-09-21)
+---------------------------
 
 Bug fixes
  - Tasks created in Outlook are now saved and shown in SOGo UI
