@@ -1,3 +1,29 @@
+sogo (2.3.1-zentyal3) trusty; urgency=medium
+
+  [ Javier Amor García ]
+  * [1fdb44] Fix some compilation warnings
+
+  [ Xavy Bahillo ]
+  * [1a0751] Changed logrotate
+
+  [ Juan Vallés ]
+  * [36d8fa] Improve first character check in CSS identifiers
+
+  [ Enrique J. Hernández Blasco ]
+  * [b075a3] oc-task: Save tasks from Outlook
+  * [7aaadf] Update NEWS from PR #181
+
+  [ Jesús García Sáez ]
+  * [5bef77] Update NEWS for PR #182
+  * [f94231] Preparing NEWS for 2.3.1-zentyal3
+
+  [ Ludovic Marcotte ]
+  * [c8acba] (fix) safe-guard against not-yet-created calendar of local users
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 21 Sep 2015 12:09:58 +0200
+
 sogo (2.3.1-zentyal2) trusty; urgency=medium
 
   [ Julio García ]
