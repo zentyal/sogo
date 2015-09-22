@@ -1,3 +1,9 @@
+master
+------
+
+Bug fixes
+ - Avoid crashing Outlook after setting a custom view in a calendar folder
+
 2.3.1-zentyal3 (2015-09-21)
 ---------------------------
 
