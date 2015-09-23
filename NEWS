@@ -1,3 +1,10 @@
+master
+------
+
+Bug fixes
+ - Fix double creation of folders in Outlook when the folder name starts with a digit
+ - Avoid crashing Outlook after setting a custom view in a calendar folder
+
 2.3.1-zentyal3 (2015-09-21)
 ---------------------------
 
