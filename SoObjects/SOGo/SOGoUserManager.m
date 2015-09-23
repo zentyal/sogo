@@ -69,6 +69,8 @@ static Class NSNullK;
     {
       if ([type isEqualToString: @"ldap"])
         sourceClass = @"LDAPSource";
+      else if ([type isEqualToString: @"multidomainldap"])
+        sourceClass = @"MultiDomainLDAPSource";
       else if ([type isEqualToString: @"sql"])
         sourceClass = @"SQLSource";
       else
