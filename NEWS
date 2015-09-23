@@ -1,5 +1,5 @@
-master
-------
+2.3.1-zentyal4 (2015-09-23)
+---------------------------
 
 Bug fixes
  - Fix double creation of folders in Outlook when the folder name starts with a digit
