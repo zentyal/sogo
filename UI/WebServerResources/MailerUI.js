@@ -3012,7 +3012,7 @@ Mailbox.prototype = {
 
         var currentFolder = this;
         while (currentFolder.parentFolder) {
-            fullName = ("/folder" + currentFolder.name).asCSSIdentifier() + fullName;
+            fullName = "/folder" + currentFolder.name.asCSSIdentifier() + fullName;
             currentFolder = currentFolder.parentFolder;
         }
 
