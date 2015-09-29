@@ -2,6 +2,7 @@ master
 ------
 
 Bug fixes
+ - Freebusy on web interface works again in multidomain environments
  - Fix double creation of folders in Outlook when the folder name starts with a digit
  - Avoid crashing Outlook after setting a custom view in a calendar folder
  - Tasks created in Outlook are now saved and shown in SOGo UI
