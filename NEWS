@@ -1,3 +1,9 @@
+2.3.1-zentyal5 (2015-XX-XX)
+---------------------------
+
+Bug fixes
+  - Freebusy on web interface works again in multidomain environments
+
 2.3.1-zentyal4 (2015-09-23)
 ---------------------------
 
