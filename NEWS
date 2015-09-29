@@ -1,4 +1,10 @@
-2.3.1-zentyal5 (2015-XX-XX)
+master
+------
+
+Bug fixes
+  - Fix corner case that removes attachments on sending messages from Outlook
+
+2.3.1-zentyal5 (2015-09-29)
 ---------------------------
 
 Bug fixes
