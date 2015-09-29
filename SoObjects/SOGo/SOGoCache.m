@@ -41,6 +41,7 @@
  * cas-pgtiou:< >           value =
  * session:< >              value =
  * saml2-login:< >          value =
+ * uuid-<domain>            value = NSString instance (used on MultiDomainLDAPSource)
  */
 
 

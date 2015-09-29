@@ -1,6 +1,8 @@
-/* LDAPSource.h - this file is part of SOGo
+/* MultiDomainLDAPSource.h - this file is part of SOGo
  *
- * Copyright (C) 2007-2015 Inverse inc.
+ * Copyright (C) 2015 Jesús García Sáez
+ *
+ * Author: Jesús García Sáez <jgarcia@zentyal.com>
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef LDAPSOURCE_H
-#define LDAPSOURCE_H
+#ifndef MULTIDOMAINLDAPSOURCE_H
+#define MULTIDOMAINLDAPSOURCE_H
 
 #import <Foundation/NSObject.h>
 
@@ -30,10 +32,9 @@
 @class NGLdapEntry;
 @class NSException;
 @class NSMutableArray;
-@class NSMutableDictionary;
 @class NSString;
 
-@interface LDAPSource : NSObject <SOGoDNSource>
+@interface MultiDomainLDAPSource : NSObject <SOGoDNSource>
 {
   int queryLimit;
   int queryTimeout;
@@ -41,21 +42,20 @@
   NSString *sourceID;
   NSString *displayName;
 
-  NSString *bindDN;       // The bindDN/password could be either the source's one
-  NSString *password;     // or the current user if _bindAsCurrentUser is set to YES
-  NSString *sourceBindDN; // while sourceBindDN/sourceBindPassword always belong to the source
+  NSString *bindDN;
+  NSString *password;
+  NSString *sourceBindDN;
   NSString *sourceBindPassword;
   NSString *hostname;
   unsigned int port;
   NSString *encryption;
   NSString *_filter;
   BOOL _bindAsCurrentUser;
-  NSString *_scope;
   NSString *_userPasswordAlgorithm;
 
-  NSString *baseDN;
+  NSString *_baseDN;
   LDAPSourceSchema *schema;
-  NSString *IDField;     // the first part of a user DN
+  NSString *IDField; // the first part of a user DN (CN=IdFieldValue,CN=Users,...)
   NSString *CNField;
   NSString *UIDField;
   NSArray *mailFields;
@@ -67,7 +67,6 @@
 
   BOOL listRequiresDot;
 
-  NSString *domain;
   NSString *contactInfoAttribute;
 
   NSDictionary *contactMapping;
@@ -77,7 +76,7 @@
   NSDictionary *modulesConstraints;
 
   NSMutableArray *searchAttributes;
-  
+
   BOOL passwordPolicy;
   BOOL updateSambaNTLMPasswords;
 
@@ -87,36 +86,33 @@
 
   NSString *MSExchangeHostname;
 
-  /* user addressbooks */
-  NSString *abOU;
-
   /* ACL */
   NSArray *modifiers;
 }
 
 - (void) setBindDN: (NSString *) newBindDN
-	  password: (NSString *) newBindPassword
-	  hostname: (NSString *) newBindHostname
-	      port: (NSString *) newBindPort
-	encryption: (NSString *) newEncryption
+          password: (NSString *) newBindPassword
+          hostname: (NSString *) newBindHostname
+              port: (NSString *) newBindPort
+        encryption: (NSString *) newEncryption
  bindAsCurrentUser: (NSString *) bindAsCurrentUser;
 
 - (void) setBaseDN: (NSString *) newBaseDN
-	   IDField: (NSString *) newIDField
-	   CNField: (NSString *) newCNField
-	  UIDField: (NSString *) newUIDField
-	mailFields: (NSArray *) newMailFields
+           IDField: (NSString *) newIDField
+           CNField: (NSString *) newCNField
+          UIDField: (NSString *) newUIDField
+        mailFields: (NSArray *) newMailFields
       searchFields: (NSArray *) newSearchFields
 groupObjectClasses: (NSArray *) newGroupObjectClasses
      IMAPHostField: (NSString *) newIMAPHostField
     IMAPLoginField: (NSString *) newIMAPLoginField
     SieveHostField: (NSString *) newSieveHostField
         bindFields: (id) newBindFields
-	 kindField: (NSString *) newKindField
+         kindField: (NSString *) newKindField
 andMultipleBookingsField: (NSString *) newMultipleBookingsField;
 
-/* This enable the convertion of a contact entry with inetOrgPerson and mozillaAbPerson
-   to and from an LDAP record */
+/* This enable the convertion of a contact entry with inetOrgPerson
+   and mozillaAbPerson to and from an LDAP record */
 - (void) setContactMapping: (NSDictionary *) newMapping
           andObjectClasses: (NSArray *) newObjectClasses;
 
@@ -127,4 +123,4 @@ andMultipleBookingsField: (NSString *) newMultipleBookingsField;
 
 @end
 
-#endif /* LDAPSOURCE_H */
+#endif /* MULTIDOMAINLDAPSOURCE_H */
