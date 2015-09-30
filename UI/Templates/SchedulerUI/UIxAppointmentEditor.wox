@@ -25,11 +25,11 @@
       </ul>
     </div>
     <div id="attendeesLabel">
-      <label><var:string label:value="Attendees:"/></label>
+      <label><var:string label:value="Attendees"/></label>
         <a href="#" id="attendeesHref"><!-- space --></a>
     </div>
     <div class="checkBoxList inline-field">
-      <label><var:string label:value="Start:" /></label>
+      <label><var:string label:value="Start" /></label>
         <var:component className="UIxTimeDateControl"
           const:controlID="startTime"
           date="aptStartDate"
@@ -38,7 +38,7 @@
           />
     </div>
     <div class="checkBoxList inline-field">
-      <label><var:string label:value="End:" /></label>
+      <label><var:string label:value="End" /></label>
       <var:component className="UIxTimeDateControl"
           const:controlID="endTime"
           date="aptEndDate"
@@ -71,20 +71,20 @@
   </var:if>
   <var:if condition="eventIsReadOnly">
     <var:if condition="isAllDay">
-      <label><var:string label:value="Start:" />
+      <label><var:string label:value="Start" />
         <span class="content"><var:string var:value="aptStartDateText"/> (<var:string label:value="All day Event"/>)</span>
       </label>
       <var:if condition="startDateIsEqualToEndDate" const:negate="YES">
-        <label><var:string label:value="End:" />
+        <label><var:string label:value="End" />
           <span class="content"><var:string var:value="aptEndDateText" /></span>
         </label>
       </var:if>
     </var:if>
     <var:if condition="isAllDay" const:negate="YES">
-      <label><var:string label:value="Start:" />
+      <label><var:string label:value="Start" />
         <span class="content"><var:string var:value="aptStartDateTimeText" /></span>
       </label>
-      <label><var:string label:value="End:" />
+      <label><var:string label:value="End" />
         <span class="content"><var:string var:value="aptEndDateTimeText" /></span>
       </label>
     </var:if>
