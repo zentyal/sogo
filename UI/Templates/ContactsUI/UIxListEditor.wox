@@ -21,15 +21,15 @@
       <div id="listEditor">
         <fieldset>
           <legend><var:string label:value="List details" /></legend>
-          <div><label><var:string label:value="List name:"/></label>
+          <div><label><var:string label:value="List name"/></label>
               <input type="text" const:id="listName" const:name="listName"
                   var:value="listName" class="textField" />
           </div>
-          <div ><label><var:string label:value="List nickname:"/></label>
+          <div ><label><var:string label:value="List nickname"/></label>
               <input type="text" const:id="nickname" const:name="nickname"
                   var:value="nickname" class="textField" />
           </div>
-          <div><label><var:string label:value="List description:"/></label>
+          <div><label><var:string label:value="List description"/></label>
               <input type="text" const:id="description" const:name="description"
                   var:value="description" class="textField" />
           </div>
