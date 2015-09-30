@@ -1,6 +1,9 @@
 master
 ------
 
+Enhancements
+  - Improve performance in cache tables to load metadata
+
 Bug fixes
   - Fix corner case that removes attachments on sending messages from Outlook
 
