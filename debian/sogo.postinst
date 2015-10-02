@@ -44,6 +44,20 @@ function runDBMigration() {
     echo "$sqlscript" | mysql -s -u$username -p$password -h $hostname $database || true
 }
 
+function runCacheFolderDBMigration() {
+    username=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f2|cut -d/ -f3)
+    password=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f3|cut -d@ -f1)
+    hostname=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d@ -f2|cut -d: -f1)
+    database=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d/ -f4)
+
+    tables=`mysql -s -u$username -p$password -h $hostname $database -e "show tables like '%cache%';" || true`
+
+    for table in $tables;
+    do
+	echo "alter table $table modify c_content BLOB" | mysql -s -u$username -p$password -h $hostname $database
+    done
+}
+
 case "$1" in
     configure)
 	if ! getent passwd sogo > /dev/null ; then
@@ -63,6 +77,11 @@ case "$1" in
             runDBMigration
         fi
 
+        if [ -n "$2" ] && dpkg --compare-versions "$2" le "2.3.1-zentyal5"
+        then
+            runCacheFolderDBMigration
+        fi
+
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -71,7 +90,7 @@ case "$1" in
     *)
         echo "postinst called with unknown argument \`$1'" >&2
         exit 0
-    ;;
+	;;
 esac
 
 #DEBHELPER#
