@@ -5,6 +5,7 @@ Enhancements
   - Improve performance in cache tables to load metadata
 
 Bug fixes
+  - Fix recurrence pattern event corner case created by Mozilla Thunderbird which made server crash
   - Fix corner case that removes attachments on sending messages from Outlook
 
 2.3.1-zentyal5 (2015-09-29)
