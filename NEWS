@@ -1,11 +1,12 @@
-2.3.2-zentyal1 (2015-mm-dd)
+2.3.2-zentyal1 (2015-10-09)
 ---------------------------
 
-New features
-
 Enhancements
+  - Improve performance in cache tables to load metadata
 
 Bug fixes
+ - Fix recurrence pattern event corner case created by Mozilla Thunderbird which made server crash
+ - Fix corner case that removes attachments on sending messages from Outlook
  - Freebusy on web interface works again in multidomain environments
  - Fix double creation of folders in Outlook when the folder name starts with a digit
  - Avoid crashing Outlook after setting a custom view in a calendar folder
