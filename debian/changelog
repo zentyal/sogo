@@ -1,3 +1,96 @@
+sogo (2.3.2-zentyal1) trusty; urgency=medium
+
+  [ Ludovic Marcotte ]
+  * [b86b1a] Fix for dfecce738187a57da17e4792d0daa5cc3fc147d2
+  * [7c6c78] Updated NEWS file regarding PR from Zentyal folks
+  * [3a61b7] Android EAS Lollipop fixes (#3268 and #3269)
+  * [b05f7a] (fix) compilation warning
+  * [20b91c] (fix) improved EAS email flagging handling (#3140)
+  * [d2640e] (fix) fixed computation of GlobalObjectId (#3235)
+  * [61c542] (fix) make sure ActiveSync is always usable with SQL-based auth sources
+  * [4e7a3c] (fix) fixed EAS conversation ID issues on BB10 (#3152)
+  * [f03e7a] (doc) ModuleConstraints for EAS
+  * [b7c2d8] (fix) we now respect the cr/lf in event's description (#3228)
+  * [4b19e6] (fix) fallback to utf-8/latin1 in rare decoding error cases - this is ugly
+  * [dd9b5e] Updates for the release
+  * [304ffa] (fix) SOGoMaximumMessageSubmissionCount should be independant from SOGoMaximumRecipientCount
+  * [b17488] Updated NEWS file regarding PR93
+  * [234db6] Removed merged in templates from v3
+  * [05b330] (fix) added changes from PR94 to avoid big merge conflicts
+  * [27a19a] (fix) Session fix when SOGoEnableDomainBasedUID is enabled but logins are domain-less
+  * [750a62] Updated NEWS file regarding PR#102
+  * [7c0ba7] (fix) avoid too-many LIST commands over EAS (#3294)
+  * [070928] (fix) improved EAS speed during initial syncing of large mailboxes (#3293)
+  * [2be556] (fix) slight modification for fix #3293
+  * [03b706] (fix) disable oc builds on el6 for now
+  * [42f10e] (fix) safe-guard against not-yet-created calendar of local users
+  * [652ae7] (fix) Start/end shifting by 1 hour due to timezone change on last Sunday of October 2015 (#3344)
+  * [6bccd2] (fix) improve spec file regarding disabling OC build
+  * [ce11ac] (fix) update the doc regarding the temporarily dropping rhel/old debian/ubuntu support
+  * [38c9a2] Update for the release
+  * [9a7ea2] Update ChangeLog
+  * [6f2eae] Bump version to 2.3.2
+  * [b4c285] (fix) typo in version number for doc
+  * [3b15a7] (fix) memory leak when sync'ing GCS collections
+  * [4d174b] (fix) typo in previous commit
+  * [2bccfc] (fix) additional fix for issue #3152
+  * [5409cb] (feat) moved FolderSynchronize code to GCS
+  * [c8c7aa] (feat) GUI code to set or now sync flag on address book.
+
+  [ Francis Lachapelle ]
+  * [9430f4] Add Slovenian translation
+  * [366ad4] Fix .wod files for English and Basque
+  * [6830d6] Calendar module optimizations in multidomain setup
+  * [b6dee0] (fix) Return value of [iCalPerson+SOGo uidInDomain:]
+  * [5c3cdd] Add Chinese (Taiwan) translation
+  * [b91972] Add missing template for Slovenian language
+  * [4922e6] Add missing templates for Basque language
+  * [dec152] Update CKEditor to version 4.5.1
+  * [5c017c] Update Spanish (Argentina) translation
+  * [390a85] (fix) Display of whitelisted attendees in Firefox
+  * [e4ad25] (fix) chmod 644 UI/MainUI/Slovenian.lproj/Locale
+  * [b91050] Fix localization of calendar categories
+  * [861057] Fix options availability in Contacts module
+  * [9fd8f3] Add verbose output to "sogo-tool remove" command
+  * [37b817] Fix options availability in Contacts module cont'd
+  * [98ad8f] Update NEWS file
+  * [58d03e] Update CKEditor to version 4.5.3
+  * [e75ec0] Update NEWS file
+  * [ad8941] Fix URL escaping unti test
+  * [8a3ade] Rename Slovenian template
+
+  [ Luc Charland ]
+  * [82aca2] added first draft of verify_translation
+  * [22ce38] cleaned up a few comments
+  * [490354] fixed Appointments path
+  * [2d33b0] Removing colons
+  * [ac6b29] removed double Name translation in 5 languages
+  * [307876] cleaned up a few comments
+
+  [ Jesús García Sáez ]
+  * [0ca6e7] Fix freebusy for multidomain environments
+
+  [ Juan Vallés ]
+  * [b32951] Store c_content in sogo_cache_folder as a BLOB
+  * [d068ef] Include c_content as a BLOB in the migration
+  * [62c39e] Restart samba at the end of the migration script
+
+  [ Javier Amor García ]
+  * [c01b21] oc-mail: Fixed false positive in [MAPIStoreAttachment hasContentId]
+
+  [ Enrique J. Hernández Blasco ]
+  * [b00626] Update NEWS from PR #193
+  * [eebf87] Ignore recurrence-id vevents without dtstart and outside date range
+  * [1dcebc] Update NEWS from #191
+  * [51516a] Update NEWS from #194
+
+  [ Xavy Bahillo ]
+  * [c55eab] Changed Spanish string for view all (events/tasks)
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Fri, 09 Oct 2015 15:00:45 +0200
+
 sogo (2.3.1-zentyal5) trusty; urgency=medium
 
   [ Jesús García Sáez ]
