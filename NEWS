@@ -1,3 +1,9 @@
+2.3.2-zentyal2 (2015-10-16)
+---------------------------
+
+Bug fixes
+  - Revert performance improvement in cache tables to load metadata
+
 2.3.2-zentyal1 (2015-10-09)
 ---------------------------
 
