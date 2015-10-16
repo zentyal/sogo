@@ -44,7 +44,7 @@ function runDBMigration() {
     echo "$sqlscript" | mysql -s -u$username -p$password -h $hostname $database || true
 }
 
-function revertCacheFolderDBMigration() {
+function runCacheFolderDBMigration() {
     username=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f2|cut -d/ -f3)
     password=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f3|cut -d@ -f1)
     hostname=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d@ -f2|cut -d: -f1)
@@ -54,7 +54,7 @@ function revertCacheFolderDBMigration() {
 
     for table in $tables;
     do
-	echo "alter table $table modify c_content VARCHAR" | mysql -s -u$username -p$password -h $hostname $database
+	echo "alter table $table modify c_content BLOB" | mysql -s -u$username -p$password -h $hostname $database
     done
 }
 
@@ -77,11 +77,9 @@ case "$1" in
             runDBMigration
         fi
 
-        if [ -n "$2" ] && dpkg --compare-versions "$2" eq "2.3.2-zentyal1"
+        if [ -n "$2" ] && dpkg --compare-versions "$2" le "2.3.1-zentyal5"
         then
-            status samba-ad-dc && stop samba-ad-dc
-            revertCacheFolderDBMigration
-            start samba-ad-dc
+            runCacheFolderDBMigration
         fi
 
         ;;
