@@ -44,7 +44,9 @@ function runDBMigration() {
     echo "$sqlscript" | mysql -s -u$username -p$password -h $hostname $database || true
 }
 
-function revertCacheFolderDBMigration() {
+function runCacheFolderDBMigration() {
+    # Migration of c_content field from LONGTEXT to BLOB to improve performance
+    # FIXME not working, introduced on 2.3.2-zentyal1 reverted on 2.3.2-zentyal2
     username=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f2|cut -d/ -f3)
     password=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f3|cut -d@ -f1)
     hostname=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d@ -f2|cut -d: -f1)
@@ -54,7 +56,21 @@ function revertCacheFolderDBMigration() {
 
     for table in $tables;
     do
-	echo "alter table $table modify c_content VARCHAR" | mysql -s -u$username -p$password -h $hostname $database
+	echo "alter table $table modify c_content BLOB" | mysql -s -u$username -p$password -h $hostname $database
+    done
+}
+
+function runCacheFolderDBMigrationRevert() {
+    # This is run for 2.3.2-zentyal2 version when upgrading from 2.3.2-zentyal1
+    username=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f2|cut -d/ -f3)
+    password=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d: -f3|cut -d@ -f1)
+    hostname=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d@ -f2|cut -d: -f1)
+    database=$(sogo-tool dump-defaults -f /etc/sogo/sogo.conf | awk -F\" '/ OCSFolderInfoURL =/  {print $2}'|cut -d/ -f4)
+
+    tables=`mysql -s -u$username -p$password -h $hostname $database -e "show tables like '%cache%';" || true`
+
+    for table in $tables; do
+        echo "alter table $table modify c_content LONGTEXT" | mysql -s -u$username -p$password -h $hostname $database
     done
 }
 
@@ -77,11 +93,20 @@ case "$1" in
             runDBMigration
         fi
 
-        if [ -n "$2" ] && dpkg --compare-versions "$2" eq "2.3.2-zentyal1"
+        # FIXME This change has been reverted on 2.3.2-zentyal2
+        # But it should be introduced in next versions
+        #if [ -n "$2" ] && dpkg --compare-versions "$2" le "2.3.1-zentyal5"
+        #then
+        #    runCacheFolderDBMigration
+        #fi
+
+        if [ -n "$2" ] && \
+            dpkg --compare-versions "$2" ge "2.3.2-zentyal1" && \
+            dpkg --compare-versions "$2" lt "2.3.2-zentyal3"
         then
-            status samba-ad-dc && stop samba-ad-dc
-            revertCacheFolderDBMigration
-            start samba-ad-dc
+            service samba-ad-dc stop || true
+            runCacheFolderDBMigrationRevert
+            service samba-ad-dc start || true
         fi
 
         ;;
