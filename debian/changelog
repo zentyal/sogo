@@ -1,3 +1,18 @@
+sogo (2.3.2-zentyal2a) trusty; urgency=medium
+
+  [ Juan Vallés ]
+  * [aadc6f] Revert c_content as BLOB from the migration
+  * [498cec] Revert "Store c_content in sogo_cache_folder as a BLOB"
+
+  [ Jesús García Sáez ]
+  * [b21cc6] Update NEWS for 2.3.2-zentyal2
+  * [7d337c] Revert "Merge pull request #196 from zentyal/jvalles/revert-content-as-blob"
+  * [81ae03] Migration to revert mysql change on 2.3.2-zentyal1
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Fri, 16 Oct 2015 14:25:34 +0200
+
 sogo (2.3.2-zentyal1) trusty; urgency=medium
 
   [ Ludovic Marcotte ]
