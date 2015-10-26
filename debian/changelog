@@ -1,3 +1,20 @@
+sogo (2.3.2-zentyal3) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [c1d430] Merge trusty into news branch
+  * [bbc780] Updated NEWS with latest merges
+
+  [ Enrique J. Hernández Blasco ]
+  * [d99878] oc-mail: Always increase the CN when setting the message read flag
+  * [6f5bb3] oc-mail: Sync expunged messages on first cache sync
+
+  [ Juan Vallés ]
+  * [8800cd] oc-calendar: force cache synchronisation for a message before aborting
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 26 Oct 2015 19:46:35 +0100
+
 sogo (2.3.2-zentyal2a) trusty; urgency=medium
 
   [ Juan Vallés ]
