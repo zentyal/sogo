@@ -28,6 +28,9 @@
 
 #import "SOGo/NSString+Utilities.h"
 
+#import <SBJson/SBJsonParser.h>
+#import "../../SoObjects/SOGo/BSONCodec.h"
+
 #import "SOGoTest.h"
 
 @interface TestSBJsonParser : SOGoTest
@@ -35,62 +38,100 @@
 
 @implementation TestSBJsonParser
 
-- (void) test_parseJSONString
+- (NSData *) get_plist: (NSString *) file
 {
-  SBJsonParser *parser;
-  NSString *currentString, *error;
-  NSArray *expected;
-  NSObject *resultObject;
-  int count;
-  NSString *testStrings[] = { @"\"\\\\\"", @"\\",
-                              @"\"\\u0041\"", @"A",
-                              @"\"\\u000A\"", @"\n",
-                              @"\"\\u000a\"", @"\n",
-                              @"\"weird data \\\\ ' \\\"; ^\"", @"weird data \\ ' \"; ^",
-                              nil };
-
-  parser = [SBJsonParser new];
-  [parser autorelease];
-
-  count = 0;
-  while ((currentString = testStrings[count]))
-    {
-      resultObject = [parser objectWithString: [NSString stringWithFormat:
-                                                           @"[%@]",
-                                                         currentString]];
-      expected = [NSArray arrayWithObject: testStrings[count + 1]];
-      error = [NSString stringWithFormat:
-                          @"objects '%@' and '%@' differs (count: %d)",
-                        expected, resultObject, count];
-      testEqualsWithMessage(expected, resultObject, error);
-      count += 2;
+    NSString *file_path = [NSString stringWithFormat: @"%@.bson", file];
+    if(![[NSFileManager defaultManager] fileExistsAtPath: file_path]) {
+        NSString *error = [NSString stringWithFormat: @"File %@ doesn't exist", file_path];
+        testWithMessage(false, error);
     }
+    return [NSData dataWithContentsOfFile: file_path];
 }
 
-- (void) test_parseJSONNumber
+- (void) print: (NSString *) m
 {
-  SBJsonParser *parser;
-  id result;
-
-  parser = [SBJsonParser new];
-  [parser autorelease];
-
-  result = [parser objectWithString: @""];
-  testEquals (result, nil);
-
-  result = [parser objectWithString: @"[ 0 ]"];
-  testEquals (result, [NSArray arrayWithObject: [NSNumber numberWithInt: 0]]);
-                              
-  result = [parser objectWithString: @"[ -1 ]"];
-  testEquals (result, [NSArray arrayWithObject: [NSNumber numberWithInt: -1]]);
-  
-  result = [parser objectWithString: @"[ 12.3456 ]"];
-  testEquals ([result objectAtIndex: 0],
-              [NSDecimalNumber decimalNumberWithString: @"12.3456"]);
-
-  result = [parser objectWithString: @"[ -312.3456 ]"];
-  testEquals (result, [NSArray arrayWithObject: [NSNumber numberWithDouble: -312.3456]]);
+    fprintf(stderr, "%s\n", [m UTF8String]);
 }
+
+- (void) to_plist: (NSData *) data
+               as: (NSString *) file
+{
+    NSString *file_path = [NSString stringWithFormat: @"%@.filtered", file];
+    [[NSFileManager defaultManager] createFileAtPath: file_path
+                                            contents: data
+                                          attributes: nil];
+}
+
+
+- (void) test_foobar
+{
+    NSString *error;
+    NSData *data;
+    NSDictionary *newValues;
+    NSMutableDictionary *dict;
+    NSString *file;
+    NSNumberFormatter *f;
+    id item;
+
+    file = [NSString stringWithFormat: @"/tmp/foo"];
+
+    data = [self get_plist: file];
+
+    newValues = [NSDictionary BSONFragment: data at: NULL ofType: 0x03];
+    dict = [newValues mutableCopy];
+
+    /*f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    for(id key in dict) {
+        NSNumber *number = [f numberFromString:key];
+        [self print: [NSString stringWithFormat: @"0x%llX", [number unsignedLongLongValue]]];
+    }*/
+
+    [self print: [NSString stringWithFormat: @"Size is %d", [dict count]]];
+    [self print: [NSString stringWithFormat: @"%@", dict]];
+
+    // Modify properties
+    /*[dict removeObjectForKey: [NSString stringWithFormat: @"%lld", 0x68330048]];
+    [dict removeObjectForKey: [NSString stringWithFormat: @"%lld", 0x683F0102]];
+    [dict removeObjectForKey: [NSString stringWithFormat: @"%lld", 0x70030003]];*/
+
+    //[dict removeObjectForKey: [NSString stringWithFormat: @"%lld", 0x68340003]];
+    //[dict removeObjectForKey: [NSString stringWithFormat: @"%lld", 0x683A0003]];
+
+    //[dict removeObjectForKey: [NSString stringWithFormat: @"%lld", 0x68350102]];
+    /*item = [dict objectForKey: [NSString stringWithFormat: @"%lld", 0x68350102]];
+    NSMutableData *data = [[NSMutableData alloc] initWithData:item];
+    NSRange *range = NSMakeRange(0, );
+    [data ]*/
+
+/*
+    +PR_VD_FLAGS	PT_LONG	0
++PR_VD_NAME_W	PT_UNICODE	Messages
++PR_VD_VERSION	PT_LONG	65544
++PR_VIEW_CLSID	PT_CLSID	{00062000-0000-0000-C000-000000000046}
+*/
+/*
+    const unsigned char bytes[] = {0x00, 0x20, 0x06, 0x00, 0x00, 0x00, 0x00,
+                                   0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                   0x00, 0x46};
+    NSData *clsid = [NSData dataWithBytes:bytes length:sizeof(bytes)];
+
+    [dict setObject: @"Messages"
+             forKey: [NSString stringWithFormat: @"%lld", 0x7006001F]];
+    [dict setObject: [NSNumber numberWithUnsignedLongLong: 0]
+             forKey: [NSString stringWithFormat: @"%lld", 0x70030003]];
+    [dict setObject: [NSNumber numberWithUnsignedLongLong: 65544]
+             forKey: [NSString stringWithFormat: @"%lld", 0x70070003]];
+    [dict setObject: clsid
+             forKey: [NSString stringWithFormat: @"%lld", 0x683330048]];
+
+    [self print: [NSString stringWithFormat: @"Size is %d", [dict count]]];
+
+    [self to_plist: [dict BSONEncode] as: file];
+*/
+}
+
+
+
 
 @end
-

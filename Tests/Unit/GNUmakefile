@@ -15,22 +15,11 @@ $(TEST_TOOL)_OBJC_FILES += \
 	SOGoTestRunner.m \
 	SaxXMLReaderFactory+SOGoTests.m \
 	\
-	TestVersit.m \
-	TestiCalTimeZonePeriod.m \
-	TestiCalRecurrenceCalculator.m \
-	\
 	TestSBJsonParser.m \
 	\
-	TestNGMimeAddressHeaderFieldGenerator.m \
-	TestNSData+Crypto.m \
-	TestNSString+Crypto.m \
-	TestNSString+URLEscaping.m \
-	TestNSString+Utilities.m \
-	\
-	TestRTFHandler.m \
-	../../OpenChange/RTFHandler.m
-    # I don't know how to link against -l:SOGoBackend \
-	     undefined reference to `__objc_class_name_SOGoMailFolder'
+	../../SoObjects/SOGo/BSONCodec.m
+	# I don't know how to link against -l:SOGoBackend \
+	  undefined reference to `__objc_class_name_SOGoMailFolder'
 
 TEST_TOOL_NAME = $(TEST_TOOL)
 
