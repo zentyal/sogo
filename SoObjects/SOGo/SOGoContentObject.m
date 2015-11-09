@@ -246,14 +246,12 @@
 
 - (NSException *) copyToFolder: (SOGoGCSFolder *) newFolder
 {
-  [self subclassResponsibility: _cmd];
-
-  return nil;
+  return [self subclassResponsibility: _cmd];
 }
 
 - (NSException *) moveToFolder: (SOGoGCSFolder *) newFolder
 {
-  [self subclassResponsibility: _cmd];
+  return [self subclassResponsibility: _cmd];
 }
 
 - (NSException *) delete
