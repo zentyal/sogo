@@ -2,6 +2,7 @@
 --------------------------
 
 Bug fixes
+  - Accepted & updated event names are now shown correctly
   - Provide safe guards in mail and calendar to avoid exceptions while syncing
 
 
