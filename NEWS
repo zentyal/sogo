@@ -1,3 +1,11 @@
+2.3.2-zentyal4 (2015-11-11)
+--------------------------
+
+Bug fixes
+  - Accepted & updated event names are now shown correctly
+  - Provide safe guards in mail and calendar to avoid exceptions while syncing
+
+
 2.3.2-zentyal3 (2015-10-26)
 ---------------------------
 
