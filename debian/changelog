@@ -1,3 +1,22 @@
+sogo (2.3.2-zentyal4) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [e0d49d] oc-mail: Check the number of uids fetched on synchroniseCache
+  * [77bba8] Use application context when initialising quick tables ACLs
+  * [3bf538] Update NEWS from PR #204 changes
+
+  [ Juan Vallés ]
+  * [946665] oc-calendar: Make invitation/update mails have the event name as subject
+
+  [ Jesús García Sáez ]
+  * [b6b917] Update NEWS with changes from PR #202
+  * [d6db81] Update NEWS with 2.3.2-zentyal4 release
+  * [b6db0f] Update debian/control
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 11 Nov 2015 15:45:20 +0100
+
 sogo (2.3.2-zentyal3) trusty; urgency=medium
 
   [ Jesús García Sáez ]
