@@ -1,40 +1,47 @@
+2.3.3 (2015-11-11)
+------------------
+
+New features
+ - initial S/MIME support for EAS (#3327)
+ - now possible to choose which folders to sync over EAS
+
+Enhancements
+ - we no longer always entirely rewrite messages for Outlook 2013 when using EAS
+ - support for ghosted elements on contacts over EAS
+ - added Macedonian (mk_MK) translation - thanks to Miroslav Jovanovic
+ - added Portuguese (pt) translation - thanks to Eduardo Crispim
+
+Bug fixes
+ - numerous EAS fixes when connections are dropped before the EAS client receives the response (#3058, #2849)
+ - correctly handle the References header over EAS (#3365)
+ - make sure English is always used when generating Date headers using EAS (#3356)
+ - don't escape quoted strings during versit generation
+ - we now return all cards when we receive an empty addressbook-query REPORT
+ - avoid crash when replying to a mail with no recipients (#3359)
+ - inline images sent from SOGo webmail are not displayed in Mozilla Thunderbird (#3271)
+ - prevent postal address showing on single line over EAS (#2614)
+ - display missing events when printing working hours only
+ - fix corner case making server crash when syncing hard deleted messages when clear offline items was set up (Zentyal)
+ - avoid infinite Outlook client loops trying to set read flag when it is already set (Zentyal)
+ - avoid crashing when calendar metadata is missing in the cache (Zentyal)
+ - fix recurrence pattern event corner case created by Mozilla Thunderbird which made server crash (Zentyal)
+ - fix corner case that removes attachments on sending messages from Outlook (Zentyal)
+ - freebusy on web interface works again in multidomain environments (Zentyal)
+ - fix double creation of folders in Outlook when the folder name starts with a digit (Zentyal)
+ - avoid crashing Outlook after setting a custom view in a calendar folder (Zentyal)
+ - handle emails having an attachment as their content
+ - fixed JavaScript syntax error in attendees editor
+ - fixed wrong comparison of meta vs. META tag in HTML mails
+ - fixed popup menu position when moved to the left (#3381)
+ - fixed dialog position when at the bottom of the window (#2646, #3378)
+ - fixed addressbrook-only source entires having a c_uid set
+
 2.3.2-zentyal4 (2015-11-11)
 --------------------------
 
 Bug fixes
   - Accepted & updated event names are now shown correctly
   - Provide safe guards in mail and calendar to avoid exceptions while syncing
-
-
-2.3.2-zentyal3 (2015-10-26)
----------------------------
-
-Bug fixes
-  - Fix corner case making server crash when syncing hard deleted messages when clear offline items was set up.
-  - Avoid infinite Outlook client loops trying to set read flag when it is already set
-  - Avoid crashing when calendar metadata is missing in the cache
-
-
-2.3.2-zentyal2 (2015-10-16)
----------------------------
-
-Bug fixes
-  - Revert performance improvement in cache tables to load metadata
-
-2.3.2-zentyal1 (2015-10-09)
----------------------------
-
-Enhancements
-  - Improve performance in cache tables to load metadata
-
-Bug fixes
- - Fix recurrence pattern event corner case created by Mozilla Thunderbird which made server crash
- - Fix corner case that removes attachments on sending messages from Outlook
- - Freebusy on web interface works again in multidomain environments
- - Fix double creation of folders in Outlook when the folder name starts with a digit
- - Avoid crashing Outlook after setting a custom view in a calendar folder
- - Tasks created in Outlook are now saved and shown in SOGo UI
- - Fix creation of root folders with Chinese characters
 
 2.3.2 (2015-09-16)
 ------------------
