@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 #import <Foundation/NSArray.h>
+#import <Foundation/NSCalendarDate.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSEnumerator.h>
 #import <Foundation/NSException.h>
@@ -361,6 +362,7 @@ static Class NSNullK;
   NSDictionary *contactInfos;
   NSString *login;
   SOGoDomainDefaults *dd;
+  SOGoSystemDefaults *sd;
 
   contactInfos = [self contactInfosForUserWithUIDorEmail: uid
                                                 inDomain: domain];
@@ -371,20 +373,43 @@ static Class NSNullK;
         dd = [SOGoDomainDefaults defaultsForDomain: domain];
       else
         dd = [SOGoSystemDefaults sharedSystemDefaults];
-      
-      login = [dd forceExternalLoginWithEmail] ? [self getEmailForUID: uid] : uid;
+
+      if ([dd forceExternalLoginWithEmail])
+        {
+          sd = [SOGoSystemDefaults sharedSystemDefaults];
+          if ([sd enableDomainBasedUID])
+            // On multidomain environment we must use uid@domain
+            // for getEmailForUID method
+            login = [NSString stringWithFormat: @"%@@%@", uid, domain];
+          else
+            login = uid;
+          login = [self getEmailForUID: login];
+        }
+      else
+        login = uid;
     }
-  
+
   return login;
 }
 
 - (NSString *) getUIDForEmail: (NSString *) email
 {
-  NSDictionary *contactInfos;
+  NSDictionary *info;
+  SOGoSystemDefaults *sd;
+  NSString *uid, *domain;
 
-  contactInfos = [self contactInfosForUserWithUIDorEmail: email];
+  info = [self contactInfosForUserWithUIDorEmail: email];
+  uid = [info objectForKey: @"c_uid"];
 
-  return [contactInfos objectForKey: @"c_uid"];
+  sd = [SOGoSystemDefaults sharedSystemDefaults];
+  if ([sd enableDomainBasedUID]
+      && ![[info objectForKey: @"DomainLessLogin"] boolValue])
+    {
+      domain = [info objectForKey: @"c_domain"];
+      uid = [NSString stringWithFormat: @"%@@%@", uid, domain];
+    }
+
+  return uid;
 }
 
 - (BOOL) _sourceChangePasswordForLogin: (NSString *) login
@@ -424,13 +449,16 @@ static Class NSNullK;
   NSEnumerator *authIDs;
   NSString *currentID;
   BOOL checkOK;
-  
+  SOGoSystemDefaults *sd;
+  NSRange r;
+
   checkOK = NO;
-  
+
   authIDs = [[self authenticationSourceIDsInDomain: *domain] objectEnumerator];
   while (!checkOK && (currentID = [authIDs nextObject]))
     {
       sogoSource = [_sources objectForKey: currentID];
+
       checkOK = [sogoSource checkLogin: login
                               password: password
                                   perr: perr
@@ -474,27 +502,43 @@ static Class NSNullK;
               grace: (int *) _grace
            useCache: (BOOL) useCache
 {
-  NSMutableDictionary *currentUser, *failedCount;
+  NSMutableDictionary *currentUser;
+  NSDictionary *failedCount;
   NSString *dictPassword, *username, *jsonUser;
-  SOGoSystemDefaults *dd;
+  SOGoSystemDefaults *sd;
   BOOL checkOK;
- 
-  // We check for cached passwords. If the entry is cached, we 
-  // check this immediately. If not, we'll go directly at the
-  // authentication source and try to validate there, then cache it.
-  if (*_domain != nil)
-    username = [NSString stringWithFormat: @"%@@%@", _login, *_domain];
+
+  sd = [SOGoSystemDefaults sharedSystemDefaults];
+
+  username = _login;
+
+  if (*_domain)
+    {
+      if ([_login rangeOfString: @"@"].location == NSNotFound)
+        username = [NSString stringWithFormat: @"%@@%@", _login, *_domain];
+    }
   else
-    username = _login;
+    {
+      NSRange r;
 
-  failedCount = [[SOGoCache sharedCache] failedCountForLogin: username];
-  dd = [SOGoSystemDefaults sharedSystemDefaults];
+      // We try to extract the domain in use in order to avoid pounding all the authentication
+      // sources if SOGoLoginDomains isn't specified. This is also true if the user is
+      // using DAV or EAS.
+      r = [username rangeOfString: @"@"];
 
-  //
+      if (r.location != NSNotFound)
+        {
+          *_domain = [username substringFromIndex: r.location+1];
+
+          if (![[[SOGoSystemDefaults sharedSystemDefaults] domainIds] containsObject: *_domain])
+            *_domain = nil;
+        }
+    }
+
   // We check the fail count per user in memcache (per server). If the
   // fail count reaches X in Y minutes, we deny immediately the
   // authentications for Z minutes
-  //
+  failedCount = [[SOGoCache sharedCache] failedCountForLogin: username];
   if (failedCount)
     {
       unsigned int current_time, start_time, delta, block_time;
@@ -503,10 +547,10 @@ static Class NSNullK;
       start_time = [[failedCount objectForKey: @"InitialDate"] unsignedIntValue];
       delta = current_time - start_time;
 
-      block_time = [dd failedLoginBlockInterval];
+      block_time = [sd failedLoginBlockInterval];
       
-      if ([[failedCount objectForKey: @"FailedCount"] intValue] >= [dd maximumFailedLoginCount] &&
-          delta >= [dd maximumFailedLoginInterval] &&
+      if ([[failedCount objectForKey: @"FailedCount"] intValue] >= [sd maximumFailedLoginCount] &&
+          delta >= [sd maximumFailedLoginInterval] &&
           delta <= block_time )
         {
           *_perr = PolicyAccountLocked;
@@ -520,9 +564,33 @@ static Class NSNullK;
         }
     }
 
-
+  // We check for cached passwords. If the entry is cached, we
+  // check this immediately. If not, we'll go directly at the
+  // authentication source and try to validate there, then cache it.
   jsonUser = [[SOGoCache sharedCache] userAttributesForLogin: username];
   currentUser = [jsonUser objectFromJSONString];
+
+  //
+  // If we are using multidomain and the UIDFieldName is not part of the email address
+  // we must bind without the domain part since internally, SOGo will use
+  // UIDFieldName @ domain as its unique identifier if the UIDFieldName is used to
+  // authenticate. This can happen for example of one has in LDAP:
+  //
+  // dn: uid=foo,dc=example,dc=com
+  // uid: foo
+  // mail: broccoli@example.com
+  //
+  // and authenticates with "foo", using bindFields = (uid, mail) and SOGoEnableDomainBasedUID = YES;
+  // Otherwise, -_sourceCheckLogin:... would have failed because SOGo would try to bind using: foo@example.com
+  //
+  if ([[currentUser objectForKey: @"DomainLessLogin"] boolValue])
+    {
+      NSRange r;
+
+      r = [_login rangeOfString: [NSString stringWithFormat: @"@%@", *_domain]];
+      _login = [_login substringToIndex: r.location];
+    }
+
   dictPassword = [currentUser objectForKey: @"password"];
   if (useCache && currentUser && dictPassword)
     {
@@ -542,6 +610,18 @@ static Class NSNullK;
           currentUser = [NSMutableDictionary dictionary];
         }
 
+      // Before caching user attributes, we must check if SOGoEnableDomainBasedUID is enabled
+      // but we don't have a domain. That would happen for example if the user authenticates
+      // without the domain part. We must also cache that information, since SOGo will try
+      // afterward to bind with UIDFieldName@domain, and it could potentially not exist
+      // in the authentication source. See the rationale in _sourceCheckLogin: ...
+      if ([sd enableDomainBasedUID] &&
+          [username rangeOfString: @"@"].location == NSNotFound)
+        {
+          username = [NSString stringWithFormat: @"%@@%@", username, *_domain];
+          [currentUser setObject: [NSNumber numberWithBool: YES]  forKey: @"DomainLessLogin"];
+        }
+
       // It's important to cache the password here as we might have cached the
       // user's entry in -contactInfosForUserWithUIDorEmail: and if we don't
       // set the password and recache the entry, the password would never be
@@ -555,7 +635,7 @@ static Class NSNullK;
   else
     {
       // If failed login "rate-limiting" is enabled, we adjust the stats
-      if ([dd maximumFailedLoginCount])
+      if ([sd maximumFailedLoginCount])
         {
           [[SOGoCache sharedCache] setFailedCount: ([[failedCount objectForKey: @"FailedCount"] intValue] + 1)
                                          forLogin: username];
@@ -582,7 +662,7 @@ static Class NSNullK;
             [currentSource setBindPassword: _pwd];
           }
     }
-	    
+
   return checkOK;
 }
 
@@ -621,7 +701,8 @@ static Class NSNullK;
       // internal cache.
       [currentUser setObject: [newPassword asSHA1String] forKey: @"password"];
       sd = [SOGoSystemDefaults sharedSystemDefaults];
-      if ([sd enableDomainBasedUID])
+      if ([sd enableDomainBasedUID] &&
+          [login rangeOfString: @"@"].location == NSNotFound)
         userLogin = [NSString stringWithFormat: @"%@@%@", login, domain];
       else
         userLogin = login;
@@ -662,9 +743,9 @@ static Class NSNullK;
 //
 //
 //
-- (void) _fillContactInfosForUser: (NSMutableDictionary *) currentUser
-		   withUIDorEmail: (NSString *) uid
-                         inDomain: (NSString *) domain
+- (void) _fillContactInfosForUser: (NSMutableDictionary *) theCurrentUser
+                   withUIDorEmail: (NSString *) theUID
+                         inDomain: (NSString *) theDomain
 {
   NSString *sourceID, *cn, *c_domain, *c_uid, *c_imaphostname, *c_imaplogin, *c_sievehostname;
   NSObject <SOGoSource> *currentSource;
@@ -674,6 +755,12 @@ static Class NSNullK;
   NSNumber *isGroup;
   NSArray *c_emails;
   BOOL access;
+  NSEnumerator *enumerator;
+  NSString *access_type;
+  NSArray *access_types_list = [NSArray arrayWithObjects: @"CalendarAccess",
+                                                          @"MailAccess",
+                                                          @"ActiveSyncAccess",
+                                                          nil];
 
   emails = [NSMutableArray array];
   cn = nil;
@@ -683,58 +770,75 @@ static Class NSNullK;
   c_imaplogin = nil;
   c_sievehostname = nil;
 
-  [currentUser setObject: [NSNumber numberWithBool: YES]
-	       forKey: @"CalendarAccess"];
-  [currentUser setObject: [NSNumber numberWithBool: YES]
-	       forKey: @"MailAccess"];
+  enumerator = [access_types_list objectEnumerator];
+  while ((access_type = [enumerator nextObject]) != nil)
+    [theCurrentUser setObject: [NSNumber numberWithBool: YES]
+                       forKey: access_type];
 
-  sogoSources = [[self authenticationSourceIDsInDomain: domain]
-                  objectEnumerator];
+  if ([[theCurrentUser objectForKey: @"DomainLessLogin"] boolValue])
+    {
+      NSRange r;
+
+      r = [theUID rangeOfString: [NSString stringWithFormat: @"@%@", theDomain]];
+
+      // We check if the range is ok here since we could be using DomainLessLogin
+      if (r.location != NSNotFound)
+        theUID = [theUID substringToIndex: r.location];
+    }
+
+  sogoSources = [[self authenticationSourceIDsInDomain: theDomain] objectEnumerator];
   userEntry = nil;
   while (!userEntry && (sourceID = [sogoSources nextObject]))
     {
       currentSource = [_sources objectForKey: sourceID];
-      userEntry = [currentSource lookupContactEntryWithUIDorEmail: uid
-                                                         inDomain: domain];
+      
+      userEntry = [currentSource lookupContactEntryWithUIDorEmail: theUID
+                                                         inDomain: theDomain];
       if (userEntry)
-	{
-          [currentUser setObject: sourceID forKey: @"SOGoSource"];
-	  if (!cn)
-	    cn = [userEntry objectForKey: @"c_cn"];
-	  if (!c_uid)
-	    c_uid = [userEntry objectForKey: @"c_uid"];
+        {
+          [theCurrentUser setObject: sourceID forKey: @"SOGoSource"];
+          if (!cn)
+            cn = [userEntry objectForKey: @"c_cn"];
+          if (!c_uid)
+            c_uid = [userEntry objectForKey: @"c_uid"];
           if (!c_domain)
             c_domain = [userEntry objectForKey: @"c_domain"];
-	  c_emails = [userEntry objectForKey: @"c_emails"];
-	  if ([c_emails count])
-	    [emails addObjectsFromArray: c_emails];
-	  if (!c_imaphostname)
-	    c_imaphostname = [userEntry objectForKey: @"c_imaphostname"];
+          c_emails = [userEntry objectForKey: @"c_emails"];
+          if ([c_emails count])
+            [emails addObjectsFromArray: c_emails];
+          if (!c_imaphostname)
+            c_imaphostname = [userEntry objectForKey: @"c_imaphostname"];
           if (!c_imaplogin)
             c_imaplogin = [userEntry objectForKey: @"c_imaplogin"];
           if (!c_sievehostname)
             c_sievehostname = [userEntry objectForKey: @"c_sievehostname"];
-	  access = [[userEntry objectForKey: @"CalendarAccess"] boolValue];
-	  if (!access)
-	    [currentUser setObject: [NSNumber numberWithBool: NO]
-			 forKey: @"CalendarAccess"];
-	  access = [[userEntry objectForKey: @"MailAccess"] boolValue];
-	  if (!access)
-	    [currentUser setObject: [NSNumber numberWithBool: NO]
-			 forKey: @"MailAccess"];
-	  
-	  // We check if it's a group
+
+          enumerator = [access_types_list objectEnumerator];
+          while ((access_type = [enumerator nextObject]) != nil)
+            {
+              access = [[userEntry objectForKey: access_type] boolValue];
+              if (!access)
+                [theCurrentUser setObject: [NSNumber numberWithBool: NO]
+                                   forKey: access_type];
+            }
+
+          // We check if it's a group
           isGroup = [userEntry objectForKey: @"isGroup"];
           if (isGroup)
-            [currentUser setObject: isGroup forKey: @"isGroup"];
+            [theCurrentUser setObject: isGroup forKey: @"isGroup"];
 
-	  // We also fill the resource attributes, if any
-	  if ([userEntry objectForKey: @"isResource"])
-	    [currentUser setObject: [userEntry objectForKey: @"isResource"]
-			 forKey: @"isResource"];
-	  if ([userEntry objectForKey: @"numberOfSimultaneousBookings"])
-	    [currentUser setObject: [userEntry objectForKey: @"numberOfSimultaneousBookings"]
-			 forKey: @"numberOfSimultaneousBookings"];
+          // We also fill the resource attributes, if any
+          if ([userEntry objectForKey: @"isResource"])
+            [theCurrentUser setObject: [userEntry objectForKey: @"isResource"]
+                               forKey: @"isResource"];
+          if ([userEntry objectForKey: @"numberOfSimultaneousBookings"])
+            [theCurrentUser setObject: [userEntry objectForKey: @"numberOfSimultaneousBookings"]
+                               forKey: @"numberOfSimultaneousBookings"];
+
+          // This is Active Directory specific attribute (needed on OpenChange/* layer)
+          if ([userEntry objectForKey: @"samaccountname"])
+            [theCurrentUser setObject: [userEntry objectForKey: @"samaccountname"]
+                               forKey: @"sAMAccountName"];
         }
     }
 
@@ -744,22 +848,22 @@ static Class NSNullK;
     c_uid = @"";
   if (!c_domain)
     c_domain = @"";
-  
-  if (c_imaphostname)
-    [currentUser setObject: c_imaphostname forKey: @"c_imaphostname"];
-  if (c_imaplogin)
-    [currentUser setObject: c_imaplogin forKey: @"c_imaplogin"];
-  if (c_sievehostname)
-    [currentUser setObject: c_sievehostname forKey: @"c_sievehostname"];
 
-  [currentUser setObject: emails forKey: @"emails"];
-  [currentUser setObject: cn forKey: @"cn"];
-  [currentUser setObject: c_uid forKey: @"c_uid"];
-  [currentUser setObject: c_domain forKey: @"c_domain"];
+  if (c_imaphostname)
+    [theCurrentUser setObject: c_imaphostname forKey: @"c_imaphostname"];
+  if (c_imaplogin)
+    [theCurrentUser setObject: c_imaplogin forKey: @"c_imaplogin"];
+  if (c_sievehostname)
+    [theCurrentUser setObject: c_sievehostname forKey: @"c_sievehostname"];
+
+  [theCurrentUser setObject: emails forKey: @"emails"];
+  [theCurrentUser setObject: cn forKey: @"cn"];
+  [theCurrentUser setObject: c_uid forKey: @"c_uid"];
+  [theCurrentUser setObject: c_domain forKey: @"c_domain"];
 
   // If our LDAP queries gave us nothing, we add at least one default
   // email address based on the default domain.
-  [self _fillContactMailRecords: currentUser];
+  [self _fillContactMailRecords: theCurrentUser];
 }
 
 //
@@ -770,24 +874,20 @@ static Class NSNullK;
            withLogin: (NSString *) login
 {
   NSEnumerator *emails;
-  NSString *key;
-  
-  [[SOGoCache sharedCache]
-        setUserAttributes: [newUser jsonRepresentation]
-                 forLogin: login];
+  NSString *key, *user_json;
+
+  user_json = [newUser jsonRepresentation];
+  [[SOGoCache sharedCache] setUserAttributes: user_json
+                                    forLogin: login];
   if (![newUser isKindOfClass: NSNullK])
     {
-      key = [newUser objectForKey: @"c_uid"];
-      if (key && ![key isEqualToString: login])
-        [[SOGoCache sharedCache]
-            setUserAttributes: [newUser jsonRepresentation]
-                     forLogin: key];
-
       emails = [[newUser objectForKey: @"emails"] objectEnumerator];
       while ((key = [emails nextObject]))
-        [[SOGoCache sharedCache]
-            setUserAttributes: [newUser jsonRepresentation]
-                     forLogin: key];
+        {
+          if (![key isEqualToString: login])
+            [[SOGoCache sharedCache] setUserAttributes: user_json
+                                              forLogin: key];
+        }
     }
 }
 
@@ -857,8 +957,9 @@ static Class NSNullK;
 - (NSDictionary *) contactInfosForUserWithUIDorEmail: (NSString *) uid
                                             inDomain: (NSString *) domain
 {
-  NSMutableDictionary *currentUser;
   NSString *aUID, *cacheUid, *jsonUser;
+  NSMutableDictionary *currentUser;
+
   BOOL newUser;
 
   if ([uid isEqualToString: @"anonymous"])
@@ -867,12 +968,14 @@ static Class NSNullK;
     {
       // Remove the "@" prefix used to identified groups in the ACL tables.
       aUID = [uid hasPrefix: @"@"] ? [uid substringFromIndex: 1] : uid;
-      if (domain)
+      if (domain && [aUID rangeOfString: @"@"].location == NSNotFound)
         cacheUid = [NSString stringWithFormat: @"%@@%@", aUID, domain];
       else
         cacheUid = aUID;
+
       jsonUser = [[SOGoCache sharedCache] userAttributesForLogin: cacheUid];
       currentUser = [jsonUser objectFromJSONString];
+
       if ([currentUser isKindOfClass: NSNullK])
         currentUser = nil;
       else if (!([currentUser objectForKey: @"emails"]
@@ -882,8 +985,10 @@ static Class NSNullK;
 	  // that we have an occurence with only a cached password. In the
 	  // latter case, we update the entry with the remaining information
 	  // and recache the value.
-	  if (!currentUser || ([currentUser count] == 1 && [currentUser objectForKey: @"password"]))
-	    {
+	  if (!currentUser ||
+              ([currentUser count] == 1 && [currentUser objectForKey: @"password"]) ||
+              ([currentUser count] == 2 && [currentUser objectForKey: @"password"] &&  [currentUser objectForKey: @"DomainLessLogin"]))
+              {
 	      newUser = YES;
 
 	      if (!currentUser)
@@ -903,15 +1008,59 @@ static Class NSNullK;
                   currentUser = nil;
                 }
               else
-                [self _retainUser: currentUser
-                        withLogin: cacheUid];
-	    }
+                {
+                  SOGoSystemDefaults *sd;
+
+                  sd = [SOGoSystemDefaults sharedSystemDefaults];
+
+                  // SOGoEnableDomainBasedUID is set to YES but we don't have a domain part. This happens in
+                  // multi-domain environments authenticating only with the UIDFieldName
+                  if ([sd enableDomainBasedUID] && !domain)
+                    {
+                      cacheUid = [NSString stringWithFormat: @"%@@%@", cacheUid, [currentUser objectForKey: @"c_domain"]];
+                      [currentUser setObject: [NSNumber numberWithBool: YES]  forKey: @"DomainLessLogin"];
+                    }
+
+                  [self _retainUser: currentUser  withLogin: cacheUid];
+                }
+            }
 	}
     }
   else
     currentUser = nil;
 
   return currentUser;
+}
+
+/**
+ * Fetch the contact information identified by the specified UID in the global addressbooks.
+ */
+- (NSDictionary *) fetchContactWithUID: (NSString *) uid
+                              inDomain: (NSString *) domain
+{
+  NSDictionary *contact;
+  NSMutableArray *contacts;
+  NSEnumerator *sources;
+  NSString *sourceID;
+  id currentSource;
+
+  contacts = [NSMutableArray array];
+  contact = nil;
+  sources = [[self addressBookSourceIDsInDomain: domain] objectEnumerator];
+  while ((sourceID = [sources nextObject]))
+    {
+      currentSource = [_sources objectForKey: sourceID];
+      contact = [currentSource lookupContactEntry: uid];
+      if (contact)
+        [contacts addObject: contact];
+    }
+
+  if ([contacts count])
+    contact = [[self _compactAndCompleteContacts: [contacts objectEnumerator]] lastObject];
+  else
+    contact = nil;
+
+  return contact;
 }
 
 - (NSArray *) _compactAndCompleteContacts: (NSEnumerator *) contacts

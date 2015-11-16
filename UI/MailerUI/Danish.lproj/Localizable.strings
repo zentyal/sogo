@@ -79,7 +79,6 @@
 "Remove this folder" = "Fjern denne mappe";
 "Erase mails from this folder" = "Slet beskeder fra denne mappe";
 "Expunge this folder" = "Slet denne mappe";
-"Archive This Folder" = "Gem denne mappe";
 "Modify the acl of this folder" = "Rediger ACL i denne mappe";
 
 "Saved Messages.zip" = "Gemte beskeder.zip";
@@ -238,8 +237,8 @@
 
 /* Folder operations */
 "Name :" = "Navn:";
-"Enter the new name of your folder :"
- = "Indtast det nye navn på din mappe:";
+"Enter the new name of your folder"
+ = "Indtast det nye navn på din mappe";
 "Do you really want to move this folder into the trash ?"
  = "Er du sikker på, at du vil flytte denne mappe til papirkurven?";
 "Operation failed" = "Handlingen mislykkedes";

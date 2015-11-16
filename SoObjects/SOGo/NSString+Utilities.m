@@ -1,6 +1,6 @@
 /* NSString+Utilities.m - this file is part of SOGo
  *
- * Copyright (C) 2006-2014 Inverse inc.
+ * Copyright (C) 2006-2015 Inverse inc.
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -257,7 +257,7 @@ static int cssEscapingCount;
   return selfCopy;
 }
 
-- (NSString *) doubleQuotedString
+- (NSString *) asSafeJSString
 {
   NSMutableString *representation;
 
@@ -270,7 +270,12 @@ static int cssEscapingCount;
   [representation replaceString: @"\r" withString: @"\\r"];
   [representation replaceString: @"\t" withString: @"\\t"];
 
-  return [NSString stringWithFormat: @"\"%@\"", representation];
+  return representation;
+}
+
+- (NSString *) doubleQuotedString
+{
+  return [NSString stringWithFormat: @"\"%@\"", [self asSafeJSString]];
 }
 
 //
@@ -333,12 +338,18 @@ static int cssEscapingCount;
   int count;
 
   strings = [NSArray arrayWithObjects: @"_U_", @"_D_", @"_H_", @"_A_", @"_S_",
-                     @"_C_", @"_CO_", @"_SP_", @"_SQ_", @"_AM_", @"_P_", @"_DS_", nil];
+                     @"_C_", @"_SC_",
+                     @"_CO_", @"_SP_", @"_SQ_", @"_DQ_",
+                     @"_LP_", @"_RP_", @"_LS_", @"_RS_", @"_LC_", @"_RC_",
+                     @"_AM_", @"_P_", @"_DS_", nil];
   [strings retain];
   cssEscapingStrings = [strings asPointersOfObjects];
 
-  characters = [NSArray arrayWithObjects: @"_", @".", @"#", @"@", @"*", @":",
-                        @",", @" ", @"'", @"&", @"+", @"$", nil];
+  characters = [NSArray arrayWithObjects: @"_", @".", @"#", @"@", @"*",
+                        @":", @";",
+                        @",", @" ", @"'", @"\"",
+                        @"(", @")", @"[", @"]", @"{", @"}",
+                        @"&", @"+", @"$", nil];
   cssEscapingCount = [strings count];
   cssEscapingCharacters = NSZoneMalloc (NULL,
                                         (cssEscapingCount + 1)
@@ -362,6 +373,7 @@ static int cssEscapingCount;
 
 - (NSString *) asCSSIdentifier
 {
+  NSCharacterSet *numericSet;
   NSMutableString *cssIdentifier;
   unichar currentChar;
   int count, max, idx;
@@ -370,10 +382,12 @@ static int cssEscapingCount;
     [self _setupCSSEscaping];
 
   cssIdentifier = [NSMutableString string];
+  numericSet = [NSCharacterSet decimalDigitCharacterSet];
   max = [self length];
+
   if (max > 0)
     {
-      if (isdigit([self characterAtIndex: 0]))
+      if ([numericSet characterIsMember: [self characterAtIndex: 0]])
         // A CSS identifier can't start with a digit; we add an underscore
         [cssIdentifier appendString: @"_"];
       for (count = 0; count < max; count++)
@@ -404,6 +418,7 @@ static int cssEscapingCount;
 
 - (NSString *) fromCSSIdentifier
 {
+  NSCharacterSet *numericSet;
   NSMutableString *newString;
   NSString *currentString;
   int count, length, max, idx;
@@ -412,12 +427,14 @@ static int cssEscapingCount;
   if (!cssEscapingStrings)
     [self _setupCSSEscaping];
 
+  numericSet = [NSCharacterSet decimalDigitCharacterSet];
   newString = [NSMutableString string];
   max = [self length];
   count = 0;
+
   if (max > 0
       && [self characterAtIndex: 0] == '_'
-      && isdigit([self characterAtIndex: 1]))
+      && [numericSet characterIsMember: [self characterAtIndex: 1]])
     {
       /* If the identifier starts with an underscore followed by a digit,
          we remove the underscore */

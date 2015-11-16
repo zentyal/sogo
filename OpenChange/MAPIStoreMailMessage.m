@@ -32,6 +32,7 @@
 #import <NGImap4/NGImap4EnvelopeAddress.h>
 #import <NGMail/NGMailAddress.h>
 #import <NGMail/NGMailAddressParser.h>
+#import <NGMail/NGMimeMessageGenerator.h>
 #import <NGCards/iCalCalendar.h>
 #import <SOGo/NSArray+Utilities.h>
 #import <SOGo/NSString+Utilities.h>
@@ -39,6 +40,7 @@
 #import <Mailer/NSData+Mail.h>
 #import <Mailer/SOGoMailBodyPart.h>
 #import <Mailer/SOGoMailObject.h>
+#import <Mailer/NSDictionary+Mail.h>
 
 #import "Codepages.h"
 #import "NSData+MAPIStore.h"
@@ -65,7 +67,7 @@
 
 @class iCalCalendar, iCalEvent;
 
-static Class NSExceptionK;
+static Class NSExceptionK, MAPIStoreSharingMessageK;
 
 @interface NSString (MAPIStoreMIME)
 
@@ -108,6 +110,7 @@ static Class NSExceptionK;
 + (void) initialize
 {
   NSExceptionK = [NSException class];
+  MAPIStoreSharingMessageK = [MAPIStoreSharingMessage class];
 }
 
 - (id) init
@@ -116,6 +119,7 @@ static Class NSExceptionK;
     {
       mimeKey = nil;
       mailIsEvent = NO;
+      mailIsMeetingRequest = NO;
       mailIsSharingObject = NO;
       headerCharset = nil;
       headerEncoding = nil;
@@ -193,7 +197,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   count1 = [keys indexOfObject: data1];
   data2 = [entry2 objectForKey: @"mimeType"];
   count2 = [keys indexOfObject: data2];
-  
+
   if (count1 == count2)
     {
       data1 = [entry1 objectForKey: @"key"];
@@ -256,7 +260,11 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
       ASSIGN (headerCharset, [parameters objectForKey: @"charset"]);
       if ([headerMimeType isEqualToString: @"text/calendar"]
           || [headerMimeType isEqualToString: @"application/ics"])
+      {
         mailIsEvent = YES;
+        if ([[parameters objectForKey: @"method"] isEqualToString: @"REQUEST"])
+          mailIsMeetingRequest = YES;
+      }
       else
         {
           sharingHeader = [[sogoObject mailHeaders] objectForKey: @"x-ms-sharing-localtype"];
@@ -267,7 +275,8 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
                  a sharing object is a proxy in a mail message */
               sharingMessage = [[MAPIStoreSharingMessage alloc]
                                  initWithMailHeaders: [sogoObject mailHeaders]
-                                   andConnectionInfo: [[self context] connectionInfo]];
+                                   andConnectionInfo: [[self context] connectionInfo]
+                                         fromMessage: self];
               [self addProxy: sharingMessage];
               [sharingMessage release];
             }
@@ -513,6 +522,9 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   NSUInteger colIdx;
   NSString *stringValue;
 
+  /* As specified in [MS-OXCMAIL] 2.2.3.2.6.1, if there are three
+     or less characters followed by a colon at the beginning of
+     the subject, we can assume that's the subject prefix */
   subject = [self subject];
   colIdx = [subject rangeOfString: @":"].location;
   if (colIdx != NSNotFound && colIdx < 4)
@@ -521,24 +533,52 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   else
     stringValue = @"";
   *data = [stringValue asUnicodeInMemCtx: memCtx];
-  
+
   return MAPISTORE_SUCCESS;
 }
 
 - (int) getPidTagNormalizedSubject: (void **) data
                           inMemCtx: (TALLOC_CTX *) memCtx
 {
-  NSString *subject;
-  NSUInteger colIdx;
-  NSString *stringValue;
+  NSString *stringValue, *subject;
+  NSUInteger quoteStartIdx, quoteEndIdx, colIdx;
+  NSRange quoteRange;
+
+  if (!headerSetup)
+    [self _fetchHeaderData];
 
   subject = [self subject];
-  colIdx = [subject rangeOfString: @":"].location;
-  if (colIdx != NSNotFound && colIdx < 4)
-    stringValue = [[subject substringFromIndex: colIdx + 1]
-                    stringByTrimmingLeadSpaces];
+  if (mailIsMeetingRequest)
+    {
+
+      /* SOGo "spices up" the invitation/update mail's subject, but
+         the client uses it to name the attendee's event, so we keep
+         only what's inside the quotes */
+      quoteStartIdx = [subject rangeOfString: @"\""].location;
+      quoteEndIdx = [subject rangeOfString: @"\""
+                                   options: NSBackwardsSearch].location;
+      if (quoteStartIdx != NSNotFound
+          && quoteEndIdx != NSNotFound
+          && quoteStartIdx != quoteEndIdx)
+        {
+            quoteRange = NSMakeRange(quoteStartIdx + 1, quoteEndIdx - quoteStartIdx - 1);
+            stringValue = [subject substringWithRange: quoteRange];
+        }
+      else stringValue = subject;
+    }
   else
-    stringValue = subject;
+    {
+
+      /* As specified in [MS-OXCMAIL] 2.2.3.2.6.1, if there are three
+         or less characters followed by a colon at the beginning of
+         the subject, we can assume that's the subject prefix */
+      colIdx = [subject rangeOfString: @":"].location;
+      if (colIdx != NSNotFound && colIdx < 4)
+        stringValue = [[subject substringFromIndex: colIdx + 1]
+                       stringByTrimmingLeadSpaces];
+      else
+        stringValue = subject;
+    }
   if (!stringValue)
     stringValue = @"";
   *data = [stringValue asUnicodeInMemCtx: memCtx];
@@ -569,28 +609,21 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   return MAPISTORE_SUCCESS;
 }
 
-/* Note: this applies to regular mails... */
-// - (int) getPidTagReplyRequested: (void **) data // TODO
-//                    inMemCtx: (TALLOC_CTX *) memCtx
-// {
-//   if (!headerSetup)
-//     [self _fetchHeaderData];
-
-//   return (mailIsEvent
-//           ? [self getYes: data inMemCtx: memCtx]
-//           : [self getNo: data inMemCtx: memCtx]);
-// }
-
-/* ... while this applies to invitations. */
-- (int) getPidTagResponseRequested: (void **) data // TODO
-                          inMemCtx: (TALLOC_CTX *) memCtx
+- (int) getPidTagReplyRequested: (void **) data
+                       inMemCtx: (TALLOC_CTX *) memCtx
 {
   if (!headerSetup)
     [self _fetchHeaderData];
 
-  return (mailIsEvent
-          ? [self getNo: data inMemCtx: memCtx]
+  return (mailIsMeetingRequest
+          ? [self getYes: data inMemCtx: memCtx]
           : MAPISTORE_ERR_NOT_FOUND);
+}
+
+- (int) getPidTagResponseRequested: (void **) data
+                          inMemCtx: (TALLOC_CTX *) memCtx
+{
+  return [self getPidTagReplyRequested: data inMemCtx: memCtx];
 }
 
 - (int) getPidTagLatestDeliveryTime: (void **) data // DOUBT
@@ -623,7 +656,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   NSDictionary *coreInfos;
   NSArray *flags;
   unsigned int v = 0;
-    
+
   coreInfos = [sogoObject fetchCoreInfos];
   flags = [coreInfos objectForKey: @"flags"];
 
@@ -635,7 +668,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   if ([[self attachmentKeys]
         count] > 0)
     v |= MSGFLAG_HASATTACH;
-    
+
   *data = MAPILongValue (memCtx, v);
 
   return MAPISTORE_SUCCESS;
@@ -655,7 +688,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
     v = 2;
   else
     v = 0;
-    
+
   *data = MAPILongValue (memCtx, v);
 
   return MAPISTORE_SUCCESS;
@@ -667,15 +700,15 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   NSDictionary *coreInfos;
   NSArray *flags;
   unsigned int v;
-    
+
   coreInfos = [sogoObject fetchCoreInfos];
-  
+
   flags = [coreInfos objectForKey: @"flags"];
   if ([flags containsObject: @"flagged"])
     v = 6;
   else
     v = 0;
-    
+
   *data = MAPILongValue (memCtx, v);
 
   return MAPISTORE_SUCCESS;
@@ -754,7 +787,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   if ([ngAddress isKindOfClass: [NGMailAddress class]])
     {
       cn = [ngAddress displayName];
-      
+
       // If we don't have a displayName, we use the email address instead. This
       // avoid bug #2119 - where Outlook won't display anything in the "From" field,
       // nor in the recipient field if we reply to the email.
@@ -800,7 +833,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
       contactInfos = [mgr contactInfosForUserWithUIDorEmail: email];
       if (contactInfos)
         {
-          username = [contactInfos objectForKey: @"c_uid"];
+          username = [contactInfos objectForKey: @"sAMAccountName"];
           samCtx = [[self context] connectionInfo]->sam_ctx;
           entryId = MAPIStoreInternalEntryId (samCtx, username);
         }
@@ -808,7 +841,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
         entryId = MAPIStoreExternalEntryId (cn, email);
 
       *data = [entryId asBinaryInMemCtx: memCtx];
-      
+
       rc = MAPISTORE_SUCCESS;
     }
   else
@@ -965,15 +998,15 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 {
   uint32_t v;
   NSString *s;
-    
+
   s = [[sogoObject mailHeaders] objectForKey: @"x-priority"];
   v = 0x1;
-    
+
   if ([s hasPrefix: @"1"]) v = 0x2;
   else if ([s hasPrefix: @"2"]) v = 0x2;
   else if ([s hasPrefix: @"4"]) v = 0x0;
   else if ([s hasPrefix: @"5"]) v = 0x0;
-    
+
   *data = MAPILongValue (memCtx, v);
 
   return MAPISTORE_SUCCESS;
@@ -1162,14 +1195,14 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 
   if (!headerSetup)
     [self _fetchHeaderData];
-    
+
   if ([headerMimeType isEqualToString: @"text/plain"])
     format = EDITOR_FORMAT_PLAINTEXT;
   else if ([headerMimeType isEqualToString: @"text/html"])
     format = EDITOR_FORMAT_HTML;
   else
     format = 0; /* EDITOR_FORMAT_DONTKNOW */
-    
+
   *data = MAPILongValue (memCtx, format);
 
   return MAPISTORE_SUCCESS;
@@ -1394,6 +1427,41 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
           : MAPISTORE_ERR_NOT_FOUND);
 }
 
+- (int) getPidTagTransportMessageHeaders: (void **) data
+                                inMemCtx: (TALLOC_CTX *) memCtx
+{
+  NSDictionary *mailHeaders;
+  NSEnumerator *keyEnumerator;
+  NSMutableArray *headers;
+  NGMimeMessageGenerator *g;
+  NSString *headerKey, *fullHeader, *headerGenerated;
+  id headerValue;
+  NSData *headerData;
+
+  /* Let's encode each mail header and put them on 'headers' array */
+  mailHeaders = [sogoObject mailHeaders];
+  headers = [NSMutableArray arrayWithCapacity: [mailHeaders count]];
+
+  g = [[NGMimeMessageGenerator alloc] init];
+  keyEnumerator = [mailHeaders keyEnumerator];
+  while ((headerKey = [keyEnumerator nextObject]))
+    {
+      headerValue = [mailHeaders objectForKey: headerKey];
+
+      headerData = [g generateDataForHeaderField: headerKey value: headerValue];
+      headerGenerated = [[NSString alloc] initWithData: headerData encoding:NSUTF8StringEncoding];
+      fullHeader = [NSString stringWithFormat:@"%@: %@", headerKey, headerGenerated];
+      [headerGenerated release];
+
+      [headers addObject: fullHeader];
+    }
+  [g release];
+
+  *data = [[headers componentsJoinedByString:@"\n"] asUnicodeInMemCtx: memCtx];
+
+  return MAPISTORE_SUCCESS;
+}
+
 - (void) getMessageData: (struct mapistore_message **) dataPtr
                inMemCtx: (TALLOC_CTX *) memCtx
 {
@@ -1463,10 +1531,10 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
                   if ([cn length] == 0)
                     cn = email;
                   contactInfos = [mgr contactInfosForUserWithUIDorEmail: email];
-                  
+
                   if (contactInfos)
                     {
-                      username = [contactInfos objectForKey: @"c_uid"];
+                      username = [contactInfos objectForKey: @"sAMAccountName"];
                       recipient->username = [username asUnicodeInMemCtx: msgData];
                       entryId = MAPIStoreInternalEntryId (samCtx, username);
                     }
@@ -1481,7 +1549,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
                   p = 0;
                   recipient->data = talloc_array (msgData, void *, msgData->columns->cValues);
                   memset (recipient->data, 0, msgData->columns->cValues * sizeof (void *));
-                  
+
                   // PR_OBJECT_TYPE = MAPI_MAILUSER (see MAPI_OBJTYPE)
                   recipient->data[p] = MAPILongValue (msgData, MAPI_MAILUSER);
                   p++;
@@ -1489,7 +1557,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
                   // PR_DISPLAY_TYPE = DT_MAILUSER (see MS-NSPI)
                   recipient->data[p] = MAPILongValue (msgData, 0);
                   p++;
-              
+
                   // PR_7BIT_DISPLAY_NAME_UNICODE
                   recipient->data[p] = [cn asUnicodeInMemCtx: msgData];
                   p++;
@@ -1497,7 +1565,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
                   // PR_SMTP_ADDRESS_UNICODE
                   recipient->data[p] = [email asUnicodeInMemCtx: msgData];
                   p++;
-              
+
                   // PR_SEND_INTERNET_ENCODING = 0x00060000 (plain text, see OXCMAIL)
                   recipient->data[p] = MAPILongValue (msgData, 0x00060000);
                   p++;
@@ -1530,12 +1598,9 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
                               withPrefix: (NSString *) keyPrefix
 {
   NSArray *parts;
-  NSDictionary *parameters;
   NSUInteger count, max;
 
-  parameters = [[bodyInfo objectForKey: @"disposition"]
-                 objectForKey: @"parameterList"];
-  if ([[parameters objectForKey: @"filename"] length] > 0)
+  if ([[bodyInfo filename] length] > 0)
     {
       if ([keyPrefix length] == 0)
         keyPrefix = @"0";
@@ -1578,6 +1643,8 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   max = [keyParts count];
   if (max > 0)
     {
+      [[self userContext] activate];
+
       currentPart = [sogoObject lookupName: [keyParts objectAtIndex: 0]
                                  inContext: nil
                                    acquire: NO];
@@ -1607,15 +1674,13 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   return attachment;
 }
 
-- (int) setReadFlag: (uint8_t) flag
+- (enum mapistore_error) setReadFlag: (uint8_t) flag
 {
-  NSString *imapFlag = @"\\Seen";
-
   /* TODO: notifications should probably be emitted from here */
   if (flag & CLEAR_READ_FLAG)
-    [sogoObject removeFlags: imapFlag];
+    [properties setObject: [NSNumber numberWithBool: NO] forKey: @"read_flag_set"];
   else
-    [sogoObject addFlags: imapFlag];
+    [properties setObject: [NSNumber numberWithBool: YES] forKey: @"read_flag_set"];
 
   return MAPISTORE_SUCCESS;
 }
@@ -1627,11 +1692,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   if (!headerSetup)
     [self _fetchHeaderData];
 
-  if ([mimeKey hasPrefix: @"body.peek"])
-    bodyPartKey = [NSString stringWithFormat: @"body[%@]",
-                          [mimeKey _strippedBodyKey]];
-  else
-    bodyPartKey = mimeKey;
+  bodyPartKey = mimeKey;
 
   return bodyPartKey;
 }
@@ -1645,9 +1706,27 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   bodySetup = YES;
 }
 
-- (void) save: (TALLOC_CTX *) memCtx 
+- (MAPIStoreSharingMessage *) _sharingObject
 {
+  /* Get the sharing object if available */
+  NSUInteger i, max;
+  id proxy;
+
+  max = [proxies count];
+  for (i = 0; i < max; i++) {
+    proxy = [proxies objectAtIndex: i];
+    if ([proxy isKindOfClass: MAPIStoreSharingMessageK])
+      return proxy;
+  }
+  return nil;
+}
+
+- (void) save: (TALLOC_CTX *) memCtx
+{
+  BOOL modified = NO;
+  BOOL seen, storedSeenFlag;
   NSNumber *value;
+  NSString *imapFlag = @"\\Seen";
 
   value = [properties objectForKey: MAPIPropertyKey (PR_FLAG_STATUS)];
   if (value)
@@ -1657,15 +1736,39 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
         [sogoObject addFlags: @"\\Flagged"];
       else /* 0: unflagged, 1: follow up complete */
         [sogoObject removeFlags: @"\\Flagged"];
+
+      modified = YES;
     }
-}
 
-- (BOOL) read
-{
-  if (!headerSetup)
-    [self _fetchHeaderData];
+  /* Manage seen flag on save */
+  value = [properties objectForKey: @"read_flag_set"];
+  if (value)
+    {
+      seen = [value boolValue];
+      storedSeenFlag = [[[sogoObject fetchCoreInfos] objectForKey: @"flags"] containsObject: @"seen"];
+      /* We modify the flags anyway to generate a new change number */
+      if (seen)
+        {
+          if (storedSeenFlag)
+            [sogoObject removeFlags: imapFlag];
+          [sogoObject addFlags: imapFlag];
+        }
+      else
+        {
+          if (!storedSeenFlag)
+            [sogoObject addFlags: imapFlag];
+          [sogoObject removeFlags: imapFlag];
+        }
+      modified = YES;
+    }
 
-  return [sogoObject read];
+  if (modified)
+    [(MAPIStoreMailFolder *)[self container] synchroniseCache];
+
+  if (mailIsSharingObject)
+    [[self _sharingObject] saveWithMessage: self
+                             andSOGoObject: sogoObject];
+
 }
 
 @end

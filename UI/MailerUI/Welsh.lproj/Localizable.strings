@@ -76,7 +76,6 @@
 "Remove this folder" = "Dileu'r ffolder hwn";
 "Erase mails from this folder" = "Dileu ebost o'r ffolder hwn";
 "Expunge this folder" = "Dileu'r ffolder hwn";
-"Archive This Folder" = "Archive This Folder";
 "Modify the acl of this folder" = "Newid acl y ffolder";
 
 "Saved Messages.zip" = "Saved Messages.zip";
@@ -236,8 +235,8 @@
 
 /* Folder operations */
 "Name :" = "Enw :";
-"Enter the new name of your folder :"
- = "Rhowch yr enw newydd ar eich ffolder :";
+"Enter the new name of your folder"
+ = "Rhowch yr enw newydd ar eich ffolder";
 "Do you really want to move this folder into the trash ?"
  = "A ydych yn sicr eich bod eisiau symudy ffolder yma i'r sbwriel ?";
 "Operation failed" = "Gweithrediad wedi methu";

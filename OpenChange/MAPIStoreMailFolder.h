@@ -52,8 +52,15 @@
 - (NSString *) changeNumberForMessageUID: (NSString *) messageUid;
 - (void) setChangeKey: (NSData *) changeKey
     forMessageWithKey: (NSString *) messageKey;
+- (BOOL) updatePredecessorChangeListWith: (NSData *) changeKey
+                       forMessageWithKey: (NSString *) messageKey;
 - (NSData *) changeKeyForMessageWithKey: (NSString *) messageKey;
 - (NSData *) predecessorChangeListForMessageWithKey: (NSString *) messageKey;
+
+/* Extra properties from mail messages that already hit the server */
+- (void) setExtraProperties: (NSDictionary *) props
+                 forMessage: (NSString *) messageKey;
+- (NSDictionary *) extraPropertiesForMessage: (NSString *) messageKey;
 
 @end
 

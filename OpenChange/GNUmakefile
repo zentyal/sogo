@@ -100,6 +100,7 @@ $(SOGOBACKEND)_OBJC_FILES += \
 	MAPIStoreMailAttachment.m \
 	MAPIStoreMailContext.m \
 	MAPIStoreMailFolder.m \
+	MAPIStoreMailFolderTable.m \
 	MAPIStoreMailMessage.m \
 	MAPIStoreMailVolatileMessage.m \
 	MAPIStoreMailMessageTable.m \
@@ -124,9 +125,7 @@ $(SOGOBACKEND)_OBJC_FILES += \
 	\
 	RTFHandler.m \
 	\
-	Codepages.m \
-	\
-	NGImap4Connection+Monkeypatching.m
+	Codepages.m
 
 
 $(SOGOBACKEND)_RESOURCE_FILES += \
@@ -177,7 +176,7 @@ $(SOGOBACKEND)_LIB_DIRS += \
 	$(LIBMAPISTORE_LIBS)
 
 ADDITIONAL_INCLUDE_DIRS += \
-	-Werror -Wall \
+	-Wall \
 	-DSAMBA_PRIVATE_DIR=@"\"$(SAMBA_PRIVATE_DIR)\"" \
 	$(LIBMAPI_CFLAGS) \
 	$(LIBMAPISTORE_CFLAGS) \

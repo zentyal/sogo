@@ -79,7 +79,6 @@
 "Remove this folder" = "مسح المجلد";
 "Erase mails from this folder" = "مسح الرسائل من هذا المجلد";
 "Expunge this folder" = "محو هذا المجلد";
-"Archive This Folder" = "أرشفة هذا المجلد";
 "Modify the acl of this folder" = "تعديل قائمة الصلاحيات لهذا المجلد";
 
 "Saved Messages.zip" = "حفظ Messages.zip";
@@ -238,8 +237,8 @@
 
 /* Folder operations */
 "Name :" = "أسم:";
-"Enter the new name of your folder :"
- = "أدخل اسم جديد للمجلد:";
+"Enter the new name of your folder"
+ = "أدخل اسم جديد للمجلد";
 "Do you really want to move this folder into the trash ?"
  = "هل تريد حقا نقل هذا المجلد إلى سلة المهملات؟";
 "Operation failed" = "فشلت عملية";

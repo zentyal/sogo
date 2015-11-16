@@ -79,7 +79,6 @@
 "Remove this folder" = "Вилучати цю теку";
 "Erase mails from this folder" = "Вилучати повідомлення з цієї теки";
 "Expunge this folder" = "Позначати листи як вилучені";
-"Archive This Folder" = "Архівувати цю теку";
 "Modify the acl of this folder" = "Керувати правами доступу до цієї теки";
 
 "Saved Messages.zip" = "Збережено Messages.zip";
@@ -238,8 +237,8 @@
 
 /* Folder operations */
 "Name :" = "Назва :";
-"Enter the new name of your folder :"
- = "Введіть нову назву теки :";
+"Enter the new name of your folder"
+ = "Введіть нову назву теки";
 "Do you really want to move this folder into the trash ?"
  = "Ви справді бажаєте перенести цю теку до кошика?";
 "Operation failed" = "Операція завершилась невдало";

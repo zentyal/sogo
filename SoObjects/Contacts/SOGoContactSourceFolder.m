@@ -48,6 +48,7 @@
 #import <SOGo/SOGoPermissions.h>
 #import <SOGo/SOGoSource.h>
 #import <SOGo/SOGoUserSettings.h>
+#import <SOGo/SOGoSystemDefaults.h>
 #import <SOGo/WORequest+SOGo.h>
 #import <SOGo/WOResponse+SOGo.h>
 
@@ -236,6 +237,13 @@
     data = @"";
   [newRecord setObject: data forKey: @"c_cn"];
 
+  if ([[SOGoSystemDefaults sharedSystemDefaults] enableDomainBasedUID])
+    {
+      data = [oldRecord objectForKey: @"c_domain"];
+      if (data)
+        [newRecord setObject: data forKey: @"c_domain"];
+    }
+
   data = [oldRecord objectForKey: @"mail"];
   if (!data)
     data = @"";
@@ -267,6 +275,13 @@
     data = [oldRecord objectForKey: @"homephone"];
   if (![data length])
     data = @"";
+  else if ([data isKindOfClass: [NSArray class]])
+    {
+      if ([data count] > 0)
+        data = [data objectAtIndex: 0];
+      else
+        data = @"";
+    }
   [newRecord setObject: data forKey: @"c_telephonenumber"];
 
   // Custom attribute for group-lookups. See LDAPSource.m where

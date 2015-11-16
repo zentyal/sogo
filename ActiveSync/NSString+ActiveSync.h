@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2014, Inverse inc.
+Copyright (c) 2014-2015, Inverse inc.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -49,6 +49,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 - (NSString *) deviceType;
 - (NSString *) attachmentName;
 - (NSString *) command;
+- (NSString *) collectionid;
+- (NSString *) itemid;
+- (BOOL) acceptsMultiPart;
 - (NSData *) convertHexStringToBytes;
 
 @end

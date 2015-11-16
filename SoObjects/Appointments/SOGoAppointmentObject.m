@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2007-2014 Inverse inc.
+  Copyright (C) 2007-2015 Inverse inc.
   Copyright (C) 2004-2005 SKYRIX Software AG
 
   This file is part of SOGo
@@ -317,7 +317,7 @@
   enumerator = [attendees objectEnumerator];
   while ((currentAttendee = [enumerator nextObject]))
     {
-      currentUID = [currentAttendee uid];
+      currentUID = [currentAttendee uidInContext: context];
       if (currentUID)
         [self _removeEventFromUID: currentUID
                             owner: owner
@@ -398,7 +398,7 @@
   enumerator = [updateAttendees objectEnumerator];
   while ((currentAttendee = [enumerator nextObject]))
     {
-      currentUID = [currentAttendee uid];
+      currentUID = [currentAttendee uidInContext: context];
       if (currentUID)
         [self _addOrUpdateEvent: newEvent
                          forUID: currentUID
@@ -421,11 +421,14 @@
   SOGoUserSettings *us;
   NSMutableArray *unavailableAttendees;
   NSEnumerator *enumerator;
-  NSString *currentUID, *ownerUID, *whiteListString;
+  NSString *currentUID, *ownerUID;
   NSMutableString *reason;
   NSDictionary *values;
-  NSMutableDictionary *value, *moduleSettings, *whiteList;
+  NSMutableDictionary *value, *moduleSettings;
+  id whiteList;
+  
   int i, count;
+  
   i = count = 0;
 
   // Build list of the attendees uids without ressources
@@ -435,7 +438,7 @@
 
   while ((currentAttendee = [enumerator nextObject]))
     {
-      currentUID = [currentAttendee uid];
+      currentUID = [currentAttendee uidInContext: context];
 
       if (currentUID)
         {
@@ -447,8 +450,11 @@
           if (![user isResource] && [[moduleSettings objectForKey:@"PreventInvitations"] boolValue])
             {
               // Check if the user have a whiteList
-              whiteListString = [moduleSettings objectForKey:@"PreventInvitationsWhitelist"];
-              whiteList = [whiteListString objectFromJSONString];
+              whiteList = [moduleSettings objectForKey:@"PreventInvitationsWhitelist"];
+
+              // For backward <= 2.2.17 compatibility
+              if ([whiteList isKindOfClass: [NSString class]])
+                whiteList = [whiteList objectFromJSONString];
           
               // If the filter have a hit, do not add the currentUID to the unavailableAttendees array
               if (![whiteList objectForKey:ownerUID])
@@ -514,7 +520,7 @@
   enumerator = [theAttendees objectEnumerator];
   while ((currentAttendee = [enumerator nextObject]))
     {
-      currentUID = [currentAttendee uid];
+      currentUID = [currentAttendee uidInContext: context];
       if (currentUID)
         {
           [attendees addObject: currentUID];
@@ -629,7 +635,7 @@
           for (i = 0; i < [theAttendees count]; i++)
             {
               currentAttendee = [theAttendees objectAtIndex: i];
-              if ([[currentAttendee uid] isEqualToString: currentUID])
+              if ([[currentAttendee uidInContext: context] isEqualToString: currentUID])
                 break;
               else
                 currentAttendee = nil;
@@ -707,7 +713,7 @@
   enumerator = [attendees objectEnumerator];
   while ((currentAttendee = [enumerator nextObject]))
     {
-      currentUID = [currentAttendee uid];
+      currentUID = [currentAttendee uidInContext: context];
       if (currentUID)
       [self _addOrUpdateEvent: newEvent
                        forUID: currentUID
@@ -832,7 +838,7 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
           enumerator = [updatedAttendees objectEnumerator];
           while ((currentAttendee = [enumerator nextObject]))
             {
-              currentUID = [currentAttendee uid];
+              currentUID = [currentAttendee uidInContext: context];
               if (currentUID)
                 [self _addOrUpdateEvent: newEvent
                                  forUID: currentUID
@@ -1209,7 +1215,7 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
             {
               [delegates addObject: otherDelegate];
               
-              delegatedUID = [otherDelegate uid];
+              delegatedUID = [otherDelegate uidInContext: context];
               if (delegatedUID)
                 // Delegate attendee is a local user; remove event from their calendar
                 [self _removeEventFromUID: delegatedUID
@@ -1238,7 +1244,7 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
       
       if (addDelegate)
         {
-          delegatedUID = [delegate uid];
+          delegatedUID = [delegate uidInContext: context];
           delegates = [NSArray arrayWithObject: delegate];
           [event addToAttendees: delegate];
           
@@ -1265,11 +1271,11 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
             [self sendResponseToOrganizer: event
                                      from: ownerUser];
           
-          organizerUID = [[event organizer] uid];
+          organizerUID = [[event organizer] uidInContext: context];
           
           // Event is an exception to a recurring event; retrieve organizer from master event
           if (!organizerUID)
-            organizerUID = [[(iCalEntityObject*)[[event parent] firstChildWithTag: [self componentTag]] organizer] uid];
+            organizerUID = [[(iCalEntityObject*)[[event parent] firstChildWithTag: [self componentTag]] organizer] uidInContext: context];
           
           if (organizerUID)
             // Update the attendee in organizer's calendar.
@@ -1296,7 +1302,7 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
       for (i = 0; i < [attendees count]; i++)
         {
           att = [attendees objectAtIndex: i];
-          uid = [att uid];
+          uid = [att uidInContext: context];
           if (uid && att != attendee && ![uid isEqualToString: delegatedUID])
             [self _updateAttendee: attendee
                      withDelegate: delegate
@@ -1455,7 +1461,7 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
         {
           if (delegate && ![[delegate email] isEqualToString: [attendee delegatedTo]])
             {
-              delegatedUid = [delegate uid];
+              delegatedUid = [delegate uidInContext: context];
               if (delegatedUid)
                 delegatedUser = [SOGoUser userWithLogin: delegatedUid];
               if (delegatedUser != nil && [event userIsOrganizer: delegatedUser])
@@ -1814,9 +1820,28 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
           [self warnWithFormat: @"Invalid event: no end date; setting duration to %@", [event duration]];
         }
 
-      if ([event organizer] && ![[[event organizer] cn] length])
+      if ([event organizer])
         {
-          [[event organizer] setCn: [[event organizer] rfc822Email]];
+          NSString *uid;
+
+          if (![[[event organizer] cn] length])
+            {
+              [[event organizer] setCn: [[event organizer] rfc822Email]];
+            }
+
+          // We now make sure that the organizer, if managed by SOGo, is using
+          // its default email when creating events and inviting attendees.
+          uid = [[event organizer] uidInContext: context];
+          if (uid)
+            {
+              NSDictionary *defaultIdentity;
+              SOGoUser *organizer;
+
+              organizer = [SOGoUser userWithLogin: uid];
+              defaultIdentity = [organizer defaultIdentity];
+              [[event organizer] setCn: [defaultIdentity objectForKey: @"fullName"]];
+              [[event organizer] setEmail: [defaultIdentity objectForKey: @"email"]];
+            }
         }
     }
 }
@@ -2106,32 +2131,23 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
       //
       if ([[newEvent attendees] count] || [[oldEvent attendees] count])
         {
-          NSString *uid;
-          
+          BOOL userIsOrganizer;
+
           // newEvent might be nil here, if we're deleting a RECURRENCE-ID with attendees
-          // If that's the case, we use the oldEvent for now just to obtain the organizer
-          // and we'll swap it back to nil once we're done.
-          if (!newEvent)
-            newEvent = oldEvent;
-          
-          // We fetch the organizer's uid. Sometimes, the recurrence-id will
-          // have it, sometimes not. If it doesn't, we fetch it from the master event.
-          uid = [[newEvent organizer] uid];
-          
-          if (!uid && !recurrenceId)
-            uid = [[[[[newEvent parent] events] objectAtIndex: 0] organizer] uid];
-          
+          // If that's the case, we use the oldEvent to obtain the organizer
+          if (newEvent)
+            userIsOrganizer = [newEvent userIsOrganizer: ownerUser];
+          else
+            userIsOrganizer = [oldEvent userIsOrganizer: ownerUser];
+
           // With Thunderbird 10, if you create a recurring event with an exception
           // occurence, and invite someone, the PUT will have the organizer in the
           // recurrence-id and not in the master event. We must fix this, otherwise
           // SOGo will break.
-          if (!recurrenceId && ![[[[[newEvent parent] events] objectAtIndex: 0] organizer] uid])
+          if (!recurrenceId && ![[[[[newEvent parent] events] objectAtIndex: 0] organizer] uidInContext: context])
             [[[[newEvent parent] events] objectAtIndex: 0] setOrganizer: [newEvent organizer]];
-          
-          if (newEvent == oldEvent)
-            newEvent = nil;
-          
-          if (uid && [uid caseInsensitiveCompare: owner] == NSOrderedSame)
+
+          if (userIsOrganizer)
             {
               // A RECCURENCE-ID was removed
               if (!newEvent && oldEvent)

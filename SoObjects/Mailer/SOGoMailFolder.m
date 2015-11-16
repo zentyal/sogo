@@ -197,9 +197,9 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 {
   NSArray *subfolders;
 
-  subfolders = [[self subfolders] stringsWithFormat: @"folder%@"];
+  subfolders = [[self subfolders] resultsOfSelector: @selector (asCSSIdentifier)];
 
-  return [subfolders resultsOfSelector: @selector (asCSSIdentifier)];
+  return [subfolders stringsWithFormat: @"folder%@"];
 }
 
 - (NSArray *) subfolders
@@ -632,7 +632,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 		inContext: (id) localContext
 {
   NSArray *folders;
-  NSString *currentFolderName, *currentAccountName;
+  NSString *currentFolderName, *currentAccountName, *destinationAccountName;
   NSMutableString *imapDestinationFolder;
   NGImap4Client *client;
   id result;
@@ -640,24 +640,24 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 
 #warning this code will fail on implementation using something else than '/' as delimiter
   imapDestinationFolder = [NSMutableString string];
-  folders = [[destinationFolder componentsSeparatedByString: @"/"]
-              resultsOfSelector: @selector (fromCSSIdentifier)];
+  folders = [destinationFolder componentsSeparatedByString: @"/"];
   max = [folders count];
   if (max > 1)
     {
       currentAccountName = [[self mailAccountFolder] nameInContainer];
       client = [[self imap4Connection] client];
       [imap4 selectFolder: [self imap4URL]];
+      destinationAccountName = [[folders objectAtIndex: 1] fromCSSIdentifier];
 
       for (count = 2; count < max; count++)
         {
-          currentFolderName = [[folders objectAtIndex: count] substringFromIndex: 6];
+          currentFolderName = [[[folders objectAtIndex: count] substringFromIndex: 6] fromCSSIdentifier];
           [imapDestinationFolder appendFormat: @"/%@", currentFolderName];
         }
 
       if (client)
         {
-          if ([[folders objectAtIndex: 1] isEqualToString: currentAccountName])
+          if ([destinationAccountName isEqualToString: currentAccountName])
             {
               // We make sure the destination IMAP folder exist, if not, we create it.
               result = [[client status: imapDestinationFolder
@@ -686,7 +686,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
               
               userFolder = [[context activeUser] homeFolderInContext: context];
               accounts = [userFolder lookupName: @"Mail"  inContext: context  acquire: NO];
-              account = [accounts lookupName: [folders objectAtIndex: 1] inContext: localContext acquire: NO];
+              account = [accounts lookupName: destinationAccountName inContext: localContext acquire: NO];
 
               if ([account isKindOfClass: [NSException class]])
                 {
@@ -1553,7 +1553,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 
 - (NSString *) displayName
 {
-  return [self relativeImap4Name];
+  return [[self relativeImap4Name] stringByDecodingImap4FolderName];
 }
 
 - (NSDictionary *) davIMAPFieldsTable
@@ -2090,6 +2090,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 - (NSArray *) syncTokenFieldsWithProperties: (NSArray *) theProperties
                           matchingSyncToken: (NSString *) theSyncToken
                                    fromDate: (NSCalendarDate *) theStartDate
+                                initialLoad: (BOOL) initialLoadInProgress
 {
   EOQualifier *searchQualifier;
   NSMutableArray *allTokens;
@@ -2129,13 +2130,13 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
                                       value: nextModseq];
       searchQualifier = [[EOAndQualifier alloc]
                           initWithQualifiers:
-                            kvQualifier, [self _nonDeletedQualifier], nil];
+                            kvQualifier, nil];
       [kvQualifier release];
       [searchQualifier autorelease];
     }
   else
     {
-      searchQualifier = [self _nonDeletedQualifier];
+      searchQualifier = nil;
     }
 
   if (theStartDate)
@@ -2144,7 +2145,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
       
       sinceDateQualifier = [EOQualifier qualifierWithQualifierFormat:
                                           @"(DATE >= %@)", theStartDate];
-      searchQualifier = [[EOAndQualifier alloc] initWithQualifiers: searchQualifier, sinceDateQualifier,
+      searchQualifier = [[EOAndQualifier alloc] initWithQualifiers: sinceDateQualifier, searchQualifier,
                                                 nil];
       [searchQualifier autorelease];
     }
@@ -2155,7 +2156,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
                              sortOrdering: nil];
 
   fetchResults = [(NSDictionary *)[self fetchUIDs: uids
-                                            parts: [NSArray arrayWithObject: @"modseq"]]
+                                            parts: [NSArray arrayWithObjects: @"modseq", @"flags", nil]]
                      objectForKey: @"fetch"];
   
   /* NOTE: we sort items manually because Cyrus does not properly sort
@@ -2166,7 +2167,10 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 
   for (i = 0; i < [fetchResults count]; i++)
     { 
-      d = [NSDictionary dictionaryWithObject: [[fetchResults objectAtIndex: i] objectForKey: @"modseq"]
+      if ([[[fetchResults objectAtIndex: i] objectForKey: @"flags"] containsObject: @"deleted"] && initialLoadInProgress)
+        continue;
+
+      d = [NSDictionary dictionaryWithObject: ([[[fetchResults objectAtIndex: i] objectForKey: @"flags"] containsObject: @"deleted"]) ? [NSNull null] : [[fetchResults objectAtIndex: i] objectForKey: @"modseq"]
                                       forKey: [[[fetchResults objectAtIndex: i] objectForKey: @"uid"] stringValue]];
       [allTokens addObject: d];
     }
@@ -2176,7 +2180,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   if (highestmodseq == 0)
     highestmodseq = 1;
 
-  if (highestmodseq > 0)
+  if (highestmodseq > 0 && !initialLoadInProgress)
     {
       id uid;
 

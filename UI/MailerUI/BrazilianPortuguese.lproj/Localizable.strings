@@ -26,7 +26,7 @@
 /* Tooltips */
 
 "Send this message now" = "Envia esta mensagem agora";
-"Select a recipient from an Address Book" = "Seleciona um destinatário de a partir de um Catálogo";
+"Select a recipient from an Address Book" = "Seleciona um destinatário de catálogo de endereços";
 "Include an attachment" = "Inclui um anexo";
 "Save this message" = "Salva esta mensagem";
 "Get new messages" = "Receber novas mensagens";
@@ -95,7 +95,7 @@
 "Subject"       = "Assunto";
 "To"            = "Para";
 "Cc"            = "Cc";
-"Bcc"           = "Bcc";
+"Bcc"           = "Cco";
 "Reply-To"	    = "Responder-Para";
 "Add address"   = "Adicionar endereço";
 "Body"          = "Corpo";
@@ -109,7 +109,7 @@
 
 "to"            = "Para";
 "cc"            = "Cc";
-"bcc"           = "Bcc";
+"bcc"           = "Cco";
 
 "Edit Draft..." = "Editar Rascunho...";
 "Load Images" = "Carregar Imagens";
@@ -180,7 +180,7 @@
 
 /* Address Popup menu */
 "Add to Address Book..." = "Adicionar ao Catálogo...";
-"Compose Mail To" = "Escrever Mensagem Parana";
+"Compose Mail To" = "Escrever Mensagem Para";
 "Create Filter From Message..." = "Criar Filtro Da Mensagem...";
 
 /* Image Popup menu */
@@ -240,7 +240,7 @@
 "As Not Junk" = "Como Não é Lixo Eletrônico";
 "Run Junk Mail Controls" = "Executar Controle de Lixo Eletrônico";
 
-"Search messages in:" = "Pesquisar mensagens em:";
+"Search messages in" = "Pesquisar mensagens em";
 "Search" = "Pesquisar";
 "Search subfolders" = "Pesquisar sub-pastas";
 "Match any of the following" = "Combinar qualquer uma das seguintes";
@@ -254,14 +254,14 @@
 
 /* Folder operations */
 "Name :" = "Nome :";
-"Enter the new name of your folder :"
- = "Informe o novo nome de sua pasta :";
+"Enter the new name of your folder"
+ = "Informe o novo nome de sua pasta";
 "Do you really want to move this folder into the trash ?"
  = "Você realmente quer mover esta pasta para a Lixeira ?";
 "Operation failed" = "Falha na Operação";
 
 "Quota" = "Quota:";
-"quotasFormat" = "%{0}% usedo em %{1} MB";
+"quotasFormat" = "%{0}% usado em %{1} MB";
 
 "Please select a message." = "Por favor, selecione uma mensagem.";
 "Please select a message to print." = "Por favor, selecione a mensagem para imprimir.";

@@ -167,9 +167,9 @@ Operating System Requirements
 The following 32-bit and 64-bit operating systems are currently
 supported by SOGo:
 
-* Red Hat Enterprise Linux (RHEL) Server 5 and 6
-* Community ENTerprise Operating System (CentOS) 5 and 6
-* Debian GNU/Linux 5.0 (Lenny) to 7.0 (Wheezy)
+* Red Hat Enterprise Linux (RHEL) Server 5, 6 and 7
+* Community ENTerprise Operating System (CentOS) 5, 6 and 7
+* Debian GNU/Linux 6.0 (Squeeze) to 8.0 (Jessie)
 * Ubuntu 10.04 (Lucid) to 14.04 (Trusty)
 
 Make sure the required components are started automatically at boot time
@@ -194,7 +194,8 @@ Installation
 
 This section will guide you through the installation of SOGo together
 with its dependencies. The steps described here apply to an RPM-based
-installation for a Red Hat or CentOS distribution.
+installation for a Red Hat or CentOS 6 distribution. Most of these steps
+should apply to all supported operating systems.
 
 Software Downloads
 ~~~~~~~~~~~~~~~~~~
@@ -566,17 +567,29 @@ usernames like this: `SOGoSuperUsernames = (<username1>[, <username2>, ...]);`
 for SOGo. Possible values are:
 
 [options="compact"]
+* `Arabic`
+* `Basque`
 * `BrazilianPortuguese`
+* `Catalan`
 * `Czech`
+* `Danish`
 * `Dutch`
 * `English`
+* `Finnish`
 * `French`
 * `German`
 * `Hungarian`
+* `Icelandic`
 * `Italian`
+* `NorwegianBokmal`
+* `NorwegianNynorsk`
+* `Polish`
 * `Russian`
-* `Spanish`
+* `Slovak`
+* `SpanishSpain`
+* `SpanishArgentina`
 * `Swedish`
+* `Ukrainian`
 * `Welsh`
 
 |D |SOGoNotifyOnPersonalModifications
@@ -649,7 +662,7 @@ of 1 day by default.
 |Parameter used to configure which languages are available from SOGo's
 Web interface. Available languages are specified as an array of string.
 
-The default value is: `( "Czech", "Welsh", "English", "Spanish", "French", "German", "Italian", "Hungarian", "Dutch", "BrazilianPortuguese", "Polish", "Russian", Ukrainian", "Swedish" )`
+The default value is: `( "Arabic", "Basque", "Catalan", "Czech", "Dutch", "Danish", "Welsh", "English", "SpanishSpain", "SpanishArgentina", "Finnish", "French", "German", "Icelandic", "Italian", "Hungarian", "BrazilianPortuguese", "NorwegianBokmal", "NorwegianNynorsk", "Polish", "Russian", "Slovak", "Ukrainian", "Swedish" )`
 
 |D |SOGoHideSystemEMail
 |Parameter used to control if SOGo should hide or not the system email
@@ -843,7 +856,7 @@ source:
 
 [cols="^3,>47,50a"]
 |=======================================================================
-.33+|D <|SOGoUserSources
+.34+|D <|SOGoUserSources
 |Parameter used to set the LDAP and/or SQL sources used for
 authentication and global address books. Multiple sources can be
 specified as an array of dictionaries. A dictionary that defines an LDAP
@@ -1003,6 +1016,14 @@ this feature, every LDAP requests will fail. Note that some LDAP servers
 require LDAP/SSL for password policies to work. This is the case for
 example with 389 Directory Server.
 
+|updateSambaNTLMPasswords
+|If set to `YES`, SOGo will automatically update the sambaNTPassword
+and sambaLMPassword attributes when changing passwords. The attributes
+must be called sambaNTPassword and sambaLMPassword. You must also make
+sure the correct ACL is set in your LDAP server to allow users to change
+their own sambaNTPassword and sambaLMPassword password attributes.
+Defaults to `NO` when unset.
+
 |isAddressBook
 |If set to `YES`, this LDAP source is used as a shared address book
 (with read-only access). Note that if set to `NO`, autocompletion will
@@ -1014,8 +1035,8 @@ repository
 
 |ModulesConstraints (optional)
 |Limits the access of any module through a constraint based on an LDAP
-attribute; must be a dictionary with keys `Mail`, and/or `Calendar`, for
-example:
+attribute; must be a dictionary with keys `Mail`, and/or `Calendar`,
+and/or `ActiveSync` for example:
 
 ----
 ModulesConstraints = {
@@ -1039,6 +1060,11 @@ of supported attributes.
 |When the _modifiers_ list (see below) is set, or when using LDAP-based
 user addressbooks (see _abOU_ below), this list of object classes will
 be applied to new records as they are created.
+
+|GroupObjectClasses
+|A list (array) of names identifying groups within the LDAP source. If not
+set, SOGo will use `group`, `groupofnames`, `groupofuniquenames`
+and `posixgroup`.
 
 |modifiers
 |A list (array) of usernames that are authorized to perform
@@ -1329,27 +1355,27 @@ The following table describes the parameters that were set:
 
 [cols="3,47,50a"]
 |=======================================================================
-|D |SOGoProfileURL
+|S |SOGoProfileURL
 |Parameter used to set the database URL so that SOGo can retrieve user
 profiles.
 
 For MySQL, set the database URL to something like:
 `mysql://sogo:sogo@localhost:3306/sogo/sogo_user_profile`.
 
-|D |OCSFolderInfoURL
+|S |OCSFolderInfoURL
 |Parameter used to set the database URL so that SOGo can retrieve the
 location of user folders (address books and calendars).
 
 For Oracle, set the database URL to something like:
 `oracle://sogo:sogo@localhost:1526/sogo/sogo_folder_info`.
 
-|D |OCSSessionsFolderURL
+|S |OCSSessionsFolderURL
 |Parameter used to set the database URL so that SOGo can store and
 retrieve secured user sessions information. For PostgreSQL, the database
 URL could be set to something like:
 `postgresql://sogo:sogo@localhost:5432/sogo/sogo_sessions_folder`.
 
-|D |OCSEMailAlarmsFolderURL
+|S |OCSEMailAlarmsFolderURL
 |Parameter used to set the database URL for email-based alarms (that can
 be set on events and tasks). This parameter is relevant only if
 _SOGoEnableEMailAlarms_ is set to `YES`. For PostgreSQL, the database
@@ -1681,6 +1707,13 @@ cronjob `sogo-tmpwatch`.
 
 Defaults to `/var/spool/sogo`.
 
+|S |NGMimeBuildMimeTempDirectory
+|Parameter used to set the path where temporary files will be stored
+by SOPE when dealing with MIME messages.
+
+Defaults to `/tmp`.
+
+
 |S |NGImap4DisableIMAP4Pooling
 |Disables IMAP pooling when set to `YES`. Enable pooling by setting to
 `NO` or using a caching proxy like imapproxy.
@@ -1784,6 +1817,12 @@ host.
 
 Defaults to `NO` when unset.
 
+|D |SOGoForwardConstraints
+|Parameter used to set constraints on possible addresses used when
+automatically forwarding mails. When set to `0` (default), no constraint
+is enforced. When set to `1`, only internal domains can be used. When
+set to `2`, only external domains can be used.
+
 |D |SOGoSieveScriptsEnabled
 |Parameter used to activate the edition from the preferences windows of
 server-side mail filters. Requires Sieve script support on the IMAP
@@ -1881,10 +1920,11 @@ events. This parameter is an array of arbitrary strings.
 
 Defaults to a list that depends on the language.
 
-|U |SOGoCalendarDefaultCategoryColor
-|Parameter used to define the default colour of categories.
+|U |SOGoCalendarCategoriesColors
+|Parameter used to define the colour of categories. This parameter
+is a dictionary of category name/color.
 
-Defaults to `#F0F0F0` when unset.
+Defaults to `#F0F0F0` for all categories when unset.
 
 |U |SOGoCalendarEventsDefaultClassification
 |Parameter used to defined the default classification for new events.
@@ -2097,7 +2137,8 @@ Multi-domains Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want your installation to isolate two groups of users, you must
-define a distinct authentication source for each _domain_. Following is
+define a distinct authentication source for each _domain_. Your domain keys
+must have the same value as your email domain you want to add. Following is
 the same configuration that now includes two domains (acme.com and
 coyote.com):
 
@@ -2105,7 +2146,7 @@ coyote.com):
 {
 ...
     domains = {
-        acme = {
+        acme.com = {
             SOGoMailDomain = acme.com;
             SOGoDraftsFolderName = Drafts;
             SOGoUserSources = (
@@ -2126,7 +2167,7 @@ coyote.com):
                 }
             );
         };
-        coyote = {
+        coyote.com = {
             SOGoMailDomain = coyote.com;
             SOGoIMAPServer = imap.coyote.com;
             SOGoUserSources = (
@@ -2157,7 +2198,7 @@ domains.
 [cols="3,47,50a"]
 |=======================================================================
 |S |SOGoEnableDomainBasedUID
-|Parameter used to activate user identification by domain. Users will be
+|Parameter used to enable user identification by domain. Users will be
 able (without being required) to login using the form `username@domain`,
 meaning that values of _UIDFieldName_ no longer have to be unique among
 all domains but only within the same domain. Internally, users will
@@ -2346,8 +2387,8 @@ easier. These GUI utilities can make use of templates to create and
 pre-configure typical user accounts or any standardized LDAP record,
 along with the correct object classes, fields and default values.
 
-Microsoft ActiveSync
---------------------
+Microsoft Enterprise ActiveSync
+-------------------------------
 
 SOGo supports the Microsoft ActiveSync protocol.
 
@@ -2413,6 +2454,11 @@ Defaults to `0`, which means no overwrite is performed.
 
 Setting this parameter to a value greater than `512` will
 have unexpected behaviour with various ActiveSync clients.
+|S |SOGoEASDebugEnabled
+|Parameter used to log the complete request and response of every single
+EAS command.
+
+Defaults to `NO`, which means no logging is performed.
 |=======================================================================
 
 Please be aware of the following limitations:
@@ -2421,6 +2467,10 @@ Please be aware of the following limitations:
 solution is to configure Outlook to use a LDAP server (over SSL) with
 authentication. Outlook 2013 also does not seem to support multiple
 address books over ActiveSync.
+* To successfully synchronize Outlook email categories, a corresponding
+mail label (Preferences->Mail Options) has to be created manually in SOGo
+for each label defined in Outlook. The name in SOGo and in Outlook must be
+identical.
 * Make sure you do not use a self-signed certificate. While this will
 work, Outlook will work intermittently as it will raise popups for
 certificate validation, sometimes in background, preventing the user to
@@ -2456,6 +2506,83 @@ and send an email to iplicreq@microsoft.com
 
 Inverse inc. provides this software for free, but is not responsible for
 anything related to its usage.
+
+Microsoft Enterprise ActiveSync Tuning
+--------------------------------------
+
+First of all, it is important to know that most EAS devices will keep
+HTTP connections open to SOGo (and thus, Apache) for a long time. This
+is required for "push" to work properly. Connections can stay open for
+up to one hour, or 3600 seconds.
+
+The first parameter to check is related to Apache's proxying to
+SOGo:
+
+----
+ProxyPass /Microsoft-Server-ActiveSync \
+ http://127.0.0.1:20000/SOGo/Microsoft-Server-ActiveSync \
+ retry=60 connectiontimeout=5 timeout=360
+----
+
+The above line sets a timeout for up to 360 seconds, or 6 minutes. If
+you want to let EAS clients keep their HTTP connections open for up
+to an hour, you must change the timeout parameter and set it to 3600.
+
+If you change this value, the WOWatchDogRequestTimeout parameter must be changed
+accordingly in SOGo's configuration file (/etc/sogo/sogo.conf). By default,
+a SOGo child process is allowed to handle a request that can take up
+to 10 minutes before it gets killed by its parent process. When using
+EAS "push", the client expects to keep its connection open for up to one
+hour - so the WOWatchDogRequestTimeout, which is set in minutes,
+must be adjusted accordingly.
+
+EAS clients will keep HTTP connections open for a long time
+during these two EAS commands: Ping and Sync. By default, SOGo will prevent
+EAS clients from keeping connections for a long time. This is to avoid the
+situation where all SOGo child processes would be monopolized by EAS clients -
+rendering the SOGo web interface or DAV interface unavailable. The
+default SOGo behavior is thus similar to disable EAS push entirely.
+
+Two SOGo configuration parameters are available to modify this behavior:
+SOGoMaximumPingInterval (set by default to 10 seconds) and
+SOGoMaximumSyncInterval (set by default to 30 seconds). If you want
+connection to stay open for up to one hour, you should set these
+slightly under 3600 seconds (say 3540 - or 59 minutes). During a
+long-lived HTTP connection, the SOGo child process will perform
+internal polling to detect changes and return them to the EAS client
+if any changes are found. The parameter used to control this
+is SOGoInternalSyncInterval. By default, polling is done every 10
+seconds. This might generate too much load on large-scale system.
+
+The last configuration parameter to adjust is WOWorkersCount - which sets the
+number of SOGo child process that will be used to handle requests.
+You should have at least one child per EAS device configured to use
+"push". You must also have more children than you have EAS devices
+configured to use "push" - in order to handle normal SOGo requests to
+its Web or DAV interfaces.
+
+Here are some usage examples for EAS devices using "push". In all
+cases, the Apache timeout is set to 3600 and the
+WOWatchDogRequestTimeout parameter is set to 60.
+
+Example 1 - 100 users, 10 EAS devices:
+
+----
+WOWorkersCount = 15;
+SOGoMaximumPingInterval = 3540;
+SOGoMaximumSyncInterval = 3540;
+SOGoInternalSyncInterval = 30;
+----
+
+Example 2 - 1000 users, 100 EAS devices:
+
+----
+WOWorkersCount = 120;
+SOGoMaximumPingInterval = 3540;
+SOGoMaximumSyncInterval = 3540;
+SOGoInternalSyncInterval = 60;
+----
+
 
 Using SOGo
 ----------
@@ -2586,6 +2713,21 @@ current version of SOGo from the previous release.
 
 [cols="100a"]
 |=======================================================================
+h|2.3.1
+|The SOGoCalendarDefaultCategoryColor default has been removed. If you
+want to customize the color of calendar categories, use the
+SOGoCalendarCategories and SOGoCalendarCategoriesColors defaults.
+
+h|2.3.0
+|Run the shell script `sql-update-2.2.17_to_2.3.0.sh` or
+`sql-update-2.2.17_to_2.3.0-mysql.sh` (if you use MySQL).
+
+This will grow the "participant states" field of calendar quick tables to a larger
+size and add the the "c_description" column to calendar quick tables.
+
+Moreover, if you are using a multi-domain configuration, make sure the keys for
+your domains match the email domains you have defined.
+
 h|2.2.8
 |The configuration configuration parameters were renamed:
 

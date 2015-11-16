@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2004-2005 SKYRIX Software AG
-  Copyright (C) 2008-2014 Inverse inc.
+  Copyright (C) 2008-2015 Inverse inc.
 
   This file is part of SOGo.
 
@@ -230,7 +230,15 @@ static NSArray *infoKeys = nil;
 - (NSString *) localeCode
 {
   // WARNING : NSLocaleCode is not defined in <Foundation/NSUserDefaults.h>
-  return [locale objectForKey: @"NSLocaleCode"];
+  // Region subtag must be separated by a dash
+  NSMutableString *s = [NSMutableString stringWithString: [locale objectForKey: @"NSLocaleCode"]];
+
+  [s replaceOccurrencesOfString: @"_"
+                     withString: @"-"
+                        options: 0
+                          range: NSMakeRange(0, [s length])];
+  
+  return s;
 }
 
 - (void) setFrom: (NSString *) newFrom
@@ -815,7 +823,7 @@ static NSArray *infoKeys = nil;
       recipients_count += [[co allRecipients] count];
       messages_count += 1;
       
-      if ([dd maximumMessageSubmissionCount] > 0 && [dd maximumRecipientCount] > 0)
+      if ([dd maximumMessageSubmissionCount] > 0 || [dd maximumRecipientCount] > 0)
         {
           [[SOGoCache sharedCache] setMessageSubmissionsCount: messages_count
                                               recipientsCount: recipients_count

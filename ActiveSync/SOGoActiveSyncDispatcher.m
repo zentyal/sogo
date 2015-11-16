@@ -61,6 +61,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #import <NGExtensions/NGHashMap.h>
 #import <NGExtensions/NSObject+Logs.h>
 #import <NGExtensions/NSString+misc.h>
+#import <NGExtensions/NSString+Encoding.h>
 
 #import <NGImap4/NGImap4Client.h>
 #import <NGImap4/NGImap4Connection.h>
@@ -95,6 +96,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #import <SOGo/GCSSpecialQueries+SOGoCacheObject.h>
 #import <SOGo/NSString+Utilities.h>
 #import <SOGo/WORequest+SOGo.h>
+#import <SOGo/NSArray+Utilities.h>
 
 #import <Appointments/SOGoAppointmentFolder.h>
 #import <Appointments/SOGoAppointmentFolders.h>
@@ -110,6 +112,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #import <Mailer/SOGoMailBodyPart.h>
 #import <Mailer/SOGoMailFolder.h>
 #import <Mailer/SOGoMailObject.h>
+#import <Mailer/SOGoMailObject+Draft.h>
+#import <Mailer/NSString+Mail.h>
+
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSString.h>
@@ -138,17 +143,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @implementation SOGoActiveSyncDispatcher
 
+static BOOL debugOn = NO;
+
 - (id) init
 {
   [super init];
 
+  debugOn = [[SOGoSystemDefaults sharedSystemDefaults] easDebugEnabled];
   folderTableURL = nil;
+  imapFolderGUIDS = nil;
   return self;
 }
 
 - (void) dealloc
 {
   RELEASE(folderTableURL);
+  RELEASE(imapFolderGUIDS);
   [super dealloc];
 }
 
@@ -221,21 +231,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       SOGoMailAccounts *accountsFolder;
       SOGoMailAccount *accountFolder;
       SOGoUserFolder *userFolder;
-      NSDictionary *imapGUIDs;
 
-      userFolder = [[context activeUser] homeFolderInContext: context];
-      accountsFolder = [userFolder lookupName: @"Mail" inContext: context acquire: NO];
-      accountFolder = [accountsFolder lookupName: @"0" inContext: context acquire: NO];
-      
-      // Get the GUID of the IMAP folder
-      imapGUIDs = [accountFolder imapFolderGUIDs];
-      
-      //return [[imapGUIDs allKeysForObject: theIdToTranslate] objectAtIndex: 0];
-      return [[[imapGUIDs allKeysForObject:  [NSString stringWithFormat: @"folder%@", theIdToTranslate]] objectAtIndex: 0] substringFromIndex: 6] ;
+      if (!imapFolderGUIDS)
+        {
+          userFolder = [[context activeUser] homeFolderInContext: context];
+          accountsFolder = [userFolder lookupName: @"Mail" inContext: context acquire: NO];
+          accountFolder = [accountsFolder lookupName: @"0" inContext: context acquire: NO];
+
+          // Get the GUID of the IMAP folder
+          imapFolderGUIDS = [accountFolder imapFolderGUIDs];
+          [imapFolderGUIDS retain];
+
+        }
+
+        return [[[imapFolderGUIDS allKeysForObject:  [NSString stringWithFormat: @"folder%@", theIdToTranslate]] objectAtIndex: 0] substringFromIndex: 6] ;
     }
   
   return theIdToTranslate;
 }
+
 
 
 //
@@ -445,7 +459,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   [s appendString: @"<FolderCreate xmlns=\"FolderHierarchy:\">"];
   [s appendFormat: @"<Status>%d</Status>", 1];
   [s appendFormat: @"<SyncKey>%@</SyncKey>", syncKey];
-  [s appendFormat: @"<ServerId>%@</ServerId>", nameInContainer];
+  [s appendFormat: @"<ServerId>%@</ServerId>", [nameInContainer stringByEscapingURL]];
   [s appendString: @"</FolderCreate>"];
   
   d = [[s dataUsingEncoding: NSUTF8StringEncoding] xml2wbxml];
@@ -691,7 +705,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   SOGoMailAccount *accountFolder;
   NSMutableString *s, *commands;
   SOGoUserFolder *userFolder;
-  NSMutableArray *folders;
+  NSMutableArray *folders, *processedFolders;
   SoSecurityManager *sm;
   SOGoCacheGCSObject *o;
   id currentFolder;
@@ -711,6 +725,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   command_count = 0;
   commands = [NSMutableString string];
 
+  processedFolders = [NSMutableArray array];
+
   [s appendString: @"<?xml version=\"1.0\" encoding=\"utf-8\"?>"];
   [s appendString: @"<!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\">"];
 
@@ -719,7 +735,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       first_sync = YES;
       syncKey = @"1";
     }
-  else if (![syncKey isEqualToString: [metadata objectForKey: @"FolderSyncKey"]])
+  else if (![metadata objectForKey: @"FolderSyncKey"])
     {
       // Synchronization key mismatch or invalid synchronization key
       //NSLog(@"FolderSync syncKey mismatch %@ <> %@", syncKey, metadata);
@@ -854,7 +870,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
      serverId = [NSString stringWithFormat: @"mail/%@",  [[imapGUIDs objectForKey: nameInCache] substringFromIndex: 6]];
      name = [folderMetadata objectForKey: @"displayName"];
-          
+
+     // avoid duplicate folders if folder is returned by different imap namespaces
+     if ([processedFolders indexOfObject: serverId] == NSNotFound)
+       [processedFolders addObject: serverId];
+     else
+       continue;
+
      if ([name hasPrefix: @"/"])
        name = [name substringFromIndex: 1];
           
@@ -866,7 +888,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          
      if ([folderMetadata objectForKey: @"parent"])
        {
-         parentId = [NSString stringWithFormat: @"mail/%@", [[imapGUIDs objectForKey: [NSString stringWithFormat: @"folder%@",  [[folderMetadata objectForKey: @"parent"] substringFromIndex: 1]]] substringFromIndex: 6]];
+         // make sure that parent of main-folders is always 0
+         if (type == 12)
+            parentId = [NSString stringWithFormat: @"mail/%@", [[imapGUIDs objectForKey: [NSString stringWithFormat: @"folder%@",  [[folderMetadata objectForKey: @"parent"] substringFromIndex: 1]]] substringFromIndex: 6]];
+
          name = [[name pathComponents] lastObject];
        }
           
@@ -917,7 +942,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          [[o properties] removeObjectForKey: @"SyncCache"];
          [[o properties] removeObjectForKey: @"DateCache"];
          [[o properties] removeObjectForKey: @"MoreAvailable"];
+         [[o properties] removeObjectForKey: @"BodyPreferenceType"];
          [[o properties] removeObjectForKey: @"SuccessfulMoveItemsOps"];
+         [[o properties] removeObjectForKey: @"InitialLoadSequence"];
          [o save];
               
          command_count++;
@@ -1001,7 +1028,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                    [[o properties] removeObjectForKey: @"SyncCache"];
                    [[o properties] removeObjectForKey: @"DateCache"];
                    [[o properties] removeObjectForKey: @"MoreAvailable"];
+                   [[o properties] removeObjectForKey: @"BodyPreferenceType"];
                    [[o properties] removeObjectForKey: @"SuccessfulMoveItemsOps"];
+                   [[o properties] removeObjectForKey: @"InitialLoadSequence"];
                  }
 
                [o save];
@@ -1023,7 +1052,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                    [[o properties] removeObjectForKey: @"SyncCache"];
                    [[o properties] removeObjectForKey: @"DateCache"];
                    [[o properties] removeObjectForKey: @"MoreAvailable"];
+                   [[o properties] removeObjectForKey: @"BodyPreferenceType"];
                    [[o properties] removeObjectForKey: @"SuccessfulMoveItemsOps"];
+                   [[o properties] removeObjectForKey: @"InitialLoadSequence"];
                  }
 
                [o save];
@@ -1073,6 +1104,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       SOGoMailAccounts *accountsFolder;
       SOGoUserFolder *userFolder;
       SOGoMailObject *mailObject;
+      NSArray *partKeys;
+      int p;
 
       NSRange r1, r2;
 
@@ -1092,7 +1125,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                                             acquire: NO];
 
       mailObject = [currentCollection lookupName: messageName  inContext: context  acquire: NO];
-      currentBodyPart = [mailObject lookupImap4BodyPartKey: pathToPart  inContext: context];
+
+      partKeys = [pathToPart componentsSeparatedByString: @"."];
+
+      currentBodyPart = [mailObject lookupImap4BodyPartKey: [partKeys objectAtIndex:0]  inContext: context];
+      for (p = 1; p < [partKeys count]; p++)
+        {
+          currentBodyPart = [currentBodyPart lookupImap4BodyPartKey: [partKeys objectAtIndex:p]  inContext: context];
+        }
 
       [theResponse setHeader: [NSString stringWithFormat: @"%@/%@", [[currentBodyPart partInfo] objectForKey: @"type"], [[currentBodyPart partInfo] objectForKey: @"subtype"]]
                  forKey: @"Content-Type"];
@@ -1127,6 +1167,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   id currentCollection;
   NSMutableString *s;
   NSData *d;
+  NSArray *allCollections;
+  int j;
 
   SOGoMicrosoftActiveSyncFolderType folderType;
   int status, count;
@@ -1135,66 +1177,72 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   status = 1;
   count = 0;
 
-  collectionId = [[(id)[theDocumentElement getElementsByTagName: @"CollectionId"] lastObject] textValue];
-  realCollectionId = [collectionId realCollectionIdWithFolderType: &folderType];
-
-  if (folderType == ActiveSyncMailFolder)
-     nameInCache = [NSString stringWithFormat: @"folder%@", realCollectionId];
-  else
-     nameInCache = collectionId;
-
-  realCollectionId = [self globallyUniqueIDToIMAPFolderName: realCollectionId  type: folderType];
-
-  currentCollection = [self collectionFromId: realCollectionId  type: folderType];
-  
-  //
-  // For IMAP, we simply build a request like this:
-  //
-  // . UID SORT (SUBJECT) UTF-8 SINCE 1-Jan-2014 NOT DELETED
-  // * SORT 124576 124577 124579 124578
-  // . OK Completed (4 msgs in 0.000 secs)
-  //
-  if (folderType == ActiveSyncMailFolder)
-    {
-      EOQualifier *notDeletedQualifier, *sinceDateQualifier;
-      EOAndQualifier *qualifier;
-      NSCalendarDate *filter;
-      NSArray *uids;
-
-      filter = [NSCalendarDate dateFromFilterType: [[(id)[theDocumentElement getElementsByTagName: @"FilterType"] lastObject] textValue]];
-      
-      notDeletedQualifier =  [EOQualifier qualifierWithQualifierFormat:
-                                            @"(not (flags = %@))",
-                                          @"deleted"];
-      sinceDateQualifier = [EOQualifier qualifierWithQualifierFormat:
-                                          @"(DATE >= %@)", filter];
-      
-      qualifier = [[EOAndQualifier alloc] initWithQualifiers: notDeletedQualifier, sinceDateQualifier,
-                                          nil];
-      AUTORELEASE(qualifier);
-      
-      uids = [currentCollection fetchUIDsMatchingQualifier: qualifier
-                                              sortOrdering: @"REVERSE ARRIVAL"
-                                                  threaded: NO];
-      count = [uids count];
-      
-      // Add the number of UIDs expected to "soft delete"
-      count += [self _softDeleteCountWithFilter: filter collectionId: nameInCache];
-
-    }
-  else
-    {
-      count = [[currentCollection toOneRelationshipKeys] count];
-    }
-      
   [s appendString: @"<?xml version=\"1.0\" encoding=\"utf-8\"?>"];
   [s appendString: @"<!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\">"];
-  [s appendFormat: @"<GetItemEstimate xmlns=\"GetItemEstimate:\"><Response><Status>%d</Status><Collection>", status];
+  [s appendString: @"<GetItemEstimate xmlns=\"GetItemEstimate:\">"];
+
+  allCollections = (id)[theDocumentElement getElementsByTagName: @"Collection"];
+
+  for (j = 0; j < [allCollections count]; j++)
+     {
+       collectionId = [[(id)[[allCollections objectAtIndex: j] getElementsByTagName: @"CollectionId"] lastObject] textValue];
+       realCollectionId = [collectionId realCollectionIdWithFolderType: &folderType];
+       
+       if (folderType == ActiveSyncMailFolder)
+         nameInCache = [NSString stringWithFormat: @"folder%@", realCollectionId];
+       else
+         nameInCache = collectionId;
+
+       realCollectionId = [self globallyUniqueIDToIMAPFolderName: realCollectionId  type: folderType];
+
+       currentCollection = [self collectionFromId: realCollectionId  type: folderType];
   
-  [s appendFormat: @"<CollectionId>%@</CollectionId>", collectionId];
-  [s appendFormat: @"<Estimate>%d</Estimate>", count];
+       //
+       // For IMAP, we simply build a request like this:
+       //
+       // . UID SORT (SUBJECT) UTF-8 SINCE 1-Jan-2014 NOT DELETED
+       // * SORT 124576 124577 124579 124578
+       // . OK Completed (4 msgs in 0.000 secs)
+       //
+       if (folderType == ActiveSyncMailFolder)
+         {
+           NSCalendarDate *filter;
+           NSString *syncKey;
+           NSArray *allMessages;
+
+           filter = [NSCalendarDate dateFromFilterType: [[(id)[[allCollections objectAtIndex: j] getElementsByTagName: @"FilterType"] lastObject] textValue]];
+           syncKey = [[(id)[[allCollections objectAtIndex: j] getElementsByTagName: @"SyncKey"] lastObject] textValue];
+      
+           allMessages = [currentCollection syncTokenFieldsWithProperties: nil  matchingSyncToken: syncKey  fromDate: filter initialLoad: NO];
+
+           count = [allMessages count];
+      
+           // Add the number of UIDs expected to "soft delete"
+           count += [self _softDeleteCountWithFilter: filter collectionId: nameInCache];
+         }
+       else
+         {
+           count = [[currentCollection toOneRelationshipKeys] count];
+         }
+      
+
+       [s appendString: @"<Response>"];
+       [s appendFormat: @"<Status>%d</Status><Collection>", status];
+
+       if (folderType == ActiveSyncMailFolder)
+         [s appendString: @"<Class>Email</Class>"];
+       else if (folderType == ActiveSyncContactFolder)
+         [s appendString: @"<Class>Contacts</Class>"];
+       else if (folderType == ActiveSyncEventFolder)
+         [s appendString: @"<Class>Calendar</Class>"];
+       else if (folderType == ActiveSyncTaskFolder)
+         [s appendString: @"<Class>Tasks</Class>"];
+
+       [s appendFormat: @"<CollectionId>%@</CollectionId>",collectionId];
+       [s appendFormat: @"<Estimate>%d</Estimate></Collection></Response>", count];
+     }
   
-  [s appendString: @"</Collection></Response></GetItemEstimate>"];
+  [s appendString: @"</GetItemEstimate>"];
 
   d = [[s dataUsingEncoding: NSUTF8StringEncoding] xml2wbxml];
   
@@ -1215,10 +1263,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 - (void) processItemOperations: (id <DOMElement>) theDocumentElement
                     inResponse: (WOResponse *) theResponse
 {
-  NSString *fileReference, *realCollectionId; 
+  NSString *fileReference, *realCollectionId, *serverId, *bodyPreferenceType, *collectionId;
   NSMutableString *s;
   NSArray *fetchRequests;
   id aFetch;
+  NSData *d;
   int i;
 
   SOGoMicrosoftActiveSyncFolderType folderType;
@@ -1228,8 +1277,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   [s appendString: @"<?xml version=\"1.0\" encoding=\"utf-8\"?>"];
   [s appendString: @"<!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\">"];
   [s appendString: @"<ItemOperations xmlns=\"ItemOperations:\">"];
-  [s appendString: @"<Status>1</Status>"];
-  [s appendString: @"<Response>"];
 
   fetchRequests = (id)[theDocumentElement getElementsByTagName: @"Fetch"];
   
@@ -1237,17 +1284,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     {
       NSMutableData *bytes, *parts;
       NSMutableArray *partLength;
-      NSData *d;
 
       bytes = [NSMutableData data];
       parts = [NSMutableData data];
       partLength = [NSMutableArray array];
 
+      [s appendString: @"<Status>1</Status>"];
+      [s appendString: @"<Response>"];
+
       for (i = 0; i < [fetchRequests count]; i++)
         {
           aFetch = [fetchRequests objectAtIndex: i];
           fileReference = [[[(id)[aFetch getElementsByTagName: @"FileReference"] lastObject] textValue] stringByUnescapingURL];
-          realCollectionId = [fileReference realCollectionIdWithFolderType: &folderType];
+          collectionId = [[(id)[theDocumentElement getElementsByTagName: @"CollectionId"] lastObject] textValue];
+
+          // its either a itemOperation to fetch an attachment or an email
+          if ([fileReference length])
+             realCollectionId = [fileReference realCollectionIdWithFolderType: &folderType];
+          else
+             realCollectionId = [collectionId realCollectionIdWithFolderType: &folderType];
 
           if (folderType == ActiveSyncMailFolder)
             {
@@ -1257,43 +1312,80 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               SOGoUserFolder *userFolder;
               SOGoMailObject *mailObject;
 
-              NSRange r1, r2;
-
-              r1 = [realCollectionId rangeOfString: @"/"];
-              r2 = [realCollectionId rangeOfString: @"/"  options: 0  range: NSMakeRange(NSMaxRange(r1)+1, [realCollectionId length]-NSMaxRange(r1)-1)];
-      
-              folderName = [realCollectionId substringToIndex: r1.location];
-              messageName = [realCollectionId substringWithRange: NSMakeRange(NSMaxRange(r1), r2.location-r1.location-1)];
-              pathToPart = [realCollectionId substringFromIndex: r2.location+1];
-
-              userFolder = [[context activeUser] homeFolderInContext: context];
-              accountsFolder = [userFolder lookupName: @"Mail"  inContext: context  acquire: NO];
-              currentFolder = [accountsFolder lookupName: @"0"  inContext: context  acquire: NO];
-
-              currentCollection = [currentFolder lookupName: [NSString stringWithFormat: @"folder%@", folderName]
-                                                  inContext: context
-                                                    acquire: NO];
-
-              mailObject = [currentCollection lookupName: messageName  inContext: context  acquire: NO];
-              currentBodyPart = [mailObject lookupImap4BodyPartKey: pathToPart  inContext: context];
-
-              [s appendString: @"<Fetch>"];
-              [s appendString: @"<Status>1</Status>"];
-              [s appendFormat: @"<FileReference xmlns=\"AirSyncBase:\">%@</FileReference>", [fileReference stringByEscapingURL]];
-              [s appendString: @"<Properties>"];
-
-              [s appendFormat: @"<ContentType xmlns=\"AirSyncBase:\">%@/%@</ContentType>", [[currentBodyPart partInfo] objectForKey: @"type"], [[currentBodyPart partInfo] objectForKey: @"subtype"]];
-
-              if ([[theResponse headerForKey: @"Content-Type"] isEqualToString:@"application/vnd.ms-sync.multipart"])
+              if ([fileReference length])
                 {
-                  [s appendFormat: @"<Part>%d</Part>", i+1];
-                  [partLength addObject: [NSNumber numberWithInteger: [[currentBodyPart fetchBLOB] length]]];
-                  [parts  appendData:[currentBodyPart fetchBLOB]];
+                  // fetch attachment
+                  NSRange r1, r2;
+                  NSArray *partKeys;
+                  int p;
+
+                  r1 = [realCollectionId rangeOfString: @"/"];
+                  r2 = [realCollectionId rangeOfString: @"/"  options: 0  range: NSMakeRange(NSMaxRange(r1)+1, [realCollectionId length]-NSMaxRange(r1)-1)];
+      
+                  folderName = [realCollectionId substringToIndex: r1.location];
+                  messageName = [realCollectionId substringWithRange: NSMakeRange(NSMaxRange(r1), r2.location-r1.location-1)];
+                  pathToPart = [realCollectionId substringFromIndex: r2.location+1];
+
+                  userFolder = [[context activeUser] homeFolderInContext: context];
+                  accountsFolder = [userFolder lookupName: @"Mail"  inContext: context  acquire: NO];
+                  currentFolder = [accountsFolder lookupName: @"0"  inContext: context  acquire: NO];
+
+                  currentCollection = [currentFolder lookupName: [NSString stringWithFormat: @"folder%@", folderName]
+                                                      inContext: context
+                                                        acquire: NO];
+
+                  mailObject = [currentCollection lookupName: messageName  inContext: context  acquire: NO];
+
+                  partKeys = [pathToPart componentsSeparatedByString: @"."];
+
+                  currentBodyPart = [mailObject lookupImap4BodyPartKey: [partKeys objectAtIndex:0]  inContext: context];
+                  for (p = 1; p < [partKeys count]; p++)
+                  {
+                    currentBodyPart = [currentBodyPart lookupImap4BodyPartKey: [partKeys objectAtIndex:p]  inContext: context];
+                  }
+                  
+                  [s appendString: @"<Fetch>"];
+                  [s appendString: @"<Status>1</Status>"];
+                  [s appendFormat: @"<FileReference xmlns=\"AirSyncBase:\">%@</FileReference>", [fileReference stringByEscapingURL]];
+                  [s appendString: @"<Properties>"];
+
+                  [s appendFormat: @"<ContentType xmlns=\"AirSyncBase:\">%@/%@</ContentType>", [[currentBodyPart partInfo] objectForKey: @"type"], [[currentBodyPart partInfo] objectForKey: @"subtype"]];
+
+                  if ([[theResponse headerForKey: @"Content-Type"] isEqualToString:@"application/vnd.ms-sync.multipart"])
+                    {
+                      NSData *d;
+                      d = [currentBodyPart fetchBLOB];
+
+                      [s appendFormat: @"<Part>%d</Part>", i+1];
+                      [partLength addObject: [NSNumber numberWithInteger: [d length]]];
+                      [parts appendData: d];
+                    }
+                  else
+                    {
+                      NSString *a;
+                      a = [[currentBodyPart fetchBLOB] activeSyncRepresentationInContext: context];
+
+                      [s appendFormat: @"<Range>0-%d</Range>", [a length]-1];
+                      [s appendFormat: @"<Data>%@</Data>", a];
+                    }
                 }
               else
                 {
-                  [s appendFormat: @"<Range>0-%d</Range>", [[[currentBodyPart fetchBLOB] activeSyncRepresentationInContext: context] length]-1];
-                  [s appendFormat: @"<Data>%@</Data>", [[currentBodyPart fetchBLOB] activeSyncRepresentationInContext: context]];
+                  // fetch mail
+                  realCollectionId = [self globallyUniqueIDToIMAPFolderName: realCollectionId  type: folderType];
+                  serverId = [[(id)[theDocumentElement getElementsByTagName: @"ServerId"] lastObject] textValue];
+                  bodyPreferenceType = [[(id)[[(id)[theDocumentElement getElementsByTagName: @"BodyPreference"] lastObject] getElementsByTagName: @"Type"] lastObject] textValue];
+                  [context setObject: bodyPreferenceType  forKey: @"BodyPreferenceType"];
+
+                  currentCollection = [self collectionFromId: realCollectionId  type: folderType];
+
+                  mailObject = [currentCollection lookupName: serverId  inContext: context  acquire: NO];
+                  [s appendString: @"<Fetch>"];
+                  [s appendString: @"<Status>1</Status>"];
+                  [s appendFormat: @"<CollectionId xmlns=\"AirSyncBase:\">%@</CollectionId>", collectionId];
+                  [s appendFormat: @"<ServerId xmlns=\"AirSyncBase:\">%@</ServerId>", serverId];
+                  [s appendString: @"<Properties>"];
+                  [s appendString: [mailObject activeSyncRepresentationInContext: context]];
                 }
 
               [s appendString: @"</Properties>"];
@@ -1346,6 +1438,62 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       else
         {
           [theResponse setContent: d];
+        }
+    } 
+  else if ([theDocumentElement getElementsByTagName: @"EmptyFolderContents"])
+    {
+      NGImap4Connection *connection;
+      NSEnumerator *subfolders;
+      NSException *error;
+      NSURL *currentURL;
+      id co; 
+
+      collectionId = [[(id)[theDocumentElement getElementsByTagName: @"CollectionId"] lastObject] textValue];
+      realCollectionId = [collectionId realCollectionIdWithFolderType: &folderType];
+      realCollectionId = [self globallyUniqueIDToIMAPFolderName: realCollectionId  type: folderType];
+
+      if (folderType == ActiveSyncMailFolder)
+        {
+          co = [self collectionFromId: realCollectionId  type: folderType];
+          error = [co addFlagsToAllMessages: @"deleted"];
+
+          if (!error)
+            error = [(SOGoMailFolder *)co expunge];
+
+          if (!error)
+            {
+              [co flushMailCaches];
+
+              if ([theDocumentElement getElementsByTagName: @"DeleteSubFolders"])
+                {
+                  // Delete sub-folders 
+                  connection = [co imap4Connection];
+                  subfolders = [[co allFolderURLs] objectEnumerator];
+
+                  while ((currentURL = [subfolders nextObject]))
+                    {
+                      [[connection client] unsubscribe: [currentURL path]];
+                      [connection deleteMailboxAtURL: currentURL];
+                    }
+                }
+
+              [s appendString: @"<Status>1</Status>"];
+              [s appendString: @"</ItemOperations>"];
+            }
+
+          if (error)
+            {
+              [s appendString: @"<Status>3</Status>"];
+              [s appendString: @"</ItemOperations>"];
+            }
+
+          d = [[s dataUsingEncoding: NSUTF8StringEncoding] xml2wbxml];
+          [theResponse setContent: d];
+        }
+      else
+        {
+          [theResponse setStatus: 500];
+          return;
         }
     }
 }
@@ -1443,6 +1591,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           appointmentObject = [collection lookupName: [NSString stringWithFormat: @"%@.ics", [event uid]]
                                            inContext: context
                                              acquire: NO];
+
+          // Create the appointment if it is not added to calendar yet
+          if ([appointmentObject isKindOfClass: [NSException class]])
+            {
+              appointmentObject = [[SOGoAppointmentObject alloc] initWithName: [NSString stringWithFormat: @"%@.ics", [event uid]]
+                                                                  inContainer: collection];
+              [appointmentObject saveComponent: event];
+           }
         }
     }
      
@@ -1478,7 +1634,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     }
   else
     {
-      [theResponse setStatus: 500];
+      [s appendString: @"<?xml version=\"1.0\" encoding=\"utf-8\"?>"];
+      [s appendString: @"<!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\">"];
+      [s appendString: @"<MeetingResponse xmlns=\"MeetingResponse:\">"];
+      [s appendString: @"<Result>"];
+      [s appendFormat: @"<RequestId>%@</RequestId>", requestId];
+      [s appendFormat: @"<Status>%d</Status>", 2];
+      [s appendString: @"</Result>"];
+      [s appendString: @"</MeetingResponse>"];
+      d = [[s dataUsingEncoding: NSUTF8StringEncoding] xml2wbxml];
+
+      [theResponse setContent: d];
     }
 }
 
@@ -1592,10 +1758,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               //
               // See http://msdn.microsoft.com/en-us/library/gg651088(v=exchg.80).aspx for Status response codes.
               //
+              [s appendFormat: @"<SrcMsgId>%@</SrcMsgId>", srcMessageId];
               if ([prevSuccessfulMoveItemsOps objectForKey: srcMessageId])
                 {
                   // Previous move failed operation but we can recover the dstMessageId from previous request
-                  [s appendFormat: @"<SrcMsgId>%@</SrcMsgId>", srcMessageId];
                   [s appendFormat: @"<DstMsgId>%@</DstMsgId>", [prevSuccessfulMoveItemsOps objectForKey: srcMessageId]];
                   [s appendFormat: @"<Status>%d</Status>", 3];
                   [newSuccessfulMoveItemsOps setObject: [prevSuccessfulMoveItemsOps objectForKey: srcMessageId]  forKey: srcMessageId];
@@ -1929,6 +2095,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   [s appendString: @"<?xml version=\"1.0\" encoding=\"utf-8\"?>"];
   [s appendString: @"<!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\">"];
   [s appendString: @"<Provision xmlns=\"Provision:\">"];
+  [s appendString: @"<AllowHTMLEmail>1</AllowHTMLEmail>"];
   [s appendString: @"</Provision>"];
   
   d = [[s dataUsingEncoding: NSUTF8StringEncoding] xml2wbxml];
@@ -2079,13 +2246,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             inResponse: (WOResponse *) theResponse
 {
   SOGoContactSourceFolder *currentFolder;
+  NSArray *allKeys, *allContacts, *mails;
   NSDictionary *systemSources, *contact;
+  NSString *name, *query, *current_mail;
   SOGoContactFolders *contactFolders;
-  NSArray *allKeys, *allContacts;
   SOGoUserFolder *userFolder;
-  NSString *name, *query;
   NSMutableString *s;
   NSData *d;
+  id o;
 
   int i, j, total;
             
@@ -2136,18 +2304,50 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           
           // We get the LDIF entry of our record, for easier processing
           contact = [[currentFolder lookupName: [contact objectForKey: @"c_name"] inContext: context  acquire: NO] ldifRecord];
-          
-          [s appendString: @"<Result xmlns=\"Search:\">"];
-          [s appendString: @"<Properties>"];
-          [s appendFormat: @"<DisplayName xmlns=\"Gal:\">%@</DisplayName>", [contact objectForKey: @"displayname"]];
-          [s appendFormat: @"<FirstName xmlns=\"Gal:\">%@</FirstName>", [contact objectForKey: @"givenname"]];
-          [s appendFormat: @"<LastName xmlns=\"Gal:\">%@</LastName>", [contact objectForKey: @"sn"]];
-          [s appendFormat: @"<EmailAddress xmlns=\"Gal:\">%@</EmailAddress>", [contact objectForKey: @"mail"]];
-          [s appendFormat: @"<Phone xmlns=\"Gal:\">%@</Phone>", [contact objectForKey: @"telephonenumber"]];
-          [s appendFormat: @"<Company xmlns=\"Gal:\">%@</Company>", [contact objectForKey: @"o"]];
-          [s appendString: @"</Properties>"];
-          [s appendString: @"</Result>"];
-          total++;
+ 
+          o = [contact objectForKey: @"mail"];
+          if ([o isKindOfClass: [NSArray class]])
+            mails = o;
+          else
+            mails = [NSArray arrayWithObjects: o ? o : @"", nil];
+
+          for (total = 0; total < [mails count]; total++)
+            {
+              current_mail = [mails objectAtIndex: total];
+              
+              [s appendString: @"<Result xmlns=\"Search:\">"];
+              [s appendString: @"<Properties>"];
+              
+              if ((o = [contact objectForKey: @"displayname"]))
+                [s appendFormat: @"<DisplayName xmlns=\"Gal:\">%@</DisplayName>", o];
+              
+              if ((o = [contact objectForKey: @"title"]))
+                [s appendFormat: @"<Title xmlns=\"Gal:\">%@</Title>", o];
+              
+              if ((o = [contact objectForKey: @"givenname"]))
+                [s appendFormat: @"<FirstName xmlns=\"Gal:\">%@</FirstName>", o];
+              
+              if ((o = [contact objectForKey: @"sn"]))
+                [s appendFormat: @"<LastName xmlns=\"Gal:\">%@</LastName>", o];
+              
+              if ([current_mail length] > 0)
+                [s appendFormat: @"<EmailAddress xmlns=\"Gal:\">%@</EmailAddress>", current_mail];
+              
+              if ((o = [contact objectForKey: @"telephonenumber"]))
+                [s appendFormat: @"<Phone xmlns=\"Gal:\">%@</Phone>", o];
+              
+              if ((o = [contact objectForKey: @"homephone"]))
+                [s appendFormat: @"<HomePhone xmlns=\"Gal:\">%@</HomePhone>", o];
+              
+              if ((o = [contact objectForKey: @"mobile"]))
+                [s appendFormat: @"<MobilePhone xmlns=\"Gal:\">%@</MobilePhone>", o];
+              
+              if ((o = [contact objectForKey: @"o"]))
+                [s appendFormat: @"<Company xmlns=\"Gal:\">%@</Company>", o];
+              
+              [s appendString: @"</Properties>"];
+              [s appendString: @"</Result>"];
+            }
         }        
     }
   
@@ -2254,7 +2454,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   error = [self _sendMail: data
                recipients: [message allRecipients]
-                saveInSentItems:  ([(id)[theDocumentElement getElementsByTagName: @"SaveInSentItems"] count] ? YES : NO)];
+                saveInSentItems: ([(id)[theDocumentElement getElementsByTagName: @"SaveInSentItems"] count] ? YES : NO)];
 
   if (error)
     {
@@ -2323,29 +2523,36 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 }
 
 
-//
-// <?xml version="1.0"?>
-// <!DOCTYPE ActiveSync PUBLIC "-//MICROSOFT//DTD ActiveSync//EN" "http://www.microsoft.com/">
-// <SmartForward xmlns="ComposeMail:">
-//  <ClientId>C9FF94FE-EA40-473A-B3E2-AAEE94F753A4</ClientId>
-//  <SaveInSentItems/>
-//  <ReplaceMime/>
-//  <Source>
-//   <FolderId>mail/INBOX</FolderId>
-//   <ItemId>82</ItemId>
-//  </Source>
-//  <MIME>... the data ...</MIME>
-// </SmartForward>
-//
-- (void) processSmartForward: (id <DOMElement>) theDocumentElement
-                  inResponse: (WOResponse *) theResponse
+- (void) _processSmartCommand: (id <DOMElement>) theDocumentElement
+                   inResponse: (WOResponse *) theResponse
+               isSmartForward: (BOOL ) isSmartForward
 {
   NSString *folderId, *itemId, *realCollectionId;
   SOGoMicrosoftActiveSyncFolderType folderType;
+  SOGoUserDefaults *ud;
+
+  BOOL htmlComposition, isHTML;
   id value;
+  
+  isHTML = NO;
+  ud = [[context activeUser] userDefaults];
 
   folderId = [[(id)[theDocumentElement getElementsByTagName: @"FolderId"] lastObject] textValue];
+
+  // if folderId is not there try to get it from URL
+  if (!folderId)
+    {
+     folderId = [[[context request] uri] collectionid];
+    }
+
   itemId = [[(id)[theDocumentElement getElementsByTagName: @"ItemId"] lastObject] textValue];
+
+  // if itemId is not there try to get it from URL
+  if (!itemId)
+    {
+     itemId = [[[context request] uri] itemid];
+    }
+
   realCollectionId = [folderId realCollectionIdWithFolderType: &folderType];
   realCollectionId = [self globallyUniqueIDToIMAPFolderName: realCollectionId  type: folderType];
 
@@ -2377,10 +2584,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       NGMutableHashMap *map;
       NGMimeFileData *fdata;
       NSException *error;
+      NSArray *attachmentKeys;
+      NSMutableArray *attachments, *references;
 
-      id body, bodyFromSmartForward;
-      NSString *fullName, *email;
+      id body, bodyFromSmartForward, htmlPart, textPart;
+      NSString *fullName, *email, *charset, *s;
       NSDictionary *identity;
+
+      int a;
 
       userFolder = [[context activeUser] homeFolderInContext: context];
       accountsFolder = [userFolder lookupName: @"Mail"  inContext: context  acquire: NO];
@@ -2391,7 +2602,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                                             acquire: NO];
 
       mailObject = [currentCollection lookupName: itemId  inContext: context  acquire: NO];
-
 
       parser = [[NGMimeMessageParser alloc] init];
       data = [[[[(id)[theDocumentElement getElementsByTagName: @"MIME"] lastObject] textValue] stringByDecodingBase64] dataUsingEncoding: NSUTF8StringEncoding];
@@ -2413,6 +2623,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       else
         [map setObject: email forKey: @"from"];
 
+      if ([mailObject messageId])
+        {
+          [map setObject: [mailObject messageId] forKey: @"in-reply-to"];
+
+          references = [[[[[mailObject mailHeaders] objectForKey: @"references"] componentsSeparatedByString: @" "] mutableCopy] autorelease];
+
+          // If there is no References: header, initialize it with In-Reply-To.
+          if ([mailObject inReplyTo] && ![references count])
+             references = [NSMutableArray arrayWithObject: [mailObject inReplyTo]];
+
+          if ([references count] > 0)
+            {
+              // If there are more than ten identifiers listed, we eliminate the second one.
+              if ([references count] >= 10)
+                [references removeObjectAtIndex: 1];
+
+              [references addObject: [mailObject messageId]];
+
+              [map setObject: [references componentsJoinedByString:@" "] forKey: @"references"];
+            }
+          else
+            {
+              [map setObject: [mailObject messageId] forKey: @"references"];
+            }
+        }
+
       messageToSend = [[[NGMimeMessage alloc] initWithHeader: map] autorelease];
       body = [[[NGMimeMultipartBody alloc] initWithPart: messageToSend] autorelease];
       
@@ -2420,12 +2656,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       // we take the first part text/* part we see.
       map = [[[NGMutableHashMap alloc] initWithCapacity: 1] autorelease];
       bodyFromSmartForward = nil;
+      textPart = nil;
+      htmlPart = nil;
+
+      attachments = [NSMutableArray array];
 
       if ([[messageFromSmartForward body] isKindOfClass: [NGMimeMultipartBody class]])
         {
-          NGMimeBodyPart *part;
-          NSArray *parts;
-          int i;
+          NGMimeBodyPart *part, *apart;
+          NSArray *parts, *aparts;
+          int i, j;
           
           parts = [[messageFromSmartForward body] parts];
           
@@ -2433,37 +2673,159 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             {
               part = [parts objectAtIndex: i];
               
-              if ([[[part contentType] type] isEqualToString: @"text"])
+              if ([[[part contentType] type] isEqualToString: @"multipart"] && [[[part contentType] subType] isEqualToString: @"alternative"])
                 {
-                  [map setObject: [[part contentType] stringValue] forKey: @"content-type"];
-                  bodyFromSmartForward = [part body];
-                  break;
+                  aparts = [[part body] parts];
+                  for (j = 0; j < [aparts count]; j++)
+                    {
+                      apart = [aparts objectAtIndex: j];
+                      if ([[[apart contentType] type] isEqualToString: @"text"] && [[[apart contentType] subType] isEqualToString: @"html"])
+                          htmlPart = apart;
+                      if ([[[apart contentType] type] isEqualToString: @"text"] && [[[apart contentType] subType] isEqualToString: @"plain"])
+                          textPart = apart;
+                    }
                 }
+              else 
+                {
+                  if ([[[part contentType] type] isEqualToString: @"text"] && [[[part contentType] subType] isEqualToString: @"html"])
+                     htmlPart = part;
+                  else if ([[[part contentType] type] isEqualToString: @"text"] && [[[part contentType] subType] isEqualToString: @"plain"])
+                     textPart = part;
+                  else
+                     [attachments addObject: part];
+               }
             }
         }
       else
         {
-          [map setObject: [[messageFromSmartForward contentType] stringValue] forKey: @"content-type"];
-          bodyFromSmartForward = [messageFromSmartForward body];
+          if ([[[messageFromSmartForward contentType] type] isEqualToString: @"text"] && [[[messageFromSmartForward contentType] subType] isEqualToString: @"html"])
+             htmlPart = messageFromSmartForward;
+          else
+             textPart = messageFromSmartForward;
         }
 
+      htmlComposition = [[ud mailComposeMessageType] isEqualToString: @"html"];
+
+      if (htmlComposition && htmlPart)
+        {
+          bodyFromSmartForward = [htmlPart body];
+          charset = [[htmlPart contentType] valueOfParameter: @"charset"];
+          isHTML = YES;
+        }
+      else if (!htmlComposition && !textPart)
+        {
+          bodyFromSmartForward = [htmlPart body];
+          charset = [[htmlPart contentType] valueOfParameter: @"charset"];
+          isHTML = YES;
+        } 
+      else 
+        {
+          bodyFromSmartForward = [textPart body];
+          charset = [[textPart contentType] valueOfParameter: @"charset"];
+        }
+
+      // We make sure everything is encoded in UTF-8.
+      if ([bodyFromSmartForward isKindOfClass: [NSData class]])
+        {
+          if (![charset length])
+            charset = @"utf-8";
+
+          s = [NSString stringWithData: bodyFromSmartForward usingEncodingNamed: charset];
+
+          // We fallback to ISO-8859-1 string encoding. We avoid #3103.
+          if (!s)
+            s = [[[NSString alloc] initWithData: bodyFromSmartForward  encoding: NSISOLatin1StringEncoding] autorelease];
+
+          bodyFromSmartForward = s;
+        }
+
+     if (htmlComposition && !isHTML)
+       {
+         [map setObject: @"text/html; charset=utf-8" forKey: @"content-type"];
+         bodyFromSmartForward = [[bodyFromSmartForward stringByEscapingHTMLString] stringByConvertingCRLNToHTML];
+       } 
+     else if (!htmlComposition && isHTML)
+       {
+         [map setObject: @"text/plain; charset=utf-8" forKey: @"content-type"];
+         bodyFromSmartForward = [bodyFromSmartForward htmlToText]; 
+       } 
+     else if (htmlComposition && isHTML)
+       {
+         [map setObject: @"text/html; charset=utf-8" forKey: @"content-type"];
+       }
+     else
+       {
+         [map setObject: @"text/plain; charset=utf-8" forKey: @"content-type"];
+       }
+
       bodyPart = [[[NGMimeBodyPart alloc] initWithHeader:map] autorelease];
-      [bodyPart setBody: bodyFromSmartForward];
+
+      if (isSmartForward && [[ud mailMessageForwarding] isEqualToString: @"attached"])
+        [bodyPart setBody: [bodyFromSmartForward dataUsingEncoding: NSUTF8StringEncoding]];
+      else
+        [bodyPart setBody: [[NSString stringWithFormat: @"%@%@", bodyFromSmartForward, [mailObject contentForEditing]] dataUsingEncoding: NSUTF8StringEncoding]];
+
       [body addBodyPart: bodyPart];
 
-      // Second part
-      map = [[[NGMutableHashMap alloc] initWithCapacity: 1] autorelease];
-      [map setObject: @"message/rfc822" forKey: @"content-type"];
-      [map setObject: @"8bit" forKey: @"content-transfer-encoding"];
-      bodyPart = [[[NGMimeBodyPart alloc] initWithHeader:map] autorelease];
-      
-      data = [mailObject content];
-      fdata = [[NGMimeFileData alloc] initWithBytes:[data bytes]
-                                             length:[data length]];
+      // Add attachments
+      for (a = 0; a < [attachments count]; a++)
+        {
+          [body addBodyPart: [attachments objectAtIndex: a]];
+        }
 
-      [bodyPart setBody: fdata];
-      RELEASE(fdata);
-      [body addBodyPart: bodyPart];
+      // For a forward decide whether do it inline or as an attachment.
+      if (isSmartForward)
+        {
+          if ([[ud mailMessageForwarding] isEqualToString: @"attached"])
+            {
+              map = [[[NGMutableHashMap alloc] initWithCapacity: 1] autorelease];
+              [map setObject: @"message/rfc822" forKey: @"content-type"];
+              [map setObject: @"8bit" forKey: @"content-transfer-encoding"];
+              [map addObject: [NSString stringWithFormat: @"attachment; filename=\"%@\"", [mailObject filenameForForward]] forKey: @"content-disposition"];
+              bodyPart = [[[NGMimeBodyPart alloc] initWithHeader: map] autorelease];
+
+              data = [mailObject content];
+              fdata = [[NGMimeFileData alloc] initWithBytes: [data bytes]  length: [data length]];
+
+              [bodyPart setBody: fdata];
+              RELEASE(fdata);
+              [body addBodyPart: bodyPart];
+            }
+          else
+            {
+              attachmentKeys = [mailObject fetchFileAttachmentKeys];
+              if ([attachmentKeys count])
+                {
+                  id currentAttachment;
+                  NGHashMap *response;
+                  NSData *bodydata;
+                  NSArray *paths;
+
+                  paths = [attachmentKeys keysWithFormat: @"BODY[%{path}]"];
+                  response = [[mailObject fetchParts: paths] objectForKey: @"RawResponse"];
+
+                  for (a = 0; a < [attachmentKeys count]; a++)
+                     {
+                       currentAttachment = [attachmentKeys objectAtIndex: a];
+                       bodydata = [[[response objectForKey: @"fetch"] objectForKey: [NSString stringWithFormat: @"body[%@]", [currentAttachment objectForKey: @"path"]]] valueForKey: @"data"]; 
+
+                       map = [[[NGMutableHashMap alloc] initWithCapacity: 1] autorelease];
+                       [map setObject: [currentAttachment objectForKey: @"mimetype"] forKey: @"content-type"];
+                       [map setObject: [currentAttachment objectForKey: @"encoding"] forKey: @"content-transfer-encoding"];
+                       [map addObject: [NSString stringWithFormat: @"attachment; filename=\"%@\"", [currentAttachment objectForKey: @"filename"]] forKey: @"content-disposition"];
+                       bodyPart = [[[NGMimeBodyPart alloc] initWithHeader: map] autorelease];
+
+                       fdata = [[NGMimeFileData alloc] initWithBytes:[bodydata bytes]  length:[bodydata length]];
+
+                       [bodyPart setBody: fdata];
+                       RELEASE(fdata);
+                       [body addBodyPart: bodyPart];
+                     }
+
+                }
+            }
+        }
+
       [messageToSend setBody: body];
       
       generator = [[[NGMimeMessageGenerator alloc] init] autorelease];
@@ -2490,6 +2852,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // <?xml version="1.0"?>
 // <!DOCTYPE ActiveSync PUBLIC "-//MICROSOFT//DTD ActiveSync//EN" "http://www.microsoft.com/">
+// <SmartForward xmlns="ComposeMail:">
+//  <ClientId>C9FF94FE-EA40-473A-B3E2-AAEE94F753A4</ClientId>
+//  <SaveInSentItems/>
+//  <ReplaceMime/>
+//  <Source>
+//   <FolderId>mail/INBOX</FolderId>
+//   <ItemId>82</ItemId>
+//  </Source>
+//  <MIME>... the data ...</MIME>
+// </SmartForward>
+//
+- (void) processSmartForward: (id <DOMElement>) theDocumentElement
+                  inResponse: (WOResponse *) theResponse
+{
+  [self _processSmartCommand: theDocumentElement
+                  inResponse: theResponse
+              isSmartForward: YES];
+}
+
+
+//
+// <?xml version="1.0"?>
+// <!DOCTYPE ActiveSync PUBLIC "-//MICROSOFT//DTD ActiveSync//EN" "http://www.microsoft.com/">
 // <SmartReply xmlns="ComposeMail:">
 //  <ClientId>DD40B5DC-4BDF-4A6A-9D8B-4B02BE5342CD</ClientId>
 //  <SaveInSentItems/>
@@ -2504,10 +2889,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 - (void) processSmartReply: (id <DOMElement>) theDocumentElement
                 inResponse: (WOResponse *) theResponse
 {
-  [self processSmartForward: theDocumentElement  inResponse: theResponse];
+  [self _processSmartCommand: theDocumentElement
+                  inResponse: theResponse
+              isSmartForward: NO];
 }
-
-
 
 //
 //
@@ -2520,6 +2905,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   NSAutoreleasePool *pool;
   id builder, dom;
   SEL aSelector;
+  id activeUser;
 
   NSString *cmdName, *deviceId;
   NSData *d;
@@ -2527,7 +2913,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   pool = [[NSAutoreleasePool alloc] init];
     
   ASSIGN(context, theContext);
-  
+
+  activeUser = [context activeUser];
+  if (![activeUser canAccessModule: @"ActiveSync"]) 
+    {
+      [(WOResponse *)theResponse setStatus: 403];
+      [self logWithFormat: @"EAS - Forbidden access for user %@", [activeUser loginInDomain]];
+      return nil;
+    }     
+
   // Get the device ID, device type and "stash" them
   deviceId = [[theRequest uri] deviceId];
   [context setObject: deviceId  forKey: @"DeviceId"];
@@ -2543,7 +2937,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   // If the MS-ASProtocolVersion header is set to "12.1", the body of the SendMail request is
   // is a "message/rfc822" payload - otherwise, it's a WBXML blob.
   //
-  if ([cmdName caseInsensitiveCompare: @"SendMail"] == NSOrderedSame &&
+  if (([cmdName caseInsensitiveCompare: @"SendMail"] == NSOrderedSame ||
+      [cmdName caseInsensitiveCompare: @"SmartReply"] == NSOrderedSame ||
+      [cmdName caseInsensitiveCompare: @"SmartForward"] == NSOrderedSame) &&
       [[theRequest headerForKey: @"content-type"] caseInsensitiveCompare: @"message/rfc822"] == NSOrderedSame)
     {
       NSString *s, *xml;
@@ -2561,7 +2957,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           s = [theRequest contentAsString];
         }
       
-      xml = [NSString stringWithFormat: @"<?xml version=\"1.0\"?><!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\"><SendMail xmlns=\"ComposeMail:\"><SaveInSentItems/><MIME>%@</MIME></SendMail>", [s stringByEncodingBase64]];
+      xml = [NSString stringWithFormat: @"<?xml version=\"1.0\"?><!DOCTYPE ActiveSync PUBLIC \"-//MICROSOFT//DTD ActiveSync//EN\" \"http://www.microsoft.com/\"><%@ xmlns=\"ComposeMail:\"><SaveInSentItems/><MIME>%@</MIME></%@>", cmdName, [s stringByEncodingBase64], cmdName];
+
+
       
       d = [xml dataUsingEncoding: NSASCIIStringEncoding];
     }
@@ -2586,6 +2984,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   if (d)
     {
+      if (debugOn)
+        [self logWithFormat: @"EAS - request for device %@: %@", [context objectForKey: @"DeviceId"], [[[NSString alloc] initWithData: d  encoding: NSUTF8StringEncoding] autorelease]];
+
       builder = [[[NSClassFromString(@"DOMSaxBuilder") alloc] init] autorelease];
       dom = [builder buildFromData: d];
       documentElement = [dom documentElement];
@@ -2603,7 +3004,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   aSelector = NSSelectorFromString(cmdName);
 
   // The -processItemOperations: method will generate a multipart response when Content-Type is application/vnd.ms-sync.multipart
-  if ([[theRequest headerForKey: @"MS-ASAcceptMultiPart"] isEqualToString:@"T"])
+  if (([cmdName rangeOfString: @"ItemOperations" options: NSCaseInsensitiveSearch].location != NSNotFound) &&
+      ([[theRequest headerForKey: @"MS-ASAcceptMultiPart"] isEqualToString:@"T"] || [[theRequest uri] acceptsMultiPart]))
     [theResponse setHeader: @"application/vnd.ms-sync.multipart"  forKey: @"Content-Type"];
   else 
     [theResponse setHeader: @"application/vnd.ms-sync.wbxml"  forKey: @"Content-Type"];
@@ -2613,6 +3015,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   [theResponse setHeader: @"14.1"  forKey: @"MS-Server-ActiveSync"];
   [theResponse setHeader: @"Sync,SendMail,SmartForward,SmartReply,GetAttachment,GetHierarchy,CreateCollection,DeleteCollection,MoveCollection,FolderSync,FolderCreate,FolderDelete,FolderUpdate,MoveItems,GetItemEstimate,MeetingResponse,Search,Settings,Ping,ItemOperations,ResolveRecipients,ValidateCert"  forKey: @"MS-ASProtocolCommands"];
   [theResponse setHeader: @"2.5,12.0,12.1,14.0,14.1"  forKey: @"MS-ASProtocolVersions"];
+
+  if (debugOn && [[theResponse content] length])
+    [self logWithFormat: @"EAS - response for device %@: %@", [context objectForKey: @"DeviceId"], [[[NSString alloc] initWithData: [[theResponse content] wbxml2xml] encoding: NSUTF8StringEncoding] autorelease]];
 
   RELEASE(context);
   RELEASE(pool);
@@ -2644,7 +3049,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
              parts in this url. We strip the '-' character in case we have
              this in the domain part - like foo@bar-zot.com */
           ocFSTableName = [NSMutableString stringWithFormat: @"sogo_cache_folder_%@",
-                                           [[user loginInDomain] asCSSIdentifier]];
+                                           [[user login] asCSSIdentifier]];
           [ocFSTableName replaceOccurrencesOfString: @"-"
                                          withString: @"_"
                                             options: 0

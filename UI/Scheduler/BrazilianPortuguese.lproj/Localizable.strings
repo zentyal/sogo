@@ -7,7 +7,7 @@
 "Edit this event or task" = "Editar este evento ou tarefa";
 "Print the current calendar view" = "Imprimir a visualização do calendário atual";
 "Delete this event or task" = "Apagar este evento ou tarefa";
-"Go to today" = "Vai para hoje";
+"Go to today" = "Ir para Hoje";
 "Switch to day view" = "Visualizar Dia";
 "Switch to week view" = "Visualizar Semana";
 "Switch to month view" = "Visualizar Mês";
@@ -129,7 +129,7 @@
 "Update" = "Atualizar";
 "Cancel" = "Cancelar";
 "show_rejected_apts" = "Exibir apontamentos rejeitados";
-"hide_rejected_apts" = "Ocultar apontamentos rejeitados";
+"hide_rejected_apts" = "Ocultar compromissos rejeitados";
 
 
 /* Schedule */
@@ -144,14 +144,14 @@
 "decline" = "Declinar";
 "more attendees" = "Mais Participantes";
 "Hide already accepted and rejected appointments" = "Ocultar apontamentos já aceitos e rejeitados";
-"Show already accepted and rejected appointments" = "Exibir apontamentos já aceitos e rejeitados";
+"Show already accepted and rejected appointments" = "Exibir compromissos já aceitos e rejeitados";
 
 /* Print view */
 
 "LIST" = "Lista";
 "Print Settings" = "Configurações de Impressão";
-"Title:" = "Título:";
-"Layout:" = "Layout:";
+"Title" = "Título";
+"Layout" = "Layout";
 "What to Print" = "O que imprimir";
 "Options" = "Opções";
 "Tasks with no due date" = "Tarefas sem data de vencimento";
@@ -163,38 +163,38 @@
 
 /* Appointments */
 
-"Appointment viewer" = "Visualizador de Apontamentos";
-"Appointment editor" = "Editor de Apontamento";
-"Appointment proposal" = "Apontamento Proposto";
-"Appointment on" = "Apontamento em";
-"Start:" = "Inicio:";
-"End:" = "Fim:";
-"Due Date:" = "Data:";
-"Title:" = "Título:";
-"Calendar:" = "Calendário:";
+"Appointment viewer" = "Visualizador de Compromissos";
+"Appointment editor" = "Editor de Compromisso";
+"Appointment proposal" = "Compromisso Proposto";
+"Appointment on" = "Compromisso em";
+"Start" = "Inicio";
+"End" = "Fim";
+"Due Date" = "Data";
+"Title" = "Título";
+"Calendar" = "Calendário";
 "Name" = "Nome";
 "Email" = "Correio";
-"Status:" = "Status:";
+"Status" = "Status";
 "% complete" = "% completado";
-"Location:" = "Localização:";
-"Priority:" = "Prioridade:";
+"Location" = "Localização";
+"Priority" = "Prioridade";
 "Privacy" = "Privacidade";
 "Cycle" = "Ciclo";
 "Cycle End" = "Ciclo Final";
 "Categories" = "Categorias";
 "Classification" = "Classificação";
 "Duration" = "Duração";
-"Attendees:" = "Participantes:";
+"Attendees" = "Participantes";
 "Resources" = "Recursos";
-"Organizer:" = "Organizador:";
-"Description:" = "Descrição:";
-"Document:" = "Documento:";
-"Category:" = "Categoria:";
-"Repeat:" = "Repetir:";
-"Reminder:" = "Lembrete:";
-"General:" = "Geral:";
-"Reply:" = "Responder:";
-"Created by:" = "Criado por:";
+"Organizer" = "Organizador";
+"Description" = "Descrição";
+"Document" = "Documento";
+"Category" = "Categoria";
+"Repeat" = "Repetir";
+"Reminder" = "Lembrete";
+"General" = "Geral";
+"Reply" = "Responder";
+"Created by" = "Criado por";
 
 
 "Target:" = "Marca:";
@@ -210,7 +210,7 @@
 "Private" = "Privado";
 /* text used in overviews and tooltips */
 "empty title" = "Título Vazio";
-"private appointment" = "Apontamento privado";
+"private appointment" = "Compromisso privado";
 
 "Change..." = "Alterar...";
 
@@ -244,7 +244,7 @@
 "view_overdue" = "Tarefas em atraso";
 "view_incomplete" = "Tarefas incompletas";
 
-"View:" = "Visão:";
+"View" = "Visão";
 "Title, category or location" = "Título, categoria ou localização";
 "Entire content" = "Todo o conteúdo";
 
@@ -331,7 +331,7 @@
 "cycle_of" = "de";
 "No end date" = "Sem data final";
 "Create" = "Criar";
-"appointment(s)" = "apontamento(s)";
+"appointment(s)" = "compromisso(s)";
 "Repeat until" = "Repetir até";
 
 "First" = "Primeiro";
@@ -429,7 +429,7 @@ validate_endbeforestart    = "A data que você informou ocorre antes da data ini
 
 /* menu */
 "New Event..." = "Novo Evento...";
-"New Task..." = "Neva Tarefa...";
+"New Task..." = "Nova Tarefa";
 "Edit Selected Event..." = "Editar o Evento Selecionado...";
 "Delete Selected Event" = "Apagar o Evento Selecionado";
 "Select All" = "Selecionar Tudo";
@@ -471,7 +471,7 @@ validate_endbeforestart    = "A data que você informou ocorre antes da data ini
 "Work days only" = "Somente dias de trabalho";
 "The whole day" = "O dia inteiro";
 "Between" = "Entre";
-"and" = "and";
+"and" = "e";
 
 "A time conflict exists with one or more attendees.\nWould you like to keep the current settings anyway?"
 = "Existe um conflito de tempo com um ou mais participantes.\nGostaria de manter as configurações atuais?";
@@ -506,8 +506,8 @@ vtodo_class2 = "(Tarefa Confidencial)";
 "button_allOccurrences" = "Todas as ocorrências";
 
 /* Properties dialog */
-"Name:" = "Nome:";
-"Color:" = "Cor:";
+"Name" = "Nome";
+"Color" = "Cor";
 
 "Include in free-busy" = "Incluir na disponibilidade";
 
@@ -522,11 +522,11 @@ vtodo_class2 = "(Tarefa Confidencial)";
 "Notifications" = "Notificações";
 "Receive a mail when I modify my calendar" = "Receber um email quando eu modificar meu calendário";
 "Receive a mail when someone else modifies my calendar" = "Receber um email quando alguem modificar meu calendário";
-"When I modify my calendar, send a mail to:" = "Quando eu modificar meu calendário, enviar um email para:";
+"When I modify my calendar, send a mail to" = "Quando eu modificar meu calendário, enviar um email para";
 
 "Links to this Calendar" = "Links para este Calendário";
 "Authenticated User Access" = "Acesso a Usuário Autenticado";
-"CalDAV URL" = "CalDAV URL:";
+"CalDAV URL" = "CalDAV URL";
 "WebDAV ICS URL" = "WebDAV ICS URL";
 "WebDAV XML URL" = "WebDAV XML URL";
 

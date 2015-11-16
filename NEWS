@@ -1,17 +1,189 @@
-master
-------
+2.3.3 (2015-mm-dd)
+------------------
+
+New features
 
 Enhancements
- - Give support to calendar sharing invitations
- - Missing contact fields are now saved and available when sharing it
-    (Office, Profession, Manager's name, Assistant's name, Spouse/Partner, Anniversary)
- - Appointment color and importance work now between Outlooks
 
 Bug fixes
- - Fix server side crash parsing rtf emails with images (with word97 format)
- - Fix sender on importing email messages like event invitations
- - Fix Outlook crashes when modifying the view of a folder
- - Fix server side crash when reading some recurrence appointments
+
+2.3.2 (2015-09-16)
+------------------
+
+Enhancements
+ - improved EAS speed and memory usage, avoiding many IMAP LIST commands (#3294)
+ - improved EAS speed during initial syncing of large mailboxes (#3293)
+ - updated CKEditor to version 4.5.3
+
+Bug fixes
+ - fixed display of whitelisted attendees in Preferences window on Firefox (#3285)
+ - non-latin subfolder names are displayed correctly on Outlook (Zentyal)
+ - fixed several sync issues on environments with multiple users (Zentyal)
+ - folders from other users will no longer appear on your Outlook (Zentyal)
+ - use right auth in multidomain environments in contacts and calendar from Outlook (Zentyal)
+ - session fix when SOGoEnableDomainBasedUID is enabled but logins are domain-less
+ - less sync issues when setting read flag (Zentyal)
+ - attachments with non-latin filenames sent by Outlook are now received (Zentyal)
+ - support attachments from more mail clients (Zentyal)
+ - avoid conflicting message on saving a draft mail (Zentyal)
+ - less conflicting messages in Outlook while moving messages between folders (Zentyal)
+ - start/end shifting by 1 hour due to timezone change on last Sunday of October 2015 (#3344)
+ - fixed localization of calendar categories with empty profile (#3295)
+ - fixed options availability in contextual menu of Contacts module (#3342)
+
+2.3.1 (2015-07-23)
+------------------
+
+Enhancements
+ - improved EAS speed, especially when fetching big attachments
+ - now always enforce the organizer's default identity in appointments
+ - improved the handling of default calendar categories/colors (#3200) 
+ - added support for DeletesAsMoves over EAS
+ - added create-folder subcommand to sogo-tool to create contact and calendar folders
+ - group mail addresses can be used as recipient in Outlook
+ - added 'ActiveSync' module constraints
+ - updated CKEditor to version 4.5.1
+ - added Slovenian translation - thanks to Jens Riecken
+ - added Chinese (Taiwan) translation
+
+Bug fixes
+ - EAS's GetItemEstimate/ItemOperations now support fetching mails and empty folders
+ - fixed some rare cornercases in multidomain configurations
+ - properly escape folder after creation using EAS (#3237)
+ - fixed potential organizer highjacking when using EAS (#3131)
+ - properly support big characters in EAS and fix encoding QP EAS error for Outlook (#3082)
+ - properly encode id of DOM elements in Address Book module (#3239, #3245)
+ - fixed multi-domain support for sogo-tool backup/restore (#2600)
+ - fixed data ordering in events list of Calendar module (#3261)
+ - fixed data ordering in tasks list of Calendar module (#3267)
+ - Android EAS Lollipop fixes (#3268 and #3269) 
+ - improved EAS email flagging handling (#3140)
+ - fixed computation of GlobalObjectId (#3235)
+ - fixed EAS conversation ID issues on BB10 (#3152)
+ - fixed CR/LF printing in event's description (#3228)
+ - optimized Calendar module in multidomain configurations
+
+2.3.0 (2015-06-01)
+-------------------
+
+New features
+ - Internet headers are now shown in Outlook (Zentyal)
+
+Enhancements
+ - improved multipart handling using EAS
+ - added systemd startup script (PR#76)
+ - added Basque translation - thanks to Gorka Gonzalez
+ - updated Brazilian (Portuguese), Dutch, Norwegian (Bokmal), Polish, Russian, and Spanish (Spain) translations
+ - calendar sharing request support among different Outlook versions (Zentyal)
+ - improved sync speed from Outlook by non-reprocessing already downloaded unread mails (Zentyal)
+ - added support for sharing calendar invitations
+ - missing contact fields are now saved and available when sharing it (Office, Profession, Manager's name, Assistant's name, Spouse/Partner, Anniversary) (Zentyal)
+ - appointment color and importance work now between Outlooks (Zentyal)
+ - synchronize events, contacts and tasks in reverse chronological order (Zentyal)
+ - during login, we now extract the domain from the user to accelerate authentication requests on sources
+ - make sure sure email invitations can always be read by EAS clients
+ - now able to print event/task's description (new components only) in the list view (#2881)
+ - now possible to log EAS commands using the SOGoEASDebugEnabled system defaults
+ - many improvements to EAS SmartReply/SmartForward commands
+ - event invitation response mails from Outlook are now sent
+ - mail subfolders created in WebMail are created when Outlook synchronises
+ - mail root folder created in WebMail (same level INBOX) are created on Outlook logon
+
+Bug fixes
+ - now keep the BodyPreference for future EAS use and default to MIME if none set (#3146)
+ - EAS reply fix when message/rfc822 parts are included in the original mail (#3153)
+ - fixed yet an other potential crash during freebusy lookups during timezone changes
+ - fixed display of freebusy information in event attendees editor during timezone changes
+ - fixed timezone of MSExchange freebusy information
+ - fixed a potential EAS error with multiple email priority flags
+ - fixed paragraphs margins in HTML messages (#3163)
+ - fixed regression when loading the inbox for the first time
+ - fixed serialization of the PreventInvitationsWhitelist settings
+ - fixed md4 support (for NTLM password changes) with GNU TLS
+ - fixed edition of attachment URL in event/task editor
+ - sent mails are not longer in Drafts folder using Outlook (Zentyal)
+ - deleted mails are properly synced between Outlook profiles from the same account (Zentyal)
+ - does not create a mail folder in other user's mailbox (Zentyal)
+ - fix server-side crash with invalid events (Zentyal)
+ - fix setting permissions for a folder with several users (Zentyal)
+ - fix reception of calendar event invitations on optional attendees (Zentyal)
+ - fix server side crash parsing rtf without color table (Zentyal)
+ - weekly recurring events created in SOGo web interface are now shown in Outlook (Zentyal)
+ - fix exception modifications import in recurrence series (Zentyal)
+ - fix server side crash parsing rtf emails with images (with word97 format) (Zentyal)
+ - fix sender on importing email messages like event invitations (Zentyal)
+ - fix Outlook crashes when modifying the view of a folder (Zentyal)
+ - fix server side crash when reading some recurrence appointments (Zentyal)
+ - Outlook clients can use reply all functionality on multidomain environment (Zentyal)
+ - optional attendes on events are now shown properly (Zentyal)
+ - fixed the EAS maximum response size being per-folder, and not global
+ - now set MeetingMessageType only for EAS 14.1
+ - now correctly handle external invitations using EAS
+ - now correctly handle multiple email addresses in the GAL over EAS (#3102)
+ - now handle very large amount of participants correctly (#3175)
+ - fix message bodies not shown on some EAS devices (#3173)
+ - avoid appending the domain unconditionally when SOGoEnableDomainBasedUID is set to YES
+ - recurrent all day events are now shown properly in Outlook
+
+2.2.17a (2015-03-15)
+--------------------
+
+Bug fixes
+ - avoid calling -stringByReplacingOccurrencesOfString:... for old GNUstep runtime
+
+2.2.17 (2015-03-24)
+-------------------
+
+Enhancements
+ - support for mail prority using EAS
+ - immediately delete mails from EAS clients when they are marked as deleted on the IMAP server
+ - now favor login@domain as the default email address if multiple mail: fields are specified
+ - enable by default HTML mails support using EAS on Windows and BB phones
+ - now possible to configure objectClass names for LDAP groups using GroupObjectClasses (#1499)
+
+Bug fixes
+ - fixed login issue after password change (#2601)
+ - fixed potential encoding issue using EAS and 8-bit mails (#3116)
+ - multiple collections support for GetItemEstimate using EAS
+ - fixed empty sync responses for EAS 2.5 and 12.0 clients
+ - use the correct mail body element for EAS 2.5 clients
+ - fixed tasks disappearing issue with RoadSync
+ - use the correct body element for events for EAS 2.5 clients
+ - SmartReply improvements for missing body attributes
+ - do not use syncKey from cache when davCollectionTag = -1
+ - use correct mail attachment elements for EAS 2.5 clients
+ - fixed contacts lookup by UID in freebusy
+ - reduced telephone number to a single value in JSON response of contacts list
+ - fixed freebusy data when 'busy off hours' is enabled and period starts during the weekend
+ - fixed fetching of freebusy data from the Web interface
+ - fixed EAS handling of Bcc in emails (#3138)
+ - fixed Language-Region tags in Web interface (#3121)
+ - properly fallback over EAS to UTF-8 and then Latin1 for messages w/o charset (#3103)
+ - prevent potential freebusy lookup crashes during timezone changes with repetitive events
+ - improved GetItemEstimate to count all vasnished/deleted mails too
+ - improvements to EAS SyncKey handling to avoid missing mails (#3048, #3058)
+ - fixed EAS replies decoding from Outlook (#3123)
+
+2.2.16 (2015-02-12)
+-------------------
+
+New features
+ - now possible for SOGo to change the sambaNTPassword/sambaLMPassword
+ - now possible to limit automatic forwards to internal/external domains
+
+Enhancements
+ - added support for email categories using EAS (#2995)
+ - now possible to always send vacation messages (#2332)
+ - added EAS best practices to the documentation
+ - improved fetching of text parts over EAS
+ - updated Czech, Finnish, French, German and Hungarian translations
+
+Bug fixes
+ - (regression) fixed sending a message when mail module is not active (#3088)
+ - mail labels with blanks are not handled correctly (#3078)
+ - fixed BlackBerry issues sending multiple mails over EAS (#3095)
+ - fixed plain/text mails showing on one line on Android/EAS (#3055)
+ - fixed exception in sogo-tool when parsing arguments of a set operation
 
 2.2.15 (2015-01-30)
 -------------------

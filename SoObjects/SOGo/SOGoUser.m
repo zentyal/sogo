@@ -37,6 +37,7 @@
 #import <NGExtensions/NSObject+Logs.h>
 
 #import <Appointments/SOGoAppointmentFolders.h>
+#import <Contacts/SOGoContactFolders.h>
 
 #import "NSArray+Utilities.h"
 #import "SOGoCache.h"
@@ -164,10 +165,9 @@
               // The domain is probably appended to the username;
               // make sure it is defined as a domain in the configuration.
               domain = [newLogin substringFromIndex: (r.location + r.length)];
-              if ([[sd domainIds] containsObject: domain])
+              if ([[sd domainIds] containsObject: domain] &&
+                  ![sd enableDomainBasedUID])
                 newLogin = [newLogin substringToIndex: r.location];
-              else
-                domain = nil;
 
               if (domain != nil && ![sd enableDomainBasedUID])
                 // Login domains are enabled (SOGoLoginDomains) but not
@@ -196,8 +196,25 @@
           // When the user is associated to a domain, the [SOGoUser login]
           // method returns the combination login@domain while
           // [SOGoUser loginInDomain] only returns the login.
-          uid = [NSString stringWithString: realUID];
-          realUID = [NSString stringWithFormat: @"%@@%@", realUID, domain];
+          r = [realUID rangeOfString: domain  options: NSBackwardsSearch|NSCaseInsensitiveSearch];
+
+          // Do NOT strip @domain.com if SOGoEnableDomainBasedUID is enabled since
+          // the real login most likely is the email address.
+          if (r.location != NSNotFound && ![sd enableDomainBasedUID])
+            uid = [realUID substringToIndex: r.location-1];
+          // If we don't have the domain in the UID but SOGoEnableDomainBasedUID is
+          // enabled, let's add it internally so so it becomes unique across
+          // all potential domains.
+          else if (r.location == NSNotFound && [sd enableDomainBasedUID])
+            {
+              uid = [NSString stringWithString: realUID];
+              realUID = [NSString stringWithFormat: @"%@@%@", realUID, domain];
+            }
+          // We found the domain and SOGoEnableDomainBasedUID is enabled,
+          // we keep realUID.. This would happen for example if the user
+          // authenticates with foo@bar.com and the UIDFieldName is also foo@bar.com
+          else if ([sd enableDomainBasedUID])
+            uid = [NSString stringWithString: realUID];
         }
     }
 
@@ -234,7 +251,6 @@
   [currentPassword release];
   [cn release];
   [loginInDomain release];
-  //[language release];
   [super dealloc];
 }
 
@@ -577,13 +593,13 @@
 - (void) _appendSystemMailAccount
 {
   NSString *fullName, *replyTo, *imapLogin, *imapServer, *cImapServer, *signature,
-    *encryption, *scheme, *action, *query, *customEmail, *sieveServer;
+    *encryption, *scheme, *action, *query, *customEmail, *defaultEmail, *sieveServer;
   NSMutableDictionary *mailAccount, *identity, *mailboxes, *receipts;
   NSNumber *port;
   NSMutableArray *identities;
   NSArray *mails;
   NSURL *url, *cUrl;
-  unsigned int count, max;
+  unsigned int count, max, default_identity;
   NSInteger defaultPort;
 
   [self userDefaults];
@@ -661,8 +677,9 @@
       [mailAccount setObject: sieveServer  forKey: @"sieveServerName"];
     }
   
-
-  /* identities */
+  // Identities
+  defaultEmail = [NSString stringWithFormat: @"%@@%@", [self loginInDomain], [self domain]];
+  default_identity = 0;
   identities = [NSMutableArray new];
   mails = [self allEmails];
   [mailAccount setObject: [mails objectAtIndex: 0] forKey: @"name"];
@@ -702,6 +719,10 @@
           if (signature)
             [identity setObject: signature forKey: @"signature"];
           [identities addObject: identity];
+
+          if ([[identity objectForKey: @"email"] caseInsensitiveCompare: defaultEmail] == NSOrderedSame)
+            default_identity = [identities count]-1;
+
           [identity release];
         }
     }
@@ -723,10 +744,14 @@
       if (signature)
         [identity setObject: signature forKey: @"signature"];
       [identities addObject: identity];
+
+      if ([[identity objectForKey: @"email"] caseInsensitiveCompare: defaultEmail] == NSOrderedSame)
+            default_identity = [identities count]-1;
+
       [identity release];
     }
-  [[identities objectAtIndex: 0] setObject: [NSNumber numberWithBool: YES]
-                                    forKey: @"isDefault"];
+  [[identities objectAtIndex: default_identity] setObject: [NSNumber numberWithBool: YES]
+                                                   forKey: @"isDefault"];
   
   [mailAccount setObject: identities forKey: @"identities"];
   [identities release];

@@ -181,6 +181,12 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
       else
         {
           origCalendar = [sogoObject calendar: YES secure: YES];
+          if (!origCalendar)
+            {
+              [self errorWithFormat: @"Incorrect calendar event %@. Empty message is created",
+                    [self url]];
+              return self;
+            }
           calendar = [origCalendar mutableCopy];
           masterEvent = [[calendar events] objectAtIndex: 0];
           [self _setupAttachmentParts];
@@ -488,6 +494,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
   folder = [sogoObject container];
 
   /* reinstantiate the old sogo object and attach it to self */
+  [[self userContext] activate];
   woContext = [[self userContext] woContext];
   if (isNew)
     {
@@ -571,7 +578,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
     }
 }
 
-- (void) save: (TALLOC_CTX *) memCtx 
+- (void) save: (TALLOC_CTX *) memCtx
 {
   // iCalCalendar *vCalendar;
   // NSCalendarDate *now;
@@ -628,7 +635,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
                          withActiveUser: activeUser
 	                       inMemCtx: memCtx];
   [self _updateAttachedEvents];
-  [[self userContext] activateWithUser: activeUser];
+  [[self userContext] activate];
   [sogoObject updateContentWithCalendar: calendar
                             fromRequest: nil];
   [self updateVersions];
@@ -664,7 +671,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
   return newAttachment;
 }
 
-- (int) setReadFlag: (uint8_t) flag
+- (enum mapistore_error) setReadFlag: (uint8_t) flag
 {
   return MAPISTORE_SUCCESS;
 }

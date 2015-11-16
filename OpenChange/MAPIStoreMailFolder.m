@@ -52,6 +52,7 @@
 #import "MAPIStoreFAIMessage.h"
 #import "MAPIStoreMailContext.h"
 #import "MAPIStoreMailMessage.h"
+#import "MAPIStoreMailFolderTable.h"
 #import "MAPIStoreMailMessageTable.h"
 #import "MAPIStoreMapping.h"
 #import "MAPIStoreTypes.h"
@@ -66,6 +67,8 @@
 #import "MAPIStoreMailFolder.h"
 
 static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
+
+#include <gen_ndr/exchange.h>
 
 #undef DEBUG
 #include <util/attr.h>
@@ -108,6 +111,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
           [SOGoMAPIDBMessage objectWithName: @"versions.plist"
                                 inContainer: dbFolder]);
   [versionsMessage setObjectType: MAPIInternalCacheObject];
+  [versionsMessage reloadIfNeeded];
 }
 
 - (BOOL) ensureFolderExists
@@ -138,7 +142,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
       [[self mapping] updateID: fid withURL: [self url]];
       [dbFolder setNameInContainer: newNameInContainer];
       [self cleanupCaches];
-      
+
       propsCopy = [newProperties mutableCopy];
       [propsCopy removeObjectForKey: key];
       [propsCopy autorelease];
@@ -152,6 +156,11 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
 {
   [self synchroniseCache];
   return [MAPIStoreMailMessageTable tableForContainer: self];
+}
+
+- (MAPIStoreFolderTable *) folderTable
+{
+  return [MAPIStoreMailFolderTable tableForContainer: self];
 }
 
 - (enum mapistore_error) createFolder: (struct SRow *) aRow
@@ -179,6 +188,9 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
     {
       nameInContainer = [NSString stringWithFormat: @"folder%@",
                                   [[folderName stringByEncodingImap4FolderName] asCSSIdentifier]];
+
+      [[self userContext] activate];
+
       newFolder = [SOGoMailFolderK objectWithName: nameInContainer
                                       inContainer: sogoObject];
       if ([newFolder create])
@@ -233,7 +245,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
                                          sortOrdering: nil]
                 count];
   *data = MAPILongValue (memCtx, longValue);
-  
+
   return MAPISTORE_SUCCESS;
 }
 
@@ -241,7 +253,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
                        inMemCtx: (TALLOC_CTX *) memCtx
 {
   *data = [@"IPF.Note" asUnicodeInMemCtx: memCtx];
-  
+
   return MAPISTORE_SUCCESS;
 }
 
@@ -253,7 +265,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
   if (!nonDeletedQualifier)
     {
       deletedQualifier
-        = [[EOKeyValueQualifier alloc] 
+        = [[EOKeyValueQualifier alloc]
                  initWithKey: @"FLAGS"
             operatorSelector: EOQualifierOperatorContains
                        value: [NSArray arrayWithObject: @"Deleted"]];
@@ -353,19 +365,54 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
 - (NSArray *) folderKeysMatchingQualifier: (EOQualifier *) qualifier
                          andSortOrderings: (NSArray *) sortOrderings
 {
+  NSArray *filteredSubfolderKeys;
   NSMutableArray *subfolderKeys;
+  NSMutableArray *subfolderKeysQualifying;
+  NSString *subfolderKey;
+  NSUInteger count, max;
 
   if ([self ensureFolderExists])
     {
+      /* Only folder name can be used as qualifier key */
       if (qualifier)
-        [self errorWithFormat: @"qualifier is not used for folders"];
+        [self warnWithFormat: @"qualifier is only used for folders with name"];
       if (sortOrderings)
         [self errorWithFormat: @"sort orderings are not used for folders"];
-      
+
+      /* FIXME: Flush any cache before retrieving the hierarchy, this
+         slows things down but it is safer */
+      if (!qualifier)
+        [sogoObject flushMailCaches];
+
       subfolderKeys = [[sogoObject toManyRelationshipKeys] mutableCopy];
       [subfolderKeys autorelease];
 
       [self _cleanupSubfolderKeys: subfolderKeys];
+
+      if (qualifier)
+        {
+          subfolderKeysQualifying = [NSMutableArray array];
+          max = [subfolderKeys count];
+          for (count = 0; count < max; count++) {
+            subfolderKey = [subfolderKeys objectAtIndex: count];
+            /* Remove "folder" prefix */
+            subfolderKey = [subfolderKey substringFromIndex: 6];
+            subfolderKey = [[subfolderKey fromCSSIdentifier] stringByDecodingImap4FolderName];
+            [subfolderKeysQualifying addObject: [NSDictionary dictionaryWithObject: subfolderKey
+                                                                            forKey: @"name"]];
+          }
+          filteredSubfolderKeys = [subfolderKeysQualifying filteredArrayUsingQualifier: qualifier];
+
+          max = [filteredSubfolderKeys count];
+          subfolderKeys = [NSMutableArray arrayWithCapacity: max];
+          for (count = 0; count < max; count++)
+            {
+              subfolderKey = [[filteredSubfolderKeys objectAtIndex: count] valueForKey: @"name"];
+              subfolderKey = [NSString stringWithFormat: @"folder%@", [[subfolderKey stringByEncodingImap4FolderName] asCSSIdentifier]];
+              [subfolderKeys addObject: subfolderKey];
+            }
+
+        }
     }
   else
     subfolderKeys = nil;
@@ -425,7 +472,7 @@ static Class SOGoMailFolderK, MAPIStoreMailFolderK, MAPIStoreOutboxFolderK;
     }
   else
     supportsSubFolders = YES;
-  
+
   return supportsSubFolders;
 }
 
@@ -472,6 +519,44 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   return [modseq1 compare: modseq2];
 }
 
+- (void) _updatePredecessorChangeListWith: (NSData *) predecessorChangeList
+                          forMessageEntry: (NSMutableDictionary *) messageEntry
+{
+  NSData *globCnt, *oldGlobCnt;
+  NSMutableDictionary *changeList;
+  NSString *guid;
+  struct SizedXid *sizedXIDList;
+  struct XID xid;
+  uint32_t i, length;
+
+  sizedXIDList = [predecessorChangeList asSizedXidArrayInMemCtx: NULL with: &length];
+
+  changeList = [messageEntry objectForKey: @"PredecessorChangeList"];
+  if (!changeList)
+    {
+      changeList = [NSMutableDictionary new];
+      [messageEntry setObject: changeList
+                    forKey: @"PredecessorChangeList"];
+      [changeList release];
+    }
+
+  if (sizedXIDList) {
+    for (i = 0; i < length; i++)
+      {
+        xid = sizedXIDList[i].XID;
+        guid = [NSString stringWithGUID: &xid.NameSpaceGuid];
+        globCnt = [NSData dataWithBytes: xid.LocalId.data length: xid.LocalId.length];
+        oldGlobCnt = [changeList objectForKey: guid];
+        if (!oldGlobCnt || ([globCnt compare: oldGlobCnt] == NSOrderedDescending))
+          [changeList setObject: globCnt forKey: guid];
+      }
+
+    talloc_free (sizedXIDList);
+  }
+
+  [versionsMessage save];
+}
+
 - (void) _setChangeKey: (NSData *) changeKey
        forMessageEntry: (NSMutableDictionary *) messageEntry
 {
@@ -482,8 +567,8 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   NSMutableDictionary *changeList;
 
   xid = [changeKey asXIDInMemCtx: NULL];
-  guid = [NSString stringWithGUID: &xid->GUID];
-  globCnt = [NSData dataWithBytes: xid->Data length: xid->Size];
+  guid = [NSString stringWithGUID: &xid->NameSpaceGuid];
+  globCnt = [NSData dataWithBytes: xid->LocalId.data length: xid->LocalId.length];
   talloc_free (xid);
 
   /* 1. set change key association */
@@ -509,13 +594,12 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 {
   BOOL rc = YES;
   uint64_t newChangeNum;
-  NSNumber *ti, *modseq, *initialLastModseq, *lastModseq,
-    *nextModseq;
+  NSNumber *ti, *modseq, *lastModseq, *nextModseq;
   NSString *changeNumber, *uid, *messageKey;
   uint64_t lastModseqNbr;
-  EOQualifier *kvQualifier, *searchQualifier;
+  EOQualifier *searchQualifier;
   NSArray *uids, *changeNumbers;
-  NSUInteger count, max;
+  NSUInteger count, max, nFetched;
   NSArray *fetchResults;
   NSDictionary *result;
   NSData *changeKey;
@@ -549,19 +633,15 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
     }
 
   lastModseq = [currentProperties objectForKey: @"SyncLastModseq"];
-  initialLastModseq = lastModseq;
   if (lastModseq)
     {
       lastModseqNbr = [lastModseq unsignedLongLongValue];
       nextModseq = [NSNumber numberWithUnsignedLongLong: lastModseqNbr + 1];
-      kvQualifier = [[EOKeyValueQualifier alloc]
+      searchQualifier = [[EOKeyValueQualifier alloc]
                                 initWithKey: @"modseq"
                            operatorSelector: EOQualifierOperatorGreaterThanOrEqualTo
                                       value: nextModseq];
-      searchQualifier = [[EOAndQualifier alloc]
-                          initWithQualifiers:
-                            kvQualifier, [self nonDeletedQualifier], nil];
-      [kvQualifier release];
+
       [searchQualifier autorelease];
     }
   else
@@ -589,7 +669,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
 
       fetchResults
         = [(NSDictionary *) [sogoObject fetchUIDs: uids
-                                            parts: [NSArray arrayWithObject: @"modseq"]]
+                                            parts: [NSArray arrayWithObjects: @"modseq", @"flags", nil]]
                           objectForKey: @"fetch"];
 
       /* NOTE: we sort items manually because Cyrus does not properly sort
@@ -597,7 +677,14 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
       fetchResults
         = [fetchResults sortedArrayUsingFunction: _compareFetchResultsByMODSEQ
                                          context: NULL];
-      
+
+      nFetched = [fetchResults count];
+      if (nFetched != max) {
+        [self errorWithFormat: @"Error fetching UIDs. Asked: %d Received: %d."
+              @"Check the IMAP conversation for details", max, nFetched];
+        return NO;
+      }
+
       for (count = 0; count < max; count++)
         {
           result = [fetchResults objectAtIndex: count];
@@ -625,45 +712,47 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
           if (!lastModseq
               || ([lastModseq compare: modseq] == NSOrderedAscending))
             lastModseq = modseq;
+
+          if ([[result objectForKey: @"flags"] containsObject: @"deleted"])
+            [currentProperties setObject: changeNumber
+                                  forKey: @"SyncLastDeleteChangeNumber"];
         }
 
       [currentProperties setObject: lastModseq forKey: @"SyncLastModseq"];
       foundChange = YES;
     }
 
-  /* 2. we synchronise deleted UIDs */
-  if (initialLastModseq)
-    {
-      fetchResults = [(SOGoMailFolder *) sogoObject
-                         fetchUIDsOfVanishedItems: lastModseqNbr];
-      max = [fetchResults count];
+  /* 2. we synchronise expunged UIDs */
+  fetchResults = [(SOGoMailFolder *) sogoObject
+                     fetchUIDsOfVanishedItems: lastModseqNbr];
 
-      changeNumber = nil;
-      for (count = 0; count < max; count++)
+  max = [fetchResults count];
+
+  changeNumber = nil;
+  for (count = 0; count < max; count++)
+    {
+      uid = [[fetchResults objectAtIndex: count] stringValue];
+      if ([messages objectForKey: uid])
         {
-          uid = [[fetchResults objectAtIndex: count] stringValue];
-          if ([messages objectForKey: uid])
+          if (!changeNumber)
             {
-              if (!changeNumber)
-                {
-                  newChangeNum = [[self context] getNewChangeNumber];
-                  changeNumber = [NSString stringWithUnsignedLongLong: newChangeNum];
-                }
-              [messages removeObjectForKey: uid];
-              [self logWithFormat: @"Removed message entry for UID %@", uid];
+              newChangeNum = [[self context] getNewChangeNumber];
+              changeNumber = [NSString stringWithUnsignedLongLong: newChangeNum];
             }
-          else
-            {
-              [self logWithFormat:@"Message entry not found for UID %@", uid];
-            }
+          [messages removeObjectForKey: uid];
+          [self logWithFormat: @"Removed message entry for UID %@", uid];
         }
-      if (changeNumber)
+      else
         {
-          [currentProperties setObject: changeNumber
-                                forKey: @"SyncLastDeleteChangeNumber"];
-          [mapping setObject: lastModseq forKey: changeNumber];
-          foundChange = YES;
+          [self logWithFormat:@"Message entry not found for UID %@", uid];
         }
+    }
+  if (changeNumber)
+    {
+      [currentProperties setObject: changeNumber
+                            forKey: @"SyncLastDeleteChangeNumber"];
+      [mapping setObject: lastModseq forKey: changeNumber];
+      foundChange = YES;
     }
 
   if (foundChange)
@@ -763,7 +852,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   if (!messageEntry)
     {
       fetchResults = [(NSDictionary *) [sogoObject fetchUIDs: [NSArray arrayWithObject: messageUID]
-                                                       parts: [NSArray arrayWithObject: @"modseq"]]
+                                                       parts: [NSArray arrayWithObjects: @"modseq", @"flags", nil]]
                          objectForKey: @"fetch"];
       if ([fetchResults count] == 1)
         {
@@ -788,6 +877,11 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
           /* Store the changeNumber -> modseq mapping */
           mapping = [currentProperties objectForKey: @"VersionMapping"];
           [mapping setObject: modseq forKey: changeNumberStr];
+
+          /* Store the last deleted change number if it is soft-deleted */
+          if ([[result objectForKey: @"flags"] containsObject: @"deleted"])
+            [currentProperties setObject: changeNumberStr
+                                  forKey: @"SyncLastDeleteChangeNumber"];
 
           /* Save the message */
           [versionsMessage save];
@@ -873,8 +967,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   return changeNumber;
 }
 
-- (void) setChangeKey: (NSData *) changeKey
-    forMessageWithKey: (NSString *) messageKey
+- (NSMutableDictionary *) _messageEntryFromMessageKey: (NSString *) messageKey
 {
   NSMutableDictionary *messages, *messageEntry;
   NSString *messageUid;
@@ -885,7 +978,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   messageEntry = [messages objectForKey: messageUid];
   if (!messageEntry)
     {
-      [self warnWithFormat: @"attempting to synchronise to set the change key for "
+      [self warnWithFormat: @"attempting to synchronise to get the message entry for "
                             @"this message %@", messageKey];
       synced = [self synchroniseCacheForUID: messageUid];
       if (synced)
@@ -896,9 +989,55 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
           abort ();
         }
     }
-  [self _setChangeKey: changeKey forMessageEntry: messageEntry];
-  
+
+  return messageEntry;
+}
+
+- (void) setChangeKey: (NSData *) changeKey
+    forMessageWithKey: (NSString *) messageKey
+{
+  [self _setChangeKey: changeKey
+      forMessageEntry: [self _messageEntryFromMessageKey: messageKey]];
+
   [versionsMessage save];
+}
+
+- (BOOL) updatePredecessorChangeListWith: (NSData *) changeKey
+                       forMessageWithKey: (NSString *) messageKey
+{
+  /* Update predecessor change list property given the change key. It
+     returns if the change key has been added to the list or not */
+  BOOL added = NO;
+  NSData *globCnt, *oldGlobCnt;
+  NSDictionary *messageEntry;
+  NSMutableDictionary *changeList;
+  NSString *guid;
+  struct XID *xid;
+
+  xid = [changeKey asXIDInMemCtx: NULL];
+  guid = [NSString stringWithGUID: &xid->NameSpaceGuid];
+  globCnt = [NSData dataWithBytes: xid->LocalId.data length: xid->LocalId.length];
+  talloc_free (xid);
+
+  messageEntry = [self _messageEntryFromMessageKey: messageKey];
+  if (messageEntry)
+    {
+      changeList = [messageEntry objectForKey: @"PredecessorChangeList"];
+      if (changeList)
+        {
+          oldGlobCnt = [changeList objectForKey: guid];
+          if (!oldGlobCnt || ([globCnt compare: oldGlobCnt] == NSOrderedDescending))
+            {
+              [changeList setObject: globCnt forKey: guid];
+              [versionsMessage save];
+              added = YES;
+            }
+        }
+      else
+        [self errorWithFormat: @"Missing predecessor change list to update"];
+    }
+
+  return added;
 }
 
 - (NSData *) changeKeyForMessageWithKey: (NSString *) messageKey
@@ -964,6 +1103,37 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   return list;
 }
 
+/* Management for extra properties once they already hit the IMAP server */
+- (void) setExtraProperties: (NSDictionary *) props
+                 forMessage: (NSString *) messageKey
+{
+  NSMutableDictionary *extraProps, *currentProperties;
+  NSString *messageUid;
+
+  messageUid = [self messageUIDFromMessageKey: messageKey];
+  currentProperties = [versionsMessage properties];
+  extraProps = [currentProperties objectForKey: @"ExtraMessagesProperties"];
+  if (!extraProps)
+    {
+      extraProps = [NSMutableDictionary new];
+      [currentProperties setObject: extraProps forKey: @"ExtraMessagesProperties"];
+      [extraProps release];
+    }
+
+  [extraProps setObject: props
+                 forKey: messageUid];
+  [versionsMessage save];
+}
+
+- (NSDictionary *) extraPropertiesForMessage: (NSString *) messageKey
+{
+  NSString *messageUid;
+
+  messageUid = [self messageUIDFromMessageKey: messageKey];
+  return [[[versionsMessage properties] objectForKey: @"ExtraMessagesProperties"]
+                   objectForKey: messageUid];
+}
+
 - (NSArray *) getDeletedKeysFromChangeNumber: (uint64_t) changeNum
                                        andCN: (NSNumber **) cnNbr
                                  inTableType: (uint8_t) tableType
@@ -972,6 +1142,7 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
   NSString *changeNumber;
   uint64_t modseq;
   NSDictionary *versionProperties;
+  EOQualifier *deletedQualifier, *kvQualifier, *searchQualifier;
 
   if (tableType == MAPISTORE_MESSAGE_TABLE)
     {
@@ -980,8 +1151,33 @@ _compareFetchResultsByMODSEQ (id entry1, id entry2, void *data)
                  unsignedLongLongValue];
       if (modseq > 0)
         {
+          /* Hard deleted items */
           deletedUIDs = [(SOGoMailFolder *) sogoObject
                            fetchUIDsOfVanishedItems: modseq];
+
+          /* Soft deleted items */
+          kvQualifier = [[EOKeyValueQualifier alloc]
+                                initWithKey: @"modseq"
+                           operatorSelector: EOQualifierOperatorGreaterThanOrEqualTo
+                                      value: [NSNumber numberWithUnsignedLongLong: modseq]];
+          deletedQualifier
+            = [[EOKeyValueQualifier alloc]
+                 initWithKey: @"FLAGS"
+                operatorSelector: EOQualifierOperatorContains
+                       value: [NSArray arrayWithObject: @"Deleted"]];
+
+          searchQualifier = [[EOAndQualifier alloc]
+                              initWithQualifiers:
+                                kvQualifier, deletedQualifier, nil];
+
+          deletedUIDs = [deletedUIDs arrayByAddingObjectsFromArray:
+                                       [sogoObject fetchUIDsMatchingQualifier: searchQualifier
+                                                                 sortOrdering: nil]];
+
+          [deletedQualifier release];
+          [kvQualifier release];
+          [searchQualifier release];
+
           deletedKeys = [deletedUIDs stringsWithFormat: @"%@.eml"];
           if ([deletedUIDs count] > 0)
             {
@@ -1067,7 +1263,7 @@ _parseIMAPRange (const unichar *uniString, NSArray **UIDsP)
       count++;
     }
   *UIDsP = UIDs;
- 
+
   return count;
 }
 
@@ -1109,6 +1305,7 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
                       fromFolder: (MAPIStoreFolder *) sourceFolder
                         withMIDs: (uint64_t *) targetMids
                    andChangeKeys: (struct Binary_r **) targetChangeKeys
+       andPredecessorChangeLists: (struct Binary_r **) targetPredecessorChangeLists
                         wantCopy: (uint8_t) wantCopy
                         inMemCtx: (TALLOC_CTX *) memCtx
 
@@ -1123,12 +1320,13 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
   NSDictionary *result;
   NSUInteger count;
   NSArray *a;
-  NSData *changeKey;
+  NSData *changeList;
 
   if (![sourceFolder isKindOfClass: [MAPIStoreMailFolder class]])
     return [super moveCopyMessagesWithMIDs: srcMids andCount: midCount
                                 fromFolder: sourceFolder withMIDs: targetMids
                              andChangeKeys: targetChangeKeys
+                 andPredecessorChangeLists: targetPredecessorChangeLists
                                   wantCopy: wantCopy
                                   inMemCtx: memCtx];
 
@@ -1163,13 +1361,20 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
   if (![[result objectForKey: @"result"] boolValue])
     return MAPISTORE_ERROR;
 
-  /* "Move" treatment: Store \Deleted and unregister urls */
+  /* "Move" treatment: Store \Deleted and unregister urls as soft-deleted */
   if (!wantCopy)
     {
       [client storeFlags: [NSArray arrayWithObject: @"Deleted"] forUIDs: uids
              addOrRemove: YES];
       for (count = 0; count < midCount; count++)
-        [mapping unregisterURLWithID: srcMids[count]];
+        {
+          /* Using soft-deleted to make deleted fmids to return the
+             srcMids.
+             See [MAPIStoreFolder getDeletedFMIDs:andCN:fromChangeNumber:inTableType:inMemCtx]
+             for details */
+          [mapping unregisterURLWithID: srcMids[count]
+                              andFlags: MAPISTORE_SOFT_DELETE];
+        }
     }
 
   /* Registration of target messages */
@@ -1210,20 +1415,13 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
       [self synchroniseCache];
       for (count = 0; count < midCount; count++)
         {
-          changeKey = [NSData dataWithBinary: targetChangeKeys[count]];
+          changeList = [NSData dataWithBinary: targetPredecessorChangeLists[count]];
           messageKey = [NSString stringWithFormat: @"%@.eml",
                                  [destUIDs objectAtIndex: count]];
-          [self   setChangeKey: changeKey
-             forMessageWithKey: messageKey];
+          [self _updatePredecessorChangeListWith: changeList
+                                 forMessageEntry: [self _messageEntryFromMessageKey: messageKey]];
         }
     }
-
-  [self postNotificationsForMoveCopyMessagesWithMIDs: srcMids
-                                      andMessageURLs: oldMessageURLs
-                                            andCount: midCount
-                                          fromFolder: sourceFolder
-                                            withMIDs: targetMids
-                                            wantCopy: wantCopy];
 
   // We cleanup cache of our source and destination folders
   [self cleanupCaches];
@@ -1345,7 +1543,7 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
                   [uids addObject: [self messageUIDFromMessageKey: childKey]];
                 }
 
-              result = [client copyUids: uids 
+              result = [client copyUids: uids
                                toFolder: newFolderIMAPName];
               if ([[result objectForKey: @"result"] boolValue])
                 {
@@ -1384,9 +1582,10 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
 {
   SOGoCacheObject *childObject;
 
-  childObject = [SOGoCacheObject objectWithName: [SOGoCacheObject
-                                                  globallyUniqueObjectId]
-                                   inContainer: sogoObject];
+  [[[self context] userContext] activate];
+
+  childObject = [SOGoCacheObject objectWithName: [SOGoCacheObject globallyUniqueObjectId]
+                                    inContainer: sogoObject];
   return [MAPIStoreMailVolatileMessage
            mapiStoreObjectWithSOGoObject: childObject
                              inContainer: self];
@@ -1462,7 +1661,7 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
     rights |= RoleNone; /* actually "folder visible" */
 
   // [self logWithFormat: @"rights for roles (%@) = %.8x", roles, rights];
- 
+
   return rights;
 }
 
@@ -1478,7 +1677,6 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
   NGImap4Client *client;
   NSArray *fetch;
   NSData *bodyContent;
-  NSMutableArray *unseenUIDs;
 
   if (tableType == MAPISTORE_MESSAGE_TABLE)
     {
@@ -1489,7 +1687,6 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
         {
           bodyPartKeys = [NSMutableSet setWithCapacity: max];
 
-          unseenUIDs = [NSMutableArray arrayWithCapacity: max];
           keyAssoc = [NSMutableDictionary dictionaryWithCapacity: max];
           for (count = 0; count < max; count++)
             {
@@ -1502,23 +1699,22 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
                     {
                       [bodyPartKeys addObject: bodyPartKey];
                       messageUid = [self messageUIDFromMessageKey: messageKey];
-                      [keyAssoc setObject: bodyPartKey forKey: messageUid];
-                      /* Fetch flags to remove seen flag if required,
-                         as fetching a message body set the seen flag.
-                         We are not using body.peek[] as
-                         bodyContentPartKey explicitly avoids it.
+                      /* If the bodyPartKey include peek, remove it as it is not returned
+                         as key in the IMAP server response.
+
+                         IMAP conversation example:
+                         a4 UID FETCH 1 (UID BODY.PEEK[text])
+                         * 1 FETCH (UID 1 BODY[TEXT] {1677}
                       */
-                      if (![message read])
-                        {
-                          [unseenUIDs addObject: messageUid];
-                        }
+                      bodyPartKey = [bodyPartKey stringByReplacingOccurrencesOfString: @"body.peek"
+                                                                           withString: @"body"];
+                      [keyAssoc setObject: bodyPartKey forKey: messageUid];
                     }
                 }
             }
-      
+
           client = [[(SOGoMailFolder *) sogoObject imap4Connection] client];
           [client select: [sogoObject absoluteImap4Name]];
-
           response = [client fetchUids: [keyAssoc allKeys]
                              parts: [bodyPartKeys allObjects]];
           fetch = [response objectForKey: @"fetch"];
@@ -1539,14 +1735,6 @@ _parseCOPYUID (NSString *line, NSArray **destUIDsP)
                       [bodyData setObject: bodyContent forKey: messageKey];
                     }
                 }
-            }
-
-          /* Restore unseen state once the body has been fetched */
-          if ([unseenUIDs count] > 0)
-            {
-              response = [client storeFlags: [NSArray arrayWithObjects: @"seen", nil]
-                                    forUIDs: unseenUIDs
-                                addOrRemove: NO];
             }
         }
     }

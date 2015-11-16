@@ -47,7 +47,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #import <NGExtensions/NSString+Encoding.h>
 #import <NGImap4/NGImap4Envelope.h>
 #import <NGImap4/NGImap4EnvelopeAddress.h>
+#import <NGImap4/NSString+Imap4.h>
 #import <NGObjWeb/WOContext+SoObjects.h>
+#import <NGObjWeb/WOApplication.h>
 
 #import <NGMime/NGMimeBodyPart.h>
 #import <NGMime/NGMimeFileData.h>
@@ -56,6 +58,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #import <NGMail/NGMimeMessageParser.h>
 #import <NGMail/NGMimeMessage.h>
 #import <NGMail/NGMimeMessageGenerator.h>
+
+#import <Mailer/SOGoMailLabel.h>
+
+#import <SOGo/SOGoUserDefaults.h>
 
 #include "iCalTimeZone+ActiveSync.h"
 #include "NSData+ActiveSync.h"
@@ -68,6 +74,43 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Mailer/SOGoMailBodyPart.h>
 #include <SOGo/SOGoUser.h>
 #include <SOGo/NSString+Utilities.h>
+
+#import <Appointments/SOGoAptMailNotification.h>
+
+unsigned char strToChar(char a, char b) {
+    char encoder[3] = {'\0','\0','\0'};
+    encoder[0] = a;
+    encoder[1] = b;
+    return (char) strtol(encoder,NULL,16);
+}
+
+@interface NSString (NSStringExtensions)
+- (NSData *) decodeFromHexidecimal;
+@end
+
+@implementation NSString (NSStringExtensions)
+
+- (NSData *) decodeFromHexidecimal;
+{
+    const char * bytes = [self cStringUsingEncoding: NSUTF8StringEncoding];
+    NSUInteger length = strlen(bytes);
+    unsigned char * r = (unsigned char *) malloc(length / 2 + 1);
+    unsigned char * index = r;
+
+    while ((*bytes) && (*(bytes +1))) {
+        *index = strToChar(*bytes, *(bytes +1));
+        index++;
+        bytes+=2;
+    }
+    *index = '\0';
+
+    NSData * result = [NSData dataWithBytes: r length: length / 2];
+    free(r);
+
+    return result;
+}
+
+@end
 
 typedef struct {
   uint32_t dwLowDateTime;
@@ -83,7 +126,7 @@ struct GlobalObjectId {
   FILETIME                  CreationTime;
   uint8_t                   X[8];
   uint32_t                  Size;
-  uint8_t*                  Data;
+  uint8_t Data[0];
 };
 
 @implementation SOGoMailObject (ActiveSync)
@@ -110,38 +153,39 @@ struct GlobalObjectId {
 //
 // The GlobalObjId is documented here: http://msdn.microsoft.com/en-us/library/ee160198(v=EXCHG.80).aspx
 //
+
 - (NSData *) _computeGlobalObjectIdFromEvent: (iCalEvent *) event
 {
   NSData *binPrefix, *globalObjectId, *uidAsASCII;
   NSString *prefix, *uid;
-
-  struct GlobalObjectId newGlobalId;
+  struct GlobalObjectId *newGlobalId;
   const char *bytes;
-  
+
+  uid = [event uid];
+  uidAsASCII = [uid decodeFromHexidecimal];
+  newGlobalId = (struct GlobalObjectId*)calloc(sizeof(uint8_t), sizeof(struct GlobalObjectId) + 0x0c + [uidAsASCII length]);
+
   prefix = @"040000008200e00074c5b7101a82e008";
 
   // dataPrefix is "vCal-Uid %x01 %x00 %x00 %x00"
   uint8_t dataPrefix[] = { 0x76, 0x43, 0x61, 0x6c, 0x2d, 0x55, 0x69, 0x64, 0x01, 0x00, 0x00, 0x00 };
-  uid = [event uid];
 
   binPrefix = [prefix convertHexStringToBytes];
-  [binPrefix getBytes: &newGlobalId.ByteArrayID];
-  [self _setInstanceDate: &newGlobalId
+  [binPrefix getBytes: &newGlobalId->ByteArrayID];
+  [self _setInstanceDate: newGlobalId
                 fromDate: [event recurrenceId]];
-  uidAsASCII = [uid dataUsingEncoding: NSASCIIStringEncoding];
   bytes = [uidAsASCII bytes];
 
   // 0x0c is the size of our dataPrefix
-  newGlobalId.Size = 0x0c + [uidAsASCII length];
-  newGlobalId.Data = malloc(newGlobalId.Size * sizeof(uint8_t));
-  memcpy(newGlobalId.Data, dataPrefix, 0x0c);
-  memcpy(newGlobalId.Data + 0x0c, bytes, newGlobalId.Size - 0x0c);
+  newGlobalId->Size = 0x0c + [uidAsASCII length];
+  memcpy(newGlobalId->Data, dataPrefix, 0x0c);
+  memcpy(newGlobalId->Data + 0x0c, bytes, newGlobalId->Size - 0x0c);
 
-  globalObjectId = [[NSData alloc] initWithBytes: &newGlobalId  length: 40 + newGlobalId.Size*sizeof(uint8_t)];
-  free(newGlobalId.Data);
-  
+  globalObjectId = [[NSData alloc] initWithBytes: newGlobalId  length: 40 + newGlobalId->Size*sizeof(uint8_t)];
+  free(newGlobalId);
   return [globalObjectId autorelease];
 }
+
 
 //
 // For debugging purposes...
@@ -204,11 +248,14 @@ struct GlobalObjectId {
 //
 //
 - (NSData *) _preferredBodyDataInMultipartUsingType: (int) theType
+                                    nativeTypeFound: (int *) theNativeTypeFound
 {
   NSString *encoding, *key, *plainKey, *htmlKey, *type, *subtype;
   NSDictionary *textParts, *part;
   NSEnumerator *e;
   NSData *d;
+
+  BOOL ignore;
 
   textParts = [self fetchPlainTextParts];
   e = [textParts keyEnumerator];
@@ -218,10 +265,35 @@ struct GlobalObjectId {
 
   while ((key = [e nextObject]))
     {
+      // Walk the hierarchy up and check whether parents are of type mulipart - i.e. ignore message/rfc822
+      if ([key countOccurrencesOfString: @"."] > 0)
+        {
+          NSMutableArray *a;
+
+          a = [[[key componentsSeparatedByString: @"."] mutableCopy] autorelease];
+          ignore = NO;
+
+          while ([a count] > 0)
+            {
+              [a removeLastObject];
+              part = [self lookupInfoForBodyPart: [a componentsJoinedByString: @"."]];
+
+              if (![[part valueForKey: @"type"] isEqualToString: @"multipart"])
+                ignore = YES;
+            }
+
+          if (ignore)
+            continue;
+        }
+
       part = [self lookupInfoForBodyPart: key];
       type = [part valueForKey: @"type"];
       subtype = [part valueForKey: @"subtype"];
       
+      // Don't select an attachment as body
+      if ([[[part valueForKey: @"disposition"] valueForKey: @"type"] isEqualToString: @"attachment"])
+         continue;
+
       if ([type isEqualToString: @"text"] && [subtype isEqualToString: @"html"])
         htmlKey = key;
       else if ([type isEqualToString: @"text"] && [subtype isEqualToString: @"plain"])
@@ -229,11 +301,22 @@ struct GlobalObjectId {
     }
 
   key = nil;
+  *theNativeTypeFound = 1;
 
-  if (theType == 2)
-    key = htmlKey;
-  else if (theType == 1)
+  if (theType == 2 && htmlKey)
+    {
+      key = htmlKey;
+      *theNativeTypeFound = 2;
+    }
+  else if (theType == 1 && plainKey)
     key = plainKey;
+  else if (theType == 2 && plainKey)
+    key = plainKey;
+  else if (theType == 1 && htmlKey)
+    {
+      key = htmlKey;
+      *theNativeTypeFound = 2;
+    }
 
   if (key)
     {
@@ -251,9 +334,17 @@ struct GlobalObjectId {
       charset = [[[self lookupInfoForBodyPart: key] objectForKey: @"parameterList"] objectForKey: @"charset"];
 
       if (![charset length])
-        charset = @"us-ascii";
+        charset = @"utf-8";
       
       s = [NSString stringWithData: d  usingEncodingNamed: charset];
+
+      // We fallback to ISO-8859-1 string encoding
+      if (!s)
+        s = [[[NSString alloc] initWithData: d  encoding: NSISOLatin1StringEncoding] autorelease];
+
+      if (theType == 1 && *theNativeTypeFound == 2)
+        s = [s htmlToText];
+
       d = [s dataUsingEncoding: NSUTF8StringEncoding];
     }
 
@@ -298,7 +389,7 @@ struct GlobalObjectId {
                [[[thePart contentType] type] isEqualToString: @"text"] &&
                ([[[thePart contentType] subType] isEqualToString: @"plain"] || [[[thePart contentType] subType] isEqualToString: @"html"]))
         {
-          // We make sure everything is encoded in UTF-8
+          // We make sure everything is encoded in UTF-8.
           NGMimeType *mimeType;
           NSString *s;
 
@@ -309,9 +400,13 @@ struct GlobalObjectId {
               charset = [[thePart contentType] valueOfParameter: @"charset"];
 
               if (![charset length])
-                charset = @"us-ascii";
+                charset = @"utf-8";
               
-              s = [NSString stringWithData: body usingEncodingNamed: charset];     
+              s = [NSString stringWithData: body usingEncodingNamed: charset];
+
+              // We fallback to ISO-8859-1 string encoding. We avoid #3103.
+              if (!s)
+                s = [[[NSString alloc] initWithData: body  encoding: NSISOLatin1StringEncoding] autorelease];
             }
           else
             {
@@ -322,11 +417,6 @@ struct GlobalObjectId {
 
           if (s)
             {
-              // We sanitize the content immediately, in case we have non-UNICODE safe
-              // characters that would be re-encoded later in HTML entities and thus,
-              // ignore afterwards.
-              s = [s safeString];
-
               body = [s dataUsingEncoding: NSUTF8StringEncoding];
             }
 
@@ -407,14 +497,14 @@ struct GlobalObjectId {
   // We get the right part based on the preference
   if (theType == 1 || theType == 2)
     {
-      if ([type isEqualToString: @"text"])
+      if ([type isEqualToString: @"text"] && ![subtype isEqualToString: @"calendar"])
         {
           NSString *s, *charset;
           
           charset = [[[self lookupInfoForBodyPart: @""] objectForKey: @"parameterList"] objectForKey: @"charset"];
           
           if (![charset length])
-            charset = @"us-ascii";
+            charset = @"utf-8";
           
           d = [[self fetchPlainTextParts] objectForKey: @""];
           
@@ -428,25 +518,30 @@ struct GlobalObjectId {
             d = [d dataByDecodingQuotedPrintableTransferEncoding];
 
           s = [NSString stringWithData: d  usingEncodingNamed: charset];
+
+          // We fallback to ISO-8859-1 string encoding. We avoid #3103.
+          if (!s)
+            s = [[[NSString alloc] initWithData: d  encoding: NSISOLatin1StringEncoding] autorelease];
           
           // Check if we must convert html->plain
           if (theType == 1 && [subtype isEqualToString: @"html"])
             {
               s = [s htmlToText];
             }
-          
+
           d = [s dataUsingEncoding: NSUTF8StringEncoding];
         }
       else if ([type isEqualToString: @"multipart"])
         {
-          d = [self _preferredBodyDataInMultipartUsingType: theType];
+          d = [self _preferredBodyDataInMultipartUsingType: theType nativeTypeFound: theNativeType];
         }
     }
   else if (theType == 4)
     {
-      // We sanitize the content *ONLY* for Outlook clients. Outlook has strange issues
+      // We sanitize the content *ONLY* for Outlook clients and if the content-transfer-encoding is 8bit. Outlook has strange issues
       // with quoted-printable/base64 encoded text parts. It just doesn't decode them.
-      if ([[context objectForKey: @"DeviceType"] isEqualToString: @"WindowsOutlook15"])
+      encoding = [[self lookupInfoForBodyPart: @""] objectForKey: @"encoding"];
+      if ([[context objectForKey: @"DeviceType"] isEqualToString: @"WindowsOutlook15"] || ([encoding caseInsensitiveCompare: @"8bit"] == NSOrderedSame))
         d = [self _sanitizedMIMEMessage];
       else
         d = [self content];
@@ -455,14 +550,64 @@ struct GlobalObjectId {
   return d;
 }
 
+
+- (NSString *) _getNormalizedSubject
+{
+  NSString *subject;
+  NSUInteger colIdx;
+  NSString *stringValue;
+
+  subject = [[self subject] decodedHeader];
+
+  colIdx = [subject rangeOfString: @":" options:NSBackwardsSearch].location;
+  if (colIdx != NSNotFound && colIdx + 1 < [subject length])
+    stringValue = [[subject substringFromIndex: colIdx + 1] stringByTrimmingLeadSpaces];
+  else
+    stringValue = subject;
+
+  if (!stringValue)
+    stringValue = @"";
+
+  return stringValue;
+}
+
+
 //
 //
 //
 - (iCalCalendar *) calendarFromIMIPMessage
 {
   NSDictionary *part;
+  NSString *type, *subtype;
   NSArray *parts;
   int i;
+
+  type = [[[self bodyStructure] valueForKey: @"type"] lowercaseString];
+  subtype = [[[self bodyStructure] valueForKey: @"subtype"] lowercaseString];
+
+  // process mail of type text/calendar
+  if ([type isEqualToString: @"text"] && [subtype isEqualToString: @"calendar"])
+    {
+      iCalCalendar *calendar;
+      NSString *encoding;
+      NSData *calendarData;
+
+      encoding = [[[self bodyStructure] valueForKey: @"encoding"] lowercaseString];
+      calendarData = [[self fetchPlainTextParts] objectForKey: @""];
+
+      if ([encoding caseInsensitiveCompare: @"base64"] == NSOrderedSame)
+        calendarData = [calendarData dataByDecodingBase64];
+      else if ([encoding caseInsensitiveCompare: @"quoted-printable"] == NSOrderedSame)
+        calendarData = [calendarData dataByDecodingQuotedPrintableTransferEncoding];
+
+      NS_DURING
+        calendar = [iCalCalendar parseSingleFromSource: calendarData];
+      NS_HANDLER
+        calendar = nil;
+      NS_ENDHANDLER
+
+      return calendar;
+    }
 
   // We check if we have at least 2 parts and if one of them is a text/calendar
   parts = [[self bodyStructure] objectForKey: @"parts"];
@@ -512,6 +657,10 @@ struct GlobalObjectId {
   NSData *d, *globalObjId;
   NSArray *attachmentKeys;
   NSMutableString *s;
+
+  uint32_t v;
+  NSString *p;
+  
   id value;
 
   iCalCalendar *calendar;
@@ -536,7 +685,7 @@ struct GlobalObjectId {
   if (value)
     {
       [s appendFormat: @"<Subject xmlns=\"Email:\">%@</Subject>", [value activeSyncRepresentationInContext: context]];
-      [s appendFormat: @"<ThreadTopic xmlns=\"Email:\">%@</ThreadTopic>", [value activeSyncRepresentationInContext: context]];
+      [s appendFormat: @"<ThreadTopic xmlns=\"Email:\">%@</ThreadTopic>", [[self _getNormalizedSubject] activeSyncRepresentationInContext: context]];
     }
 
   // DateReceived
@@ -552,8 +701,34 @@ struct GlobalObjectId {
   if (value)
     [s appendFormat: @"<Cc xmlns=\"Email:\">%@</Cc>", [value activeSyncRepresentationInContext: context]];
     
-  // Importance - FIXME
-  [s appendFormat: @"<Importance xmlns=\"Email:\">%@</Importance>", @"1"];
+  // Importance
+  v = 0x1;
+  value = [[self mailHeaders] objectForKey: @"x-priority"];
+  if ([value isKindOfClass: [NSArray class]])
+    p = [value lastObject];
+  else
+    p = value;
+
+  if (p) 
+    {
+      if ([p hasPrefix: @"1"]) v = 0x2;
+      else if ([p hasPrefix: @"2"]) v = 0x2;
+      else if ([p hasPrefix: @"4"]) v = 0x0;
+      else if ([p hasPrefix: @"5"]) v = 0x0;
+    }
+  else
+    {
+      value = [[self mailHeaders] objectForKey: @"importance"];
+      if ([value isKindOfClass: [NSArray class]])
+        p = [value lastObject];
+      else
+        p = value;
+
+      if ([p hasPrefix: @"High"]) v = 0x2;
+      else if ([p hasPrefix: @"Low"]) v = 0x0;
+    }
+
+  [s appendFormat: @"<Importance xmlns=\"Email:\">%d</Importance>", v];
   
   // Read
   [s appendFormat: @"<Read xmlns=\"Email:\">%d</Read>", ([self read] ? 1 : 0)];
@@ -617,18 +792,18 @@ struct GlobalObjectId {
 
       [s appendFormat: @"<AllDayEvent xmlns=\"Email:\">%d</AllDayEvent>", ([event isAllDay] ? 1 : 0)];
 
-      // StartTime -- http://msdn.microsoft.com/en-us/library/ee157132(v=exchg.80).aspx
+      // StartTime -- https://msdn.microsoft.com/en-us/library/ee203365%28v=exchg.80%29.aspx
       if ([event startDate])
-        [s appendFormat: @"<StartTime xmlns=\"Email:\">%@</StartTime>", [[event startDate] activeSyncRepresentationWithoutSeparatorsInContext: context]];
+        [s appendFormat: @"<StartTime xmlns=\"Email:\">%@</StartTime>", [[event startDate] activeSyncRepresentationInContext: context]];
       
       if ([event timeStampAsDate])
-        [s appendFormat: @"<DTStamp xmlns=\"Email:\">%@</DTStamp>", [[event timeStampAsDate] activeSyncRepresentationWithoutSeparatorsInContext: context]];
+        [s appendFormat: @"<DTStamp xmlns=\"Email:\">%@</DTStamp>", [[event timeStampAsDate] activeSyncRepresentationInContext: context]];
       else if ([event created])
-        [s appendFormat: @"<DTStamp xmlns=\"Email:\">%@</DTStamp>", [[event created] activeSyncRepresentationWithoutSeparatorsInContext: context]];
+        [s appendFormat: @"<DTStamp xmlns=\"Email:\">%@</DTStamp>", [[event created] activeSyncRepresentationInContext: context]];
       
-      // EndTime -- http://msdn.microsoft.com/en-us/library/ee157945(v=exchg.80).aspx
+      // EndTime -- https://msdn.microsoft.com/en-us/library/ee158628(v=exchg.80).aspx
       if ([event endDate])
-        [s appendFormat: @"<EndTime xmlns=\"Email:\">%@</EndTime>", [[event endDate] activeSyncRepresentationWithoutSeparatorsInContext: context]];
+        [s appendFormat: @"<EndTime xmlns=\"Email:\">%@</EndTime>", [[event endDate] activeSyncRepresentationInContext: context]];
       
       // FIXME: Single appointment - others are not supported right now
       [s appendFormat: @"<InstanceType xmlns=\"Email:\">%d</InstanceType>", 0];
@@ -676,7 +851,9 @@ struct GlobalObjectId {
       [s appendFormat: @"<GlobalObjId xmlns=\"Email:\">%@</GlobalObjId>", [globalObjId activeSyncRepresentationInContext: context]];
 
       // We set the right message type - we must set AS version to 14.1 for this
-      [s appendFormat: @"<MeetingMessageType xmlns=\"Email2:\">%d</MeetingMessageType>", 1];
+      if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"14.1"])
+        [s appendFormat: @"<MeetingMessageType xmlns=\"Email2:\">%d</MeetingMessageType>", 1];
+
       [s appendString: @"</MeetingRequest>"];
 
       // ContentClass
@@ -703,13 +880,80 @@ struct GlobalObjectId {
 
   nativeBodyType = 1;
   d = [self _preferredBodyDataUsingType: preferredBodyType  nativeType: &nativeBodyType];
+
+  if (calendar && !d)
+    {
+      WOApplication *app;
+      SOGoAptMailNotification *p;
+      NSString *pageName;
+
+      nativeBodyType = 2;
+
+      /* get WOApplication instance */
+      app = [WOApplication application];
+
+      /* create page name */
+      pageName = [NSString stringWithFormat: @"SOGoAptMail%@", @"Invitation"];
+      /* construct message content */
+      p = [app pageWithName: pageName inContext: context];
+      [p setApt: (iCalEvent *)  [[calendar events] lastObject]];
+
+      if ([[ [[calendar events] lastObject] organizer] cn] && [[[ [[calendar events] lastObject] organizer] cn] length])
+        {
+          [p setOrganizerName: [[ [[calendar events] lastObject] organizer] cn]];
+        }
+      else
+        {
+          [p setOrganizerName: [[SOGoUser userWithLogin: owner] cn]];
+        }
+
+      if (preferredBodyType == 1 && nativeBodyType == 2)
+        d = [[[p getBody] htmlToText] dataUsingEncoding: NSUTF8StringEncoding];
+      else
+        {
+          preferredBodyType = 2;
+          d = [[p getBody] dataUsingEncoding: NSUTF8StringEncoding];
+        }
+
+    }
   
   if (d)
     {
+      NSMutableData *sanitizedData;
       NSString *content;
       int len, truncated;
-      
-      content = [[NSString alloc] initWithData: d  encoding: NSUTF8StringEncoding];
+
+      // Outlook fails to decode quoted-printable (see #3082) if lines are not termined by CRLF.
+      const char *bytes;
+      char *mbytes;
+      int mlen;
+
+      len = [d length];
+      mlen = 0;
+
+      sanitizedData = [NSMutableData dataWithLength: len*2];
+
+      bytes = [d bytes];
+      mbytes = [sanitizedData mutableBytes];
+
+      while (len > 0)
+        {
+          if (*bytes == '\n' && *(bytes-1) != '\r' && mlen > 0)
+            {
+              *mbytes = '\r';
+              mbytes++;
+              mlen++;
+            }
+
+          *mbytes = *bytes;
+          mbytes++; bytes++;
+          len--;
+          mlen++;
+        }
+
+      [sanitizedData setLength: mlen];
+
+      content = [[NSString alloc] initWithData: sanitizedData  encoding: NSUTF8StringEncoding];
 
       // FIXME: This is a hack. We should normally avoid doing this as we might get
       // broken encodings. We should rather tell that the data was truncated and expect
@@ -719,26 +963,40 @@ struct GlobalObjectId {
       // for an "interesting" discussion around this.
       //
       if (!content)
-        content = [[NSString alloc] initWithData: d  encoding: NSISOLatin1StringEncoding];
+        content = [[NSString alloc] initWithData: sanitizedData  encoding: NSISOLatin1StringEncoding];
       
       AUTORELEASE(content);
       
       content = [content activeSyncRepresentationInContext: context];
       truncated = 0;
-    
-      len = [content length];
-      
-      [s appendString: @"<Body xmlns=\"AirSyncBase:\">"];
-      [s appendFormat: @"<Type>%d</Type>", preferredBodyType];
-      [s appendFormat: @"<Truncated>%d</Truncated>", truncated];
-      [s appendFormat: @"<Preview></Preview>"];
 
-      if (!truncated)
+      len = [content length];
+
+      if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"2.5"])
         {
-          [s appendFormat: @"<Data>%@</Data>", content];
-          [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>", len];
+          [s appendFormat: @"<Body xmlns=\"Email:\">%@</Body>", content];
+          [s appendFormat: @"<BodyTruncated xmlns=\"Email:\">%d</BodyTruncated>", truncated];
         }
-      [s appendString: @"</Body>"];
+      else
+       {
+          [s appendString: @"<Body xmlns=\"AirSyncBase:\">"];
+
+          // Set the correct type if client requested text/html but we got text/plain
+          if (preferredBodyType == 2 && nativeBodyType == 1)
+             [s appendString: @"<Type>1</Type>"];
+          else
+             [s appendFormat: @"<Type>%d</Type>", preferredBodyType];
+
+          [s appendFormat: @"<Truncated>%d</Truncated>", truncated];
+          [s appendFormat: @"<Preview></Preview>"];
+
+          if (!truncated)
+            {
+              [s appendFormat: @"<Data>%@</Data>", content];
+              [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>", len];
+            }
+          [s appendString: @"</Body>"];
+       }
     }
   
   // Attachments -namespace 16
@@ -746,9 +1004,12 @@ struct GlobalObjectId {
   if ([attachmentKeys count])
     {
       int i;
-      
-      [s appendString: @"<Attachments xmlns=\"AirSyncBase:\">"];
-      
+
+      if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"2.5"])
+        [s appendString: @"<Attachments xmlns=\"Email:\">"];
+      else
+        [s appendString: @"<Attachments xmlns=\"AirSyncBase:\">"];
+
       for (i = 0; i < [attachmentKeys count]; i++)
         {
           value = [attachmentKeys objectAtIndex: i];
@@ -759,11 +1020,22 @@ struct GlobalObjectId {
           // FileReference must be a unique identifier across the whole store. We use the following structure:
           // mail/<foldername>/<message UID/<pathofpart>
           // mail/INBOX/2          
-          [s appendFormat: @"<FileReference>mail/%@/%@/%@</FileReference>", [[[self container] relativeImap4Name] stringByEscapingURL], [self nameInContainer], [value objectForKey: @"path"]];
+          if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"2.5"])
+            [s appendFormat: @"<AttName>mail/%@/%@/%@</AttName>", [[[self container] relativeImap4Name] stringByEscapingURL], [self nameInContainer], [value objectForKey: @"path"]];
+          else
+            [s appendFormat: @"<FileReference>mail/%@/%@/%@</FileReference>", [[[self container] relativeImap4Name] stringByEscapingURL], [self nameInContainer], [value objectForKey: @"path"]];
 
-          [s appendFormat: @"<Method>%d</Method>", 1]; // See: http://msdn.microsoft.com/en-us/library/ee160322(v=exchg.80).aspx
-          [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>", [[value objectForKey: @"size"] intValue]];
-          //[s appendFormat: @"<IsInline>%d</IsInline>", 1];
+          if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"2.5"])
+            {
+              [s appendFormat: @"<AttMethod>%d</AttMethod>", 1];
+              [s appendFormat: @"<AttSize>%d</AttSize>", [[value objectForKey: @"size"] intValue]];
+            }
+          else
+            {
+              [s appendFormat: @"<Method>%d</Method>", 1]; // See: http://msdn.microsoft.com/en-us/library/ee160322(v=exchg.80).aspx
+              [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>", [[value objectForKey: @"size"] intValue]];
+              //[s appendFormat: @"<IsInline>%d</IsInline>", 1];
+            }
           [s appendString: @"</Attachment>"];
         }
 
@@ -774,10 +1046,46 @@ struct GlobalObjectId {
   [s appendString: @"<Flag xmlns=\"Email:\">"];
   [s appendFormat: @"<FlagStatus>%d</FlagStatus>", ([self flagged] ? 2 : 0)];
   [s appendString: @"</Flag>"];
+
+
+  // Categroies/Labels
+  NSEnumerator *categories;
+  categories = [[[self fetchCoreInfos] objectForKey: @"flags"] objectEnumerator];
+
+  if (categories)
+    {
+      NSString *currentFlag;
+      NSDictionary *v;
+
+      v = [[[context activeUser] userDefaults] mailLabelsColors];
+
+      [s appendFormat: @"<Categories xmlns=\"Email:\">"];
+      while ((currentFlag = [categories nextObject]))
+        {
+          if ([[v objectForKey: currentFlag] objectAtIndex:0])
+            [s appendFormat: @"<Category>%@</Category>", [[[v objectForKey: currentFlag] objectAtIndex:0] activeSyncRepresentationInContext: context]];
+        }
+      [s appendFormat: @"</Categories>"];
+    }
   
+  if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"14.0"] ||
+      [[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"14.1"])
+    {
+      NSString *reference;
+
+      reference = [[[[self mailHeaders] objectForKey: @"references"] componentsSeparatedByString: @" "] objectAtIndex: 0];
+
+      if ([reference length] > 0)
+        [s appendFormat: @"<ConversationId xmlns=\"Email2:\">%@</ConversationId>", [[reference dataUsingEncoding: NSUTF8StringEncoding] activeSyncRepresentationInContext: context]];
+      else if ([self inReplyTo])
+        [s appendFormat: @"<ConversationId xmlns=\"Email2:\">%@</ConversationId>", [[[self inReplyTo] dataUsingEncoding: NSUTF8StringEncoding] activeSyncRepresentationInContext: context]];
+      else if ([self messageId])
+        [s appendFormat: @"<ConversationId xmlns=\"Email2:\">%@</ConversationId>", [[[self messageId] dataUsingEncoding: NSUTF8StringEncoding] activeSyncRepresentationInContext: context]];
+    }
+
   // FIXME - support these in the future
-  //[s appendString: @"<ConversationId xmlns=\"Email2:\">foobar</ConversationId>"];
   //[s appendString: @"<ConversationIndex xmlns=\"Email2:\">zot=</ConversationIndex>"];
+
   
   // NativeBodyType -- http://msdn.microsoft.com/en-us/library/ee218276(v=exchg.80).aspx
   // This is a required child element.
@@ -835,6 +1143,65 @@ struct GlobalObjectId {
         [self addFlags: @"seen"];
       else
         [self removeFlags: @"seen"];;
+    }
+
+  if ((o = [theValues objectForKey: @"Categories"]))
+    {
+      NSEnumerator *categories;
+      NSString *currentFlag;
+      NSDictionary *v;
+
+      v = [[[context activeUser] userDefaults] mailLabelsColors];
+
+      // add categories/labels sent from client
+      if ([o isKindOfClass: [NSArray class]])
+        {
+          NSEnumerator *enumerator;
+          NSMutableArray *labels;
+          NSEnumerator *flags;
+          id key;
+
+          labels = [NSMutableArray array];
+
+          enumerator = [v keyEnumerator];
+          flags = [o objectEnumerator];
+
+          while ((currentFlag = [flags nextObject]))
+            {
+              while ((key = [enumerator nextObject]))
+                {
+                  if (([currentFlag isEqualToString:[[v objectForKey:key] objectAtIndex:0]]))
+                    {
+                      [labels addObject: key];
+                      break;
+                    }
+                }
+            }
+
+          [self addFlags: [labels componentsJoinedByString: @" "]];
+        }
+
+      categories = [[[self fetchCoreInfos] objectForKey: @"flags"] objectEnumerator];
+
+      // remove all categories/labels from server which were not it the list sent from client
+      if (categories)
+        {
+          while ((currentFlag = [categories nextObject]))
+            {
+              // only deal with lables and don't touch flags like seen and flagged
+              if (([v objectForKey: currentFlag]))
+                {
+                  if (![o isKindOfClass: [NSArray class]])
+                    {
+                      [self removeFlags: currentFlag];
+                    }
+                  else if (([o indexOfObject: [[v objectForKey:currentFlag] objectAtIndex:0]] == NSNotFound))
+                    {
+                      [self removeFlags: currentFlag];
+                    }
+                }
+            }
+        }
     }
 }
 

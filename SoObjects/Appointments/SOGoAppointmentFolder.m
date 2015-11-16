@@ -432,61 +432,6 @@ static Class iCalEventK = nil;
                     inCategory: @"FolderShowTasks"];    
 }
 
-- (NSString *) syncTag
-{
-  NSString *syncTag;
-
-  syncTag = [self folderPropertyValueInCategory: @"FolderSyncTags"];
-  if (!syncTag)
-    syncTag = @"";
-
-  return syncTag;
-}
-
-- (void) setSyncTag: (NSString *) newSyncTag
-{
-  // Check for duplicated tags
-  SOGoUserSettings *settings;
-  NSDictionary *syncTags;
-  NSArray *values;
-
-  if ([newSyncTag length])
-    {
-      settings = [[context activeUser] userSettings];
-      syncTags = [[settings objectForKey: @"Calendar"]
-                           objectForKey: @"FolderSyncTags"];
-      values = [syncTags allValues];
-      if (![values containsObject: newSyncTag])
-        [self setFolderPropertyValue: newSyncTag
-                          inCategory: @"FolderSyncTags"];
-    }
-  else
-    [self setFolderPropertyValue: nil
-                      inCategory: @"FolderSyncTags"];
-}
-
-- (BOOL) synchronizeCalendar
-{
-  NSNumber *synchronize;
-
-  synchronize = [self folderPropertyValueInCategory: @"FolderSynchronize"];
-
-  return [synchronize boolValue];
-}
-
-- (void) setSynchronizeCalendar: (BOOL) new
-{
-  NSNumber *synchronize;
-
-  if (new)
-    synchronize = [NSNumber numberWithBool: YES];
-  else
-    synchronize = nil;
-
-  [self setFolderPropertyValue: synchronize
-                    inCategory: @"FolderSynchronize"];
-}
-
 //
 // If the user is the owner of the calendar, by default we include the freebusy information.
 //
@@ -502,12 +447,12 @@ static Class iCalEventK = nil;
   BOOL is_owner;
   
   userLogin = [[context activeUser] login];
-  is_owner = [userLogin isEqualToString: [self ownerInContext: context]];
+  is_owner = [userLogin isEqualToString: self->owner];
   
   // Check if the owner (not the active user) has excluded the calendar from her/his free busy data.
   excludeFromFreeBusy
     = [self folderPropertyValueInCategory: @"FreeBusyExclusions"
-				  forUser: [SOGoUser userWithLogin: userLogin]];
+				  forUser: [context activeUser]];
 
   if ([self isSubscription])
     {
@@ -659,8 +604,16 @@ static Class iCalEventK = nil;
   NSNumber *classNumber;
   unsigned int grantedCount;
   iCalAccessClass currentClass;
+  WOContext *localContext;
 
-  [self initializeQuickTablesAclsInContext: context];
+  /* FIXME: The stored context from initialisation may have changed
+     by setContext by other operations in OpenChange library,
+     so we keep tighly to use the current session one. Without
+     this, the login is set to nil and a NSException is raised
+     at [SOGoAppointmentFolder:roleForComponentsWithAccessClass:forUser]
+     inside [SOGoAppointmentFolder:initializeQuickTablesAclsInContext]. */
+  localContext = [[WOApplication application] context];
+  [self initializeQuickTablesAclsInContext: localContext];
   grantedClasses = [NSMutableArray arrayWithCapacity: 3];
   deniedClasses = [NSMutableArray arrayWithCapacity: 3];
   for (currentClass = 0;
@@ -800,7 +753,7 @@ static Class iCalEventK = nil;
 
 /**
  * Set the timezone of the event start and end dates to the user's timezone.
- * @param theRecord a dictionnary with the attributes of the event.
+ * @param theRecord a dictionary with the attributes of the event.
  * @return a copy of theRecord with adjusted dates.
  */
 - (NSMutableDictionary *) _fixupRecord: (NSDictionary *) theRecord
@@ -1063,7 +1016,7 @@ firstInstanceCalendarDateRange: (NGCalendarDateRange *) fir
 	{
           if ([dateRange containsDate: [component startDate]])
             {
-              // We must pass nill to :container here in order to avoid re-entrancy issues.
+              // We must pass nil to :container here in order to avoid re-entrancy issues.
               newRecord = [self _fixupRecord: [component quickRecordFromContent: nil  container: nil]];
               [ma replaceObjectAtIndex: recordIndex withObject: newRecord];
             }
@@ -1080,15 +1033,20 @@ firstInstanceCalendarDateRange: (NGCalendarDateRange *) fir
     {
       // The recurrence id of the exception is outside the date range;
       // simply add the exception to the records array.
-      // We must pass nill to :container here in order to avoid re-entrancy issues.
+      // We must pass nil to :container here in order to avoid re-entrancy issues.
       newRecord = [self _fixupRecord: [component quickRecordFromContent: nil  container: nil]];
-      newRecordRange = [NGCalendarDateRange 
-			 calendarDateRangeWithStartDate: [newRecord objectForKey: @"startDate"]
-			 endDate: [newRecord objectForKey: @"endDate"]];
-      if ([dateRange doesIntersectWithDateRange: newRecordRange])
+      if ([newRecord objectForKey: @"startDate"] && [newRecord objectForKey: @"endDate"]) {
+        newRecordRange = [NGCalendarDateRange
+                           calendarDateRangeWithStartDate: [newRecord objectForKey: @"startDate"]
+                                                  endDate: [newRecord objectForKey: @"endDate"]];
+        if ([dateRange doesIntersectWithDateRange: newRecordRange])
           [ma addObject: newRecord];
-      else
+        else
+          newRecord = nil;
+      } else {
+        [self warnWithFormat: @"Recurrence %@ without dtstart or dtend. Ignoring", recurrenceId];
         newRecord = nil;
+      }
     }
 
   if (newRecord)
@@ -2814,7 +2772,7 @@ firstInstanceCalendarDateRange: (NGCalendarDateRange *) fir
 			     @"c_category", @"c_classification", @"c_isallday",
 			     @"c_isopaque", @"c_participants", @"c_partmails",
 			     @"c_partstates", @"c_sequence", @"c_priority",
-			     @"c_cycleinfo", @"c_iscycle",  @"c_nextalarm", nil];
+			     @"c_cycleinfo", @"c_iscycle",  @"c_nextalarm", @"c_description", nil];
 
   return [self fetchFields: infos from: _startDate to: _endDate title: title
                component: _component
@@ -2980,7 +2938,10 @@ firstInstanceCalendarDateRange: (NGCalendarDateRange *) fir
 
   theUser = [SOGoUser userWithLogin: theUID];
   aParent = [theUser calendarsFolderInContext: context];
-  
+
+  if ([aParent isKindOfClass: [NSException class]])
+    return nil;
+
   aFolders = [aParent subFolders];
   e = [aFolders objectEnumerator];
   while ((aFolder = [e nextObject]))
@@ -3157,6 +3118,8 @@ firstInstanceCalendarDateRange: (NGCalendarDateRange *) fir
                                     inContainer: self];
   [object setIsNew: YES];
   content = [NSMutableString stringWithString: @"BEGIN:VCALENDAR\n"];
+  [content appendFormat: @"PRODID:-//Inverse inc./SOGo %@//EN\n", SOGoVersion];
+
   if (timezone)
     [content appendFormat: @"%@\n",  [timezone versitString]];
   [content appendFormat: @"%@\nEND:VCALENDAR", [event versitString]];

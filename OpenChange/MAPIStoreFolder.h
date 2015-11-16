@@ -121,6 +121,7 @@
                       fromFolder: (MAPIStoreFolder *) sourceFolder
                         withMIDs: (uint64_t *) targetMids
                    andChangeKeys: (struct Binary_r **) targetChangeKeys
+       andPredecessorChangeLists: (struct Binary_r **) targetPredecessorChangeLists
                         wantCopy: (uint8_t) want_copy
                         inMemCtx: (TALLOC_CTX *) memCtx;
 
@@ -185,12 +186,6 @@
 /* subclass helpers */
 - (void) setupVersionsMessage;
 - (void) ensureIDsForChildKeys: (NSArray *) keys;
-- (void) postNotificationsForMoveCopyMessagesWithMIDs: (uint64_t *) srcMids
-                                       andMessageURLs: (NSArray *) oldMessageURLs
-                                             andCount: (uint32_t) midCount
-                                           fromFolder: (MAPIStoreFolder *) sourceFolder
-                                             withMIDs: (uint64_t *) targetMids
-                                             wantCopy: (uint8_t) wantCopy;
 
 @end
 

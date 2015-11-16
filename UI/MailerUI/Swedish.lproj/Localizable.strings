@@ -76,7 +76,6 @@
 "Remove this folder" = "Ta bort mappen";
 "Erase mails from this folder" = "Radera meddelanden från mappen";
 "Expunge this folder" = "Radera mappen";
-"Archive This Folder" = "Arkivera mappen";
 "Modify the acl of this folder" = "Ändra åtkomsträttigheter på mappen";
 
 "Saved Messages.zip" = "Sparat Messages.zip";
@@ -236,8 +235,8 @@
 
 /* Folder operations */
 "Name :" = "Namn: ";
-"Enter the new name of your folder :"
- = "Skriv namnet på mappen: ";
+"Enter the new name of your folder"
+ = "Skriv namnet på mappen";
 "Do you really want to move this folder into the trash ?"
  = "Vill du verkligen flytta mappen till papperskorgen?";
 "Operation failed" = "Operationen misslyckades";
