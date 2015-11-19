@@ -2,6 +2,7 @@ Unreleased (2015-xx-xx)
 --------------------------
 
 Bug fixes
+  - Avoid creation of phantom contacts in SOGo from distribution list synced from Outlook.
   - Activate user even when the context was already created
  
 
