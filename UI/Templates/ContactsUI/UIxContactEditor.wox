@@ -55,26 +55,26 @@
         <div id="baseInfos" class="tab">
           <fieldset><legend><var:string label:value="Name" /></legend>
               <div>
-                <label><var:string label:value="First:" /></label>
+                <label><var:string label:value="Firstname" /></label>
                   <input type="text" class="textField" name="givenname"
                     id="givenname"
                     var:value="ldifRecord.givenname"
                     />
               </div>
               <div>
-                <label><var:string label:value="Last:" /></label>
+                <label><var:string label:value="Lastname" /></label>
                   <input type="text" class="textField" name="sn" id="sn"
                     var:value="ldifRecord.sn"
                     />
               </div>
               <div>
-                <label><var:string label:value="Display:" /></label>
+                <label><var:string label:value="Display" /></label>
                   <input type="text" class="textField" name="displayname" id="displayname"
                     var:value="ldifRecord.displayname"
                     />
               </div>
               <div>
-                <label><var:string label:value="Nickname:" /></label>
+                <label><var:string label:value="Nickname" /></label>
                   <input type="text" class="textField" name="mozillanickname" id="mozillanickname"
                     var:value="ldifRecord.mozillanickname"
                     />
@@ -86,7 +86,7 @@
             <legend><var:string label:value="Internet" /></legend>
             
               <div>
-                <label><var:string label:value="Email:" /></label>
+                <label><var:string label:value="Email" /></label>
                   <input type="text" class="textField" name="mail" id="mail"
                     var:value="ldifRecord.mail"
                     />
@@ -181,7 +181,7 @@
           <fieldset>
             <legend><var:string label:value="Home"/></legend>
               <div>
-                <label><var:string label:value="Address:" /></label>
+                <label><var:string label:value="Address" /></label>
                   <input type="text" class="textField" name="mozillahomestreet"
                     id="mozillahomestreet"
                     var:value="ldifRecord.mozillahomestreet"
@@ -192,7 +192,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="City:" /></label>
+                <label><var:string label:value="City" /></label>
                   <input type="text" class="textField" name="mozillahomelocalityname"
                     id="mozillahomelocalityname"
                     var:value="ldifRecord.mozillahomelocalityname"
@@ -215,7 +215,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="Country:" /></label>
+                <label><var:string label:value="Country" /></label>
                   <input type="text" class="textField" name="mozillahomecountryname"
                     id="mozillahomecountryname"
                     var:value="ldifRecord.mozillahomecountryname"
@@ -234,7 +234,7 @@
             <legend><var:string label:value="Work" /></legend>
               <div>
                 <label>
-                  <var:string label:value="Title:" /></label>
+                  <var:string label:value="Title" /></label>
                   <input type="text" class="textField" name="title"
                     id="title"
                     var:value="ldifRecord.title"
@@ -265,7 +265,7 @@
                     />
               </div>
               <div class="inline-field">
-                <label><var:string label:value="City:" /></label>
+                <label><var:string label:value="City" /></label>
                   <input type="text" class="textField" name="l"
                     id="l" var:value="ldifRecord.l"
                     />
@@ -285,7 +285,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="Country:" /></label>
+                <label><var:string label:value="Country" /></label>
                   <input type="text" class="textField" name="c"
                     id="c" var:value="ldifRecord.c"
                     />
@@ -311,15 +311,15 @@
         <div id="otherInfos" class="tab">
           <fieldset class="framenocaption">
                 <div>
-                  <label id="birthdayLabel"><var:string label:value="Birthday (yyyy-mm-dd):"/></label>
+                  <label id="birthdayLabel"><var:string label:value="Birthday (yyyy-mm-dd)"/></label>
                   <var:component className="UIxDatePicker"
                     const:dateID="birthdayDate"
                     day="ldifRecord.birthday"
                     month="ldifRecord.birthmonth"
                     year="ldifRecord.birthyear"
-                    label:label="browse birthday"/>
+                    label:label="Birthday"/>
                 </div>
-                <label><var:string label:value="Note:" /></label>
+                <label><var:string label:value="Note" /></label>
                 <textarea rows="23" var:value="ldifRecord.description" name="note" id="note"></textarea>
           </fieldset>
         </div>
