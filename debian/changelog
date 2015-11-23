@@ -1,3 +1,23 @@
+sogo (2.3.2-zentyal5) trusty; urgency=medium
+
+  [ Javier Amor García ]
+  * [08f05a] sogo-openchange: Avoid compile warnings after changes in exchange.idl
+  * [88a74b] Do not save IPM.DistList messages
+  * [a73df9] [MAPIStoreGCSMessage getPidTagChangeKey:inMemCtx:] return on error
+
+  [ Jesús García Sáez ]
+  * [194c41] Log an error for SOGoObject without wocontext
+  * [5f5b5d] oc: activate user context on initialization (for real)
+  * [994359] Update NEWS with release 2.3.2-zentyal5
+
+  [ Enrique J. Hernández Blasco ]
+  * [973177] Update NEWS from #208 PR
+  * [6a07d3] Update NEWS from #205 PR
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 23 Nov 2015 12:45:10 +0100
+
 sogo (2.3.2-zentyal4) trusty; urgency=medium
 
   [ Enrique J. Hernández Blasco ]
