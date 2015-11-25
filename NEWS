@@ -1,15 +1,15 @@
-2.3.3a-zentyal1 (YYYY-MM-DD)
+2.3.3a-zentyal1 (2015-11-26)
 ----------------------------
 
 New features
- - 
+ - Upstream with SOGo 2.3.3a
 
 Enhancements
  - limit the maximum width of toolbar buttons
- 
 
 Bug fixes
- - JavaScript exception when printing events from calendars with no assigned color (#3203)
+  - sogo-openchange reconnect broken ldap connections
+  - JavaScript exception when printing events from calendars with no assigned color (#3203)
   - Accepted & updated event names are now shown correctly
   - Provide safe guards in mail and calendar to avoid exceptions while syncing
   - Avoid creation of phantom contacts in SOGo from distribution list synced from Outlook.
