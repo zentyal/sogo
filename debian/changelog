@@ -1,3 +1,93 @@
+sogo (2.3.3a-zentyal1) trusty; urgency=medium
+
+  [ Ludovic Marcotte ]
+  * [8d85ca] (fix) numerous EAS fixes when connections are dropped before the EAS client receives the response (#3058, #2849)
+  * [7f92ac] (fix) handle references correctly over EAS (#3365)
+  * [a54cc2] (fix) we no longer always rewrite emails for Outlook when using EAS
+  * [beb484] (fix) make sure English is always used when generating Date headers using EAS (#3356)
+  * [3702e7] (fix) don't escape quoted strings during versit generation
+  * [2b1e06] (feat) initial S/MIME support for EAS (#3327)
+  * [8cb580] (fix) oh well, old crappy distros
+  * [1716e4] (fix) last fixes for cache coherency
+  * [fc9b17] (feat) now possible to choose which folders to sync over EAS
+  * [2c7230] (fix) we now return all cards when we receive an empty addressbook-query REPORT
+  * [df211a] (fix) fixed br_pt translation + updated transifex (#3355)
+  * [1b4421] (fix) avoid crash when replying to a mail with no recipients (#3359)
+  * [40a1d5] (fix) inline images sent from SOGo webmail are not displayed in Mozilla Thunderbird (#3271)
+  * [3ba1e3] (fix) perms fixes on scripts
+  * [b378d2] (fix) add unit test from PR #105
+  * [40cb81] (fix) prevent postal address showing on single line over EAS (#2614)
+  * [b8d772] (feat) we now save the supported elements in EAS collections
+  * [1013c4] (feat) support for ghosted elements on contacts over EAS
+  * [34f626] (fix) small fixes around web calendars + sync
+  * [7a5e55] (fix) manually added patch from PR#113 to avoid many "broken" commits
+  * [41e80b] Updated NEWS file regarding PR#120
+  * [9d3102] (fix) additional fix for #3118
+  * [ca2746] (fix) added type cast
+  * [c2e4f7] (fix) double declaration of same method
+  * [f919df] (fix) one more fix for #3118
+  * [b55ec5] (fix) handle emails having an attachment as their content
+  * [7f26d4] We drop Lucid.
+  * [b170ae] (fix) small fixes
+  * [863f18] (fix) fixed wrong comparison of meta vs. META tag in HTML mails
+  * [ef7de7] (fix) fixed addressbrook-only source entires having a c_uid set
+  * [64456c] (fix) additional fix for #3356
+  * [31deae] (fix) domain in doc
+
+  [ Francis Lachapelle ]
+  * [b62167] Fix Brazilian (Portuguese) translation
+  * [6812cb] Display missing events when printing working hours
+  * [7c69e3] (fix) JavaScript syntax error in attendees editor
+  * [191574] Bump version to 2.3.3
+  * [ba3735] (fix) Position of popup menu
+  * [106c6a] (js) Fix dialogs when partially visible
+  * [76b8de] Add Portuguese translation
+  * [f58554] Add Macedonian translation
+  * [106f8e] Improve Portuguese translation
+  * [f2347e] Fix localizable strings in contact editor
+  * [46f93d] Fix Macedonian translation
+  * [ceec49] Fix Portuguese translation
+  * [707aab] Update Slovenian translation
+  * [f8d31a] Update NEWS file
+  * [82114f] Fix Macedonian et Portuguese translations
+  * [da2304] Handle ExpandedFolders settings like in v3
+  * [71db39] Update CKEditor to version 4.5.4
+  * [6aef71] Update prototype.js to v1.7.3
+  * [1d78b2] Preparation for release 2.3.3
+  * [fbc73d] Update ChangeLog
+  * [2a9010] Update translations
+  * [a9984d] Fix regression when saving mail folders state
+  * [4b8a9b] Always show user's name in top banner
+  * [7644d6] Preparation for release 2.3.3a
+  * [701571] Update ChangeLog
+  * [85ce41] (fix) JS exception when printing calendars
+  * [8dae5f] Localization
+  * [4a27be] (css) Limit toolbar buttons min/max width
+
+  [ Euan Thoms ]
+  * [892bd6] Stage 3 of clang compiler warning patches.
+  * [5b65ea] Stage 4 of clang compiler warning patches.
+  * [1425bb] Stage 5 of clang compiler warning patches.
+  * [e173c6] Stage 9 of clang compiler warning patches.
+  * [d3290d] Stage 2 of clang compiler warning patches.
+  * [0605fd] Delete .orig files left over from applying patches to Stage 2.
+  * [eda84c] Stage1b (v2 branch) of clang compiler warning patches.
+  * [e4fae4] Stage 8 of clang compiler warning patches.
+
+  [ extrafu ]
+  * [196765] (fix) allow getting password from context for OC
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [9554e9] Adapt to new safe_ldb_search function
+
+  [ Jesús García Sáez ]
+  * [7f0a10] Updated NEWS for release 2.3.3a-zentyal1
+  * [936b50] Update debian/control require oc 2.4-zentyal15
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 26 Nov 2015 13:41:35 +0100
+
 sogo (2.3.2-zentyal5) trusty; urgency=medium
 
   [ Javier Amor García ]
