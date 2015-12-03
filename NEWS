@@ -1,8 +1,12 @@
 Unreleased
 ----------
 
+Enhancements
+  - User sources can be loaded dynamically
+  - Unify user sources API
+
 Bug fixes
-  -  No crash resolving recipients after reconnecting LDAP connection
+  - No crash resolving recipients after reconnecting LDAP connection
   - Fixes on RTF parsing used by event/contact description and mail as
     RTF to read non-ASCII characters:
     - Better parsing of font table
