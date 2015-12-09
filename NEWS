@@ -1,3 +1,19 @@
+2.3.3a-zentyal2 (2015-12-09)
+----------------------------
+
+Enhancements
+  - User sources can be loaded dynamically
+  - Unify user sources API
+
+Bug fixes
+  - No crash resolving recipients after reconnecting LDAP connection
+  - Fixes on RTF parsing used by event/contact description and mail as
+    RTF to read non-ASCII characters:
+    - Better parsing of font table
+    - When using a font, switch to its character set
+    - Correct parsing of escaped characters
+    - Unicode character command word support for unicode characters greater than 32767
+
 2.3.3a-zentyal1 (2015-11-26)
 ----------------------------
 
