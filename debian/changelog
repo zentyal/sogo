@@ -1,3 +1,40 @@
+sogo (2.3.3a-zentyal2) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [48832a] Add domain to lookupGroupEntryByUID/ByEmail
+  * [7d4967] Add domain to lookupContactEntry
+  * [9d3f3c] LDAPSource: release displayName on dealloc
+  * [bf4a58] Added isDomainDefined
+  * [0d05e3] defaultsForDomain return sharedSystemDefaults for unknown domains
+  * [ec5338] return enableDomainBasedUID based only on the key
+  * [30a941] SOGoUserManager.m: format and small refactor
+  * [08f57f] SOGoUserManager: get domain after authentication
+  * [8cfb0f] Avoid inserting second email for Contacts
+  * [0bd5d4] Update news for release 2.3.3a-zentyal2
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [a6bbe1] Add missing header files
+  * [ec5983] Add user defined user source
+  * [c50e35] Update NEWS from PR #214
+
+  [ Javier Amor García ]
+  * [fa4d3a] Reimplementation of [RTFHandler parseFontTable]
+  * [01dcf3] Fixed activation of characters sets in [RTFHandler parse]
+  * [8e3e4a] Added RTF escapes parsing
+  * [2518b3] Fixed RTF support for unicode characters greater than 32767
+  * [3155bd] Fixed bug which created unnecesary font tags
+  * [2f6354] Fixed problem with ascii chars that had different unicode value
+  * [94d4da] Reimplemented [RTFHandler parse] to have an unambiguous decoding of control words
+
+  [ Enrique J. Hernández Blasco ]
+  * [5e9c24] Update NEWS from PR #209
+  * [2deda0] oc-mail: Do not crash after reconnect sending mails
+  * [9c11a2] Update NEWS from PR #210
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 09 Dec 2015 09:55:18 +0100
+
 sogo (2.3.3a-zentyal1) trusty; urgency=medium
 
   [ Ludovic Marcotte ]
