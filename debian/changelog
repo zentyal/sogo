@@ -1,3 +1,12 @@
+sogo (2.3.3a-zentyal3) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [74843f] Fix attendees editor after 2.3.3a merge
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 10 Dec 2015 16:09:19 +0100
+
 sogo (2.3.3a-zentyal2) trusty; urgency=medium
 
   [ Jesús García Sáez ]
