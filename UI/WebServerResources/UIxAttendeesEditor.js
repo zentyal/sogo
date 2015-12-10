@@ -228,6 +228,8 @@ function performSearchCallback(http) {
                     }
                     else {
                         node.uid = null;
+                        node.appendChild(new Element('div').addClassName('colorBox').addClassName('noFreeBusy'));
+                    }
                     node.isList = isList;
                     if (isList) {
                         node.cname = contact["c_name"];
