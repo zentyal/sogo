@@ -25,9 +25,8 @@ function openContactsFolder(contactsFolder, reload, idx) {
         if (searchValue && searchValue.length > 0)
             url += ("&search=" + search["contacts"]["criteria"]
                     + "&value=" + escape(searchValue.utf8encode()));
-        else if (currentFolderIsRemote())
-            url += ("&search=name_or_address"
-                    + "&value=.");
+        else
+            url += "&search=name_or_address&value=.";
         var sortAttribute = sorting["attribute"];
         if (sortAttribute && sortAttribute.length > 0)
             url += ("&sort=" + sorting["attribute"]
