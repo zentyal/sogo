@@ -2,6 +2,8 @@ Unreleased (2015-12-XX)
 -----------------------
 
 Bug fixes
+  - Priorize filename in Content-Disposition against name in Content-Type
+    to get the filename of an attachment in mail
   - Request all contacts when there is no filter in Contacts menu
     in Webmail
   - Personal contacts working properly on Outlook
