@@ -86,11 +86,11 @@
 
   result = [parser objectWithString: @"[ 12.3456 ]"];
   test ([(NSDecimalNumber *)[result objectAtIndex: 0] compare:
-            [NSDecimalNumber decimalNumberWithString: @"12.3456"]]);
+            [NSDecimalNumber decimalNumberWithString: @"12.3456"]] == NSOrderedSame);
 
   result = [parser objectWithString: @"[ -312.3456 ]"];
   test ([(NSDecimalNumber *)[result objectAtIndex: 0] compare:
-            [NSDecimalNumber decimalNumberWithString: @"-312.3456"]]);
+            [NSDecimalNumber decimalNumberWithString: @"-312.3456"]] == NSOrderedSame);
 }
 
 @end
