@@ -1,3 +1,19 @@
+2.3.3a-zentyal4 (2015-12-22)
+----------------------------
+
+Bug fixes
+  - Priorize filename in Content-Disposition against name in Content-Type
+    to get the filename of an attachment in mail
+  - Request all contacts when there is no filter in Contacts menu
+    in Webmail
+  - Personal contacts working properly on Outlook
+
+2.3.3a-zentyal3 (2015-12-10)
+----------------------------
+
+Bug fixes
+  - Fix invite attendees editor (It was not working since 2.3.3a-zentyal1)
+
 2.3.3a-zentyal2 (2015-12-09)
 ----------------------------
 
