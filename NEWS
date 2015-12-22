@@ -1,5 +1,5 @@
-Unreleased (2015-12-XX)
------------------------
+2.3.3a-zentyal4 (2015-12-22)
+----------------------------
 
 Bug fixes
   - Priorize filename in Content-Disposition against name in Content-Type
