@@ -2,6 +2,7 @@ xxxxxxxxxxx
 ----------------------------
 
 Enhancements
+  - Return an error to openchange if mail message delivery fails
   - Return the requested elements on complex requests from Outlook when downloading changes
 
 2.3.3a-zentyal4 (2015-12-22)
