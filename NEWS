@@ -1,3 +1,13 @@
+2.3.3a-zentyal5 (2015-12-28)
+----------------------------
+
+Bug fixes
+  - Share calendar, tasks and contacts folders in Outlook 2013 with editor permissions
+
+Enhancements
+  - Return an error to openchange if mail message delivery fails
+  - Return the requested elements on complex requests from Outlook when downloading changes
+
 2.3.3a-zentyal4 (2015-12-22)
 ----------------------------
 
