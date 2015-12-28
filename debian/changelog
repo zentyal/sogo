@@ -1,3 +1,27 @@
+sogo (2.3.3a-zentyal5) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [10cabc] oc: Use ReplicaID from connection info
+  * [98ed9c] oc-mail: Manage multiple CN restriction
+  * [2fc21e] oc: Use proper variable name for last modified value
+  * [3dff73] oc: Use NSString index for version lookup
+  * [7cdf48] oc: Support every operator for CN restriction
+  * [5993fe] oc-db: Implement description message to ease debugging
+  * [a61838] oc-db: Store version number instead of CN
+  * [db1787] oc: Dump property canonical name in dbmsgreader
+  * [916c04] oc-mail: Return error when delivery was not successful
+  * [dbfd86] oc: Set Editor as role is now possible in Outlook
+  * [7fe1b5] oc: Do compile with Samba 4.1
+
+  [ Jesús García Sáez ]
+  * [8e0589] Update NEWS with changes from PR #219
+  * [bf2eaf] Update NEWS from PR #226
+  * [fb9f05] Update news with pr #228
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 28 Dec 2015 16:11:58 +0100
+
 sogo (2.3.3a-zentyal4) trusty; urgency=medium
 
   [ Jesús García Sáez ]
