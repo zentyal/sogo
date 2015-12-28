@@ -20,7 +20,7 @@
     <var:if condition="isNew">
       <div id="addressBookSelector">
         <style type="text/css">DIV#editorTabs { top: 40px; };</style>
-        <var:string label:value="Add to:"/>
+        <var:string label:value="Add to"/>
         <var:popup const:id="addressBooksList"
           list="addressBooksList" item="addressBookItem"
           string="addressBookDisplayName"
@@ -92,7 +92,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="Additional Email:" /></label>
+                <label><var:string label:value="Additional Email" /></label>
                   <input type="text" class="textField" name="mozillasecondemail"
                     id="mozillasecondemail" var:value="ldifRecord.mozillasecondemail"
                     />
@@ -105,7 +105,7 @@
               </div>
               <div id="htmlMailFormat">
                 <label><var:string
-                    label:value="Prefers to receive messages formatted as:" />
+                    label:value="Prefers to receive messages formatted as" />
                   <var:popup list="htmlMailFormatList" item="item"
                     label:noSelectionString="htmlMailFormat_UNKNOWN"
                     string="itemHtmlMailFormatText"
@@ -117,7 +117,7 @@
           <fieldset><legend><var:string label:value="Phones" /></legend>
           
               <div>
-                <label><var:string label:value="Work:" /></label>
+                <label><var:string label:value="Work" /></label>
                   <input type="text" class="textField"
                     name="telephonenumber"
                     id="telephonenumber"
@@ -125,7 +125,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="Home:" /></label>
+                <label><var:string label:value="Home" /></label>
                   <input type="text" class="textField"
                     name="homephone" id="homephone"
                     var:value="ldifRecord.homephone"
@@ -140,7 +140,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="Pager:" /></label>
+                <label><var:string label:value="Pager" /></label>
                   <input type="text" class="textField"
                     name="pager"
                     id="pager"
@@ -148,7 +148,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="Mobile:" /></label>
+                <label><var:string label:value="Mobile" /></label>
                   <input type="text" class="textField" name="mobile" id="mobile"
                     var:value="ldifRecord.mobile"
                     />
@@ -199,7 +199,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="State_Province:" /></label>
+                <label><var:string label:value="State_Province" /></label>
                   <input type="text" class="textField" name="mozillahomestate"
                     id="mozillahomestate"
                     var:value="ldifRecord.mozillahomestate"
@@ -207,7 +207,7 @@
               </div>
               <div>
                 <label><var:string
-                    label:value="ZIP_Postal Code:"
+                    label:value="ZIP_Postal Code"
                     /></label>
                   <input type="text" class="textField" name="mozillahomepostalcode"
                     id="mozillahomepostalcode"
@@ -223,7 +223,7 @@
               </div>
               <div>
                 <label>
-                  <var:string label:value="Web Page:" /></label>
+                  <var:string label:value="Web Page" /></label>
                   <input type="text" class="textField" name="mozillahomeurl"
                     var:value="ldifRecord.mozillahomeurl"
                     />
@@ -242,20 +242,20 @@
               </div>
               <div>
                 <label>
-                  <var:string label:value="Department:" /></label>
+                  <var:string label:value="Department" /></label>
                   <input type="text" class="textField" name="ou"
                     id="ou"
                     var:value="ldifRecord.ou"
                     />
               </div>
               <div>
-                <label><var:string label:value="Organization:" /></label>
+                <label><var:string label:value="Organization" /></label>
                   <input type="text" class="textField" name="o"
                     id="o" var:value="ldifRecord.o"
                     />
               </div>
               <div>
-                <label><var:string label:value="Address:" /></label>
+                <label><var:string label:value="Address" /></label>
                  <input type="text" class="textField inline-input" name="street"
                     id="street"
                     var:value="ldifRecord.street"
@@ -271,14 +271,14 @@
                     />
               </div>
               <div class="inline-field">
-                <label><var:string label:value="State_Province:" /></label>
+                <label><var:string label:value="State_Province" /></label>
                   <input type="text" class="textField" name="st"
                     id="st" var:value="ldifRecord.st"
                     />
               </div>
               <div>
                 <label><var:string
-                    label:value="ZIP_Postal Code:"
+                    label:value="ZIP_Postal Code"
                     /></label>
                   <input type="text" class="textField" name="postalcode"
                     id="postalcode" var:value="ldifRecord.postalcode"
@@ -291,7 +291,7 @@
                     />
               </div>
               <div>
-                <label><var:string label:value="Web Page:" /></label>
+                <label><var:string label:value="Web Page" /></label>
                   <input type="text" class="textField" name="mozillaworkurl"
                     var:value="ldifRecord.mozillaworkurl"/>
               </div>
