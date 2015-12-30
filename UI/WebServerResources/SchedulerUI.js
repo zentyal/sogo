@@ -20,6 +20,9 @@ var calendarsOfEventsToDelete = [];
 var usersRightsWindowHeight = 270;
 var usersRightsWindowWidth = 502;
 
+var componentWindowHeight = 600;
+var componentWindowWidth = 600;
+
 var calendarEvents = null;
 
 var preventAutoScroll = false;
@@ -89,7 +92,7 @@ function newEvent(type, day, hour, duration) {
     if (params.length > 0)
         urlstr += "?" + params.join("&");
 
-    window.open(urlstr, "", "width=600,height=600,resizable=0");
+    window.open(urlstr, "", "width=" + componentWindowWidth + ",height=" + componentWindowHeight + ",resizable=0");
 
     return false; /* stop following the link */
 }
@@ -224,7 +227,7 @@ function _editEventId(id, calendar, recurrence) {
     }
     urlstr += "/edit";
     var win = window.open(urlstr, "_blank",
-                          "width=600,height=600,resizable=0");
+                          "width=" + componentWindowWidth + ",height=" + componentWindowHeight + ",resizable=0");
     if (win)
         win.focus();
 }
