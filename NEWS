@@ -2,6 +2,7 @@
 ---------------------------
 
 Bug fixes
+  - Fix appointment notification mails using SOGoEnableDomainBasedUID configuration
   - Fix shifts in event times on Outlook
 
 
