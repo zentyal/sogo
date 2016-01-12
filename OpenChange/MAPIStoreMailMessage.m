@@ -62,6 +62,7 @@
 #undef DEBUG
 #include <stdbool.h>
 #include <gen_ndr/exchange.h>
+#include <gen_ndr/property.h>
 #include <mapistore/mapistore.h>
 #include <mapistore/mapistore_errors.h>
 
@@ -1415,13 +1416,34 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 - (int) getPidLidMeetingType: (void **) data
                     inMemCtx: (TALLOC_CTX *) memCtx
 {
+  NSString *messageType;
+
   if (!headerSetup)
     [self _fetchHeaderData];
 
-  return (mailIsEvent
-          ? [[self _appointmentWrapper] getPidLidMeetingType: data
-                                                    inMemCtx: memCtx]
-          : MAPISTORE_ERR_NOT_FOUND);
+  /* This property specifies the type of Meeting Request, Update or Cancellation
+     object ([MS-OXOCAL] 2.2.6.5, 2.2.8.6). */
+  messageType = [[sogoObject mailHeaders] objectForKey: @"x-sogo-message-type"];
+  if (messageType && [messageType isEqualToString: @"calendar:invitation-update"])
+    {
+      /* Update request. SOGo doesn't send update mails for changes that don't require
+         validation, so we don't need to return mtgInfo in any case. This header field
+         is only present in mails sent from SOGo (i.e. from the webmail and from
+         Outlook) */
+      *data = MAPILongValue (memCtx, mtgFull);
+    }
+  else if (mailIsMeetingRequest)
+    {
+      /* Initial request */
+      *data = MAPILongValue (memCtx, mtgRequest);
+    }
+  else
+    {
+      /* Unspecified */
+      *data = MAPILongValue (memCtx, mtgEmpty);
+    }
+
+  return MAPISTORE_SUCCESS;
 }
 
 - (int) getPidTagTransportMessageHeaders: (void **) data

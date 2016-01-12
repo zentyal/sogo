@@ -552,9 +552,7 @@ static NSCharacterSet *hexCharacterSet = nil;
 - (int) getPidLidMeetingType: (void **) data
                     inMemCtx: (TALLOC_CTX *) memCtx
 {
-  /* TODO
-     See 2.2.6.5 PidLidMeetingType (OXOCAL) */
-  *data = MAPILongValue (memCtx, 0x00000001);
+  *data = MAPILongValue (memCtx, mtgEmpty);
 
   return MAPISTORE_SUCCESS;
 }
