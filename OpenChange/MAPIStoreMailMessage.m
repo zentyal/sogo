@@ -1258,6 +1258,17 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   return rc;
 }
 
+- (int) getPidLidAppointmentSequence: (void **) data
+                            inMemCtx: (TALLOC_CTX *) memCtx
+{
+  if (!headerSetup)
+    [self _fetchHeaderData];
+
+  return (mailIsEvent
+          ? [[self _appointmentWrapper] getPidLidAppointmentSequence: data inMemCtx: memCtx]
+          : MAPISTORE_ERR_NOT_FOUND);
+}
+
 - (int) getPidLidAppointmentStartWhole: (void **) data
                               inMemCtx: (TALLOC_CTX *) memCtx
 {
