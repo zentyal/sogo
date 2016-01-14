@@ -231,10 +231,13 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
 - (int) getPidTagMessageClass: (void **) data
                      inMemCtx: (TALLOC_CTX *) memCtx
 {
+  iCalPerson *ownerAttendee;
   SOGoUser *owner;
 
   owner = [[self userContext] sogoUser];
-  if ([masterEvent userAsAttendee: owner])
+  ownerAttendee = [masterEvent userAsAttendee: owner];
+
+  if (ownerAttendee && [[ownerAttendee partStat] isEqualToString: @"NEEDS-ACTION"])
     *data = talloc_strdup (memCtx, "IPM.Schedule.Meeting.Request");
   else
     *data = talloc_strdup (memCtx, "IPM.Appointment");

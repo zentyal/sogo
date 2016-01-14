@@ -496,6 +496,9 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 - (int) getPidLidResponseStatus: (void **) data
                        inMemCtx: (TALLOC_CTX *) memCtx
 {
+  if (mailIsEvent)
+    return [[self _appointmentWrapper] getPidLidResponseStatus: data inMemCtx: memCtx];
+
   *data = MAPILongValue (memCtx, 0);
 
   return MAPISTORE_SUCCESS;
