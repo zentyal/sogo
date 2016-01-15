@@ -45,6 +45,7 @@
 #import <SOGo/NSDictionary+Utilities.h>
 #import <SOGo/NSString+Utilities.h>
 #import <SOGo/NSObject+DAV.h>
+#import <SOGo/SOGoCache.h>
 #import <SOGo/SOGoPermissions.h>
 #import <SOGo/SOGoSource.h>
 #import <SOGo/SOGoUserSettings.h>
@@ -156,13 +157,24 @@
   NSString *url;
   BOOL isNew = NO;
   NSArray *baseClasses;
+  SOGoCache *cache;
+  NSString *objectNameKey;
+
+  cache = [SOGoCache sharedCache];
 
   /* first check attributes directly bound to the application */
   obj = [super lookupName: objectName inContext: lookupContext acquire: NO];
 
   if (!obj)
     {
-      ldifEntry = [childRecords objectForKey: objectName];
+      // FIXME: workaround for performance dav issue 1+n ldap queries
+      objectNameKey = [NSString stringWithFormat:@"dav:contact:%@", objectName];
+      NSString *valueCached = [cache valueForKey:objectNameKey];
+      if (valueCached)
+        ldifEntry = [valueCached objectFromJSONString];
+      else
+        ldifEntry = [childRecords objectForKey: objectName];
+
       if (!ldifEntry)
         {
           ldifEntry = [source lookupContactEntry: objectName];
@@ -189,6 +201,17 @@
                                                inContainer: self];
           if (isNew)
             [obj setIsNew: YES];
+
+          // FIXME: workaround for performance dav issue 1+n ldap queries
+          if (!valueCached)
+            {
+              NSMutableDictionary *ldifEntryMutable = [ldifEntry mutableCopy];
+              // LDAPSource object is not serializable
+              [ldifEntryMutable removeObjectForKey:@"source"];
+              valueCached = [ldifEntryMutable jsonRepresentation];
+              // Cache 1 hour
+              [cache setValue:valueCached forKey:objectNameKey expire:3600];
+            }
         }
       else
         obj = [NSException exceptionWithHTTPStatus: 404];
