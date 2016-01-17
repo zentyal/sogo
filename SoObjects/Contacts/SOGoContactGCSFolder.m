@@ -180,6 +180,9 @@ static NSArray *folderListingFields = nil;
     {
       filter = [[filter stringByReplacingString: @"\\"  withString: @"\\\\"]
                      stringByReplacingString: @"'"  withString: @"\\'\\'"];
+      if ([filter isEqualToString: @"."])
+        filter = @"_";  /* matches one “_” character and it uses by UI. */
+
       if ([criteria isEqualToString: @"name_or_address"])
         qs = [NSString stringWithFormat:
                          @"(c_sn isCaseInsensitiveLike: '%%%@%%') OR "
