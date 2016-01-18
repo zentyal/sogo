@@ -1,3 +1,97 @@
+sogo (2.3.3a-zentyal5) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [10cabc] oc: Use ReplicaID from connection info
+  * [98ed9c] oc-mail: Manage multiple CN restriction
+  * [2fc21e] oc: Use proper variable name for last modified value
+  * [3dff73] oc: Use NSString index for version lookup
+  * [7cdf48] oc: Support every operator for CN restriction
+  * [5993fe] oc-db: Implement description message to ease debugging
+  * [a61838] oc-db: Store version number instead of CN
+  * [db1787] oc: Dump property canonical name in dbmsgreader
+  * [916c04] oc-mail: Return error when delivery was not successful
+  * [dbfd86] oc: Set Editor as role is now possible in Outlook
+  * [7fe1b5] oc: Do compile with Samba 4.1
+
+  [ Jesús García Sáez ]
+  * [8e0589] Update NEWS with changes from PR #219
+  * [bf2eaf] Update NEWS from PR #226
+  * [fb9f05] Update news with pr #228
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 28 Dec 2015 16:11:58 +0100
+
+sogo (2.3.3a-zentyal4) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [2a3367] oc-contacts: returning properly personal contacts
+  * [0ddbd7] Remove commented code
+  * [bc5aa3] Whitespaces and indentation
+  * [a9fe80] oc-contacts: don't return empty values
+  * [25dbce] Reorganize methods according to MS-OXOCNTC
+  * [1c8b69] Request all contacts when there is no filter
+  * [61aa18] Update NEWS for 2.3.3a-zentyal3 release
+  * [92d5f9] Update new for release 2.3.3a-zentyal4
+
+  [ Enrique J. Hernández Blasco ]
+  * [2e378e] Update NEWS from PR #215
+  * [41fae7] Update NEWS from PR #217
+  * [df6d97] Update NEWS from PR #216
+
+  [ Javier Amor García ]
+  * [41e388] sogo-mail: Priorize filename attribute to get attachment name
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 22 Dec 2015 16:56:49 +0100
+
+sogo (2.3.3a-zentyal3) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [74843f] Fix attendees editor after 2.3.3a merge
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 10 Dec 2015 16:09:19 +0100
+
+sogo (2.3.3a-zentyal2) trusty; urgency=medium
+
+  [ Jesús García Sáez ]
+  * [48832a] Add domain to lookupGroupEntryByUID/ByEmail
+  * [7d4967] Add domain to lookupContactEntry
+  * [9d3f3c] LDAPSource: release displayName on dealloc
+  * [bf4a58] Added isDomainDefined
+  * [0d05e3] defaultsForDomain return sharedSystemDefaults for unknown domains
+  * [ec5338] return enableDomainBasedUID based only on the key
+  * [30a941] SOGoUserManager.m: format and small refactor
+  * [08f57f] SOGoUserManager: get domain after authentication
+  * [8cfb0f] Avoid inserting second email for Contacts
+  * [0bd5d4] Update news for release 2.3.3a-zentyal2
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [a6bbe1] Add missing header files
+  * [ec5983] Add user defined user source
+  * [c50e35] Update NEWS from PR #214
+
+  [ Javier Amor García ]
+  * [fa4d3a] Reimplementation of [RTFHandler parseFontTable]
+  * [01dcf3] Fixed activation of characters sets in [RTFHandler parse]
+  * [8e3e4a] Added RTF escapes parsing
+  * [2518b3] Fixed RTF support for unicode characters greater than 32767
+  * [3155bd] Fixed bug which created unnecesary font tags
+  * [2f6354] Fixed problem with ascii chars that had different unicode value
+  * [94d4da] Reimplemented [RTFHandler parse] to have an unambiguous decoding of control words
+
+  [ Enrique J. Hernández Blasco ]
+  * [5e9c24] Update NEWS from PR #209
+  * [2deda0] oc-mail: Do not crash after reconnect sending mails
+  * [9c11a2] Update NEWS from PR #210
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Wed, 09 Dec 2015 09:55:18 +0100
+
 sogo (2.3.3a-zentyal1) trusty; urgency=medium
 
   [ Ludovic Marcotte ]

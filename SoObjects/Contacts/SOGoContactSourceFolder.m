@@ -47,7 +47,6 @@
 #import <SOGo/NSObject+DAV.h>
 #import <SOGo/SOGoPermissions.h>
 #import <SOGo/SOGoSource.h>
-#import <SOGo/SOGoUserManager.h>
 #import <SOGo/SOGoUserSettings.h>
 #import <SOGo/SOGoSystemDefaults.h>
 #import <SOGo/WORequest+SOGo.h>
@@ -166,9 +165,10 @@
       ldifEntry = [childRecords objectForKey: objectName];
       if (!ldifEntry)
         {
-          ldifEntry = [source lookupContactEntry: objectName];
-	  if (ldifEntry)
-	    [childRecords setObject: ldifEntry forKey: objectName];
+          ldifEntry = [source lookupContactEntry: objectName
+                                        inDomain: [[context activeUser] domain]];
+          if (ldifEntry)
+            [childRecords setObject: ldifEntry forKey: objectName];
           else if ([self isValidContentName: objectName])
             {
               url = [[[lookupContext request] uri] urlWithoutParameters];
@@ -226,16 +226,8 @@
   NSObject <SOGoSource> *recordSource;
 
   newRecord = [NSMutableDictionary dictionaryWithCapacity: 8];
-
-  // We set the c_uid only for authentication sources. SOGoUserSources set
-  // with canAuthenticate = NO and isAddressBook = YES have absolutely *NO REASON*
-  // to have entries with a c_uid. These can collide with real uids.
-  if ([[[[SOGoUserManager sharedUserManager] metadataForSourceID: [source sourceID]] objectForKey: @"canAuthenticate"] boolValue])
-    {
-      [newRecord setObject: [oldRecord objectForKey: @"c_uid"]
-                    forKey: @"c_uid"];
-    }
-
+  [newRecord setObject: [oldRecord objectForKey: @"c_uid"]
+                forKey: @"c_uid"];
   [newRecord setObject: [oldRecord objectForKey: @"c_name"]
                 forKey: @"c_name"];
 
@@ -341,10 +333,14 @@
   NSDictionary *record;
 
   if (aName && [aName length] > 0)
-    record = [self _flattenedRecord: [source lookupContactEntry: aName]];
+    {
+      record = [source lookupContactEntry: aName
+                                 inDomain: [[context activeUser] domain]];
+      record = [self _flattenedRecord: record];
+    }
   else
     record = nil;
-  
+
   return record;
 }
 
@@ -579,7 +575,7 @@
                          toResponse: (WOResponse *) response
 {
   NSObject <DOMElement> *element;
-  NSString *url, *baseURL, *cname;
+  NSString *url, *baseURL, *cname, *domain;
   NSString **propertiesArray;
   NSMutableString *buffer;
   NSDictionary *object;
@@ -596,13 +592,13 @@
 
   max = [refs length];
   buffer = [NSMutableString stringWithCapacity: max*512];
-
+  domain = [[context activeUser] domain];
   for (count = 0; count < max; count++)
     {
       element = [refs objectAtIndex: count];
       url = [[[element firstChild] nodeValue] stringByUnescapingURL];
       cname = [self _deduceObjectNameFromURL: url fromBaseURL: baseURL];
-      object = [source lookupContactEntry: cname];
+      object = [source lookupContactEntry: cname inDomain: domain];
       if (object)
         [self appendObject: object
                 properties: propertiesArray
