@@ -1,3 +1,90 @@
+sogo (2.3.4-zentyal1) trusty; urgency=medium
+
+  [ Francis Lachapelle ]
+  * [2ae8c6] Add missing tooltips on buttons of toolbars
+  * [f42d6f] Enlarge size of event/task editor window
+  * [bbdb27] (css) Enlarge max width of toolbar buttons
+  * [993647] Update translations
+  * [15ab0f] Localization
+  * [8d19ec] Remove duplicate key in MainUI localization
+  * [e94b44] Localization cleanup
+  * [37f29c] Localization
+  * [6ddb40] Update CKEditor to version 4.5.6
+  * [5dfbfe] Preparation for release 2.3.4
+  * [c6dbcb] Update ChangeLog
+  * [e38640] Properly compute the last week number for the year
+  * [135535] Update NEWS file
+
+  [ Ludovic Marcotte ]
+  * [01642e] (fix) fixed one unit test
+  * [8df311] (fix) EAS fix for wrong charset being used (#3392)
+  * [2d1a4b] (fix) adjust doc and packaging regarding oc cleanup script
+  * [f7d748] (fix) EAS fix on qp-encoded subjects (#3390)
+  * [127962] (fix) correctly handle all-day event exceptions when the master event changes
+  * [dc0857] (feat) Initial support for EAS calendar exceptions
+  * [5a3caf] (fix) prevent characters in calendar component UID causing issues during import process
+  * [8456d4] Revert "(fix) fixed addressbrook-only source entires having a c_uid set"
+  * [8c0ef9] (fix) proper fix for #3389
+  * [2755a8] (fix) remove trailing semicolon everywhere
+  * [1f98d7] (fix) fixed broken translations
+  * [f9884e] (fix) added new strings from v3
+  * [7e1bbe] (fix #118) handle /.well-known/carddav
+  * [c5c6ff] (fix #119) disable servername and url by default
+  * [980db7] (fix #127) fallback to "work" when export as ldif
+  * [b4e4b9] (fix) avoid duplicating attendees when accepting event using a different identity over CalDAV
+  * [248892] (fix) small fix over previous commit
+  * [28bd4c] (fix) carry over the delegatedTo, not only the part stat
+  * [720b1d] (fix) carry over delegatedFrom too
+  * [225fe8] Disabled today's code for now. It requires more testing.
+  * [29f2d9] Enable old code.
+
+  [ Jesús García Sáez ]
+  * [b98d11] unittest: commented failing test
+  * [2a2d14] unittest: rtf, test crash core dump
+  * [0b6972] unittest: add rtf test
+  * [a8e5a3] unittest: NSString objectFromJSONString for single values
+  * [24a751] unittest: file as NSData and try different encodings
+  * [942f48] unittest: RTF with \pict
+  * [752084] unittest: New unittest with a rtf file
+  * [0316e4] unittest: RTF without color table definition
+  * [e4cd45] unittest: removed TestNGMimeAddressHeaderFieldGenerator
+  * [2e1ed2] unittest: fix TestNGMailAddressParser
+  * [75ff4a] Use new function from sope to qp-encode the subject
+  * [1529e7] unittest: compare properly decimal numbers
+  * [c2922e] unittest: QP encode function from NGMimeHeaderFieldGenerator
+  * [db213c] unittest: just reformat and indentation
+  * [d7e8df] Update NEWS from PR #221
+  * [90378b] draft: remove attachment on failure
+  * [0abb0c] Update libsope-dev dependecy when building
+
+  [ Javier Amor García ]
+  * [b07680] Added test fixture for RTF crash 6977
+  * [7e4571] Added test for RTF with russian characters
+  * [a0b15d] Test for [RTFHandler parseFontTable]
+  * [9ed381] Added test for character escape
+  * [603da7] Added test for spanish characters
+
+  [ Juan Vallés ]
+  * [d2ea6f] oc-calendar: Initialise NSCalendarDate with a SYSTEMTIME struct
+  * [332508] oc-calendar: Use signed integer for time zone biases
+  * [4ae5fe] oc-calendar: Extract time zone from TimeZoneDefinition
+  * [376e71] oc-calendar: Use the calendar's time zone if it is present
+  * [ccd9e3] Add the domain in the `uidInDomain` method
+
+  [ Enrique J. Hernández Blasco ]
+  * [8b0788] oc: Print retval on high debug for library interface
+  * [e7d2b8] Update NEWS from PR #229
+  * [1f564a] Update NEWS from PR #227
+  * [0c5f4e] Give support to JUnit output format for sogo-tests
+  * [74afe1] Update NEWS from #233 PR
+  * [b81c27] oc-calendar: Enable editor role
+  * [c130a4] oc-calendar: Set simple and Detailed Free/Busy permission level
+  * [823ab2] oc-calendar: Detail limitations on setting permissions
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 18 Jan 2016 10:57:01 +0100
+
 sogo (2.3.3a-zentyal5) trusty; urgency=medium
 
   [ Enrique J. Hernández Blasco ]
