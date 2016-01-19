@@ -652,4 +652,16 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
   return MAPISTORE_SUCCESS;
 }
 
+- (BOOL) isUpdateRequest
+{
+  iCalPerson *ownerAttendee;
+  SOGoUser *owner;
+
+  owner = [[self userContext] sogoUser];
+  ownerAttendee = [masterEvent userAsAttendee: owner];
+
+  return (ownerAttendee && [[ownerAttendee partStat] isEqualToString: @"NEEDS-ACTION"]
+          && ([masterEvent sequence] > 0));
+}
+
 @end

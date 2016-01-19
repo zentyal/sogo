@@ -35,6 +35,8 @@
   iCalEvent *masterEvent;
 }
 
+- (BOOL) isUpdateRequest;
+
 @end
 
 #endif /* MAPISTORECALENDARMESSAGE_H */
