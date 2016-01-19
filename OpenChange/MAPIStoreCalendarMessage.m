@@ -451,6 +451,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
   WOContext *woContext;
   SOGoAppointmentFolder *folder;
   SOGoAppointmentObject *newObject;
+  bool softDeleted;
 
   cname = [[container sogoObject] resourceNameForEventUID: uid];
   if (cname)
@@ -478,14 +479,14 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
         }
     }
   else
-    {
-      /* dissociate the object url from the old object's id */
-      objectId = [mapping idFromURL: url];
-      [mapping unregisterURLWithID: objectId];
-      newObject = [folder lookupName: cname
-                           inContext: woContext
-                             acquire: NO];
-    }
+    newObject = [folder lookupName: cname
+                         inContext: woContext
+                           acquire: NO];
+
+  /* dissociate the object url from the old object's id */
+  objectId = [mapping idFromURL: url isSoftDeleted: &softDeleted];
+  if (objectId != NSNotFound)
+    [mapping unregisterURLWithID: objectId];
 
   /* dissociate the object url associated with this object, as we want to
      discard it */
