@@ -396,35 +396,6 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
   return MAPISTORE_SUCCESS;
 }
 
-
-- (NSString *) _uidFromGlobalObjectId: (TALLOC_CTX *) memCtx 
-{
-  NSData *objectId;
-  NSString *uid = nil;
-  char *bytesDup, *uidStart;
-  NSUInteger length;
-
-  /* NOTE: we only handle the generic case at the moment, see
-     MAPIStoreAppointmentWrapper */
-  objectId = [properties
-               objectForKey: MAPIPropertyKey (PidLidGlobalObjectId)];
-  if (objectId)
-    {
-      length = [objectId length];
-      bytesDup = talloc_array (memCtx, char, length + 1);
-      memcpy (bytesDup, [objectId bytes], length);
-      bytesDup[length] = 0;
-      uidStart = bytesDup + length - 1;
-      while (uidStart != bytesDup && *(uidStart - 1))
-        uidStart--;
-      if (uidStart > bytesDup && *uidStart)
-        uid = [NSString stringWithUTF8String: uidStart];
-      talloc_free (bytesDup);
-    }
-
-  return uid;
-}
-
 - (SOGoAppointmentObject *) _resurrectRecord: (NSString *) cname
                                   fromFolder: (SOGoAppointmentFolder *) folder
 {
@@ -581,6 +552,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
 {
   // iCalCalendar *vCalendar;
   // NSCalendarDate *now;
+  NSData *objectId;
   NSString *uid, *nameInContainer;
   // iCalEvent *newEvent;
   // iCalPerson *userPerson;
@@ -589,7 +561,12 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
 
   if (isNew)
     {
-      uid = [self _uidFromGlobalObjectId: memCtx];
+      objectId = [properties
+                   objectForKey: MAPIPropertyKey (PidLidGlobalObjectId)];
+
+      if (objectId)
+        uid = [objectId globalObjectIdToUid: memCtx];
+
       if (uid)
         {
           /* Hack required because of what's explained in oxocal 3.1.4.7.1:

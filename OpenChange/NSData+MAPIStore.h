@@ -49,6 +49,8 @@
 
 - (void) hexDumpWithLineSize: (NSUInteger) lineSize;
 
+- (NSString *) globalObjectIdToUid: (void *) memCtx;
+
 @end
 
 @interface NSMutableData (MAPIStoreDataTypes)

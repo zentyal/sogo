@@ -251,6 +251,34 @@ static void _fillFlatUIDWithGUID (struct FlatUID_r *flatUID, const struct GUID *
     }
 }
 
+- (NSString *) globalObjectIdToUid: (void *) memCtx
+{
+  NSString *uid = nil;
+  char *bytesDup, *uidStart;
+  NSUInteger length;
+
+  /* NOTE: we only handle the generic case at the moment, see
+     MAPIStoreAppointmentWrapper */
+  length = [self length];
+  bytesDup = talloc_array (memCtx, char, length + 1);
+  if (!bytesDup)
+    {
+      NSLog (@"%s: Out of memory");
+      return nil;
+    }
+  memcpy (bytesDup, [self bytes], length);
+
+  bytesDup[length] = 0;
+  uidStart = bytesDup + length - 1;
+  while (uidStart != bytesDup && *(uidStart - 1))
+    uidStart--;
+  if (uidStart > bytesDup && *uidStart)
+    uid = [NSString stringWithUTF8String: uidStart];
+
+  talloc_free (bytesDup);
+  return uid;
+}
+
 @end
 
 @implementation NSMutableData (MAPIStoreDataTypes)
