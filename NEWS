@@ -6,6 +6,7 @@ Bug fixes
   - Contact listing with no filter
  
 Enhancements
+ - Use OpenChange log level in SOGo-OpenChange library
  - Editor role, Simple and Detailed Free/Busy permission level can be set in calendar folder permissions from Outlook
 
 2.3.4-zentyal1 (2016-01-18)
