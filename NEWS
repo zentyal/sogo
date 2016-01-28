@@ -1,6 +1,9 @@
 xxxxxxxxxxxxxxxxxxxxxxx
 -----------------------
 
+New feautres
+  - sogo-openchange will raise exceptions when imap connection cannot be established
+
 Bug fixes
   - Do not fail encoding email subjects mixing ASCII with non-ASCII
   - Contact listing with no filter
