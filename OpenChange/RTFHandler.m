@@ -1448,21 +1448,44 @@ inline static void parseUl(RTFHandler *self, BOOL hasArg, int arg, RTFFormatting
         }
       else
         {
-          c = *_bytes;
-          // We avoid appending NULL bytes or endlines
-          if (c && (c != '\n') && (c != '\r'))
+          const unsigned short * active_charset;
+          if (formattingOptions && formattingOptions->charset)
+            active_charset = formattingOptions->charset;
+          else
+            active_charset = defaultCharset;
+          s = nil;
+
+          // as we have begun a text section we process its own loop
+          while (_current_pos < _len)
             {
-              const unsigned short * active_charset;
-              if (formattingOptions && formattingOptions->charset)
-                active_charset = formattingOptions->charset;
+              c = *_bytes;
+              if (c == '\\' || c == '{' || c == '}' )
+                {
+                  // control word or group; return to the main loop
+                  break;
+                }       
+              else if (c && (c != '\n') && (c != '\r'))
+                {
+                  if (s == nil)
+                    s = [NSMutableString stringWithCharacters: &(active_charset[c])  length: 1];
+                  else
+                    [(NSMutableString*)s appendFormat: @"%C", active_charset[c]];
+
+                  ADVANCE;
+                }
               else
-                active_charset = defaultCharset;
-              
-              s = [NSString stringWithCharacters: &(active_charset[c])  length: 1];
+                {
+                  // We avoid appending NULL bytes, carriadge return or endlines
+                  ADVANCE;
+                }
+            }
+
+          if (s)
+            {
               d = [s dataUsingEncoding: NSUTF8StringEncoding];
               [_html appendData: d];
-            }
-          ADVANCE;
+            }       
+
         }
     }
   
