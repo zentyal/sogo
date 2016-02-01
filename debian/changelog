@@ -1,3 +1,31 @@
+sogo (2.3.4-zentyal2) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [4278e4] oc-calendar: Enable editor role
+  * [e0b7ef] oc-calendar: Set simple and Detailed Free/Busy permission level
+  * [57fad4] oc-calendar: Detail limitations on setting permissions
+  * [e887d7] Update NEWS from #236 PR
+  * [359da7] oc-calendar: Fix typo setting or operator
+  * [a19aa9] Update NEWS from PR #240
+
+  [ Jesús García Sáez ]
+  * [9e9a0a] Update NEWS from PR #231
+  * [cb3959] Unit test encode qp text
+  * [bad7fd] Unit test encode qp text: long of second line
+  * [6b2ec7] Remove listRequiresDot option from *Source classes
+  * [1bae41] Request all contacts no longer needs value=.
+  * [3d9466] Setting log level on backend initialization
+  * [99682a] Update NEWS from PR #241
+  * [bbdc19] Prepare for release 2.3.4-zentyal2
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [0d3e5e] Update NEWS for PR #237
+  * [061244] Allow exception raising when connecting to IMAP
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 01 Feb 2016 18:10:25 +0100
+
 sogo (2.3.4-zentyal1) trusty; urgency=medium
 
   [ Francis Lachapelle ]
