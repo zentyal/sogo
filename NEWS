@@ -1,5 +1,5 @@
-xxxxxxxxxxxxxxxxxxxxxxx
------------------------
+2.3.4-zentyal2 (2016-02-01)
+---------------------------
 
 New feautres
   - sogo-openchange will raise exceptions when imap connection cannot be established
@@ -7,7 +7,7 @@ New feautres
 Bug fixes
   - Do not fail encoding email subjects mixing ASCII with non-ASCII
   - Contact listing with no filter
- 
+
 Enhancements
  - Use OpenChange log level in SOGo-OpenChange library
  - Editor role, Simple and Detailed Free/Busy permission level can be set in calendar folder permissions from Outlook
