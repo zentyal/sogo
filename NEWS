@@ -1,3 +1,10 @@
+X.X.X
+--------------------------
+
+Bug fixes
+  - Outlook can handle contacts without email (sync issue on folder)
+
+
 2.3.4-zentyal2 (2016-02-01)
 ---------------------------
 
