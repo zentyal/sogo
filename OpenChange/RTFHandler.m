@@ -33,6 +33,8 @@
 #define DEFAULT_CHARSET 1
 #define FONTNAME_LEN_MAX 100
 #define UTF8_FIRST_BYTE_LAST_CODEPOINT 0x7F
+#define MAX_CHARSET_INDEX 255
+
 //
 // Charset definitions. See http://msdn.microsoft.com/en-us/goglobal/bb964654 for all details.
 //
@@ -608,7 +610,6 @@ static void _init_fontCws_table()
      word and is not part of the control word. */
 
   end = _bytes;
-
   *len = end-start-1;
 
   return start+1;
@@ -1215,7 +1216,6 @@ inline static void parseUl(RTFHandler *self, BOOL hasArg, int arg, RTFFormatting
   unsigned char c;
   NSData *d;
   NSString *s;
-  unichar uch;
 
   stack = [[RTFStack alloc] init];
   fontTable = nil;
@@ -1223,7 +1223,7 @@ inline static void parseUl(RTFHandler *self, BOOL hasArg, int arg, RTFFormatting
   defaultCharset = ansicpg1252;
   formattingOptions = nil;
 
-  _html = [[NSMutableData alloc] init];
+  _html = [[[NSMutableData alloc] init] autorelease];
   [_html appendBytes: "<html><meta charset='utf-8'><body>"  length: 34];
   
 
@@ -1251,10 +1251,10 @@ inline static void parseUl(RTFHandler *self, BOOL hasArg, int arg, RTFFormatting
             {
               // A hexadecimal value, based on the specified character set (may be used to identify 8-bit values).
               const char *b1, *b2;
-              unsigned short index;
+              short index;
+              short tmp;
 
               const unsigned short * active_charset;
-
               if (formattingOptions && formattingOptions->charset)
                 active_charset = formattingOptions->charset;
               else
@@ -1267,8 +1267,21 @@ inline static void parseUl(RTFHandler *self, BOOL hasArg, int arg, RTFFormatting
               b1 = ADVANCE;
               b2 = ADVANCE;
               
-              index = (isdigit(*b1) ? *b1 - 48 : toupper(*b1) - 55) * 16;
-              index += (isdigit(*b2) ? *b2 - 48 : toupper(*b2) - 55);
+              tmp = (isdigit(*b1) ? *b1 - 48 : toupper(*b1) - 55);
+              if (tmp < 0 || tmp > 16)
+                {
+                  // Incorrect first hexadecimal character. Skipping.
+                  continue;
+                }
+              index = tmp*16;
+
+              tmp = (isdigit(*b2) ? *b2 - 48 : toupper(*b2) - 55);
+              if (tmp < 0 || tmp > 16)
+                {
+                  // Incorrect second hexadecimal character. Skipping.
+                  continue;
+                }              
+              index += tmp;
               
               s = [NSString stringWithCharacters: &(active_charset[index])  length: 1];
               d = [s dataUsingEncoding: NSUTF8StringEncoding];
@@ -1435,31 +1448,51 @@ inline static void parseUl(RTFHandler *self, BOOL hasArg, int arg, RTFFormatting
         }
       else
         {
-          c = *_bytes;
-          // We avoid appending NULL bytes or endlines
-          if (c && (c != '\n')) 
+          const unsigned short * active_charset;
+          if (formattingOptions && formattingOptions->charset)
+            active_charset = formattingOptions->charset;
+          else
+            active_charset = defaultCharset;
+          s = nil;
+
+          // as we have begun a text section we process its own loop
+          while (_current_pos < _len)
             {
-              if (c <= UTF8_FIRST_BYTE_LAST_CODEPOINT) 
+              c = *_bytes;
+              if (c == '\\' || c == '{' || c == '}' )
                 {
-                  // in this case utf8 and ascii encoding are the same
-                  [_html appendBytes: &c  length: 1];
+                  // control word or group; return to the main loop
+                  break;
+                }       
+              else if (c && (c != '\n') && (c != '\r'))
+                {
+                  if (s == nil)
+                    s = [NSMutableString stringWithCharacters: &(active_charset[c])  length: 1];
+                  else
+                    [(NSMutableString*)s appendFormat: @"%C", active_charset[c]];
+
+                  ADVANCE;
                 }
-              else 
+              else
                 {
-                  uch = c;
-                  s = [NSString stringWithCharacters: &uch length: 1];
-                  d = [s dataUsingEncoding: NSUTF8StringEncoding];
-                  [_html appendData: d];
+                  // We avoid appending NULL bytes, carriadge return or endlines
+                  ADVANCE;
                 }
             }
-          ADVANCE;
+
+          if (s)
+            {
+              d = [s dataUsingEncoding: NSUTF8StringEncoding];
+              [_html appendData: d];
+            }       
+
         }
     }
   
   [_html appendBytes: "</body></html>"  length: 14];
   
   [stack release];
-  return [_html autorelease];
+  return _html;
 }
 
 /* This method is for ease of testing and should not be used in normal operations */
