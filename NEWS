@@ -1,6 +1,9 @@
 X.X.X
 --------------------------
 
+Enhancements
+  - Support to multipart/mixed and multipart/alternative content types from Outlook
+
 Bug fixes
   - Fix RTF format problems mixing plain ASCII characters using a non-ASCII charset
   - Outlook can handle contacts without email (sync issue on folder)
