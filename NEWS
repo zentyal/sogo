@@ -2,6 +2,7 @@ X.X.X
 --------------------------
 
 Bug fixes
+  - Fix RTF format problems mixing plain ASCII characters using a non-ASCII charset
   - Outlook can handle contacts without email (sync issue on folder)
 
 
