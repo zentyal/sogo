@@ -1,5 +1,5 @@
-X.X.X
---------------------------
+2.3.4-zentyal3 (2016-02-04)
+---------------------------
 
 Enhancements
   - Support to multipart/mixed and multipart/alternative content types from Outlook
