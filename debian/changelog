@@ -1,3 +1,24 @@
+sogo (2.3.4-zentyal3a) trusty; urgency=medium
+
+  [ Javier Amor García ]
+  * [61ac1d] oc-mail: Support for multipart/mixed and multipart/alternative
+  * [093ea9] RTFHandler: support charsets in plain text
+  * [8d55c1] RTFHandler: protect against CR and bad hexadecimal sequence
+
+  [ Enrique J. Hernández Blasco ]
+  * [ff8fb5] oc-contacts: Return not found when there is no information
+  * [b6892d] Update NEWS from PR #242
+  * [f1a459] Update NEWS from PR #234
+
+  [ Jesús García Sáez ]
+  * [a8b5f2] Update NEWS from PR #244
+  * [02e22b] Prepare release 2.3.4-zentyal3
+  * [16132d] Rename 2.3.4-zentyal3 to 2.3.4-zentyal3a
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 04 Feb 2016 14:50:33 +0100
+
 sogo (2.3.4-zentyal3) trusty; urgency=medium
 
   * UNRELEASED
