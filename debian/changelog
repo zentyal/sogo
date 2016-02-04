@@ -1,3 +1,9 @@
+sogo (2.3.4-zentyal3) trusty; urgency=medium
+
+  * UNRELEASED
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Thu, 04 Feb 2016 14:31:47 +0100
+
 sogo (2.3.4-zentyal2) trusty; urgency=medium
 
   [ Enrique J. Hernández Blasco ]
