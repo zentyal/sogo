@@ -316,15 +316,23 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
           if (i == 0)
              {
                ASSIGN (headerMimeType, mimeType);
-               ASSIGN (headerCharset, charset);               
                parameters = partParameters;
              }
-          else
+
+          if ([mimeType isEqualToString: @"text/plain"])
             {
-              /* We can only put one header charset so we will use utf-8
-                 when we have different charsets in the parts */
-              if (headerCharset != charset)
-                ASSIGN (headerCharset, @"utf-8");
+              //  utf-8 is always encoded in text/plain
+              ASSIGN (headerCharset, @"utf-8");              
+            }
+          else if (charset)
+            {
+              if (headerCharset == nil)
+                ASSIGN (headerCharset, charset);
+              else if (![headerCharset isEqualToString: charset])
+                {
+                  /* Because we have different charsets we will encode all in UTF-8 */
+                  ASSIGN (headerCharset, @"utf-8");
+                }
             }
         }
       
@@ -367,17 +375,14 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
       id result;      
       NSString *key;
       NSEnumerator *enumerator;
-      NSMutableData *htmlContent = nil;
-      NSMutableData *textContent = nil;
+      NSMutableData *htmlContent;
+      NSMutableData *textContent;
       
       result = [sogoObject fetchParts: bodyContentKeys];
       result = [[result valueForKey: @"RawResponse"] objectForKey: @"fetch"];
 
       htmlContent = [[NSMutableData alloc] initWithCapacity: 0];
-      if (multipartMixed || mailIsEvent)
-        textContent = htmlContent;
-      else
-        textContent = [[NSMutableData alloc] initWithCapacity: 0];      
+      textContent = [[NSMutableData alloc] initWithCapacity: 0];      
       
       enumerator = [bodyContentKeys objectEnumerator];
       while ((key = [enumerator nextObject]))
@@ -396,36 +401,82 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
             encoding = @"7-bit";
 
           /* We should provide a case for each of the types in acceptedMimeTypes */
-          if ([mimeType isEqualToString: @"text/html"] && !mailIsEvent)
+          if (!mailIsEvent)
             {
-              content = [content bodyDataFromEncoding: encoding];
-              [htmlContent appendData: content];
-            }
-          else if ([mimeType isEqualToString: @"text/plain"] && !mailIsEvent)
-            {
-              content = [content bodyDataFromEncoding: encoding];
-              NSString *charset = [bodyPartsCharsets objectForKey: key];
-              if (charset)
+              NSString *charset;
+              BOOL html;
+              if ([mimeType isEqualToString: @"text/html"])
                 {
-                  NSString *stringValue = [content bodyStringFromCharset: charset];
-                  [textContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                  html = YES;
+                }
+              else if ([mimeType isEqualToString: @"text/plain"])
+                {
+                  html = NO;
                 }
               else
                 {
-                  [textContent appendData: content];
+                  [self warnWithFormat: @"Unsupported MIME type for non-event body part: %@.",
+                        mimeType];
+                  continue;
                 }
-            }
-          else if (mailIsEvent &&
-                   ([mimeType isEqualToString: @"text/calendar"] ||
-                    [mimeType isEqualToString: @"application/ics"]))
-            {
+                          
               content = [content bodyDataFromEncoding: encoding];
+              charset = [bodyPartsCharsets objectForKey: key];
+              if (charset)
+                {
+                  NSString *stringValue = nil;
+                  if (html)
+                    {
+                      if ([charset isEqualToString: headerCharset])
+                        {
+                          [htmlContent appendData: content];
+                        }
+                      else
+                        {
+                          stringValue = [content bodyStringFromCharset: charset];
+                          [htmlContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                        }
+                      if (multipartMixed)
+                        {
+                          if (stringValue == nil)
+                            stringValue = [content bodyStringFromCharset: charset];
+                          [textContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                        }
+                    }
+                  else
+                    {
+                      /* No HTML, then is text/plain */
+                      stringValue = [content bodyStringFromCharset: charset];
+                      [textContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                      if (multipartMixed)
+                        {
+                          stringValue = [stringValue stringByReplacingOccurrencesOfString: @"\n"
+                                                                               withString: @"<br/>"];
+                          [htmlContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                        }
+                    }
+                }
+              else
+                {
+                  /* Without charset we cannot mangle the text, so we add as it stands */
+                  if (html || multipartMixed)
+                    [htmlContent appendData: content];
+                  if (!html || multipartMixed)
+                    [textContent appendData: content];
+                }
+
+            }
+          else if ([mimeType isEqualToString: @"text/calendar"] ||
+                   [mimeType isEqualToString: @"application/ics"])
+            {
               [textContent appendData: content];
+              [htmlContent appendData: content];
+              content = [content bodyDataFromEncoding: encoding];
             }
           else
             {
-              [self warnWithFormat: @"Unsupported combination for body part. MIME type: %@. Event: %i",
-                    mimeType, mailIsEvent];
+              [self warnWithFormat: @"Unsupported combination for event body part. MIME type: %@",
+                    mimeType];
             }
         }
 
