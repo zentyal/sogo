@@ -400,10 +400,14 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
             {
               NSMutableData *target;
               NSString *charset;
+              BOOL replaceEOL = NO;
               if ([mimeType isEqualToString: @"text/html"])
                 target = htmlContent;
               else if ([mimeType isEqualToString: @"text/plain"])
-                target = textContent;
+                {
+                  target = textContent;
+                  replaceEOL = multipartMixed;
+                }
               else
                 {
                   [self warnWithFormat: @"Unsupported MIME type for non-event body part: %@.",
@@ -416,6 +420,9 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
               if (charset)
                 {
                   NSString *stringValue = [content bodyStringFromCharset: charset];
+                  if (replaceEOL)
+                    stringValue = [stringValue stringByReplacingOccurrencesOfString: @"\n"
+                                                                         withString: @"<br/>"];
                   [target appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
                 }
               else
