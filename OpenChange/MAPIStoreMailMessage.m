@@ -396,36 +396,44 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
             encoding = @"7-bit";
 
           /* We should provide a case for each of the types in acceptedMimeTypes */
-          if ([mimeType isEqualToString: @"text/html"] && !mailIsEvent)
+          if (!mailIsEvent)
             {
+              NSMutableData *target;
+              NSString *charset;
+              if ([mimeType isEqualToString: @"text/html"])
+                target = htmlContent;
+              else if ([mimeType isEqualToString: @"text/plain"])
+                target = textContent;
+              else
+                {
+                  [self warnWithFormat: @"Unsupported MIME type for non-event body part: %@.",
+                        mimeType];
+                  continue;
+                }
+                          
               content = [content bodyDataFromEncoding: encoding];
-              [htmlContent appendData: content];
-            }
-          else if ([mimeType isEqualToString: @"text/plain"] && !mailIsEvent)
-            {
-              content = [content bodyDataFromEncoding: encoding];
-              NSString *charset = [bodyPartsCharsets objectForKey: key];
+              charset = [bodyPartsCharsets objectForKey: key];
               if (charset)
                 {
                   NSString *stringValue = [content bodyStringFromCharset: charset];
-                  [textContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                  [target appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
                 }
               else
                 {
-                  [textContent appendData: content];
+                  [target appendData: content];
                 }
+
             }
-          else if (mailIsEvent &&
-                   ([mimeType isEqualToString: @"text/calendar"] ||
-                    [mimeType isEqualToString: @"application/ics"]))
+          else if ([mimeType isEqualToString: @"text/calendar"] ||
+                   [mimeType isEqualToString: @"application/ics"])
             {
               content = [content bodyDataFromEncoding: encoding];
               [textContent appendData: content];
             }
           else
             {
-              [self warnWithFormat: @"Unsupported combination for body part. MIME type: %@. Event: %i",
-                    mimeType, mailIsEvent];
+              [self warnWithFormat: @"Unsupported combination for event body part. MIME type: %@",
+                    mimeType];
             }
         }
 
