@@ -1,3 +1,14 @@
+2.3.4-zentyal3a (2016-02-04)
+----------------------------
+
+Enhancements
+  - Support to multipart/mixed and multipart/alternative content types from Outlook
+
+Bug fixes
+  - Fix RTF format problems mixing plain ASCII characters using a non-ASCII charset
+  - Outlook can handle contacts without email (sync issue on folder)
+
+
 2.3.4-zentyal2 (2016-02-01)
 ---------------------------
 
