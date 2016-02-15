@@ -4,6 +4,9 @@
 Enhancements
   - Support to groups for EnableDomainBasedUID configuration
 
+Bug fixes
+  - Preserve all stored roles in Calendar folder ACLs to store custom MAPI-only permissions
+
 
 2.3.4-zentyal3a (2016-02-04)
 ----------------------------
