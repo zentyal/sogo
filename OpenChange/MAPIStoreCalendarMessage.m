@@ -231,10 +231,13 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
 - (int) getPidTagMessageClass: (void **) data
                      inMemCtx: (TALLOC_CTX *) memCtx
 {
+  iCalPerson *ownerAttendee;
   SOGoUser *owner;
 
   owner = [[self userContext] sogoUser];
-  if ([masterEvent userAsAttendee: owner])
+  ownerAttendee = [masterEvent userAsAttendee: owner];
+
+  if (ownerAttendee && [[ownerAttendee partStat] isEqualToString: @"NEEDS-ACTION"])
     *data = talloc_strdup (memCtx, "IPM.Schedule.Meeting.Request");
   else
     *data = talloc_strdup (memCtx, "IPM.Appointment");
@@ -396,35 +399,6 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
   return MAPISTORE_SUCCESS;
 }
 
-
-- (NSString *) _uidFromGlobalObjectId: (TALLOC_CTX *) memCtx 
-{
-  NSData *objectId;
-  NSString *uid = nil;
-  char *bytesDup, *uidStart;
-  NSUInteger length;
-
-  /* NOTE: we only handle the generic case at the moment, see
-     MAPIStoreAppointmentWrapper */
-  objectId = [properties
-               objectForKey: MAPIPropertyKey (PidLidGlobalObjectId)];
-  if (objectId)
-    {
-      length = [objectId length];
-      bytesDup = talloc_array (memCtx, char, length + 1);
-      memcpy (bytesDup, [objectId bytes], length);
-      bytesDup[length] = 0;
-      uidStart = bytesDup + length - 1;
-      while (uidStart != bytesDup && *(uidStart - 1))
-        uidStart--;
-      if (uidStart > bytesDup && *uidStart)
-        uid = [NSString stringWithUTF8String: uidStart];
-      talloc_free (bytesDup);
-    }
-
-  return uid;
-}
-
 - (SOGoAppointmentObject *) _resurrectRecord: (NSString *) cname
                                   fromFolder: (SOGoAppointmentFolder *) folder
 {
@@ -480,6 +454,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
   WOContext *woContext;
   SOGoAppointmentFolder *folder;
   SOGoAppointmentObject *newObject;
+  bool softDeleted;
 
   cname = [[container sogoObject] resourceNameForEventUID: uid];
   if (cname)
@@ -507,14 +482,14 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
         }
     }
   else
-    {
-      /* dissociate the object url from the old object's id */
-      objectId = [mapping idFromURL: url];
-      [mapping unregisterURLWithID: objectId];
-      newObject = [folder lookupName: cname
-                           inContext: woContext
-                             acquire: NO];
-    }
+    newObject = [folder lookupName: cname
+                         inContext: woContext
+                           acquire: NO];
+
+  /* dissociate the object url from the old object's id */
+  objectId = [mapping idFromURL: url isSoftDeleted: &softDeleted];
+  if (objectId != NSNotFound)
+    [mapping unregisterURLWithID: objectId];
 
   /* dissociate the object url associated with this object, as we want to
      discard it */
@@ -581,6 +556,7 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
 {
   // iCalCalendar *vCalendar;
   // NSCalendarDate *now;
+  NSData *objectId;
   NSString *uid, *nameInContainer;
   // iCalEvent *newEvent;
   // iCalPerson *userPerson;
@@ -589,7 +565,12 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
 
   if (isNew)
     {
-      uid = [self _uidFromGlobalObjectId: memCtx];
+      objectId = [properties
+                   objectForKey: MAPIPropertyKey (PidLidGlobalObjectId)];
+
+      if (objectId)
+        uid = [objectId globalObjectIdToUid: memCtx];
+
       if (uid)
         {
           /* Hack required because of what's explained in oxocal 3.1.4.7.1:
@@ -673,6 +654,18 @@ static Class NSArrayK, MAPIStoreAppointmentWrapperK;
 - (enum mapistore_error) setReadFlag: (uint8_t) flag
 {
   return MAPISTORE_SUCCESS;
+}
+
+- (BOOL) isUpdateRequest
+{
+  iCalPerson *ownerAttendee;
+  SOGoUser *owner;
+
+  owner = [[self userContext] sogoUser];
+  ownerAttendee = [masterEvent userAsAttendee: owner];
+
+  return (ownerAttendee && [[ownerAttendee partStat] isEqualToString: @"NEEDS-ACTION"]
+          && ([masterEvent sequence] > 0));
 }
 
 @end

@@ -50,8 +50,13 @@
 #import <SOGo/SOGoMailer.h>
 #import <SOGo/SOGoUser.h>
 #import <SOGo/SOGoUserManager.h>
+#import <Appointments/iCalEntityObject+SOGo.h>
+#import <Appointments/SOGoAppointmentFolder.h>
+#import <Appointments/SOGoAppointmentObject.h>
 #import <Mailer/SOGoMailFolder.h>
 #import <Mailer/NSString+Mail.h>
+#import <NGCards/iCalCalendar.h>
+#import <NGCards/iCalPerson.h>
 
 #import "Codepages.h"
 #import "MAPIStoreAttachment.h"
@@ -1051,6 +1056,75 @@ MakeMessageBody (NSDictionary *mailProperties, NSDictionary *attachmentParts, NS
   return messageData;
 }
 
+- (int) _declineAppointmentInvitation
+{
+  NSData *objectId;
+  NSString *uid, *cname, *username, *partStat;
+  TALLOC_CTX *localMemCtx;
+  NSUInteger count, max;
+  WOContext *woContext;
+  NSArray * subfolders;
+  SOGoAppointmentFolder *currentFolder;
+  SOGoAppointmentObject *appointment;
+  iCalPerson *ownerAttendee;
+  NSNumber *sequence;
+
+  localMemCtx = talloc_new (NULL);
+  if (!localMemCtx)
+    {
+      [self logWithFormat: @"Out of memory"];
+      return MAPISTORE_ERROR;
+    }
+
+  objectId = [properties objectForKey: MAPIPropertyKey (PidLidGlobalObjectId)];
+  if (objectId)
+    uid = [objectId globalObjectIdToUid: localMemCtx];
+
+  if (uid)
+    {
+      cname = [NSString stringWithFormat: @"%@.ics", uid];
+
+      [[self userContext] activate];
+      woContext = [[self userContext] woContext];
+
+      subfolders = [[[[self userContext] rootFolders]
+                     objectForKey: @"calendar"] subFolders];
+      max = [subfolders count];
+      for (count = 0; count < max; count++)
+        {
+          currentFolder = [subfolders objectAtIndex: count];
+          username = [[self userContext] username];
+          if ([[currentFolder ownerInContext: nil] isEqualToString: username])
+            {
+              appointment = [currentFolder lookupName: cname
+                                            inContext: woContext
+                                              acquire: NO];
+              if (!appointment)
+                continue;
+
+              [appointment prepareDelete];
+
+              /* Outlook doesn't care about the SOGo object until we accept the first invitation.
+                 If we decline it, OL will never delete the SOGo object. */
+              ownerAttendee = [[[[appointment calendar: NO secure: NO] events] objectAtIndex: 0]
+                                userAsAttendee: [[self userContext] sogoUser]];
+              partStat = [ownerAttendee partStat];
+              sequence = [properties objectForKey: MAPIPropertyKey (PidLidAppointmentSequence)];
+              if (sequence && ([sequence intValue] == 0) && [partStat isEqualToString: @"NEEDS-ACTION"])
+                [appointment delete];
+
+              [self logWithFormat: @"Cancellation mail sent from the SOGoAppointmentObject"];
+              talloc_free (localMemCtx);
+              return MAPISTORE_SUCCESS;
+            }
+         }
+    }
+
+  [self logWithFormat: @"Couldn't cancel/decline the event invitation"];
+  talloc_free (localMemCtx);
+  return MAPISTORE_ERROR;
+}
+
 - (int) submitWithFlags: (enum SubmitFlags) flags
 {
   enum mapistore_error rc = MAPISTORE_SUCCESS;
@@ -1114,6 +1188,9 @@ MakeMessageBody (NSDictionary *mailProperties, NSDictionary *attachmentParts, NS
   else
     [self logWithFormat: @"skipping submit of message with class '%@'",
           msgClass];
+
+  if ([msgClass isEqualToString: @"IPM.Schedule.Meeting.Resp.Neg"])
+    rc = [self _declineAppointmentInvitation];
 
   return rc;
 }

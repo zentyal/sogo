@@ -123,7 +123,13 @@ static NSCharacterSet *hexCharacterSet = nil;
 
   attendee = [event userAsAttendee: user];
   if (attendee)
-    method = @"REQUEST";
+    {
+      if ([[attendee partStat] isEqualToString: @"NEEDS-ACTION"])
+        method = @"REQUEST";
+      else
+        method = @"REPLY";
+      partstat = [attendee participationStatus];
+    }
   else if ([event userIsOrganizer: user])
     {
       if (senderEmail)
@@ -478,7 +484,7 @@ static NSCharacterSet *hexCharacterSet = nil;
     [self _setupITIPContext];
 
   longValue = 0x0400;
-  
+
   if (method)
     {
       if ([method isEqualToString: @"REQUEST"])
@@ -512,7 +518,7 @@ static NSCharacterSet *hexCharacterSet = nil;
       if ([[event attendees] count] > 0)
         longValue |= 0x0002;
     }
-  
+
   *data = MAPILongValue (memCtx, longValue);
 
   return MAPISTORE_SUCCESS;
@@ -552,9 +558,7 @@ static NSCharacterSet *hexCharacterSet = nil;
 - (int) getPidLidMeetingType: (void **) data
                     inMemCtx: (TALLOC_CTX *) memCtx
 {
-  /* TODO
-     See 2.2.6.5 PidLidMeetingType (OXOCAL) */
-  *data = MAPILongValue (memCtx, 0x00000001);
+  *data = MAPILongValue (memCtx, mtgEmpty);
 
   return MAPISTORE_SUCCESS;
 }
@@ -647,6 +651,9 @@ static NSCharacterSet *hexCharacterSet = nil;
 - (int) getPidLidAppointmentMessageClass: (void **) data
                                 inMemCtx: (TALLOC_CTX *) memCtx
 {
+  if (!method)
+    return MAPISTORE_ERR_NOT_FOUND;
+
   *data = talloc_strdup (memCtx, "IPM.Appointment");
 
   return MAPISTORE_SUCCESS;
@@ -1116,7 +1123,7 @@ static NSCharacterSet *hexCharacterSet = nil;
   return MAPISTORE_SUCCESS;
 }
 
-- (int) getPidLidIndentedBusyStatus: (void **) data // TODO
+- (int) getPidLidIntendedBusyStatus: (void **) data
                            inMemCtx: (TALLOC_CTX *) memCtx
 {
   return [self getPidLidBusyStatus: data inMemCtx: memCtx];
@@ -1828,6 +1835,43 @@ ReservedBlockEE2Size: 00 00 00 00
     }
 
   return rc;
+}
+
+
+- (int) getPidLidClientIntent: (void **) data
+                     inMemCtx: (TALLOC_CTX *) memCtx
+{
+  uint32_t longValue;
+
+  if (!itipSetup)
+    [self _setupITIPContext];
+
+  longValue = 0x0000;
+
+  if ([event userIsOrganizer: user])
+    longValue |= CI_MANAGER;
+
+  if (method)
+    {
+      switch (partstat)
+      {
+      case iCalPersonPartStatTentative:
+        longValue |= CI_RESP_TENTATIVE;
+        break;
+      case iCalPersonPartStatAccepted:
+        longValue |= CI_RESP_ACCEPT;
+        break;
+      case iCalPersonPartStatDeclined:
+        longValue |= CI_RESP_DECLINE;
+        break;
+      default:
+        break;
+      }
+    }
+
+  *data = MAPILongValue (memCtx, longValue);
+
+  return MAPISTORE_SUCCESS;
 }
 
 /* reminders */

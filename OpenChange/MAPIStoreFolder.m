@@ -35,6 +35,7 @@
 #import <SOGo/SOGoFolder.h>
 
 #import "MAPIStoreActiveTables.h"
+#import "MAPIStoreCalendarMessage.h"
 #import "MAPIStoreContext.h"
 #import "MAPIStoreFAIMessage.h"
 #import "MAPIStoreFAIMessageTable.h"
@@ -63,13 +64,14 @@
 #include <mapistore/mapistore.h>
 #include <mapistore/mapistore_errors.h>
 
-Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMessageTableK, MAPIStoreFolderTableK;
+Class NSExceptionK, MAPIStoreCalendarMessageK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMessageTableK, MAPIStoreFolderTableK;
 
 @implementation MAPIStoreFolder
 
 + (void) initialize
 {
   NSExceptionK = [NSException class];
+  MAPIStoreCalendarMessageK = [MAPIStoreCalendarMessage class];
   MAPIStoreFAIMessageK = [MAPIStoreFAIMessage class];
   MAPIStoreMessageTableK = [MAPIStoreMessageTable class];
   MAPIStoreFAIMessageTableK = [MAPIStoreFAIMessageTable class];
@@ -580,6 +582,7 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
   NSUInteger count, max;
   id msgObject;
   SOGoUser *ownerUser;
+  BOOL isUpdateRequest;
   int rc;
 
   /* flags that control the behaviour of the operation
@@ -609,20 +612,27 @@ Class NSExceptionK, MAPIStoreFAIMessageK, MAPIStoreMessageTableK, MAPIStoreFAIMe
                 [[activeTables objectAtIndex: count] restrictedChildKeys];
 
               msgObject = [message sogoObject];
-              if (([msgObject respondsToSelector: @selector (prepareDelete)]
-                   && [msgObject prepareDelete])
-                  || [msgObject delete])
+              isUpdateRequest = [message isKindOfClass: MAPIStoreCalendarMessageK]
+                                 && [(MAPIStoreCalendarMessage *) message isUpdateRequest];
+
+              /* When we accept an event update from Outlook, a copy of the event is created and
+                 the old one is deleted ([MS-OXOCAL] 3.1.4.7.1). We don't want to cancel the
+                 event in that case. */
+              if (!isUpdateRequest && [msgObject respondsToSelector: @selector (prepareDelete)])
+                [msgObject prepareDelete];
+
+              if ([msgObject delete])
                 {
                   rc = MAPISTORE_ERROR;
                   [self logWithFormat: @"ERROR deleting object at URL: %@", childURL];
                 }
               else
                 {
+                  rc = MAPISTORE_SUCCESS;
                   [self logWithFormat: @"successfully deleted object at URL: %@", childURL];
                   /* Ensure we are respecting flags parameter */
                   [mapping unregisterURLWithID: mid andFlags: flags];
                   [self cleanupCaches];
-                  rc = MAPISTORE_SUCCESS;
                 }
             }
           else

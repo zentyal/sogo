@@ -119,7 +119,7 @@
                            inMemCtx: (TALLOC_CTX *) memCtx;
 - (int) getPidLidBusyStatus: (void **) data // TODO
                    inMemCtx: (TALLOC_CTX *) memCtx;
-- (int) getPidLidIndentedBusyStatus: (void **) data // TODO
+- (int) getPidLidIntendedBusyStatus: (void **) data
                            inMemCtx: (TALLOC_CTX *) memCtx;
 - (int) getPidTagNormalizedSubject: (void **) data // SUMMARY
                           inMemCtx: (TALLOC_CTX *) memCtx;
@@ -149,6 +149,8 @@
                                 inMemCtx: (TALLOC_CTX *) memCtx;
 - (int) getPidLidAppointmentReplyTime: (void **) data
                              inMemCtx: (TALLOC_CTX *) memCtx;
+- (int) getPidLidClientIntent: (void **) data
+                     inMemCtx: (TALLOC_CTX *) memCtx;
 
 /* reminders */
 - (int) getPidLidReminderSet: (void **) data
