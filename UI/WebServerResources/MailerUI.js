@@ -645,6 +645,45 @@ function onMenuDeleteMessage(event) {
     preventDefault(event);
 }
 
+function onMarkOrUnmarkMessagesAsJunk(is_junk) {
+  var targetMailbox;
+  var messageList = $("messageListBody").down("TBODY");
+  var rowIds = messageList.getSelectedNodesId();
+  var uids = new Array(); // message IDs
+
+  for (var i = 0; i < rowIds.length; i++) {
+    var uid = rowIds[i].substr(4);
+    uids.push(uid);
+  }
+
+  var url;
+
+  if (is_junk)
+    url = ApplicationBaseURL + encodeURI(Mailer.currentMailbox) + "/markMessagesAsNotJunk";
+  else
+    url = ApplicationBaseURL + encodeURI(Mailer.currentMailbox) + "/markMessagesAsJunk";
+
+  var data = { "uids": uids };
+  triggerAjaxRequest(url, onMarkOrUnmarkMessagesAsJunkCallback, data, Object.toJSON(data));
+
+  return false;
+}
+
+function onMarkOrUnmarkMessagesAsJunkCallback(http) {
+  // If all went well, lets move the message
+  if (isHttpStatus204(http.status) || http.status == 200) {
+    var func, item;
+
+    if (Mailer.currentMailboxType == "junk") {
+      item = $$("[datatype=inbox]").first();
+    } else {
+      item = $$("[datatype=junk]").first();
+    }
+    func = onMailboxMenuMove.bind(item);
+    func();
+  }
+}
+
 /**
  * The following two functions are called from UIxMailPopupView
  * with window.opener.
@@ -683,9 +722,26 @@ function onPrintCurrentMessage(event) {
     preventDefault(event);
 }
 
+function toggleJunkAction(isJunk) {
+  var button = $$(".tbicon_junk").first();
+  button.stopObserving("click");
+
+  if (isJunk) {
+    button.title = _("Mark the selected messages as not junk");
+    button.select('span').first().childNodes[3].nodeValue = _("Not junk");
+  }
+  else {
+    button.title = _("Mark the selected messages as junk");
+    button.select('span').first().childNodes[3].nodeValue = _("Junk");
+  }
+
+  button.on("click", onMarkOrUnmarkMessagesAsJunk.bind(button, isJunk));
+}
+
 function onMailboxTreeItemClick(event) {
     var topNode = $("mailboxTree");
     var mailbox = this.parentNode.getAttribute("dataname");
+    var is_junk = false;
     if (topNode.selectedEntry)
         topNode.selectedEntry.deselect();
     this.selectElement();
@@ -709,12 +765,16 @@ function onMailboxTreeItemClick(event) {
         var datatype = this.parentNode.getAttribute("datatype");
         if (datatype == 'draft' || datatype == 'draft/folder' || datatype == 'sent' || datatype == 'sent/folder')
             toggleAddressColumn("from", "to");
+        else if (datatype == 'junk')
+            is_junk = true;
         else
             toggleAddressColumn("to", "from");
 
         updateWindowTitle(this.childNodesWithTag("span")[0]);
         openMailbox(mailbox);
     }
+
+    toggleJunkAction(is_junk);
 
     Event.stop(event);
 }
@@ -2108,10 +2168,14 @@ function initMailer(event) {
         initMailboxTree();
         initRefreshViewCheckTimer();
 
+        toggleJunkAction(false);
+
         if (Prototype.Browser.Gecko)
             Event.observe(document, "keypress", onDocumentKeydown); // for FF2
         else
             Event.observe(document, "keydown", onDocumentKeydown);
+
+        Event.observe(document, "keydown", onDocumentKeydown);
 
         /* Perform an expunge when leaving the webmail */
         //        if (isSafari()) {
@@ -2449,7 +2513,7 @@ function saveFoldersStateCallback(http) {
 }
 
 function onMenuCreateFolder(event) {
-    showPromptDialog(_("New Folder..."), _("Name :"), onMenuCreateFolderConfirm);
+    showPromptDialog(_("New Folder..."), _("Name"), onMenuCreateFolderConfirm);
 }
 
 function onMenuCreateFolderConfirm(event) {
@@ -2466,7 +2530,7 @@ function onMenuCreateFolderConfirm(event) {
 
 function onMenuRenameFolder(event) {
     var folderName = document.menuTarget.down('.nodeName').childNodes[0].nodeValue;
-    showPromptDialog(_("Rename Folder..."), _("Enter the new name of your folder :"), onMenuRenameFolderConfirm, folderName);
+    showPromptDialog(_("Rename Folder..."), _("Enter the new name of your folder"), onMenuRenameFolderConfirm, folderName);
 }
 
 function onMenuRenameFolderConfirm() {
@@ -2588,6 +2652,10 @@ function onMenuChangeToSentFolder(event) {
 
 function onMenuChangeToTrashFolder(event) {
     return _onMenuChangeToXXXFolder(event, "Trash");
+}
+
+function onMenuChangeToJunkFolder(event) {
+    return _onMenuChangeToXXXFolder(event, "Junk");
 }
 
 function onMenuToggleMessageRead(event) {
@@ -2942,7 +3010,8 @@ function getMenus() {
                               onMenuDeleteMessage ],
         folderTypeMenu: [ onMenuChangeToSentFolder,
                           onMenuChangeToDraftsFolder,
-                          onMenuChangeToTrashFolder  ],
+                          onMenuChangeToTrashFolder,
+                          onMenuChangeToJunkFolder ],
 
         "mark-menu": [ onMenuToggleMessageRead, null, null, null, "-", onMenuToggleMessageFlag ],
 // , "-",
