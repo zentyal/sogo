@@ -25,6 +25,7 @@
 #import <Foundation/NSCalendarDate.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSValue.h>
 #import <NGExtensions/NSObject+Logs.h>
 #import <NGExtensions/NSObject+Values.h>
 #import <NGImap4/NGImap4Client.h>
@@ -41,6 +42,7 @@
 #import <Mailer/SOGoMailBodyPart.h>
 #import <Mailer/SOGoMailObject.h>
 #import <Mailer/NSDictionary+Mail.h>
+#import <Mailer/NSString+Mail.h>
 
 #import "Codepages.h"
 #import "NSData+MAPIStore.h"
@@ -130,11 +132,11 @@ static NSArray *acceptedMimeTypes;
       bodyPartsEncodings = nil;
       bodyPartsCharsets = nil;
       bodyPartsMimeTypes = nil;
+      bodyPartsMixed = nil;
 
       headerSetup = NO;
       bodySetup = NO;
       bodyContent = nil;
-      multipartMixed = NO;
       
       mailIsEvent = NO;
       mailIsMeetingRequest = NO;
@@ -154,6 +156,7 @@ static NSArray *acceptedMimeTypes;
   [bodyPartsEncodings release];
   [bodyPartsCharsets release];
   [bodyPartsMimeTypes release];
+  [bodyPartsMixed release];
   
   [bodyContent release];
   
@@ -259,7 +262,8 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 
   keys = [NSMutableArray array];
   [sogoObject addRequiredKeysOfStructure: [sogoObject bodyStructure]
-                                    path: @"" toArray: keys
+                                    path: @""
+                                 toArray: keys
                            acceptedTypes: acceptedMimeTypes
                                 withPeek: YES];
   [keys sortUsingFunction: _compareBodyKeysByPriority context: acceptedMimeTypes];
@@ -267,32 +271,26 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   if (keysCount > 0)
     {
       NSUInteger i;
-      id bodyStructure;
-
-      bodyStructure = [sogoObject bodyStructure];
-      /* multipart/mixed is the default type. 
-         multipart/alternative is the only other type of multipart supported here.
-      */
-      if ([[bodyStructure objectForKey: @"type"] isEqualToString: @"multipart"])
-        multipartMixed = ! [[bodyStructure objectForKey: @"subtype"] isEqualToString: @"alternative"];
-      else
-        multipartMixed = NO;
       
       bodyContentKeys = [[NSMutableArray alloc] initWithCapacity: keysCount];
       bodyPartsEncodings = [[NSMutableDictionary alloc] initWithCapacity: keysCount];
       bodyPartsCharsets = [[NSMutableDictionary alloc] initWithCapacity: keysCount];
       bodyPartsMimeTypes = [[NSMutableDictionary alloc] initWithCapacity: keysCount];
+      bodyPartsMixed = [[NSMutableDictionary alloc] initWithCapacity: keysCount];
       
       for (i = 0; i < keysCount; i++)
         {
+          NSDictionary *bodyStructureKey;
           NSString *key;
           NSString *mimeType;
+          BOOL      mixedPart;
           NSString *strippedKey;
           NSString *encoding;
           NSString *charset;
           NSDictionary *partParameters;
 
-          key = [[keys objectAtIndex: i] objectForKey: @"key"];
+          bodyStructureKey = [keys objectAtIndex: i];
+          key = [bodyStructureKey objectForKey: @"key"];
           if (key == nil)
             continue;
           
@@ -304,7 +302,11 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
           partParameters = [partHeaderData objectForKey: @"parameterList"];
           encoding = [partHeaderData objectForKey: @"encoding"];
           charset = [partParameters objectForKey: @"charset"];
-          mimeType = [[keys objectAtIndex: i] objectForKey: @"mimeType"];  
+          mimeType = [bodyStructureKey objectForKey: @"mimeType"];
+          /* multipart/mixed is the default type.
+             multipart/alternative is the only other type of multipart supported now.
+          */
+          mixedPart = ![[bodyStructureKey objectForKey: @"multipart"] isEqualToString: @"multipart/alternative"];
 
           if (encoding)
             [bodyPartsEncodings setObject: encoding forKey: key];
@@ -312,20 +314,30 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
             [bodyPartsCharsets setObject: charset forKey: key];
           if (mimeType)
             [bodyPartsMimeTypes setObject: mimeType forKey: key];
+          [bodyPartsMixed setObject: [NSNumber numberWithBool: mixedPart] forKey: key];
 
           if (i == 0)
              {
                ASSIGN (headerMimeType, mimeType);
-               ASSIGN (headerCharset, charset);               
                parameters = partParameters;
              }
-          else
+
+          if ([mimeType isEqualToString: @"text/plain"])
             {
-              /* We can only put one header charset so we will use utf-8
-                 when we have different charsets in the parts */
-              if (headerCharset != charset)
-                ASSIGN (headerCharset, @"utf-8");
+              //  utf-8 is always encoded in text/plain
+              ASSIGN (headerCharset, @"utf-8");              
             }
+          else if (charset)
+            {
+              if (headerCharset == nil)
+                ASSIGN (headerCharset, charset);
+              else if (![headerCharset isEqualToString: charset])
+                {
+                  /* Because we have different charsets we will encode all in UTF-8 */
+                  ASSIGN (headerCharset, @"utf-8");
+                }
+            }
+
         }
       
       
@@ -367,17 +379,14 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
       id result;      
       NSString *key;
       NSEnumerator *enumerator;
-      NSMutableData *htmlContent = nil;
-      NSMutableData *textContent = nil;
+      NSMutableData *htmlContent;
+      NSMutableData *textContent;
       
       result = [sogoObject fetchParts: bodyContentKeys];
       result = [[result valueForKey: @"RawResponse"] objectForKey: @"fetch"];
 
       htmlContent = [[NSMutableData alloc] initWithCapacity: 0];
-      if (multipartMixed || mailIsEvent)
-        textContent = htmlContent;
-      else
-        textContent = [[NSMutableData alloc] initWithCapacity: 0];      
+      textContent = [[NSMutableData alloc] initWithCapacity: 0];      
       
       enumerator = [bodyContentKeys objectEnumerator];
       while ((key = [enumerator nextObject]))
@@ -396,36 +405,83 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
             encoding = @"7-bit";
 
           /* We should provide a case for each of the types in acceptedMimeTypes */
-          if ([mimeType isEqualToString: @"text/html"] && !mailIsEvent)
+          if (!mailIsEvent)
             {
-              content = [content bodyDataFromEncoding: encoding];
-              [htmlContent appendData: content];
-            }
-          else if ([mimeType isEqualToString: @"text/plain"] && !mailIsEvent)
-            {
-              content = [content bodyDataFromEncoding: encoding];
-              NSString *charset = [bodyPartsCharsets objectForKey: key];
-              if (charset)
+              NSString *charset;
+              BOOL html;
+              BOOL mixed = [[bodyPartsMixed objectForKey: key] boolValue];
+              if ([mimeType isEqualToString: @"text/html"])
                 {
-                  NSString *stringValue = [content bodyStringFromCharset: charset];
-                  [textContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                  html = YES;
+                }
+              else if ([mimeType isEqualToString: @"text/plain"])
+                {
+                  html = NO;
                 }
               else
                 {
-                  [textContent appendData: content];
+                  [self warnWithFormat: @"Unsupported MIME type for non-event body part: %@.",
+                        mimeType];
+                  continue;
                 }
-            }
-          else if (mailIsEvent &&
-                   ([mimeType isEqualToString: @"text/calendar"] ||
-                    [mimeType isEqualToString: @"application/ics"]))
-            {
+                          
               content = [content bodyDataFromEncoding: encoding];
+              charset = [bodyPartsCharsets objectForKey: key];
+              if (charset)
+                {
+                  NSString *stringValue = nil;
+                  if (html)
+                    {
+                      if ([charset isEqualToString: headerCharset])
+                        {
+                          [htmlContent appendData: content];
+                        }
+                      else
+                        {
+                          stringValue = [content bodyStringFromCharset: charset];
+                          [htmlContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                        }
+                      if (mixed)
+                        {
+                          if (stringValue == nil)
+                            stringValue = [content bodyStringFromCharset: charset];
+                          [textContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                        }
+                    }
+                  else
+                    {
+                      /* No HTML, then is text/plain */
+                      stringValue = [content bodyStringFromCharset: charset];
+                      [textContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                      if (mixed)
+                        {
+                          stringValue = [stringValue stringByReplacingOccurrencesOfString: @"\n"
+                                                                               withString: @"<br/>"];
+                          [htmlContent appendData: [stringValue dataUsingEncoding: NSUTF8StringEncoding]];
+                        }
+                    }
+                }
+              else
+                {
+                  /* Without charset we cannot mangle the text, so we add as it stands */
+                  if (html || mixed)
+                    [htmlContent appendData: content];
+                  if (!html || mixed)
+                    [textContent appendData: content];
+                }
+
+            }
+          else if ([mimeType isEqualToString: @"text/calendar"] ||
+                   [mimeType isEqualToString: @"application/ics"])
+            {
               [textContent appendData: content];
+              [htmlContent appendData: content];
+              content = [content bodyDataFromEncoding: encoding];
             }
           else
             {
-              [self warnWithFormat: @"Unsupported combination for body part. MIME type: %@. Event: %i",
-                    mimeType, mailIsEvent];
+              [self warnWithFormat: @"Unsupported combination for event body part. MIME type: %@",
+                    mimeType];
             }
         }
 
