@@ -57,6 +57,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Appointments/iCalEntityObject+SOGo.h>
 #import <Appointments/iCalRepeatableEntityObject+SOGo.h>
+#import <Appointments/SOGoAppointmentObject.h>
 
 #include "iCalAlarm+ActiveSync.h"
 #include "iCalRecurrenceRule+ActiveSync.h"
@@ -137,14 +138,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   if (!tz)
     tz = [iCalTimeZone timeZoneForName: [userTimeZone name]];
 
-  [s appendFormat: @"<TimeZone xmlns=\"Calendar:\">%@</TimeZone>", [tz activeSyncRepresentationInContext: context]];
+  if (![self recurrenceId])
+    [s appendFormat: @"<TimeZone xmlns=\"Calendar:\">%@</TimeZone>", [tz activeSyncRepresentationInContext: context]];
   
   // Organizer and other invitations related properties
   if ((organizer = [self organizer]))
     {
       meetingStatus = 1;  // meeting and the user is the meeting organizer.
       o = [organizer rfc822Email];
-      if ([o length])
+      if (![self recurrenceId] && [o length])
         {
           [s appendFormat: @"<Organizer_Email xmlns=\"Calendar:\">%@</Organizer_Email>", o];
           
@@ -234,7 +236,35 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   // UID -- http://msdn.microsoft.com/en-us/library/ee159919(v=exchg.80).aspx
   if (![self recurrenceId] && [[self uid] length])
-    [s appendFormat: @"<UID xmlns=\"Calendar:\">%@</UID>", [self uid]];
+    [s appendFormat: @"<UID xmlns=\"Calendar:\">%@</UID>", [[self uid] activeSyncRepresentationInContext: context]];
+
+  // Recurrence rules
+  if ([self isRecurrent])
+    [s appendString: [[[self recurrenceRules] lastObject] activeSyncRepresentationInContext: context]];
+
+  // Comment
+  o = [self comment];
+  //if (![self recurrenceId] && [o length])
+  if ([o length])
+    {
+      // It is very important here to NOT set <Truncated>0</Truncated> in the response,
+      // otherwise it'll prevent WP8 phones from sync'ing. See #3028 for details.
+      o = [o activeSyncRepresentationInContext: context];
+
+      if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"2.5"])
+        {
+          [s appendFormat: @"<Body xmlns=\"Calendar:\">%@</Body>", o];
+          [s appendString: @"<BodyTruncated xmlns=\"Calendar:\">0</BodyTruncated>"];
+        }
+      else
+        {
+          [s appendString: @"<Body xmlns=\"AirSyncBase:\">"];
+          [s appendFormat: @"<Type>%d</Type>", 1];
+          [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>",  (int)[o length]];
+          [s appendFormat: @"<Data>%@</Data>", o];
+          [s appendString: @"</Body>"];
+       }
+    }
 
   // Sensitivity
   if ([[self accessClass] isEqualToString: @"PRIVATE"])
@@ -268,7 +298,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       [s appendString: [alarm activeSyncRepresentationInContext: context]];
     }
 
-  // Recurrence rules
+  // Exceptions
   if ([self isRecurrent])
     {
       NSMutableArray *components, *exdates;
@@ -276,8 +306,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       NSString *recurrence_id;
 
       unsigned int count, max, i;
-
-      [s appendString: [[[self recurrenceRules] lastObject] activeSyncRepresentationInContext: context]];
 
       components = [NSMutableArray arrayWithArray: [[self parent] events]];
       max = [components count];
@@ -339,29 +367,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
             [s appendString: @"</Exceptions>"];
         }
-    }
-
-  // Comment
-  o = [self comment];
-  if ([o length])
-    {
-      // It is very important here to NOT set <Truncated>0</Truncated> in the response,
-      // otherwise it'll prevent WP8 phones from sync'ing. See #3028 for details.
-      o = [o activeSyncRepresentationInContext: context];
-
-      if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"2.5"])
-        {
-          [s appendFormat: @"<Body xmlns=\"Calendar:\">%@</Body>", o];
-          [s appendString: @"<BodyTruncated xmlns=\"Calendar:\">0</BodyTruncated>"];
-        }
-      else
-        {
-          [s appendString: @"<Body xmlns=\"AirSyncBase:\">"];
-          [s appendFormat: @"<Type>%d</Type>", 1];
-          [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>",  (int)[o length]];
-          [s appendFormat: @"<Data>%@</Data>", o];
-          [s appendString: @"</Body>"];
-       }
     }
 
   if (![self recurrenceId])
@@ -809,7 +814,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     {
       // Windows phones sens sometimes an empty Attendees tag.
       // We check it's an array before processing it.
-      if ((o = [theValues objectForKey: @"Attendees"])&& [o isKindOfClass: [NSArray class]])
+      if ((o = [theValues objectForKey: @"Attendees"]) && [o isKindOfClass: [NSArray class]])
         {
           NSMutableArray *attendees;
           NSDictionary *attendee;
@@ -855,6 +860,38 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           
           [self setAttendees: attendees];
         }
+    }
+}
+
+- (void) changeParticipationStatus: (NSDictionary *) theValues
+                         inContext: (WOContext *) context
+                         component: (id) component
+{
+  NSString *status;
+  id o;
+
+  // See: https://msdn.microsoft.com/en-us/library/ee202290(v=exchg.80).aspx
+  //
+  // 0 == Free
+  // 1 == Tentative
+  // 2 == Busy
+  // 3 == Out of Office
+  // 4 == Working elsehwere
+  //
+  if ((o = [theValues objectForKey: @"BusyStatus"]))
+    {
+      // We translate >= 2 into ACCEPTED
+      if ([o intValue] == 0)
+        status = @"NEEDS-ACTION";
+      else if ([o intValue] >= 2)
+        status = @"ACCEPTED";
+      else
+        status = @"TENTATIVE";
+
+      // There's no delegate in EAS
+      [(SOGoAppointmentObject *) component changeParticipationStatus: status
+                                                        withDelegate: nil
+                                                               alarm: nil];
     }
 }
 

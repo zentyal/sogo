@@ -87,7 +87,7 @@
   result = [parser objectWithString: @"[ -1 ]"];
   testEquals (result, [NSArray arrayWithObject: [NSNumber numberWithInt: -1]]);
 
-  locale = [NSDictionary dictionaryWithObject: @"." forKey: NSLocaleDecimalSeparator];
+  locale = [NSDictionary dictionaryWithObject: @"." forKey: @"NSLocaleDecimalSeparator"];
   result = [parser objectWithString: @"[ 12.3456 ]"];
   obtained = [result objectAtIndex: 0];
   expected = [NSDecimalNumber decimalNumberWithString: @"12.3456" locale: locale];

@@ -1,3 +1,69 @@
+2.3.9 (2016-XX-XX)
+------------------
+
+Enhancements
+ - allow resources to prevent invitations (#3410)
+
+Bug fixes
+ - allow EAS attachments get on 2nd-level mailboxes (#3505)
+ - fix EAS bday shift (#3518)
+
+2.3.8 (2016-02-05)
+------------------
+
+Enhancements
+ - updated CKEditor to version 4.5.7
+
+Bug fixes
+ - correctly encode filename of attachments over EAS (#3491)
+ - correctly encode square brackets for IMAP folder names (#3321)
+ - add shared/public namespaces in the list or returned folders
+
+2.3.7 (2016-01-25)
+------------------
+
+New features
+ - new junk/not junk capability with generic SMTP integration
+
+Enhancements
+ - newly created folders using EAS are always sync'ed by default (#3454)
+ - added Croatian (hr_HR) translation - thanks to Jens Riecken
+
+Bug fixes
+ - now always generate invitation updates when using EAS
+ - rewrote the string sanitization to be 32-bit Unicode safe
+ - do not try to decode non-wbxml responses for debug output (#3444)
+
+2.3.6 (2016-01-18)
+------------------
+
+New features
+ - now able to sync only default mail folders when using EAS
+
+Enhancements
+ - unit testing for RTFHandler
+ - JUnit output for sogo-tests
+
+Bug fixes
+ - don't unescape twice mail folder names (#3423)
+ - don't consider mobile Outlook EAS clients as DAV ones (#3431)
+ - we now follow 301 redirects when fetching ICS calendars
+ - when deleting an event using EAS, properly invoke the auto-scheduling code
+ - do not include failure attachments (really long filenames)
+ - fix encoding of email subjects with non-ASCII characters
+ - fix appointment notification mails using SOGoEnableDomainBasedUID configuration
+ - fix shifts in event times on Outlook
+
+2.3.5 (2016-01-05)
+------------------
+
+Enhancements
+ - return an error to openchange if mail message delivery fails
+ - return the requested elements on complex requests from Outlook when downloading changes
+ - user sources can be loaded dynamically
+ - unify user sources API
+ - updated Russian translation (#3383)
+
 2.3.4-zentyal3a (2016-02-04)
 ----------------------------
 
@@ -12,10 +78,9 @@ Bug fixes
 2.3.4-zentyal2 (2016-02-01)
 ---------------------------
 
-New feautres
+New features
   - sogo-openchange will raise exceptions when imap connection cannot be established
 
-Bug fixes
   - Do not fail encoding email subjects mixing ASCII with non-ASCII
   - Contact listing with no filter
 
@@ -32,6 +97,20 @@ Bug fixes
   - Fix appointment notification mails using SOGoEnableDomainBasedUID configuration
   - Fix shifts in event times on Outlook
   - properly compute the last week number for the year (#1010)
+=======
+ - properly compute the last week number for the year (#1010)
+ - share calendar, tasks and contacts folders in Outlook 2013 with editor permissions
+ - priorize filename in Content-Disposition against name in Content-Type to get the filename of an attachment in mail
+ - request all contacts when there is no filter in Contacts menu in Webmail
+ - personal contacts working properly on Outlook
+ - fixes on RTF parsing used by event/contact description and mail as RTF to read non-ASCII characters:
+   better parsing of font table, when using a font, switch to its character set, correct parsing of
+   escaped characters and Unicode character command word support for unicode characters greater than 32767
+ - no crash resolving recipients after reconnecting LDAP connection
+ - avoid creation of phantom contacts in SOGo from distribution list synced from Outlook.
+ - accepted & updated event names are now shown correctly in Outlook
+ - provide safe guards in mail and calendar to avoid exceptions while syncing
+>>>>>>> inverse/v2
 
 2.3.4 (2015-12-15)
 ------------------
@@ -41,6 +120,7 @@ New features
 
 Enhancements
  - limit the maximum width of toolbar buttons (#3381)
+ - updated CKEditor to version 4.5.6
 
 Bug fixes
  - JavaScript exception when printing events from calendars with no assigned color (#3203)

@@ -8,6 +8,7 @@
 "Forward"     = "Reenviar";
 "Get Mail"    = "Recibir";
 "Junk"        = "SPAM";
+"Not junk"    = "No es spam";
 "Reply"       = "Responder";
 "Reply All"   = "Responder a todos";
 "Print"       = "Imprimir";
@@ -33,7 +34,6 @@
 "Reply to sender and all recipients" = "Responder al remitente y a todos los destinatarios";
 "Forward selected message" = "Reenviar el mensaje seleccionado";
 "Delete selected message or folder" = "Borrar el mensaje o la carpeta seleccionados";
-"Mark the selected messages as junk" = "Marcar los mensajes seleccionados como SPAM";
 "Print this message" = "Imprimir este mensaje";
 "Stop the current transfer" = "Detener la transferencia actual";
 "Attachment" = "Adjunto";
@@ -54,6 +54,8 @@
 "Share" = "Compartir";
 "Account" = "Cuenta";
 "Shared Account" = "Cuenta compartida";
+/* Empty right pane */
+"No message selected" = "Ningún mensaje seleccionado";
 /* acls */
 "Access rights to" = "Permisos de acceso a";
 "For user" = "Para el usuario";
@@ -91,6 +93,7 @@
 "to"            = "Para";
 "cc"            = "Cc";
 "bcc"           = "CCo";
+"Add a recipient" = "Agregar un destinatario";
 "Edit Draft..." = "Editar borrador...";
 "Load Images" = "Cargar Imágenes";
 "Return Receipt" = "Acuse de Recibo";
@@ -122,6 +125,7 @@
 "All"           = "Todo";
 "No message"    = "Sin mensajes";
 "messages"      = "mensajes";
+"Yesterday"     = "Ayer";
 "first"         = "Primero";
 "previous"      = "Anterior";
 "next"          = "Siguiente";
@@ -136,6 +140,7 @@
 "TrashFolderName"  = "Papelera";
 "InboxFolderName"  = "Bandeja de entrada";
 "DraftsFolderName" = "Borradores";
+"JunkFolderName" = "Spam";
 "SieveFolderName"  = "Filtros";
 "Folders"          = "Carpetas"; /* title line */
 /* MailMoveToPopUp */
@@ -167,6 +172,7 @@
 "Sent Messages" = "Mensajes enviados";
 "Drafts" = "Borradores";
 "Deleted Messages" = "Mensajes borrados";
+"Junk Messages" = "Mensajes spam";
 /* Message list popup menu */
 "Open Message In New Window" = "Abrir mensaje en ventana nueva";
 "Reply to Sender Only" = "Responder sólo al remitente";
@@ -182,6 +188,10 @@
 "Print..." = "Imprimir...";
 "Delete Message" = "Borrar mensaje";
 "Delete Selected Messages" = "Borrar mensajes selecionados";
+"Mark the selected messages as junk" = "Marcar los mensajes seleccionados como SPAM";
+"Mark the selected messages as not junk" = "Marcar los mensajes seleccionados como NO spam";
+/* Number of selected messages in list */
+"selected" = "seleccionado";
 "This Folder" = "Esta carpeta";
 /* Label popup menu */
 "None" = "Ninguna";
@@ -208,7 +218,7 @@
 /* Folder operations */
 "Name" = "Nombre";
 "Enter the new name of your folder"
- = "Introduzca el nuevo nombre de la carpeta";
+ ="Introduzca el nuevo nombre de la carpeta";
 "Do you really want to move this folder into the trash ?"
  = "¿Está seguro de que desea mover la carpeta a la papelera?";
 "Operation failed" = "Operación fallida";
@@ -249,4 +259,34 @@
 "cannot send message: (smtp) error when connecting" = "No se puede enviar el mensaje: Error de conexión mientras se trataba de conectar con el servidor SMTP.";
 /* Contacts list in mail editor */
 "Email" = "Correo";
-"Name" = "Nombre Completo";
+"More mail options" = "Más opciones de correo";
+"Delegation" = "Delegación";
+"Add User" = "Agregar usuario";
+"Add a tag" = "Agregar etiqueta";
+"reply" = "responder";
+"Edit" = "Editar";
+"Yes" = "Sí";
+"No" = "No";
+"Location" = "Lugar";
+"Rename" = "Renombrar";
+"Compact" = "Compactar";
+"Export" = "Exportar";
+"Set as Drafts" = "Usar como \"Borradores\"";
+"Set as Sent" = "Usar como \"Enviados\"";
+"Set as Trash" = "Usar como \"Papelera\"";
+"Sort" = "Ordenar";
+"Descending Order" = "Orden ascendente";
+"Back" = "Atrás";
+"Copy messages" = "Copiar mensajes";
+"More messages options" = "Más opciones sobre mensajes";
+"Mark as Unread" = "Marcar como no leído";
+"Closing Window ..." = "Cerrando la ventana...";
+"Tried to send too many mails. Please wait." = "Ha intentado enviar demasiados correos. Por favor espere.";
+"View Mail" = "Ver el correo";
+"This message contains external images." = "Este mensaje contien imágenes externas";
+"Expanded" = "Expandido";
+"Add a Criteria" = "Agregar un criterio";
+"More search options" = "Más opciones de búsqueda";
+"Your email has been saved" = "Su mensaje has sido guardado";
+"Your email has been sent" = "Su mensaje ha sido enviado";
+"Folder compacted" = "La carpeta se ha compactado";

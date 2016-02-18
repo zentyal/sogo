@@ -19,7 +19,7 @@
   <form id="mainForm" var:href="ownPath">
     <fieldset>
     <div id="filterNameContainer" class="container">
-      <label><var:string label:value="Filter name:"/></label>
+      <label><var:string label:value="Filter name"/></label>
       <input const:name="filterName" class="textField" type="text"
           var:value="filterName"/>
     </div>
@@ -27,10 +27,10 @@
       <label><var:string label:value="For incoming messages that"/></label>
       <select const:name="matchType" const:id="matchType"
         ><option const:value="all"
-          ><var:string label:value="match all of the following rules:"
+          ><var:string label:value="match all of the following rules"
             /></option
           ><option const:value="any"
-          ><var:string label:value="match any of the following rules:"
+          ><var:string label:value="match any of the following rules"
             /></option
         ><option const:value="allmessages"
           ><var:string label:value="match all messages"
@@ -51,7 +51,7 @@
     </div>
     <!-- <div id="splitter" class="dragHandle"></div> -->
     <div id="filterActionsContainer" class="container">
-      <var:string label:value="Perform these actions:"/><br/>
+      <var:string label:value="Perform these actions"/><br/>
       <div id="filterActions"><!-- empty --></div>
       <div class="bottomToolbar"
         ><a const:id="actionAdd" class="bottomButton" href="#">

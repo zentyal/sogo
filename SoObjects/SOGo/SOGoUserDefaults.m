@@ -1,6 +1,6 @@
 /* SOGoUserDefaults.m - this file is part of SOGo
  *
- * Copyright (C) 2009-2014 Inverse inc.
+ * Copyright (C) 2009-2016 Inverse inc.
  *
  * This file is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -405,6 +405,16 @@ NSString *SOGoWeekStartFirstFullWeek = @"FirstFullWeek";
   return [self boolForKey: @"SOGoMailShowSubscribedFoldersOnly"];
 }
 
+- (void) setSynchronizeOnlyDefaultMailFolders: (BOOL) newValue
+{
+  [self setBool: newValue forKey: @"SOGoMailSynchronizeOnlyDefaultFolders"];
+}
+
+- (BOOL) synchronizeOnlyDefaultMailFolders
+{
+  return [self boolForKey: @"SOGoMailSynchronizeOnlyDefaultFolders"];
+}
+
 - (void) setMailSortByThreads: (BOOL) newValue
 {
   [self setBool: newValue forKey: @"SOGoMailSortByThreads"];
@@ -445,6 +455,17 @@ NSString *SOGoWeekStartFirstFullWeek = @"FirstFullWeek";
 - (NSString *) trashFolderName
 {
   return [[self stringForKey: @"SOGoTrashFolderName"]
+             stringByEncodingImap4FolderName];
+}
+
+- (void) setJunkFolderName: (NSString *) newValue
+{
+  [self setObject: newValue forKey: @"SOGoJunkFolderName"];
+}
+
+- (NSString *) junkFolderName
+{
+  return [[self stringForKey: @"SOGoJunkFolderName"]
              stringByEncodingImap4FolderName];
 }
 
