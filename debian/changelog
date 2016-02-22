@@ -1,3 +1,35 @@
+sogo (2.3.4-zentyal4) trusty; urgency=medium
+
+  [ Javier Amor García ]
+  * [dee7b4] oc-mail: Support for multipart/mixed and multipart/alternative
+  * [8e80b5] RTFHandler: support charsets in plain text
+  * [e5f15f] RTFHandler: protect against CR and bad hexadecimal sequence
+  * [e1b181] oc-mail: Use UTF-8 when they are parts with multiple charsets
+
+  [ Enrique J. Hernández Blasco ]
+  * [75ffdd] oc-contacts: Return not found when there is no information
+  * [fab27f] Update NEWS from PR #242
+  * [fa4a71] Update NEWS from PR #234
+  * [3b0cfa] Support for groups using EnableDomainBasedUID conf
+  * [15779c] Keep all roles in calendar folder ACLs
+  * [e08ee9] oc: Use enum mapistore_error instead of int
+
+  [ Jesús García Sáez ]
+  * [7d9900] Update NEWS from PR #244
+  * [fd4a74] Prepare release 2.3.4-zentyal3
+  * [ef92d7] Rename 2.3.4-zentyal3 to 2.3.4-zentyal3a
+  * [486ee8] Update NEWS from PR #248
+  * [4ca197] Update NEWS from PR #249
+  * [66ea0f] Update NEWS from PR #245
+
+  [ Zentyal Jenkins ]
+  * [2c50b9] Version 2.3.4-zentyal3 released
+  * [f2277b] Version 2.3.4-zentyal3a released
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Mon, 22 Feb 2016 11:20:44 +0100
+
 sogo (2.3.4-zentyal3a) trusty; urgency=medium
 
   [ Javier Amor García ]
