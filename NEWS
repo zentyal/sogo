@@ -1,10 +1,11 @@
-2.3.4-zentyal4 (2016-02-XX)
+2.3.4-zentyal4 (2016-02-22)
 ---------------------------
 
 Enhancements
   - Support to groups for EnableDomainBasedUID configuration
 
 Bug fixes
+  - Fix regression with encoding of mails when adding multipart support
   - Preserve all stored roles in Calendar folder ACLs to store custom MAPI-only permissions
 
 
