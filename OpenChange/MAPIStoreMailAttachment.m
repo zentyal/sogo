@@ -76,6 +76,26 @@
   ASSIGN (bodyPart, newBodyPart);
 }
 
+- (BOOL) isInline
+{
+  return ([[self filename] length] == 0) &&
+         ([[bodyInfo objectForKey: @"bodyId"] length] > 0];       
+}
+  
+- (int) getPidTagAttachmentFlags: (void **) data
+                        inMemCtx: (TALLOC_CTX *) localMemCtx
+{
+  uint32_t flags;
+  if ([self isInline])
+    flags = 0x4;
+  else
+    flags = 0x0;
+
+  *data = MAPILongValue (localMemCtx, flags);
+
+  return MAPISTORE_SUCCESS;
+}
+
 - (int) getPidTagAttachMethod: (void **) data
                      inMemCtx: (TALLOC_CTX *) memCtx
 {
@@ -200,5 +220,20 @@
 
   return MAPISTORE_SUCCESS;
 }
+
+- (int) getPidTagRenderingPosition: (void **) data
+                          inMemCtx: (TALLOC_CTX *) memCtx
+{
+  uint32_t position;
+  if ([self isInline])
+    position = aid;
+  else
+    position = 0xffffffff;
+
+  *data = MAPILongValue (memCtx, position);
+
+  return MAPISTORE_SUCCESS;
+}
+
 
 @end

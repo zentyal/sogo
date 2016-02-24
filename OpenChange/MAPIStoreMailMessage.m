@@ -1856,6 +1856,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
 {
   NSArray *parts;
   NSUInteger count, max;
+  NSString *bodyId;
 
   if ([[bodyInfo filename] length] > 0)
     {
@@ -1863,9 +1864,22 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
         keyPrefix = @"0";
       [attachmentParts setObject: bodyInfo
                           forKey: keyPrefix];
+      return;
+    }
+
+  bodyId = [bodyId objectForKey: @"bodyId"];
+  if ([bodyId length])
+    {
+      if ([keyPrefix length] == 0)
+        keyPrefix = @"0";
+      [attachmentParts setObject: bodyInfo
+                          forKey: keyPrefix];
+      return;
     }
   else
     {
+
+      
       if ([keyPrefix length] > 0)
         keyPrefix = [NSString stringWithFormat: @"%@/", keyPrefix];
       parts = [bodyInfo objectForKey: @"parts"];

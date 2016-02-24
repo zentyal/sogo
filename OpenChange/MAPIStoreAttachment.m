@@ -86,6 +86,7 @@
 - (int) getPidTagRenderingPosition: (void **) data
                           inMemCtx: (TALLOC_CTX *) memCtx
 {
+
   *data = MAPILongValue (memCtx, 0xffffffff);
 
   return MAPISTORE_SUCCESS;
