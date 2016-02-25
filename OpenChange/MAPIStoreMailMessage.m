@@ -537,6 +537,17 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
     }
 
   bodySetup = YES;
+  /* Free data from header setup that it is only used for setup the body */
+  [bodyContentKeys release];
+  bodyContentKeys = nil;  
+  [bodyPartsEncodings release];
+  bodyPartsEncodings = nil;  
+  [bodyPartsCharsets release];
+  bodyPartsCharsets = nil;
+  [bodyPartsMimeTypes release];
+  bodyPartsMimeTypes = nil;  
+  [bodyPartsMixed release];
+  bodyPartsMixed = nil;  
 }
 
 - (NSArray*) getBodyContent
