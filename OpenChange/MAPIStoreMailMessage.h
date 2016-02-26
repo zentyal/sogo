@@ -33,6 +33,14 @@
 @class MAPIStoreAppointmentWrapper;
 @class MAPIStoreMailFolder;
 
+enum MIME_TYPE {
+  NONE_MIME_TYPE,
+  TEXT_CALENDAR,
+  APPLICATION_ICS,
+  TEXT_HTML,
+  TEXT_PLAIN
+};
+
 @interface MAPIStoreMailMessage : MAPIStoreMessage
 {
   BOOL headerSetup;
@@ -47,7 +55,7 @@
   NSMutableDictionary *bodyPartsMixed;
   
   NSString *headerCharset;
-  NSString *headerMimeType;
+  enum MIME_TYPE headerMimeType;
   BOOL bodySetup;
   NSArray *bodyContent;
   BOOL fetchedAttachments;

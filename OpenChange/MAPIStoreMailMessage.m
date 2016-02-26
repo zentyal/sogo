@@ -143,7 +143,7 @@ static NSArray *acceptedMimeTypes;
       mailIsMeetingRequest = NO;
       mailIsSharingObject = NO;
       headerCharset = nil;
-      headerMimeType = nil;
+      headerMimeType = NONE_MIME_TYPE;
 
       appointmentWrapper = nil;
     }
@@ -161,7 +161,6 @@ static NSArray *acceptedMimeTypes;
   
   [bodyContent release];
   
-  [headerMimeType release];
   [headerCharset release];
   [appointmentWrapper release];
   [super dealloc];
@@ -292,7 +291,8 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
           NSString *charset;
           NSDictionary *partParameters;
           NSString *multipart;
-
+          enum MIME_TYPE mtype;
+          
           bodyStructureKey = [keys objectAtIndex: i];
           key = [bodyStructureKey objectForKey: @"key"];
           if (key == nil)
@@ -321,24 +321,44 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
               mixedPart = !([multipart isEqualToString: @"multipart/alternative"] ||
                             [multipart isEqualToString: @"multipart/related"]);
             }
-
+          [bodyPartsMixed setObject: [NSNumber numberWithBool: mixedPart] forKey: key];
+          
           if (encoding)
             [bodyPartsEncodings setObject: encoding forKey: key];
           if (charset)
             [bodyPartsCharsets setObject: charset forKey: key];
+          
           if (mimeType)
             {
-              [bodyPartsMimeTypes setObject: mimeType forKey: key];
-              if ([mimeType isEqualToString: @"text/plain"])
-                hasText = YES;
-              else if ([mimeType isEqualToString: @"text/html"])
-                hasHtml = YES;
+              if ([mimeType isEqualToString: @"text/html"])
+                {
+                  mtype = TEXT_HTML;
+                  hasHtml = YES;
+                }
+              else if ([mimeType isEqualToString: @"text/plain"])
+                {
+                  mtype = TEXT_PLAIN;
+                  hasText = YES;
+                }
+              else if ([mimeType isEqualToString: @"text/calendar"])
+                {
+                  mtype = TEXT_CALENDAR;
+                }
+              else if ([mimeType isEqualToString: @"application/ics"])
+                {
+                  mtype = APPLICATION_ICS;
+                }
             }
-          [bodyPartsMixed setObject: [NSNumber numberWithBool: mixedPart] forKey: key];
+          else
+            {
+              mtype = NONE_MIME_TYPE;
+            }
+          [bodyPartsMimeTypes setObject: [NSNumber numberWithInt: mtype]  forKey: key];
+
 
           if (i == 0)
              {
-               ASSIGN (headerMimeType, mimeType);
+               headerMimeType = mtype;
                parameters = partParameters;
              }
 
@@ -368,8 +388,7 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
         }
 
 
-      if ([headerMimeType isEqualToString: @"text/calendar"]
-          || [headerMimeType isEqualToString: @"application/ics"])
+      if (headerMimeType == TEXT_CALENDAR || headerMimeType == APPLICATION_ICS)
       {
         mailIsEvent = YES;
         if ([[parameters objectForKey: @"method"] isEqualToString: @"REQUEST"])
@@ -427,8 +446,8 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
           NSData *content = [[result objectForKey: noPeekKey] objectForKey: @"data"];
           if (content == nil)
             continue;
-          NSString *mimeType = [bodyPartsMimeTypes objectForKey: key];
-          if (mimeType == nil)
+          enum MIME_TYPE mimeType = [[bodyPartsMimeTypes objectForKey: key] intValue];
+          if (mimeType == NONE_MIME_TYPE)
             continue;          
           NSString *contentEncoding = [bodyPartsEncodings objectForKey: key];
           if (contentEncoding == nil)
@@ -442,17 +461,17 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
               NSString *stringValue; 
               BOOL html;
               BOOL mixed = [[bodyPartsMixed objectForKey: key] boolValue];
-              if ([mimeType isEqualToString: @"text/html"])
+              if (mimeType == TEXT_HTML)
                 {
                   html = YES;
                 }
-              else if ([mimeType isEqualToString: @"text/plain"])
+              else if (mimeType == TEXT_PLAIN)
                 {
                   html = NO;
                 }
               else
                 {
-                  [self warnWithFormat: @"Unsupported MIME type for non-event body part: %@.",
+                  [self warnWithFormat: @"Unsupported MIME type for non-event body part: %i.",
                         mimeType];
                   continue;
                 }
@@ -519,15 +538,14 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
                 }
 
             }
-          else if ([mimeType isEqualToString: @"text/calendar"] ||
-                   [mimeType isEqualToString: @"application/ics"])
+          else if (mimeType == TEXT_CALENDAR || mimeType == APPLICATION_ICS)
             {
               content = [content bodyDataFromEncoding: contentEncoding];
               [textContent appendData: content];
             }
           else
             {
-              [self warnWithFormat: @"Unsupported combination for event body part. MIME type: %@",
+              [self warnWithFormat: @"Unsupported combination for event body part. MIME type: %i",
                     mimeType];
             }
         }
@@ -1455,9 +1473,9 @@ _compareBodyKeysByPriority (id entry1, id entry2, void *data)
   if (!headerSetup)
     [self _fetchHeaderData];
 
-  if ([headerMimeType isEqualToString: @"text/plain"])
+  if (headerMimeType == TEXT_PLAIN)
     format = EDITOR_FORMAT_PLAINTEXT;
-  else if ([headerMimeType isEqualToString: @"text/html"])
+  else if (headerMimeType == TEXT_HTML)
     format = EDITOR_FORMAT_HTML;
   else
     format = 0; /* EDITOR_FORMAT_DONTKNOW */
