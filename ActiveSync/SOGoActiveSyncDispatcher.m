@@ -387,7 +387,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             [[o properties ]  setObject: [[newFolder nameInContainer] substringFromIndex: 6] forKey: @"displayName"];
             [o save];
 
-            nameInContainer = [[NSString stringWithFormat: @"mail/%@", [nameInContainer  substringFromIndex: 6]] stringByEscapingURL];
+            nameInContainer = [NSString stringWithFormat: @"mail/%@", [nameInContainer  substringFromIndex: 6]];
           }
         else
           {
@@ -403,17 +403,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         SOGoAppointmentFolders *appointmentFolders;
         SOGoCacheGCSObject *o;
         NSString *key;
+        id newFolder;
         
         nameInContainer = nil;
         
         appointmentFolders = [userFolder privateCalendars: @"Calendar" inContext: context];
         [appointmentFolders newFolderWithName: displayName
                               nameInContainer: &nameInContainer];
+
+        newFolder = [appointmentFolders lookupName: nameInContainer
+                                         inContext: context
+                                           acquire: NO];
+        [newFolder setSynchronize: YES];
+
         if (type == 13)
           nameInContainer = [NSString stringWithFormat: @"vevent/%@", nameInContainer];
         else
           nameInContainer = [NSString stringWithFormat: @"vtodo/%@", nameInContainer];
-        
+
         key = [NSString stringWithFormat: @"%@+%@", [context objectForKey: @"DeviceId"], nameInContainer ];
         o = [SOGoCacheGCSObject objectWithName: key  inContainer: nil];
         [o setObjectType: ActiveSyncFolderCacheObject];
@@ -428,12 +435,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         SOGoContactFolders *contactFolders;
         SOGoCacheGCSObject *o;
         NSString *key;
+        id newFolder;
         
         nameInContainer = nil;
         
         contactFolders = [userFolder privateContacts: @"Contacts" inContext: context];
         [contactFolders newFolderWithName: displayName
                           nameInContainer: &nameInContainer];
+
+        newFolder = [contactFolders lookupName: nameInContainer
+                                     inContext: context
+                                       acquire: NO];
+        [newFolder setSynchronize: YES];
+
         nameInContainer = [NSString stringWithFormat: @"vcard/%@", nameInContainer];
         
         key = [NSString stringWithFormat: @"%@+%@", [context objectForKey: @"DeviceId"], nameInContainer ];
@@ -1375,7 +1389,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   
                   [s appendString: @"<Fetch>"];
                   [s appendString: @"<Status>1</Status>"];
-                  [s appendFormat: @"<FileReference xmlns=\"AirSyncBase:\">%@</FileReference>", [fileReference stringByEscapingURL]];
+                  [s appendFormat: @"<FileReference xmlns=\"AirSyncBase:\">%@</FileReference>", fileReference];
                   [s appendString: @"<Properties>"];
 
                   [s appendFormat: @"<ContentType xmlns=\"AirSyncBase:\">%@/%@</ContentType>", [[currentBodyPart partInfo] objectForKey: @"type"], [[currentBodyPart partInfo] objectForKey: @"subtype"]];
@@ -3241,7 +3255,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   [theResponse setHeader: @"Sync,SendMail,SmartForward,SmartReply,GetAttachment,GetHierarchy,CreateCollection,DeleteCollection,MoveCollection,FolderSync,FolderCreate,FolderDelete,FolderUpdate,MoveItems,GetItemEstimate,MeetingResponse,Search,Settings,Ping,ItemOperations,ResolveRecipients,ValidateCert"  forKey: @"MS-ASProtocolCommands"];
   [theResponse setHeader: @"2.5,12.0,12.1,14.0,14.1"  forKey: @"MS-ASProtocolVersions"];
 
-  if (debugOn && [[theResponse content] length])
+  if (debugOn && [[theResponse headerForKey: @"Content-Type"] isEqualToString:@"application/vnd.ms-sync.wbxml"] && [[theResponse content] length])
     [self logWithFormat: @"EAS - response for device %@: %@", [context objectForKey: @"DeviceId"], [[[NSString alloc] initWithData: [[theResponse content] wbxml2xml] encoding: NSUTF8StringEncoding] autorelease]];
 
   RELEASE(context);

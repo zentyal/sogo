@@ -8,6 +8,7 @@
 "Forward"     = "Továbbítás";
 "Get Mail"    = "Letöltés";
 "Junk"        = "Szemét";
+"Not junk"    = "Nem levélszemét";
 "Reply"       = "Válasz";
 "Reply All"   = "Válasz mindenkinek";
 "Print"       = "Nyomtatás";
@@ -33,7 +34,6 @@
 "Reply to sender and all recipients" = "Válasz a feladónak és az összes címzettnek";
 "Forward selected message" = "A kijelölt üzenet továbbítása";
 "Delete selected message or folder" = "A kijelölt üzenet vagy mappa törlése";
-"Mark the selected messages as junk" = "Kijelölt üzenetek megjelölése, mint szemét";
 "Print this message" = "Üzenet nyomtatása";
 "Stop the current transfer" = "Küldés megszakítása";
 "Attachment" = "Melléklet";
@@ -97,7 +97,7 @@
 "Edit Draft..." = "Piszkozat szerkesztése...";
 "Load Images" = "Képek betöltése";
 "Return Receipt" = "Visszaigazolás";
-"The sender of this message has asked to be notified when you read this message. Do you with to notify the sender?" = "A levél küldője értesítést kér arról, hogy üzenetét elolvasta. Kíván visszaigazolást küldeni?";
+"The sender of this message has asked to be notified when you read this message. Do you with to notify the sender?" = "Az üzenet feladója arra kéri , hogy erősítse meg a levél elolvasását. Értesíti a feladót?";
 "Return Receipt (displayed) - %@"= "Visszaigazolás (megjelenítés) - %@";
 "This is a Return Receipt for the mail that you sent to %@.\n\nNote: This Return Receipt only acknowledges that the message was displayed on the recipient's computer. There is no guarantee that the recipient has read or understood the message contents." = "Ez egy %@ címre küldött levél visszaigazolása.\n\nMegjegyzés: A visszaigazolás csak azt igazolja, hogy a levél a címzett számítógépén meg lett jelenítve. Nincs garancia arra, hogy a címzett el is olvasta, illetve megértette a levél tartalmát.";
 "Priority" = "Sürgősség";
@@ -140,6 +140,7 @@
 "TrashFolderName"  = "Lomtár";
 "InboxFolderName"  = "Beérkezett üzenetek";
 "DraftsFolderName" = "Piszkozatok";
+"JunkFolderName" = "Levélszemét";
 "SieveFolderName"  = "Szűrők";
 "Folders"          = "Mappák"; /* title line */
 /* MailMoveToPopUp */
@@ -171,6 +172,7 @@
 "Sent Messages" = "Elküldött üzenetek";
 "Drafts" = "Piszkozatok";
 "Deleted Messages" = "Törölt üzenetek";
+"Junk Messages" = "Levélszemét üzenetek";
 /* Message list popup menu */
 "Open Message In New Window" = "Üzenet megnyitása új ablakban";
 "Reply to Sender Only" = "Válasz csak a feladónak";
@@ -186,6 +188,8 @@
 "Print..." = "Nyomtatás...";
 "Delete Message" = "Üzenet törlése";
 "Delete Selected Messages" = "Kiválasztott üzenetek törlése";
+"Mark the selected messages as junk" = "Kijelölt üzenetek megjelölése, mint szemét";
+"Mark the selected messages as not junk" = "Jelölje meg a kiválasztott üzeneteket nem levélszemétként";
 /* Number of selected messages in list */
 "selected" = "kijelölt";
 "This Folder" = "Aktulis mappa";
@@ -283,3 +287,6 @@
 "Expanded" = "Kiterjesztett";
 "Add a Criteria" = "Feltétel hozzáadása";
 "More search options" = "További keresési tulajdonságok";
+"Your email has been saved" = "Üzenete mentésre került";
+"Your email has been sent" = "Üzenete elküldve";
+"Folder compacted" = "Mappa tömörítve";

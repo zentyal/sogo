@@ -6,20 +6,52 @@ import re
 
 DEBUG=False
 
-dir_mappings = {"../UI/Templates":"../UI/Common",
-                "../UI/Templates/AdministrationUI":"../UI/AdministrationUI",
-                "../UI/Templates/Appointments":"../SoObjects/Appointments",
-                "../UI/Templates/ContactsUI":"../UI/Contacts",
-                "../UI/Templates/MailerUI":"../UI/MailerUI",
-                "../UI/Templates/MailPartViewers":"../UI/MailPartViewers",
-                "../UI/Templates/MainUI":"../UI/MainUI",
-                "../UI/Templates/PreferencesUI":"../UI/PreferencesUI",
-                "../UI/Templates/SchedulerUI":"../UI/Scheduler"
-               }
+dir_mappings = {
+    # .wox
+    "../UI/Templates":"../UI/Common",
+    "../UI/Templates/AdministrationUI":"../UI/AdministrationUI",
+    "../UI/Templates/Appointments":"../SoObjects/Appointments",
+    "../UI/Templates/ContactsUI":"../UI/Contacts",
+    "../UI/Templates/MailerUI":"../UI/MailerUI",
+    "../UI/Templates/MailPartViewers":"../UI/MailPartViewers",
+    "../UI/Templates/MainUI":"../UI/MainUI",
+    "../UI/Templates/PreferencesUI":"../UI/PreferencesUI",
+    "../UI/Templates/SchedulerUI":"../UI/Scheduler",
+    # .toolbars
+    "../UI/AdministrationUI/Toolbars":"../UI/AdministrationUI",
+    "../UI/Contacts/Toolbars":"../UI/Contacts",
+    "../UI/MailerUI/Toolbars":"../UI/MailerUI",
+    "../UI/PreferencesUI/Toolbars":"../UI/PreferencesUI",
+    "../UI/Scheduler/Toolbars":"../UI/Scheduler",
+    # .js
+    "../UI/WebServerResources/generic.js":"../UI/Common",
+    "../UI/WebServerResources/UIxAclEditor.js":"../UI/Common",
+    "../UI/WebServerResources/SOGoRootPage.js":"../UI/MainUI",
+    "../UI/WebServerResources/SOGoRootPage.js":"../UI/MainUI",
+    "../UI/WebServerResources/PasswordPolicy.js":"../UI/AdministrationUI",
+    "../UI/WebServerResources/ContactsUI.js":"../UI/Contacts",
+    "../UI/WebServerResources/UIxContactEditor.js":"../UI/Contacts",
+    "../UI/WebServerResources/UIxContactsUserFolders.js":"../UI/Contacts",
+    "../UI/WebServerResources/UIxContactsUserRightsEditor.js":"../UI/Contacts",
+    "../UI/WebServerResources/MailerUI.js":"../UI/MailerUI",
+    "../UI/WebServerResources/MailerUIdTree.js":"../UI/MailerUI",
+    "../UI/WebServerResources/UIxMailEditor.js":"../UI/MailerUI",
+    "../UI/WebServerResources/UIxMailSearch.js":"../UI/MailerUI",
+    "../UI/WebServerResources/UIxMailUserRightsEditor.js":"../UI/MailerUI",
+    "../UI/WebServerResources/UIxPreferences.js":"../UI/PreferencesUI",
+    "../UI/WebServerResources/UIxFilterEditor.js":"../UI/PreferencesUI",
+    "../UI/WebServerResources/SchedulerUI.js":"../UI/Scheduler",
+    "../UI/WebServerResources/UIxCalUserRightsEditor.js":"../UI/Scheduler",
+    "../UI/WebServerResources/UIxCalViewPrint.js":"../UI/Scheduler",
+}
 
-def get_translations(path):
+def get_translations(path, filename):
     try:
-        transpath = dir_mappings.get(path, path)
+        transpath = dir_mappings.get(path)
+        if not transpath:
+            transpath = dir_mappings.get(path + '/' + filename)
+        if not transpath:
+            transpath = path
         transname = transpath + '/English.lproj/Localizable.strings'
         transall = open(transname).read()
     except:
@@ -29,6 +61,8 @@ def get_translations(path):
 
 def find_missing_translations(rootdir='.', extention='', recomp=None, greylist=()):
     for path, dirs, files in os.walk(rootdir):
+        if (os.path.basename(path) in greylist):
+            continue
         filelist = [f for f in files if f[(-1 * len(extention)):] == extention]
         if filelist:
             for filename in filelist:
@@ -40,7 +74,7 @@ def find_missing_translations(rootdir='.', extention='', recomp=None, greylist=(
                 values = [r.groups()[0] for r in [recomp.search(l) for l in lines] if r]
                 if values:
                     #- Get the current english translations for the path
-                    transgood = get_translations(path)
+                    transgood = get_translations(path, filename)
                     if not transgood:
                         print "No translation file found for %s, skipping %s" % (path, pathname)
                         continue
@@ -53,7 +87,8 @@ def find_missing_translations(rootdir='.', extention='', recomp=None, greylist=(
                         if found:
                             if DEBUG: print "\t", '[%s] FOUND -- "%s"' % found.groups()
                         else:
-                            notfound.append("-->\t[%s] ==== Not Found ====" % value)
+                            #notfound.append("-->\t[%s] ==== Not Found ====" % value)
+                            notfound.append("""-->\t"%s" = "%s";""" % (value, value))
                     if notfound:
                         if not DEBUG:print pathname
                         print "\n".join(notfound)
@@ -69,14 +104,20 @@ def main():
             print 'Usage:', sys.argv[0], '[-g]\n\t\t-g: debug will show matching also'
             sys.exit(1)
 
-    greylist = ('UIxFilterEditor.wox')
-
     #- Get only the label:value from all lines
-    recomp = re.compile(' label:[^=]*="(.*?)"')
-    find_missing_translations('../UI', 'wox', recomp, greylist)
+    recomp = re.compile('.label:[^=]*="([^$].*?)"')
+    find_missing_translations('../UI', 'wox', recomp, ())
 
     #- [self labelForKey: @"Issuer"]
     recomp = re.compile('\[self labelForKey: @"(.*?)"\]')
     find_missing_translations('../UI', 'm', recomp, ())
+
+    #- tooltip = "Switch to day view"
+    recomp = re.compile(' tooltip = "(.*?)";')
+    find_missing_translations('../UI', 'toolbar', recomp, ('Resources'))
+
+    #- _("Reminder")
+    recomp = re.compile(' _\("(.*?)"\)')
+    find_missing_translations('../UI/WebServerResources', 'js', recomp, ())
 
 main()

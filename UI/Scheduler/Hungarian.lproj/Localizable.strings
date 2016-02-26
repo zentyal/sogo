@@ -10,6 +10,7 @@
 "Switch to day view" = "Napi nézetre váltás";
 "Switch to week view" = "Heti nézetre váltás";
 "Switch to month view" = "Havi nézetre váltás";
+"Switch to multi-columns day view" = "Váltás több oszlopos napi nézetre";
 "Reload all calendars" = "Az összes naptár frissítése";
 /* Tabs */
 "Date" = "Dátum";
@@ -465,7 +466,7 @@ vtodo_class2 = "(Bizalmas feladat)";
 "Copy event to my calendar" = "Esemény másolása a naptáromba";
 "View Raw Source" = "Forrás megtekintése";
 "Subscriptions" = "Feliratkozások";
-"Subscribe to a shared folder" = "Feliratkozás megosztott maoppára";
+"Subscribe to a shared folder" = "Feliratkozás megosztott mappára";
 "Subscribe to a web calendar..." = "Internetes naptár becsatolása";
 "URL of the Calendar" = "A naptár URL címe";
 "Web Calendar" = "Internetes naptár";
@@ -501,3 +502,5 @@ vtodo_class2 = "(Bizalmas feladat)";
 "Rename" = "Átnevezés";
 "Import Calendar" = "Naptár importálása";
 "Select an ICS file." = "Válasszon ICS állományt.";
+/* Notification when user subscribes to a calendar */
+"Successfully subscribed to calendar" = "Sikeresen feliratkozott a naptárra";

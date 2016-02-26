@@ -8,6 +8,7 @@
 "Forward"     = "Encaminhar";
 "Get Mail"    = "Receber";
 "Junk"        = "Lixo Eletrônico";
+"Not junk"    = "Não é lixo eletrônico";
 "Reply"       = "Responder";
 "Reply All"   = "Responder a Todos";
 "Print"       = "Imprimir";
@@ -33,7 +34,6 @@
 "Reply to sender and all recipients" = "Responder ao remetente e todos na mensagem";
 "Forward selected message" = "Encaminha a mensagem selecionada";
 "Delete selected message or folder" = "Apaga a mensagem ou pasta selecionada";
-"Mark the selected messages as junk" = "Marca a mensagem selecionada como Lixo Eletrônico";
 "Print this message" = "Imprimir esta mensagem";
 "Stop the current transfer" = "Interromper a transferência";
 "Attachment" = "Anexos";
@@ -140,6 +140,7 @@
 "TrashFolderName"  = "Lixeira";
 "InboxFolderName"  = "Entrada";
 "DraftsFolderName" = "Rascunhos";
+"JunkFolderName" = "Lixo Eletrônico";
 "SieveFolderName"  = "Filtros";
 "Folders"          = "Pastas"; /* title line */
 /* MailMoveToPopUp */
@@ -171,6 +172,7 @@
 "Sent Messages" = "Enviar Mensagens";
 "Drafts" = "Rascunhos";
 "Deleted Messages" = "Mensagens Apagadas";
+"Junk Messages" = "Mensagens de Lixo Eletrônico";
 /* Message list popup menu */
 "Open Message In New Window" = "Abrir Mensagens em uma Nova Janela";
 "Reply to Sender Only" = "Responder Somente para o Remetente";
@@ -186,6 +188,8 @@
 "Print..." = "Imprimir...";
 "Delete Message" = "Apagar Mensagem";
 "Delete Selected Messages" = "Apagar Mensagens Selecionadas";
+"Mark the selected messages as junk" = "Marca a mensagem selecionada como Lixo Eletrônico";
+"Mark the selected messages as not junk" = "Marcar a mensagem selecionada como não é lixo eletrônico";
 /* Number of selected messages in list */
 "selected" = "selecionado";
 "This Folder" = "Esta Pasta";
@@ -283,3 +287,6 @@
 "Expanded" = "Expandido";
 "Add a Criteria" = "Adicionar um Critério";
 "More search options" = "Mais opções de pesquisa";
+"Your email has been saved" = "Seu e-mail foi salvo";
+"Your email has been sent" = "Seu e-mail foi enviado";
+"Folder compacted" = "Pasta compactada";

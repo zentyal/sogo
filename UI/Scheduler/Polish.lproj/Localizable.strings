@@ -10,6 +10,7 @@
 "Switch to day view" = "Przełącz na widok dnia";
 "Switch to week view" = "Przełącz na widok tygodnia";
 "Switch to month view" = "Przełącz na widok miesiąca";
+"Switch to multi-columns day view" = "Przełącz na wielokolumnowy widok dnia";
 "Reload all calendars" = "Przeładuj wszystkie kalendarze";
 /* Tabs */
 "Date" = "Data";
@@ -501,3 +502,5 @@ vtodo_class2 = "(Zadanie poufne)";
 "Rename" = "Zmień nazwę";
 "Import Calendar" = "Importuj kalendarz";
 "Select an ICS file." = "Wybierz plik ICS.";
+/* Notification when user subscribes to a calendar */
+"Successfully subscribed to calendar" = "Subskrypcja kalendarza zakończona powodzeniem";

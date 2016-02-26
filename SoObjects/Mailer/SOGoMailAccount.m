@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2004-2005 SKYRIX Software AG
-  Copyright (C) 2007-2014 Inverse inc.
+  Copyright (C) 2007-2016 Inverse inc.
 
   This file is part of SOGo.
 
@@ -58,6 +58,7 @@
 #import "SOGoMailNamespace.h"
 #import "SOGoSentFolder.h"
 #import "SOGoTrashFolder.h"
+#import "SOGoJunkFolder.h"
 #import "SOGoUser+Mailer.h"
 
 #import "SOGoMailAccount.h"
@@ -78,6 +79,7 @@ static NSString *inboxFolderName = @"INBOX";
       draftsFolder = nil;
       sentFolder = nil;
       trashFolder = nil;
+      junkFolder = nil;
       imapAclStyle = undefined;
       identities = nil;
       otherUsersFolderName = nil;
@@ -93,6 +95,7 @@ static NSString *inboxFolderName = @"INBOX";
   [draftsFolder release];
   [sentFolder release];
   [trashFolder release];
+  [junkFolder release];
   [identities release];
   [otherUsersFolderName release];
   [sharedFoldersName release];
@@ -355,6 +358,8 @@ static NSString *inboxFolderName = @"INBOX";
   NSMutableArray *folderPaths, *namespaces;
   NSArray *folders, *mainFolders;
   SOGoUserDefaults *ud;
+  NSString *namespace;
+
   BOOL subscribedOnly;
   int count, max;
 
@@ -366,6 +371,7 @@ static NSString *inboxFolderName = @"INBOX";
 			  [self draftsFolderNameInContext: context],
 			  [self sentFolderNameInContext: context],
 			  [self trashFolderNameInContext: context],
+                          [self junkFolderNameInContext: context],
 			  nil] stringsWithFormat: @"/%@"];
   folders = [[self imap4Connection] allFoldersForURL: [self imap4URL]
                                onlySubscribedFolders: subscribedOnly];
@@ -377,12 +383,19 @@ static NSString *inboxFolderName = @"INBOX";
   max = [namespaces count];
   for (count = 0; count < max; count++)
     {
-      folders = [self _allFoldersFromNS: [namespaces objectAtIndex: count]
+      namespace = [namespaces objectAtIndex: count];
+      folders = [self _allFoldersFromNS: namespace
                          subscribedOnly: subscribedOnly];
       if ([folders count])
         {
           [folderPaths removeObjectsInArray: folders];
           [folderPaths addObjectsFromArray: folders];
+
+          // We make sure our "shared" / "public" namespace is always defined. Cyrus does NOT
+          // return them in LIST while Dovecot does.
+          namespace = [NSString stringWithFormat: @"/%@", namespace];
+          [folderPaths removeObject: namespace];
+          [folderPaths addObject: namespace];
         }
     }
   [folderPaths
@@ -408,6 +421,8 @@ static NSString *inboxFolderName = @"INBOX";
     folderType = @"sent";
   else if ([folderName isEqualToString: [NSString stringWithFormat: @"/%@", [self trashFolderNameInContext: context]]])
     folderType = @"trash";
+  else if ([folderName isEqualToString: [NSString stringWithFormat: @"/%@", [self junkFolderNameInContext: context]]])
+    folderType = @"junk";
   else
     folderType = @"folder";
 
@@ -668,6 +683,7 @@ static NSString *inboxFolderName = @"INBOX";
   NSDictionary *result, *nresult, *namespaceDict;
   NSMutableDictionary *folders;
   NGImap4Client *client;
+  SOGoUserDefaults *ud;
   NSArray *folderList;
   NSEnumerator *e;
   NSString *guid;
@@ -675,7 +691,18 @@ static NSString *inboxFolderName = @"INBOX";
   
   BOOL hasAnnotatemore;
 
-  folderList = [self allFolderPaths];
+  ud = [[context activeUser] userDefaults];
+
+  // We skip the Junk folder here, as EAS doesn't know about this
+  if ([ud synchronizeOnlyDefaultMailFolders])
+    folderList = [[NSArray arrayWithObjects:
+                             [self inboxFolderNameInContext: context],
+                           [self draftsFolderNameInContext: context],
+                           [self sentFolderNameInContext: context],
+                           [self trashFolderNameInContext: context],
+                     nil] stringsWithFormat: @"/%@"];
+  else
+    folderList = [self allFolderPaths];
 
   folders = [NSMutableDictionary dictionary];
 
@@ -762,6 +789,9 @@ static NSString *inboxFolderName = @"INBOX";
       else if ([folderName
 		 isEqualToString: [self trashFolderNameInContext: _ctx]])
 	klazz = [SOGoTrashFolder class];
+      else if ([folderName
+		 isEqualToString: [self junkFolderNameInContext: _ctx]])
+	klazz = [SOGoJunkFolder class];
       else
 	klazz = [SOGoMailFolder class];
 
@@ -824,6 +854,11 @@ static NSString *inboxFolderName = @"INBOX";
 - (NSString *) trashFolderNameInContext: (id)_ctx
 {
   return [self _userFolderNameWithPurpose: @"Trash"];
+}
+
+- (NSString *) junkFolderNameInContext: (id)_ctx
+{
+  return [self _userFolderNameWithPurpose: @"Junk"];
 }
 
 - (NSString *) otherUsersFolderNameInContext: (id)_ctx
@@ -922,6 +957,19 @@ static NSString *inboxFolderName = @"INBOX";
     }
 
   return trashFolder;
+}
+
+- (SOGoJunkFolder *) junkFolderInContext: (id) _ctx
+{
+  if (!junkFolder)
+    {
+      junkFolder
+	= [self folderWithTraversal: [self junkFolderNameInContext: _ctx]
+                       andClassName: @"SOGoJunkFolder"];
+      [trashFolder retain];
+    }
+
+  return junkFolder;
 }
 
 /* account delegation */
