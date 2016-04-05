@@ -1,3 +1,14 @@
+2.3.4-zentyal5 (2016-05-04)
+---------------------------
+
+New features
+ - Give support to sharing calendars, contacts, tasks and notes with different roles including Author, Editor or Folder Owner
+ - Fix security issue validate permissions to read root folders
+ - Fix security issue validate permissions to read and modify permission tables
+
+Enhancements
+  - Support to nested multipart/mixed email displaying in Outlook
+
 2.3.4-zentyal4 (2016-02-22)
 ---------------------------
 
