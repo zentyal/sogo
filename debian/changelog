@@ -1,3 +1,44 @@
+sogo (2.3.4-zentyal5) trusty; urgency=medium
+
+  [ Enrique J. Hernández Blasco ]
+  * [967cc2] oc: Query for fmids in behalf of owner's resource
+  * [e86e3b] oc: Get new change numbers using resource's owner
+  * [c45baa] oc: Read FAI messages from shared folder must be possible
+  * [026c37] oc: Mimetise PidTagRights behaviour to PidTagMemberRights
+  * [8c8ad3] oc: Check FolderVisible permission to show permission list
+  * [bcf94c] oc: Check FolderOwner right to modify permissions
+  * [dcb1d2] oc: API to know if a message can be deleted by a subscriber
+  * [b92ca0] oc: Remove specialised PidTagAccess and PidTagAccessLevel
+  * [a9f336] oc: Check permissions on read opening a shared folder
+  * [76e586] oc: Added custom MAPI permissions
+  * [1ca1a2] oc-notes: Implement edit own and delete own permissions
+  * [8b45ee] oc: Use the same permission set original from MAPIStoreDBFolder
+  * [12ac1d] oc: Implement edit own and delete own in GCSFolders
+  * [dd32c6] oc-calendar: Add edit/delete own and Folder Contact/Owner sharing perm
+  * [9d461d] oc-contacts: Add edit/delete own and Folder Contact/Owner sharing perm
+  * [51408b] oc-tasks: Add edit/delete own and Folder Contact/Owner sharing perm
+  * [17b2e3] oc-notes: Point which folder class must be used while opening subfolders
+  * [12e952] oc: Honor calendar WebMail UI permissions on OpenChange library
+  * [bd1d15] Update NEWS from PR #256
+
+  [ Javier Amor García ]
+  * [d2e7fd] Tests for SOPE string-encoding-for-encoding-named-methods branch
+  * [f388d1] oc-mail: Better management of nested multipart types
+
+  [ Jesús García Sáez ]
+  * [698918] Fix prepareRightsForm, keep the highest role
+  * [482f1a] Update NEWS from pr #250
+
+  [ Carlos Pérez-Aradros Herce ]
+  * [978499] Ensure sogo-tool loads all available products
+
+  [ José Antonio Calvo ]
+  * [7c59ec] Prepare release 2.3.4-zentyal5
+
+  [ Jenkins Zentyal (Zentyal GPG) ]
+
+ -- Jenkins Zentyal (Zentyal GPG) <jenkins@zentyal.com>  Tue, 05 Apr 2016 17:59:36 +0200
+
 sogo (2.3.4-zentyal4) trusty; urgency=medium
 
   [ Javier Amor García ]
