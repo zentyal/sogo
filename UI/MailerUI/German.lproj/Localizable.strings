@@ -8,6 +8,7 @@
 "Forward"     = "Weiterleiten";
 "Get Mail"    = "Abrufen";
 "Junk"        = "Junk";
+"Not junk"    = "Kein Spam";
 "Reply"       = "Antworten";
 "Reply All"   = "Allen Antworten";
 "Print"       = "Drucken";
@@ -33,7 +34,6 @@
 "Reply to sender and all recipients" = "Auf gewählte Nachricht(en) an den Absender und alle Empfänger antworten";
 "Forward selected message" = "Gewählte Nachricht(en) weiterleiten";
 "Delete selected message or folder" = "Gewählte Nachricht(en) oder Ordner löschen";
-"Mark the selected messages as junk" = "Gewählte Nachricht(en) als Junk einstufen";
 "Print this message" = "Gewählte Nachricht drucken";
 "Stop the current transfer" = "Derzeitige Übertragung stoppen";
 "Attachment" = "Anhang";
@@ -54,6 +54,8 @@
 "Share" = "Benutzerrechte";
 "Account" = "Konto";
 "Shared Account" = "Gemeinsames Konto";
+/* Empty right pane */
+"No message selected" = "Keine Nachricht ausgewählt";
 /* acls */
 "Access rights to" = "Zugriffsrechte für";
 "For user" = "Für Benutzer";
@@ -91,10 +93,11 @@
 "to"            = "An";
 "cc"            = "CC";
 "bcc"           = "BCC";
+"Add a recipient" = "Bitte einen Empfänger eintragen";
 "Edit Draft..." = "Entwurf bearbeiten...";
 "Load Images" = "Bilder laden";
 "Return Receipt" = "Empfangsbestätigung";
-"The sender of this message has asked to be notified when you read this message. Do you with to notify the sender?" = "Der Absender dieser Nachricht hat um eine Empfangsbestätigung gebeten. Möchten Sie eine Empfangsbestätigung senden?";
+"The sender of this message has asked to be notified when you read this message. Do you with to notify the sender?" = "Der Absender dieser Nachricht möchte benachrichtigt werden, sobald Sie diese Nachricht lesen. Sind Sie einverstanden den Absender zu benachrichtigen?";
 "Return Receipt (displayed) - %@"= "Empfangsbestätigung (angezeigt) - %@";
 "This is a Return Receipt for the mail that you sent to %@.\n\nNote: This Return Receipt only acknowledges that the message was displayed on the recipient's computer. There is no guarantee that the recipient has read or understood the message contents." = "Dies ist die Empfangsbestätigung für die Nachricht, die Sie an %@ gesendet haben.\n\nHinweis: Es wird lediglich bestätigt, dass die Nachricht auf dem Computer des Empfängers empfangen (angezeigt) wurde. Es wird nicht garantiert, dass der Empfänger die Nachricht gelesen und/oder verstanden hat.";
 "Priority" = "Priorität";
@@ -122,6 +125,7 @@
 "All"           = "Alle";
 "No message"    = "Keine Nachricht";
 "messages"      = "Nachricht(en)";
+"Yesterday"     = "Gestern";
 "first"         = "Erste";
 "previous"      = "Vorherige";
 "next"          = "Nächste";
@@ -136,6 +140,7 @@
 "TrashFolderName"  = "Papierkorb";
 "InboxFolderName"  = "Posteingang";
 "DraftsFolderName" = "Entwürfe";
+"JunkFolderName" = "Spam";
 "SieveFolderName"  = "Filter";
 "Folders"          = "Ordner"; /* title line */
 /* MailMoveToPopUp */
@@ -167,6 +172,7 @@
 "Sent Messages" = "Gesendete Nachrichten";
 "Drafts" = "Entwürfe";
 "Deleted Messages" = "Gelöschte Nachrichten";
+"Junk Messages" = "Spam-Nachrichten";
 /* Message list popup menu */
 "Open Message In New Window" = "In neuem Fenster öffnen";
 "Reply to Sender Only" = "Nur dem Absender antworten";
@@ -182,6 +188,10 @@
 "Print..." = "Drucken...";
 "Delete Message" = "Nachricht löschen";
 "Delete Selected Messages" = "Gewählte Nachricht(en) löschen";
+"Mark the selected messages as junk" = "Gewählte Nachricht(en) als Junk einstufen";
+"Mark the selected messages as not junk" = "Die ausgewählte Nachricht nicht mehr als Spam markieren";
+/* Number of selected messages in list */
+"selected" = "ausgewählt";
 "This Folder" = "Dieser Ordner";
 /* Label popup menu */
 "None" = "Kein";
@@ -249,3 +259,34 @@
 "cannot send message: (smtp) error when connecting" = "Kann Nachricht nicht versenden: Fehler beim Verbinden mit dem SMTP-Server.";
 /* Contacts list in mail editor */
 "Email" = "E-Mail";
+"More mail options" = "Weitere E-Mail-Optionen";
+"Delegation" = "Delegation";
+"Add User" = "Benutzer hinzufügen";
+"Add a tag" = "Markierung hinzufügen";
+"reply" = "Antworten";
+"Edit" = "Ändern";
+"Yes" = "Ja";
+"No" = "Nein";
+"Location" = "Ort";
+"Rename" = "Umbenennen";
+"Compact" = "Komprimieren";
+"Export" = "Exportieren";
+"Set as Drafts" = "Als Entwürfe festlegen";
+"Set as Sent" = "Als Gesendet festlegen";
+"Set as Trash" = "Als Papierkorb festlegen";
+"Sort" = "Sortieren";
+"Descending Order" = "Absteigende Sortierung";
+"Back" = "Zurück";
+"Copy messages" = "Nachrichten kopieren";
+"More messages options" = "Weitere Nachrichtenoptionen";
+"Mark as Unread" = "Als Ungelesen markieren";
+"Closing Window ..." = "Schließe Fenster ...";
+"Tried to send too many mails. Please wait." = "Sie haben versucht zu viele Nachrichten auf einmal zu schicken. Bitte warten.";
+"View Mail" = "E-Mail Anzeigen";
+"This message contains external images." = "Diese Nachricht enthält externe Bilder.";
+"Expanded" = "Erweitert";
+"Add a Criteria" = "Ein Kriterium hinzufügen";
+"More search options" = "Weitere Suchoptionen";
+"Your email has been saved" = "Ihre E-Mail wurde gespeichert";
+"Your email has been sent" = "Ihre E-Mail wurde gesendet";
+"Folder compacted" = "Ordner komprimiert";

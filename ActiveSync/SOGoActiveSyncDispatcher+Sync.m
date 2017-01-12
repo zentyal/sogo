@@ -78,6 +78,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #import <SOGo/SOGoUserSettings.h>
 #import <SOGo/SOGoCacheGCSObject.h>
 
+#import <Appointments/iCalEntityObject+SOGo.h>
 #import <Appointments/SOGoAppointmentObject.h>
 #import <Appointments/SOGoAppointmentFolder.h>
 #import <Appointments/SOGoAppointmentFolders.h>
@@ -473,8 +474,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             case ActiveSyncTaskFolder:
               {
                 o = [sogoObject component: NO  secure: NO];
-                [o takeActiveSyncValues: allChanges  inContext: context];
-                [sogoObject saveComponent: o];
+
+                if (theFolderType == ActiveSyncEventFolder &&
+                    [(iCalEvent *)o userIsAttendee: [context activeUser]])
+                  {
+                    [o changeParticipationStatus: allChanges  inContext: context  component: sogoObject];
+                  }
+                else
+                  {
+                    [o takeActiveSyncValues: allChanges  inContext: context];
+                    [sogoObject saveComponent: o];
+                  }
 
                 if ([syncCache objectForKey: serverId])
                   [syncCache setObject: [NSString stringWithFormat:@"%f", [[sogoObject lastModified] timeIntervalSince1970]] forKey: serverId];
@@ -573,6 +583,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               // FIXME: handle errors here
               if (deletesAsMoves && theFolderType == ActiveSyncMailFolder)
                 [(SOGoMailFolder *)[sogoObject container] deleteUIDs: [NSArray arrayWithObjects: serverId, nil] useTrashFolder: &useTrash inContext: context];
+              else if (theFolderType == ActiveSyncEventFolder || theFolderType == ActiveSyncTaskFolder)
+                {
+                  [sogoObject prepareDelete];
+                  [sogoObject delete];
+                }
               else
                 [sogoObject delete];
             }
@@ -906,35 +921,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 if (theFolderType == ActiveSyncContactFolder)
                   componentObject = [sogoObject vCard];
                 else
-                  componentObject = [sogoObject component: NO  secure: NO];                
-                
-                //
-                // We do NOT synchronize NEW events that are in fact, invitations
-                // to events. This is due to the fact that Outlook 2013 creates
-                // "phantom" events in the calendar that are mapped to invitations mails.
-                // If we synchronize these events too, it'll interfere with the whole thing
-                // and prevent Outlook from properly calling MeetingResponse.
-                //
-                if (!updated && theFolderType == ActiveSyncEventFolder)
-                  {
-                    iCalPersonPartStat partstat;
-                    iCalPerson *attendee;
-                    NSString *email;
-
-                    email = [[[context activeUser] allEmails] objectAtIndex: 0];
-                    attendee = [componentObject findAttendeeWithEmail: email];
-
-                    if (attendee)
-                      {
-                        partstat = [attendee participationStatus];
-                        
-                        if (partstat == iCalPersonPartStatNeedsAction)
-                          {
-                            DESTROY(pool);
-                            continue;
-                          }
-                      }
-                  }                
+                  componentObject = [sogoObject component: NO  secure: NO];
 
                 [syncCache setObject: [component objectForKey: @"c_lastmodified"] forKey: uid];
 
@@ -1331,8 +1318,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     inBuffer: (NSMutableString *) theBuffer
                    processed: (BOOL *) processed
 {
-  id <DOMNodeList> aCommandDetails;
   id <DOMElement> aCommand, element;
+  id <DOMNodeList> aCommandDetails;
+  NSAutoreleasePool *pool;
   NSArray *allCommands;
   int i, j;
 
@@ -1345,6 +1333,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
       for (j = 0; j < [(id)aCommandDetails count]; j++)
         {
+          pool = [[NSAutoreleasePool alloc] init];
           element = [aCommandDetails objectAtIndex: j];
 
           if ([element nodeType] == DOM_ELEMENT_NODE)
@@ -1386,6 +1375,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   *processed = YES;
                 }
             }
+          DESTROY(pool);
         }
     }
 }
@@ -1398,7 +1388,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 changeDetected: (BOOL *) changeDetected
            maxSyncResponseSize: (int) theMaxSyncResponseSize
 {
-  NSString *collectionId, *realCollectionId, *syncKey, *davCollectionTag, *bodyPreferenceType, *mimeSupport, *lastServerKey, *syncKeyInCache, *folderKey;
+  NSString *collectionId, *realCollectionId, *syncKey, *davCollectionTag, *bodyPreferenceType, *mimeSupport, *mimeTruncation, *lastServerKey, *syncKeyInCache, *folderKey;
   NSMutableDictionary *folderMetadata, *folderOptions;
   NSMutableArray *supportedElements, *supportedElementNames;
   NSMutableString *changeBuffer, *commandsBuffer;
@@ -1510,48 +1500,60 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   bodyPreferenceType = [[(id)[[(id)[theDocumentElement getElementsByTagName: @"BodyPreference"] lastObject] getElementsByTagName: @"Type"] lastObject] textValue];
 
   if (!bodyPreferenceType)
-   {
-     bodyPreferenceType = [[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"BodyPreferenceType"];
+    {
+      bodyPreferenceType = [[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"BodyPreferenceType"];
 
-     // By default, send MIME mails. See #3146 for details.
-     if (!bodyPreferenceType)
-       bodyPreferenceType = @"4";
+      // By default, send MIME mails. See #3146 for details.
+      if (!bodyPreferenceType)
+        bodyPreferenceType = @"4";
 
-     mimeSupport = [[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMESupport"];
+      mimeSupport = [[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMESupport"];
+      mimeTruncation = [[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMETruncation"];
 
-     if (!mimeSupport)
-       mimeSupport = @"1";
-   }
+      if (!mimeSupport)
+        mimeSupport = @"1";
+
+      if (!mimeTruncation)
+        mimeTruncation = @"8";
+    }
   else
-   {
-     mimeSupport = [[(id)[theDocumentElement getElementsByTagName: @"MIMESupport"] lastObject] textValue];
+    {
+      mimeSupport = [[(id)[theDocumentElement getElementsByTagName: @"MIMESupport"] lastObject] textValue];
+      mimeTruncation = [[(id)[theDocumentElement getElementsByTagName: @"MIMETruncation"] lastObject] textValue];
 
-     if (!mimeSupport)
+      if (!mimeSupport)
         mimeSupport = [[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMESupport"];
 
-     if (!mimeSupport)
+      if (!mimeSupport)
         mimeSupport = @"0";
 
-     if ([mimeSupport isEqualToString: @"1"] && [bodyPreferenceType isEqualToString: @"4"])
+      if (!mimeTruncation)
+        mimeTruncation = [[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMETruncation"];
+
+      if (!mimeTruncation)
+        mimeTruncation = @"8";
+
+      if ([mimeSupport isEqualToString: @"1"] && [bodyPreferenceType isEqualToString: @"4"])
         bodyPreferenceType = @"2";
-     else if ([mimeSupport isEqualToString: @"2"] && [bodyPreferenceType isEqualToString: @"4"])
+      else if ([mimeSupport isEqualToString: @"2"] && [bodyPreferenceType isEqualToString: @"4"])
         bodyPreferenceType = @"4";
-     else if ([mimeSupport isEqualToString: @"0"] && [bodyPreferenceType isEqualToString: @"4"])
+      else if ([mimeSupport isEqualToString: @"0"] && [bodyPreferenceType isEqualToString: @"4"])
         bodyPreferenceType = @"2";
 
-
-     // Avoid writing to cache if there is nothing to change.
-     if (![[[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"BodyPreferenceType"] isEqualToString: bodyPreferenceType] ||
-         ![[[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMESupport"] isEqualToString: mimeSupport])
-       {
-         folderOptions = [[NSDictionary alloc] initWithObjectsAndKeys: mimeSupport, @"MIMESupport", bodyPreferenceType, @"BodyPreferenceType", nil];
-         [folderMetadata setObject: folderOptions forKey: @"FolderOptions"];
-         [self _setFolderMetadata: folderMetadata forKey: folderKey];
-       }
-   }
+      // Avoid writing to cache if there is nothing to change.
+      if (![[[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"BodyPreferenceType"] isEqualToString: bodyPreferenceType] ||
+          ![[[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMESupport"] isEqualToString: mimeSupport] ||
+          ![[[folderMetadata objectForKey: @"FolderOptions"] objectForKey: @"MIMETruncation"] isEqualToString: mimeTruncation])
+        {
+          folderOptions = [[NSDictionary alloc] initWithObjectsAndKeys: mimeSupport, @"MIMESupport", mimeTruncation, @"MIMETruncation", bodyPreferenceType, @"BodyPreferenceType", nil];
+          [folderMetadata setObject: folderOptions forKey: @"FolderOptions"];
+          [self _setFolderMetadata: folderMetadata forKey: folderKey];
+        }
+    }
   
   [context setObject: bodyPreferenceType  forKey: @"BodyPreferenceType"];
   [context setObject: mimeSupport  forKey: @"MIMESupport"];
+  [context setObject: mimeTruncation  forKey: @"MIMETruncation"];
   [context setObject: [folderMetadata objectForKey: @"SupportedElements"]  forKey: @"SupportedElements"];
 
   //

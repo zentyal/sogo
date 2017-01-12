@@ -10,6 +10,7 @@
 "Switch to day view" = "Siirry päivänäkymään";
 "Switch to week view" = "Siirry viikkonäkymään";
 "Switch to month view" = "Siirry kuukausinäkymään";
+"Switch to multi-columns day view" = "Vaihda monisarakepäivänäkymään";
 "Reload all calendars" = "Päivitä kaikki kalenterit";
 /* Tabs */
 "Date" = "Päivämäärä";
@@ -501,3 +502,5 @@ vtodo_class2 = "(Luottamuksellinen tehtävä)";
 "Rename" = "Nimeä uudelleen";
 "Import Calendar" = "Tuo kalenteri";
 "Select an ICS file." = "Valitse ICS tiedosto";
+/* Notification when user subscribes to a calendar */
+"Successfully subscribed to calendar" = "Kalenterin tilaus onnistui";

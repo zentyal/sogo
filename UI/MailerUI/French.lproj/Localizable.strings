@@ -8,6 +8,7 @@
 "Forward"     = "Transférer";
 "Get Mail"    = "Relever";
 "Junk"        = "Indésirable";
+"Not junk"    = "Légitimes";
 "Reply"       = "Répondre";
 "Reply All"   = "Rép. à tous";
 "Print"       = "Imprimer";
@@ -33,7 +34,6 @@
 "Reply to sender and all recipients" = "Répondre à l'expéditeur et à tous les destinataires";
 "Forward selected message" = "Transférer le message sélectionné";
 "Delete selected message or folder" = "Supprimer le message ou le dossier sélectionné";
-"Mark the selected messages as junk" = "Marquer les messages sélectionnés comme indésirables";
 "Print this message" = "Imprimer ce message";
 "Stop the current transfer" = "Arrêter le transfert courant";
 "Attachment" = "Documents joints";
@@ -53,7 +53,11 @@
 "Write a new message" = "Écrire un nouveau message";
 "Share" = "Partage";
 "Account" = "Compte";
-"Shared Account: " = "Compte Partagé ";
+"Shared Account" = "Compte partagé";
+/* A mailbox is selected, but no message (only shown on large screens) */
+"No message selected" = "Aucun message sélectionné";
+/* No mailbox is selected (usually resulting from an IMAP connection problem) */
+"No mailbox selected" = "Aucune boîte sélectionnée";
 /* acls */
 "Access rights to" = "Droits d'accès à";
 "For user" = "Pour l'utilisateur";
@@ -91,10 +95,11 @@
 "to"            = "Pour";
 "cc"            = "Copie à";
 "bcc"           = "Copie cachée à";
+"Add a recipient" = "Ajouter un destinataire";
 "Edit Draft..." = "Modifier le brouillon...";
 "Load Images" = "Télécharger les images";
 "Return Receipt" = "Accusé de réception";
-"The sender of this message has asked to be notified when you read this message. Do you with to notify the sender?" = "L'auteur de ce message a souhaité être prévenu lorsque vous lirez ce message. Souhaitez-vous avertir l'expéditeur ?";
+"The sender of this message has asked to be notified when you read this message. Do you with to notify the sender?" = "L'expéditeur demande d'être avisé car vous avez lu son message. Souhaitez-vous le notifier?";
 "Return Receipt (displayed) - %@"= "Accusé de réception (affiché) - %@";
 "This is a Return Receipt for the mail that you sent to %@.\n\nNote: This Return Receipt only acknowledges that the message was displayed on the recipient's computer. There is no guarantee that the recipient has read or understood the message contents." = "Ceci est un accusé de réception pour le courrier électronique envoyé à %@.\n\nNote : Cet accusé de réception indique seulement que le message a été affiché sur l'ordinateur du destinataire. Il n'y a aucune garantie que le destinataire ait lu ou compris le contenu du message.";
 "Priority" = "Priorité";
@@ -122,6 +127,7 @@
 "All"           = "Tous";
 "No message"    = "Aucun message";
 "messages"      = "message(s)";
+"Yesterday"     = "Hier";
 "first"         = "Premier";
 "previous"      = "Précédent";
 "next"          = "Suivant";
@@ -136,6 +142,7 @@
 "TrashFolderName"  = "Corbeille";
 "InboxFolderName"  = "Courrier entrant";
 "DraftsFolderName" = "Brouillons";
+"JunkFolderName" = "Indésirables";
 "SieveFolderName"  = "Filtres";
 "Folders"          = "Dossiers"; /* title line */
 /* MailMoveToPopUp */
@@ -167,6 +174,7 @@
 "Sent Messages" = "les message envoyés";
 "Drafts" = "les brouillons";
 "Deleted Messages" = "les message effacés";
+"Junk Messages" = "Messages indésirables";
 /* Message list popup menu */
 "Open Message In New Window" = "Ouvrir dans une nouvelle fenétre";
 "Reply to Sender Only" = "Répondre à l'expéditeur";
@@ -182,6 +190,10 @@
 "Print..." = "Imprimer...";
 "Delete Message" = "Supprimer le message";
 "Delete Selected Messages" = "Supprimer les messages sélectionnés";
+"Mark the selected messages as junk" = "Marquer les messages sélectionnés comme indésirables";
+"Mark the selected messages as not junk" = "Marquer les messages comme légitimes";
+/* Number of selected messages in list */
+"selected" = "sélectionné(s)";
 "This Folder" = "Ce dossier-ci";
 /* Label popup menu */
 "None" = "Aucune";
@@ -208,7 +220,7 @@
 /* Folder operations */
 "Name" = "Nom";
 "Enter the new name of your folder"
- = "Entrez le nouveau nom de votre dossier";
+ ="Entrez le nouveau nom de votre dossier";
 "Do you really want to move this folder into the trash ?"
  = "Voulez-vous vraiment déplacer le dossier sélectionné dans la corbeille?";
 "Operation failed" = "L'opération a échoué.";
@@ -249,4 +261,34 @@
 "cannot send message: (smtp) error when connecting" = "Le message n'a pas pu être envoyé: une erreur est survenue en tentant de rejoindre le serveur SMTP.";
 /* Contacts list in mail editor */
 "Email" = "Adresse électronique";
-"Name" = "Identité";
+"More mail options" = "Options courriels avancées";
+"Delegation" = "Délégation";
+"Add User" = "Ajouter un utilisateur";
+"Add a tag" = "Ajouter une étiquette";
+"reply" = "répondre";
+"Edit" = "Modifier";
+"Yes" = "Oui";
+"No" = "Non";
+"Location" = "Lieu";
+"Rename" = "Renommer";
+"Compact" = "Compresser";
+"Export" = "Exporter";
+"Set as Drafts" = "Utiliser pour les brouillons";
+"Set as Sent" = "Utiliser pour les messages envoyés";
+"Set as Trash" = "Utiliser pour les messages effacés";
+"Sort" = "Trier";
+"Descending Order" = "Ordre descendant";
+"Back" = "Retour";
+"Copy messages" = "Copier les messages";
+"More messages options" = "Options messages avancées";
+"Mark as Unread" = "Marquer comme non-lu";
+"Closing Window ..." = "Fermer la fenêtre...";
+"Tried to send too many mails. Please wait." = "Vous avez envoyé trop de courriels. Veillez patienter.";
+"View Mail" = "Voir le courriel";
+"This message contains external images." = "Ce message contient des images externes.";
+"Expanded" = "Étendre";
+"Add a Criteria" = "Ajouter un critère";
+"More search options" = "Options de recherches avancées";
+"Your email has been saved" = "Votre courriel a été sauvegardé";
+"Your email has been sent" = "Votre courriel a été envoyé";
+"Folder compacted" = "Dossier compressé";

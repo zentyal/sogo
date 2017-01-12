@@ -695,13 +695,14 @@ struct GlobalObjectId {
   NSMutableString *s;
   id value;
       
-  int preferredBodyType, mimeSupport, nativeBodyType;
+  int preferredBodyType, mimeSupport, mimeTruncation, nativeBodyType;
   uint32_t v;
 
   subtype = [[[self bodyStructure] valueForKey: @"subtype"] lowercaseString];
 
   preferredBodyType = [[context objectForKey: @"BodyPreferenceType"] intValue];
   mimeSupport = [[context objectForKey: @"MIMESupport"] intValue];
+  mimeTruncation = [[context objectForKey: @"MIMETruncation"] intValue];
 
   s = [NSMutableString string];
 
@@ -1007,9 +1008,71 @@ struct GlobalObjectId {
       AUTORELEASE(content);
       
       content = [content activeSyncRepresentationInContext: context];
+      len = [content length];
       truncated = 0;
 
-      len = [content length];
+      // We handle MIMETruncation
+      switch (mimeTruncation)
+        {
+        case 0:
+          {
+            content = @"";
+            len = 0;
+          }
+          break;
+        case 1:
+          if ([content length] > 4096)
+            {
+              content = [content substringToIndex: 4096];
+              len = 4096; truncated = 1;
+            }
+          break;
+        case 2:
+          if ([content length] > 5120)
+            {
+              content = [content substringToIndex: 5120];
+              len = 5120; truncated = 1;
+            }
+          break;
+        case 3:
+          if ([content length] > 7168)
+            {
+              content = [content substringToIndex: 7168];
+              len = 7168; truncated = 1;
+            }
+          break;
+        case 4:
+          if ([content length] > 10240)
+            {
+              content = [content substringToIndex: 10240];
+              len = 10240; truncated = 1;
+            }
+          break;
+        case 5:
+          if ([content length] > 20480)
+            {
+              content = [content substringToIndex: 20480];
+              len = 20480; truncated = 1;
+            }
+          break;
+        case 6:
+          if ([content length] > 51200)
+            {
+              content = [content substringToIndex: 51200];
+              len = 51200; truncated = 1;
+            }
+          break;
+        case 7:
+          if ([content length] > 102400)
+            {
+              content = [content substringToIndex: 102400];
+              len = 102400; truncated = 1;
+            }
+          break;
+        case 8:
+        default:
+          truncated = 0;
+        }
 
       if ([[[context request] headerForKey: @"MS-ASProtocolVersion"] isEqualToString: @"2.5"])
         {
@@ -1017,7 +1080,7 @@ struct GlobalObjectId {
           [s appendFormat: @"<BodyTruncated xmlns=\"Email:\">%d</BodyTruncated>", truncated];
         }
       else
-       {
+        {
           [s appendString: @"<Body xmlns=\"AirSyncBase:\">"];
 
           // Set the correct type if client requested text/html but we got text/plain.
@@ -1031,16 +1094,12 @@ struct GlobalObjectId {
 
           [s appendFormat: @"<Truncated>%d</Truncated>", truncated];
           [s appendFormat: @"<Preview></Preview>"];
-
-          if (!truncated)
-            {
-              [s appendFormat: @"<Data>%@</Data>", content];
-              [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>", len];
-            }
+          [s appendFormat: @"<Data>%@</Data>", content];
+          [s appendFormat: @"<EstimatedDataSize>%d</EstimatedDataSize>", len];
           [s appendString: @"</Body>"];
        }
     }
-  
+
   // Attachments -namespace 16
   attachmentKeys = [self fetchFileAttachmentKeys];
 
@@ -1126,9 +1185,9 @@ struct GlobalObjectId {
 
       if ([reference length] > 0)
         [s appendFormat: @"<ConversationId xmlns=\"Email2:\">%@</ConversationId>", [[reference dataUsingEncoding: NSUTF8StringEncoding] activeSyncRepresentationInContext: context]];
-      else if ([self inReplyTo])
+      else if ([[self inReplyTo] length] > 0)
         [s appendFormat: @"<ConversationId xmlns=\"Email2:\">%@</ConversationId>", [[[self inReplyTo] dataUsingEncoding: NSUTF8StringEncoding] activeSyncRepresentationInContext: context]];
-      else if ([self messageId])
+      else if ([[self messageId] length] > 0)
         [s appendFormat: @"<ConversationId xmlns=\"Email2:\">%@</ConversationId>", [[[self messageId] dataUsingEncoding: NSUTF8StringEncoding] activeSyncRepresentationInContext: context]];
     }
 

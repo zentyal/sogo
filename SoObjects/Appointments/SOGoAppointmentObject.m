@@ -432,7 +432,7 @@
   
   i = count = 0;
 
-  // Build list of the attendees uids without ressources
+  // Build list of the attendees uids
   unavailableAttendees = [[NSMutableArray alloc] init];
   enumerator = [theAttendees objectEnumerator];
   ownerUID = [[[self context] activeUser] login];
@@ -448,7 +448,7 @@
           moduleSettings = [us objectForKey:@"Calendar"];
           
           // Check if the user prevented their account from beeing invited to events
-          if (![user isResource] && [[moduleSettings objectForKey:@"PreventInvitations"] boolValue])
+          if ([[moduleSettings objectForKey:@"PreventInvitations"] boolValue])
             {
               // Check if the user have a whiteList
               whiteList = [moduleSettings objectForKey:@"PreventInvitationsWhitelist"];
@@ -2172,9 +2172,6 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
               iCalPerson *attendee, *delegate;
               NSString *delegateEmail;
 
-#if 1
-              attendee = [newEvent userAsAttendee: [SOGoUser userWithLogin: owner]];
-#else
               attendee = [oldEvent userAsAttendee: [SOGoUser userWithLogin: owner]];
 
               if (!attendee)
@@ -2202,7 +2199,6 @@ inRecurrenceExceptionsForEvent: (iCalEvent *) theEvent
                   [attendees addObject: attendee];
                   [newEvent setAttendees: attendees];
                 }
-#endif
               
               // We first check of the sequences are alright. We don't accept attendees
               // accepting "old" invitations. If that's the case, we return a 403
